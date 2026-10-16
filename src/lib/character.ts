@@ -1,4 +1,5 @@
 // Character configuration: data only, no rendering or pattern logic.
+import { normalizeLayers, type LayeredCharacter } from "./character-layers";
 
 export type Yarn = { id: string; name: string; hex: string };
 
@@ -33,6 +34,7 @@ export type CharacterConfig = {
   face: { expression: Expression; cheeks: boolean };
   body: BodyShape;
   accessories: Accessory[];
+  layered?: LayeredCharacter;
 };
 
 export const DEFAULT_CONFIG: CharacterConfig = {
@@ -77,4 +79,6 @@ export function migratePartColors(c: CharacterConfig): CharacterConfig {
   return { ...c, colors };
 }
 
-export const configKey = (c: CharacterConfig) => JSON.stringify({ base: "doll-v2", colorSchema: 2, ...c });
+export const configKey = (c: CharacterConfig) => c.layered
+  ? JSON.stringify({ base: "lined-front-v1", colorSchema: 2, colors: c.colors, layered: normalizeLayers(c.layered) })
+  : JSON.stringify({ base: "doll-v2", colorSchema: 2, ...c });

@@ -3,3 +3,6 @@
 - [x] Match the crochet pattern to the new anatomy and verify generation.
 - [x] Add individual body-part colors in the matching tabs and preview.
 - [x] Match individual colors in patterns, preserve saved drafts, and verify selections.
+- [x] Introduce the immutable supplied base, shared coordinates, and sample overlay registry.
+- [x] Add layer selection, replacement, removal, structured export, and safe pattern-rule gating.
+- [x] Verify ordering, persistence, original artwork, and saved draft recovery.
