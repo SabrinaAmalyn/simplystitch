@@ -98,7 +98,7 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
     case "cat":
       // Sits fully on top of the head; inner inset shares the outer base and sits flush on the front face.
       return (
-        <group position={[side * 0.5, 2.76, 0]} rotation={[0, 0, -side * 0.25]}>
+        <group position={[side * 0.5, 2.84, 0]} rotation={[0, 0, -side * 0.25]}>
           <mesh scale={[0.4, 0.55, 0.26]} castShadow><coneGeometry args={[1, 1, 40, 1]} /><Vinyl color={color} /></mesh>
           <mesh position={[0, -0.05, 0.1]} scale={[0.29, 0.42, 0.16]}><coneGeometry args={[1, 1, 40, 1]} /><Vinyl color={inner} /></mesh>
         </group>
