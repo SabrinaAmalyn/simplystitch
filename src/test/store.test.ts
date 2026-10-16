@@ -18,4 +18,16 @@ it("migrates legacy colors without overwriting edited or recoverable drafts", as
   expect(saved.config.colors.leftLeg).toBe("sage");
   expect(saved.draft).toEqual(draft);
   expect(saved.previous).toEqual(previous);
+  expect(saved.config.layered.baseId).toBe("lined-front-v1");
+  expect(Object.values(saved.config.layered.selections)).toEqual([null, null, null, null, null]);
+});
+
+it("keeps selected layers when reopening a saved character", async () => {
+  const { createLayeredCharacter, selectLayer } = await import("@/lib/character-layers");
+  const layered = selectLayer(createLayeredCharacter(), "hair", "sample-hair");
+  localStorage.setItem("stitchling-doll-base-v2", "true");
+  localStorage.setItem("stitchling-state-v1", JSON.stringify({ config: { ...DEFAULT_CONFIG, layered }, draft: null, previous: null }));
+  const { hydrateStore } = await import("@/lib/store");
+  hydrateStore();
+  expect(JSON.parse(localStorage.getItem("stitchling-state-v1") ?? "{}").config.layered).toEqual(layered);
 });
