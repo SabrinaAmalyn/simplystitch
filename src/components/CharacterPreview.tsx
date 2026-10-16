@@ -9,7 +9,7 @@ const VIEW_LABEL: Record<View, string> = { front: "Front", right: "Right side", 
 export function CharacterPreview({ config }: { config: CharacterConfig }) {
   const [failed, setFailed] = useState(false);
   const [viewIndex, setViewIndex] = useState(0);
-  const view = VIEWS[viewIndex];
+  const view = VIEWS[viewIndex]!;
   const turn = (step: number) => setViewIndex((i) => (i + step + VIEWS.length) % VIEWS.length);
   const layers = renderLayers(config.layered ?? createLayeredCharacter(), view);
   const { width, height } = BASE_ART.canvas;
