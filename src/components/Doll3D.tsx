@@ -111,7 +111,7 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
     case "cat":
       // Short, wide, soft rounded triangles; bases tucked behind the upper head.
       return (
-        <group position={[side * 0.56, 2.72, -0.28]} rotation={[-0.15, 0, -side * 0.38]}>
+        <group position={[side * 0.56, 2.72, -0.12]} rotation={[-0.15, 0, -side * 0.38]}>
           <mesh geometry={CAT_EAR} scale={[0.5, 0.46, 0.18]} castShadow><Vinyl color={color} /></mesh>
           <mesh geometry={CAT_EAR} position={[0, -0.03, 0.12]} scale={[0.32, 0.3, 0.08]}><Vinyl color={inner} /></mesh>
         </group>
