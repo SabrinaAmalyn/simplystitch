@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep character configuration, SVG preview, and deterministic pattern generation separate; anatomy changes must update the preview and pattern together to keep them aligned.
+- Version the base anatomy in pattern keys and migrate saved configurations without overwriting draft text; existing edited patterns must remain recoverable when defaults change.

@@ -3,6 +3,7 @@
 export type Yarn = { id: string; name: string; hex: string };
 
 export const YARNS: Yarn[] = [
+  { id: "peach", name: "Peach", hex: "#ffddcb" },
   { id: "oat", name: "Oatmeal", hex: "#e9dcc4" },
   { id: "cream", name: "Cream", hex: "#f8f1e3" },
   { id: "blush", name: "Blush Pink", hex: "#f2b8b0" },
@@ -16,9 +17,9 @@ export const YARNS: Yarn[] = [
   { id: "charcoal", name: "Charcoal", hex: "#3c3a3a" },
 ];
 
-export const yarnById = (id: string): Yarn => YARNS.find((y) => y.id === id) ?? YARNS[0]!;
+export const yarnById = (id: string): Yarn => YARNS.find((y) => y.id === id) ?? { id: "peach", name: "Peach", hex: "#ffddcb" };
 
-export type EarStyle = "round" | "long" | "pointy";
+export type EarStyle = "none" | "round" | "long" | "pointy";
 export type Expression = "happy" | "sleepy" | "surprised";
 export type BodyShape = "chubby" | "standard" | "tall";
 export type Accessory = "scarf" | "bow" | "beanie";
@@ -32,14 +33,15 @@ export type CharacterConfig = {
 };
 
 export const DEFAULT_CONFIG: CharacterConfig = {
-  colors: { main: "oat", accent: "cream", accessory: "terracotta", eyes: "charcoal" },
-  ears: "round",
-  face: { expression: "happy", cheeks: true },
+  colors: { main: "peach", accent: "cream", accessory: "terracotta", eyes: "charcoal" },
+  ears: "none",
+  face: { expression: "sleepy", cheeks: true },
   body: "standard",
-  accessories: ["scarf"],
+  accessories: [],
 };
 
 export const EAR_OPTIONS: { value: EarStyle; label: string; hint: string }[] = [
+  { value: "none", label: "None", hint: "Base doll" },
   { value: "round", label: "Round", hint: "Teddy-style" },
   { value: "long", label: "Long", hint: "Bunny-style" },
   { value: "pointy", label: "Pointy", hint: "Kitty-style" },
@@ -63,4 +65,4 @@ export const ACCESSORY_OPTIONS: { value: Accessory; label: string }[] = [
   { value: "beanie", label: "Beanie" },
 ];
 
-export const configKey = (c: CharacterConfig) => JSON.stringify(c);
+export const configKey = (c: CharacterConfig) => JSON.stringify({ base: "doll-v2", ...c });
