@@ -13,7 +13,7 @@ describe("pattern generation", () => {
 
   it("body shape changes max stitch count", () => {
     const max = (b: "chubby" | "tall") =>
-      Math.max(...generatePattern({ ...DEFAULT_CONFIG, body: b }).sections[1].rounds.map((r) => r.count ?? 0));
+      Math.max(...generatePattern({ ...DEFAULT_CONFIG, body: b }).sections[1]!.rounds.map((r) => r.count ?? 0));
     expect(max("chubby")).toBe(48);
     expect(max("tall")).toBe(30);
   });

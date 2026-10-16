@@ -16,7 +16,7 @@ export const YARNS: Yarn[] = [
   { id: "charcoal", name: "Charcoal", hex: "#3c3a3a" },
 ];
 
-export const yarnById = (id: string): Yarn => YARNS.find((y) => y.id === id) ?? YARNS[0];
+export const yarnById = (id: string): Yarn => YARNS.find((y) => y.id === id) ?? YARNS[0]!;
 
 export type EarStyle = "round" | "long" | "pointy";
 export type Expression = "happy" | "sleepy" | "surprised";
