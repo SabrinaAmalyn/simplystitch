@@ -1,6 +1,6 @@
 // Tiny persisted app store (character config + pattern draft).
 import { useSyncExternalStore } from "react";
-import { type CharacterConfig, DEFAULT_CONFIG } from "./character";
+import { type CharacterConfig, DEFAULT_CONFIG, migratePartColors } from "./character";
 
 export type Draft = { text: string; configKey: string; edited: boolean; generatedAt: number };
 type State = { config: CharacterConfig; draft: Draft | null; previous: Draft | null };
@@ -37,6 +37,7 @@ export function hydrateStore() {
       if (!localStorage.getItem(BASE_KEY)) {
         state = { ...state, config: { ...state.config, ears: "none", accessories: [], colors: { ...state.config.colors, main: "peach" } } };
       }
+      state = { ...state, config: migratePartColors(state.config) };
       listeners.forEach((l) => l());
     }
     localStorage.setItem(BASE_KEY, "true");

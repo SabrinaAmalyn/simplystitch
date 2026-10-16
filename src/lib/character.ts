@@ -24,8 +24,11 @@ export type Expression = "happy" | "sleepy" | "surprised";
 export type BodyShape = "chubby" | "standard" | "tall";
 export type Accessory = "scarf" | "bow" | "beanie";
 
+export const BODY_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar"] as const;
+export type BodyPart = (typeof BODY_PARTS)[number];
+
 export type CharacterConfig = {
-  colors: { main: string; accent: string; accessory: string; eyes: string };
+  colors: { main: string; accent: string; accessory: string; eyes: string } & Partial<Record<BodyPart, string>>;
   ears: EarStyle;
   face: { expression: Expression; cheeks: boolean };
   body: BodyShape;
@@ -65,4 +68,13 @@ export const ACCESSORY_OPTIONS: { value: Accessory; label: string }[] = [
   { value: "beanie", label: "Beanie" },
 ];
 
-export const configKey = (c: CharacterConfig) => JSON.stringify({ base: "doll-v2", ...c });
+export const partYarn = (c: CharacterConfig, part: BodyPart) => yarnById(c.colors[part] ?? c.colors.main);
+
+/** Backfill saved colors without touching pattern drafts or existing part choices. */
+export function migratePartColors(c: CharacterConfig): CharacterConfig {
+  const colors = { ...DEFAULT_CONFIG.colors, ...c.colors };
+  for (const part of BODY_PARTS) colors[part] = colors[part] ?? colors.main;
+  return { ...c, colors };
+}
+
+export const configKey = (c: CharacterConfig) => JSON.stringify({ base: "doll-v2", colorSchema: 2, ...c });

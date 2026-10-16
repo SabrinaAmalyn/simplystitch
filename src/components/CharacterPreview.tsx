@@ -1,4 +1,4 @@
-import { type CharacterConfig, yarnById } from "@/lib/character";
+import { type CharacterConfig, partYarn, yarnById } from "@/lib/character";
 
 const BODY = {
   chubby: { shoulder: 28, hip: 47, bottom: 290, foot: 354 },
@@ -8,7 +8,7 @@ const BODY = {
 
 // Yarn colors are user data, so they are applied as SVG fills.
 export function CharacterPreview({ config }: { config: CharacterConfig }) {
-  const main = yarnById(config.colors.main).hex;
+  const color = (part: Parameters<typeof partYarn>[1]) => partYarn(config, part).hex;
   const accent = yarnById(config.colors.accent).hex;
   const acc = yarnById(config.colors.accessory).hex;
   const eyes = yarnById(config.colors.eyes).hex;
@@ -19,16 +19,16 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
   const ears = () => {
     if (config.ears === "none") return null;
     if (config.ears === "round")
-      return [95, 205].map((x) => (
+      return [95, 205].map((x, i) => (
         <g key={x}>
-          <circle cx={x} cy={75} r={30} fill={main} stroke={stroke} strokeWidth={2} />
+          <circle data-part={i ? "leftEar" : "rightEar"} cx={x} cy={75} r={30} fill={color(i ? "leftEar" : "rightEar")} stroke={stroke} strokeWidth={2} />
           <circle cx={x} cy={78} r={16} fill={accent} />
         </g>
       ));
     if (config.ears === "long")
       return [120, 180].map((x, i) => (
         <g key={x} transform={`rotate(${i ? 10 : -10} ${x} 80)`}>
-          <ellipse cx={x} cy={40} rx={20} ry={58} fill={main} stroke={stroke} strokeWidth={2} />
+          <ellipse data-part={i ? "leftEar" : "rightEar"} cx={x} cy={40} rx={20} ry={58} fill={color(i ? "leftEar" : "rightEar")} stroke={stroke} strokeWidth={2} />
           <ellipse cx={x} cy={44} rx={9} ry={42} fill={accent} />
         </g>
       ));
@@ -37,7 +37,7 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
       [220, 105, 200, 30, 160, 70],
     ] as [number, number, number, number, number, number][]).map(([x1, y1, x2, y2, x3, y3], i) => (
       <g key={i}>
-        <polygon points={`${x1},${y1} ${x2},${y2} ${x3},${y3}`} fill={main} stroke={stroke} strokeWidth={2} strokeLinejoin="round" />
+        <polygon data-part={i ? "leftEar" : "rightEar"} points={`${x1},${y1} ${x2},${y2} ${x3},${y3}`} fill={color(i ? "leftEar" : "rightEar")} stroke={stroke} strokeWidth={2} strokeLinejoin="round" />
         <polygon points={`${(x1 + x2 + x3) / 3 - (i ? -2 : 2)},${y1 - 15} ${x2 + (i ? 4 : -4)},${y2 + 25} ${(x1 + x3) / 2},${y3 + 18}`} fill={accent} />
       </g>
     ));
@@ -77,15 +77,15 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
   return (
     <svg viewBox="0 -30 300 440" className="h-full w-full drop-shadow-xl" role="img" aria-label="Crochet doll preview">
       <ellipse cx={150} cy={b.foot + 8} rx={65} ry={6} fill="var(--doll-shadow)" />
-      {/* Two straight legs with rounded ends, in the same yarn as the torso. */}
-      {[150 - b.hip + 3, 155].map((x) => (
-        <rect key={x} x={x} y={b.bottom - 15} width={b.hip - 8} height={b.foot - b.bottom + 15} rx={10} fill={main} stroke={stroke} strokeWidth={2} />
+      {/* Left/right refer to the doll's own sides in this front view. */}
+      {[150 - b.hip + 3, 155].map((x, i) => (
+        <rect data-part={i ? "leftLeg" : "rightLeg"} key={x} x={x} y={b.bottom - 15} width={b.hip - 8} height={b.foot - b.bottom + 15} rx={10} fill={color(i ? "leftLeg" : "rightLeg")} stroke={stroke} strokeWidth={2} />
       ))}
-      <path d={`M${150 - b.shoulder} 204 Q150 195 ${150 + b.shoulder} 204 Q${150 + b.hip} 238 ${150 + b.hip} ${b.bottom - 6} Q${150 + b.hip} ${b.bottom + 4} 150 ${b.bottom + 4} Q${150 - b.hip} ${b.bottom + 4} ${150 - b.hip} ${b.bottom - 6} Q${150 - b.hip} 238 ${150 - b.shoulder} 204 Z`} fill={main} stroke={stroke} strokeWidth={2} />
+      <path data-part="body" d={`M${150 - b.shoulder} 204 Q150 195 ${150 + b.shoulder} 204 Q${150 + b.hip} 238 ${150 + b.hip} ${b.bottom - 6} Q${150 + b.hip} ${b.bottom + 4} 150 ${b.bottom + 4} Q${150 - b.hip} ${b.bottom + 4} ${150 - b.hip} ${b.bottom - 6} Q${150 - b.hip} 238 ${150 - b.shoulder} 204 Z`} fill={color("body")} stroke={stroke} strokeWidth={2} />
       {[-1, 1].map((side) => (
-        <rect key={side} x={150 + side * (b.shoulder + 10) - 12} y={206} width={24} height={b.bottom - 211} rx={12} transform={`rotate(${-side * 16} ${150 + side * (b.shoulder + 10)} 212)`} fill={main} stroke={stroke} strokeWidth={2} />
+        <rect data-part={side === 1 ? "leftArm" : "rightArm"} key={side} x={150 + side * (b.shoulder + 10) - 12} y={206} width={24} height={b.bottom - 211} rx={12} transform={`rotate(${-side * 16} ${150 + side * (b.shoulder + 10)} 212)`} fill={color(side === 1 ? "leftArm" : "rightArm")} stroke={stroke} strokeWidth={2} />
       ))}
-      <rect x={138} y={185} width={24} height={31} rx={10} fill={main} stroke={stroke} strokeWidth={2} />
+      <rect x={138} y={185} width={24} height={31} rx={10} fill={color("body")} stroke={stroke} strokeWidth={2} />
       {/* scarf */}
       {has("scarf") && (
         <g fill={acc} stroke={stroke} strokeWidth={2}>
@@ -95,7 +95,7 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
       )}
       {ears()}
       {/* head */}
-      <circle cx={150} cy={135} r={80} fill={main} stroke={stroke} strokeWidth={2} />
+      <circle data-part="head" cx={150} cy={135} r={80} fill={color("head")} stroke={stroke} strokeWidth={2} />
       {config.face.cheeks && (
         <g fill="var(--doll-cheeks)" opacity={0.55}>
           <ellipse cx={108} cy={162} rx={12} ry={7} />
