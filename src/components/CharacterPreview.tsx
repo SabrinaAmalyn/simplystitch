@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { type CharacterConfig } from "@/lib/character";
 import { BASE_ART, createLayeredCharacter, renderLayers } from "@/lib/character-layers";
-import maskAsset from "@/assets/character/base-display-mask-corrected.png.asset.json";
+import maskAsset from "@/assets/character/base-display-mask-smooth.png.asset.json";
 
 export function CharacterPreview({ config }: { config: CharacterConfig }) {
   const [failed, setFailed] = useState(false);
@@ -11,7 +11,7 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
       <svg viewBox={`0 0 ${BASE_ART.canvas.width} ${BASE_ART.canvas.height}`} className="h-full max-h-[480px] w-full" role="img" aria-label="Layered crochet character preview">
         <defs>
           <mask id="canonical-base-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="256" height="360" style={{ maskType: "alpha" }}>
-            <image href={maskAsset.url} x="0" y="0" width="256" height="360" />
+            <image href={maskAsset.url} x="0" y="0" width="256" height="360" preserveAspectRatio="none" />
           </mask>
         </defs>
         {layers.map((layer) => layer.base ? (
