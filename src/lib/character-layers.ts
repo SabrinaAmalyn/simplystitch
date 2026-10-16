@@ -53,7 +53,7 @@ const ear = (id: string, label: string, f: { url: string }, s: { url: string }, 
   sprites: { front: f.url, side: s.url, back: b.url },
 });
 export const CUSTOMIZATION_ITEMS: CustomizationItem[] = [
-  ear("human", "Human", humanFront, humanSide, humanBack),
+  ear("human", "Monkey", humanFront, humanSide, humanBack),
   ear("dog", "Dog", dogFront, dogSide, dogBack),
   ear("cat", "Cat", catFront, catSide, catBack),
   ear("bear", "Bear", bearFront, bearSide, bearBack),
