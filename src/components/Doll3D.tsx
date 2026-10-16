@@ -48,25 +48,27 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
         </group>
       );
     case "cat":
+      // Wide, thick triangle with rounded edges; inner inset hugs the outer boundary.
       return (
-        <group position={[side * 0.7, 2.72, 0]} rotation={[0, 0, -side * 0.55]}>
-          <mesh scale={[1, 1, 0.45]} castShadow><coneGeometry args={[0.4, 0.8, 4, 1]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, -0.05, 0.12]} scale={[1, 1, 0.25]}><coneGeometry args={[0.24, 0.5, 4, 1]} /><Vinyl color={inner} /></mesh>
+        <group position={[side * 0.62, 2.62, 0]} rotation={[0, 0, -side * 0.45]}>
+          <mesh scale={[0.5, 0.56, 0.3]} castShadow><coneGeometry args={[1, 1, 32, 1]} /><Vinyl color={color} /></mesh>
+          <mesh position={[0, -0.07, 0.1]} scale={[0.36, 0.4, 0.2]}><coneGeometry args={[1, 1, 32, 1]} /><Vinyl color={inner} /></mesh>
         </group>
       );
     case "bunny":
+      // Two smooth upright capsule ovals, side by side, touching near the centre. No inner colour.
       return (
-        <group position={[side * 0.32, 3.4, -0.05]} rotation={[0, 0, -side * 0.18]}>
-          <mesh scale={[0.27, 0.78, 0.17]} castShadow><sphereGeometry args={[1, 32, 20]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, -0.03, 0.12]} scale={[0.14, 0.57, 0.07]}><sphereGeometry args={[1, 28, 18]} /><Vinyl color={inner} /></mesh>
-        </group>
+        <mesh position={[side * 0.28, 3.45, -0.05]} rotation={[0, 0, -side * 0.1]} scale={[0.3, 0.85, 0.2]} castShadow>
+          <sphereGeometry args={[1, 32, 20]} />
+          <Vinyl color={color} />
+        </mesh>
       );
     case "dog":
-      // Long drooping ear; broad rounded pink inset on its front face.
+      // Long drooping ear; broad pink inset on the lower, inward-facing surface (toward the cheeks).
       return (
         <group position={[side * 1.08, 1.78, 0.1]} rotation={[0, side * 0.3, side * 0.3]}>
           <mesh scale={[0.25, 0.84, 0.36]} castShadow><sphereGeometry args={[1, 32, 20]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, -0.04, 0.2]} scale={[0.18, 0.66, 0.18]}><sphereGeometry args={[1, 28, 18]} /><Vinyl color={inner} /></mesh>
+          <mesh position={[-side * 0.12, -0.28, 0.12]} rotation={[0, -side * 0.5, 0]} scale={[0.16, 0.5, 0.2]}><sphereGeometry args={[1, 28, 18]} /><Vinyl color={inner} /></mesh>
         </group>
       );
   }
