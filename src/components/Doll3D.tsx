@@ -83,7 +83,7 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
       ))}
       {/* Large round blush patches */}
       {config.face.cheeks && [-1, 1].map((s) => (
-        <mesh key={`c${s}`} position={[s * 0.62, 1.46, 0.69]} rotation={[0, s * 0.72, 0]} scale={[0.23, 0.22, 0.05]}><sphereGeometry args={[1, 28, 18]} /><meshPhysicalMaterial color={c("blush")} roughness={0.8} emissive={c("blush")} emissiveIntensity={0.25} /></mesh>
+        <mesh key={`c${s}`} position={[s * 0.62, 1.46, 0.69]} rotation={[0, s * 0.72, 0]} scale={[0.23, 0.22, 0.05]}><sphereGeometry args={[1, 28, 18]} /><meshPhysicalMaterial color={c("blush")} roughness={0.9} /></mesh>
       ))}
       {/* Small rounded body */}
       <mesh position={[0, 0.48, 0]} scale={[0.38, 0.42, 0.34]} castShadow><sphereGeometry args={[1, 40, 28]} /><Vinyl color={c("body")} /></mesh>
