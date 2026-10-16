@@ -47,9 +47,11 @@ export function JoinedBody({ torso, leftLeg, rightLeg }: { torso: string; leftLe
     const color = new THREE.Color();
     for (let i = 0; i < position.count; i++) {
       const weights = bodyColorWeights(position.getX(i), position.getY(i));
-      color.copy(colors.torso).multiplyScalar(weights.torso)
-        .addScaledColor(colors.leftLeg, weights.leftLeg)
-        .addScaledColor(colors.rightLeg, weights.rightLeg);
+      color.setRGB(
+        colors.torso.r * weights.torso + colors.leftLeg.r * weights.leftLeg + colors.rightLeg.r * weights.rightLeg,
+        colors.torso.g * weights.torso + colors.leftLeg.g * weights.leftLeg + colors.rightLeg.g * weights.rightLeg,
+        colors.torso.b * weights.torso + colors.leftLeg.b * weights.leftLeg + colors.rightLeg.b * weights.rightLeg,
+      );
       color.toArray(values, i * 3);
     }
     geometry.setAttribute("color", new THREE.BufferAttribute(values, 3));
