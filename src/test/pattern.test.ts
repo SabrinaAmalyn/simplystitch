@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BODY_PARTS, configKey, DEFAULT_CONFIG, migratePartColors, partYarn } from "@/lib/character";
+import { BODY_PARTS, CROCHET_PARTS, configKey, DEFAULT_CONFIG, migratePartColors, partYarn } from "@/lib/character";
 import { generatePattern, patternToText } from "@/lib/pattern";
 
 describe("pattern generation", () => {
@@ -49,7 +49,7 @@ describe("pattern generation", () => {
     expect(legs?.rounds.map((r) => r.count)).toEqual([6, 12, 18, 18]);
   });
 
-  it.each(BODY_PARTS)("%s can have its own yarn in the pattern", (part) => {
+  it.each(CROCHET_PARTS)("%s can have its own yarn in the pattern", (part) => {
     const config = { ...DEFAULT_CONFIG, ears: "long" as const, colors: { ...DEFAULT_CONFIG.colors, [part]: "teal" } };
     const p = generatePattern(config);
     const titles = { head: "Head", body: "Body (standard, ~12 cm)", leftArm: "Left arm (make 1)", rightArm: "Right arm (make 1)", leftLeg: "Left leg (make 1)", rightLeg: "Right leg (make 1)", leftEar: "Left ear (make 1)", rightEar: "Right ear (make 1)" };
@@ -63,7 +63,8 @@ describe("pattern generation", () => {
     const old = { ...DEFAULT_CONFIG, colors: { ...DEFAULT_CONFIG.colors, main: "sage", leftArm: "sky" } };
     const migrated = migratePartColors(old);
     expect(migrated.colors.leftArm).toBe("sky");
-    for (const part of BODY_PARTS.filter((p) => p !== "leftArm")) expect(migrated.colors[part]).toBe("sage");
+    for (const part of CROCHET_PARTS.filter((p) => p !== "leftArm")) expect(migrated.colors[part]).toBe("sage");
+    for (const part of ["leftInnerEar", "rightInnerEar", "blush"] as const) expect(migrated.colors[part]).toBe("blush");
     expect(old.colors).not.toHaveProperty("head");
   });
 
