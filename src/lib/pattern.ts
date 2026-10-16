@@ -185,6 +185,20 @@ export function generatePattern(c: CharacterConfig): Pattern {
       ],
       note: "Stuff the tips only; flatten and sew closed.",
     },
+    {
+      title: "Legs (make 2)",
+      yarn: main,
+      rounds: [
+        { label: "R1", text: "6 sc in magic ring", count: 6 },
+        { label: "R2", text: "inc × 6", count: 12 },
+        { label: "R3", text: "(sc, inc) × 6", count: 18 },
+        { label: "R4", text: "BLO sc around (creates the foot edge)", count: 18 },
+        { label: "R5–6", text: "sc around", count: 18 },
+        { label: "R7", text: "(sc, dec) × 6", count: 12 },
+        { label: c.body === "tall" ? "R8–15" : c.body === "chubby" ? "R8–10" : "R8–12", text: "sc around", count: 12 },
+      ],
+      note: `Stuff firmly. Fasten off leaving a long tail and flatten the open end. Embroider 3 small toe stitches in ${accent} on each foot if you like.`,
+    },
     ...accessorySections(c, acc, body.maxK),
   ];
 
@@ -192,7 +206,7 @@ export function generatePattern(c: CharacterConfig): Pattern {
     "Sew the body to the head over R13–15 of the head, stuffing the neck firmly.",
     ...faceSteps(c, eyes, accent),
     `Sew ears to the top of the head ${c.ears === "long" ? "close together, 3 sts apart" : "about 8 sts apart"}.`,
-    "Sew the belly patch centered on the body front; sew arms at the top body rounds.",
+    "Sew the belly patch centered on the body front; sew arms at the top body rounds and legs at the bottom, feet pointing forward.",
     ...(c.accessories.includes("scarf") ? ["Wrap the scarf around the neck and tack in place."] : []),
     ...(c.accessories.includes("beanie") ? ["Pull the beanie on, threading ears through the holes; fold the brim up."] : []),
     ...(c.accessories.includes("bow") ? ["Sew the bow to the head beside one ear."] : []),
