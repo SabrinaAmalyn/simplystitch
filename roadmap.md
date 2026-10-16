@@ -9,3 +9,4 @@
 - [x] Introduce the immutable supplied base, shared coordinates, and sample overlay registry.
 - [x] Add layer selection, replacement, removal, structured export, and safe pattern-rule gating.
 - [x] Verify ordering, persistence, original artwork, and saved draft recovery.
+- [x] Shorten the torso and lower the blush further, checked from front and side.
