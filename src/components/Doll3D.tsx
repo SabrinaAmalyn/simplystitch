@@ -48,25 +48,27 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
         </group>
       );
     case "cat":
+      // Wide, thick triangle with rounded edges; inner inset hugs the outer boundary.
       return (
-        <group position={[side * 0.7, 2.72, 0]} rotation={[0, 0, -side * 0.55]}>
-          <mesh scale={[1, 1, 0.45]} castShadow><coneGeometry args={[0.4, 0.8, 4, 1]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, -0.05, 0.12]} scale={[1, 1, 0.25]}><coneGeometry args={[0.24, 0.5, 4, 1]} /><Vinyl color={inner} /></mesh>
+        <group position={[side * 0.58, 2.6, 0]} rotation={[0, 0, -side * 0.35]}>
+          <mesh scale={[0.62, 0.52, 0.34]} castShadow><coneGeometry args={[1, 1, 32, 1]} /><Vinyl color={color} /></mesh>
+          <mesh position={[0, -0.06, 0.11]} scale={[0.46, 0.37, 0.22]}><coneGeometry args={[1, 1, 32, 1]} /><Vinyl color={inner} /></mesh>
         </group>
       );
     case "bunny":
+      // Two smooth upright capsule ovals, side by side, touching near the centre. No inner colour.
       return (
-        <group position={[side * 0.32, 3.4, -0.05]} rotation={[0, 0, -side * 0.18]}>
-          <mesh scale={[0.27, 0.78, 0.17]} castShadow><sphereGeometry args={[1, 32, 20]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, -0.03, 0.12]} scale={[0.14, 0.57, 0.07]}><sphereGeometry args={[1, 28, 18]} /><Vinyl color={inner} /></mesh>
-        </group>
+        <mesh position={[side * 0.28, 3.45, -0.05]} rotation={[0, 0, -side * 0.1]} scale={[0.3, 0.85, 0.2]} castShadow>
+          <sphereGeometry args={[1, 32, 20]} />
+          <Vinyl color={color} />
+        </mesh>
       );
     case "dog":
-      // Long drooping ear; broad rounded pink inset on its front face.
+      // Long drooping ear; broad pink inset on the lower, inward-facing surface (toward the cheeks).
       return (
         <group position={[side * 1.08, 1.78, 0.1]} rotation={[0, side * 0.3, side * 0.3]}>
           <mesh scale={[0.25, 0.84, 0.36]} castShadow><sphereGeometry args={[1, 32, 20]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, -0.04, 0.2]} scale={[0.18, 0.66, 0.18]}><sphereGeometry args={[1, 28, 18]} /><Vinyl color={inner} /></mesh>
+          <mesh position={[-side * 0.12, -0.28, 0.12]} rotation={[0, -side * 0.5, 0]} scale={[0.16, 0.5, 0.2]}><sphereGeometry args={[1, 28, 18]} /><Vinyl color={inner} /></mesh>
         </group>
       );
   }
@@ -82,14 +84,16 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
         <mesh key={`e${s}`} position={[s * 0.34, 1.95, 0.9]} rotation={[0, s * 0.36, 0]} scale={[0.06, 0.09, 0.03]}><sphereGeometry args={[1, 20, 14]} /><meshPhysicalMaterial color={eye} roughness={0.3} clearcoat={1} /></mesh>
       ))}
       {config.face.cheeks && [-1, 1].map((s) => (
-        <mesh key={`c${s}`} position={[s * 0.62, 1.69, 0.69]} rotation={[0, s * 0.72, 0]} scale={[0.23, 0.22, 0.05]}><sphereGeometry args={[1, 28, 18]} /><meshPhysicalMaterial color={c("blush")} roughness={0.9} /></mesh>
+        <mesh key={`c${s}`} position={[s * 0.62, 1.66, 0.68]} rotation={[0, s * 0.72, 0]} scale={[0.28, 0.28, 0.06]}><sphereGeometry args={[1, 28, 18]} /><meshPhysicalMaterial color={c("blush")} roughness={0.9} /></mesh>
       ))}
       {/* Torso, arms and legs ~28% larger than before */}
       <mesh position={[0, 0.66, 0]} scale={[0.49, 0.54, 0.44]} castShadow><sphereGeometry args={[1, 40, 28]} /><Vinyl color={c("body")} /></mesh>
-      <mesh position={[0.49, 0.68, 0.02]} rotation={[0, 0, 0.35]} castShadow><capsuleGeometry args={[0.13, 0.23, 8, 16]} /><Vinyl color={c("leftArm")} /></mesh>
-      <mesh position={[-0.49, 0.68, 0.02]} rotation={[0, 0, -0.35]} castShadow><capsuleGeometry args={[0.13, 0.23, 8, 16]} /><Vinyl color={c("rightArm")} /></mesh>
-      <mesh position={[0.18, 0.25, 0]} castShadow><capsuleGeometry args={[0.175, 0.14, 8, 16]} /><Vinyl color={c("leftLeg")} /></mesh>
-      <mesh position={[-0.18, 0.25, 0]} castShadow><capsuleGeometry args={[0.175, 0.14, 8, 16]} /><Vinyl color={c("rightLeg")} /></mesh>
+      {/* Arms sit high and tucked in, connecting at the shoulder/neck area */}
+      <mesh position={[0.42, 0.86, 0.02]} rotation={[0, 0, 0.5]} castShadow><capsuleGeometry args={[0.13, 0.23, 8, 16]} /><Vinyl color={c("leftArm")} /></mesh>
+      <mesh position={[-0.42, 0.86, 0.02]} rotation={[0, 0, -0.5]} castShadow><capsuleGeometry args={[0.13, 0.23, 8, 16]} /><Vinyl color={c("rightArm")} /></mesh>
+      {/* Legs symmetric at the lower left/right of the torso, centred on the body */}
+      <mesh position={[0.2, 0.22, 0]} castShadow><capsuleGeometry args={[0.175, 0.14, 8, 16]} /><Vinyl color={c("leftLeg")} /></mesh>
+      <mesh position={[-0.2, 0.22, 0]} castShadow><capsuleGeometry args={[0.175, 0.14, 8, 16]} /><Vinyl color={c("rightLeg")} /></mesh>
       {ears && <Ear type={ears} side={1} color={c("leftEar")} inner={c("leftInnerEar")} />}
       {ears && <Ear type={ears} side={-1} color={c("rightEar")} inner={c("rightInnerEar")} />}
     </group>
