@@ -31,10 +31,10 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
           <ellipse cx={x} cy={44} rx={9} ry={42} fill={accent} />
         </g>
       ));
-    return [
+    return ([
       [80, 105, 100, 30, 140, 70],
       [220, 105, 200, 30, 160, 70],
-    ].map(([x1, y1, x2, y2, x3, y3], i) => (
+    ] as [number, number, number, number, number, number][]).map(([x1, y1, x2, y2, x3, y3], i) => (
       <g key={i}>
         <polygon points={`${x1},${y1} ${x2},${y2} ${x3},${y3}`} fill={main} stroke={stroke} strokeWidth={2} strokeLinejoin="round" />
         <polygon points={`${(x1 + x2 + x3) / 3 - (i ? -2 : 2)},${y1 - 15} ${x2 + (i ? 4 : -4)},${y2 + 25} ${(x1 + x3) / 2},${y3 + 18}`} fill={accent} />
