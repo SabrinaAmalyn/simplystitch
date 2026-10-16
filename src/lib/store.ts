@@ -6,6 +6,7 @@ export type Draft = { text: string; configKey: string; edited: boolean; generate
 type State = { config: CharacterConfig; draft: Draft | null; previous: Draft | null };
 
 const KEY = "stitchling-state-v1";
+const BASE_KEY = "stitchling-doll-base-v2";
 const initial: State = { config: DEFAULT_CONFIG, draft: null, previous: null };
 let state: State = initial;
 const listeners = new Set<() => void>();
@@ -33,8 +34,13 @@ export function hydrateStore() {
     if (raw) {
       const parsed = JSON.parse(raw) as State;
       state = { ...initial, ...parsed, config: { ...DEFAULT_CONFIG, ...parsed.config } };
+      if (!localStorage.getItem(BASE_KEY)) {
+        state = { ...state, config: { ...state.config, ears: "none", accessories: [], colors: { ...state.config.colors, main: "peach" } } };
+      }
       listeners.forEach((l) => l());
     }
+    localStorage.setItem(BASE_KEY, "true");
+    localStorage.setItem(KEY, JSON.stringify(state));
   } catch {
     /* ignore corrupted storage */
   }

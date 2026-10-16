@@ -86,6 +86,10 @@
   --ring: oklch(0.6 0.13 40);
   --stage: radial-gradient(circle at 50% 40%, oklch(0.95 0.04 95), oklch(0.89 0.05 130));
   --shadow-soft: 0 10px 30px -12px oklch(0.4 0.06 45 / 0.25);
+  --doll-outline: oklch(0.35 0.035 45 / 0.65);
+  --doll-shadow: oklch(0.35 0.035 45 / 0.12);
+  --doll-cheeks: oklch(0.75 0.13 25);
+  --doll-eye-glint: oklch(1 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -102,6 +106,10 @@
 }
 
 .dark {
+  --doll-outline: oklch(0.25 0.025 45 / 0.7);
+  --doll-shadow: oklch(0.1 0 0 / 0.3);
+  --doll-cheeks: oklch(0.75 0.13 25);
+  --doll-eye-glint: oklch(1 0 0);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);

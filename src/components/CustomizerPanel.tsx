@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   ACCESSORY_OPTIONS,
   BODY_OPTIONS,
@@ -19,7 +20,7 @@ function Swatches({ value, onPick, label }: { value: string; onPick: (id: string
       <p className="mb-2 text-sm font-semibold">{label}</p>
       <div className="flex flex-wrap gap-2">
         {YARNS.map((y) => (
-          <button
+          <Button variant="ghost" size="icon"
             key={y.id}
             type="button"
             title={y.name}
@@ -37,10 +38,10 @@ function Swatches({ value, onPick, label }: { value: string; onPick: (id: string
 
 function Choice({ on, onClick, label, hint }: { on: boolean; onClick: () => void; label: string; hint?: string }) {
   return (
-    <button type="button" aria-pressed={on} onClick={onClick} className={on ? "choice choice-on" : "choice"}>
+    <Button variant="ghost" type="button" aria-pressed={on} onClick={onClick} className={`h-auto whitespace-normal ${on ? "choice choice-on" : "choice"}`}>
       <span className="font-semibold">{label}</span>
       {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
-    </button>
+    </Button>
   );
 }
 
@@ -52,9 +53,9 @@ export function CustomizerPanel({ config, onChange }: Props) {
     <div className="panel flex flex-col gap-5">
       <div role="tablist" className="flex flex-wrap gap-1 rounded-full bg-muted p-1">
         {TABS.map((t) => (
-          <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={tab === t ? "tab tab-on" : "tab"}>
+          <Button variant="ghost" key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={tab === t ? "tab tab-on" : "tab"}>
             {t}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -63,7 +64,7 @@ export function CustomizerPanel({ config, onChange }: Props) {
           {(
             [
               ["main", "Main yarn"],
-              ["accent", "Accent (belly & inner ears)"],
+              ["accent", "Inner ears"],
               ["accessory", "Accessories"],
               ["eyes", "Face details"],
             ] as const
@@ -74,7 +75,7 @@ export function CustomizerPanel({ config, onChange }: Props) {
       )}
 
       {tab === "Ears" && (
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {EAR_OPTIONS.map((o) => (
             <Choice key={o.value} on={config.ears === o.value} onClick={() => set({ ears: o.value })} label={o.label} hint={o.hint} />
           ))}
