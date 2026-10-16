@@ -78,6 +78,24 @@ function Leg({ side, color }: { side: 1 | -1; color: string }) {
   return <mesh position={[side * 0.22, 0.24, 0]} castShadow><capsuleGeometry args={[0.19, 0.14, 8, 20]} /><Vinyl color={color} /></mesh>;
 }
 
+/** Rounded triangle (base on y=0) with soft corners. */
+function roundedTriangle(w: number, h: number, r: number) {
+  const p = [new THREE.Vector2(-w / 2, 0), new THREE.Vector2(0, h), new THREE.Vector2(w / 2, 0)];
+  const s = new THREE.Shape();
+  for (let i = 0; i < 3; i++) {
+    const prev = p[(i + 2) % 3], cur = p[i], next = p[(i + 1) % 3];
+    const a = cur.clone().add(prev.clone().sub(cur).normalize().multiplyScalar(r));
+    const b = cur.clone().add(next.clone().sub(cur).normalize().multiplyScalar(r));
+    if (i === 0) s.moveTo(a.x, a.y); else s.lineTo(a.x, a.y);
+    s.quadraticCurveTo(cur.x, cur.y, b.x, b.y);
+  }
+  s.closePath();
+  return s;
+}
+const CAT_OUTER = new THREE.ExtrudeGeometry(roundedTriangle(0.86, 0.72, 0.2), { depth: 0.12, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.06, bevelSegments: 5, curveSegments: 16 });
+CAT_OUTER.translate(0, 0, -0.06);
+const CAT_INNER = new THREE.ExtrudeGeometry(roundedTriangle(0.56, 0.48, 0.13), { depth: 0.02, bevelEnabled: false, curveSegments: 16 });
+
 // Doll faces +z; the doll's left side is +x (named from the doll's perspective).
 function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: string; inner: string }) {
   switch (type) {
@@ -96,11 +114,11 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
         </group>
       );
     case "cat":
-      // Sits fully on top of the head; inner inset shares the outer base and sits flush on the front face.
+      // Short, wide, soft rounded triangles; bases tucked behind the upper head.
       return (
-        <group position={[side * 0.5, 2.84, 0]} rotation={[0, 0, -side * 0.25]}>
-          <mesh scale={[0.4, 0.55, 0.26]} castShadow><coneGeometry args={[1, 1, 40, 1]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, -0.05, 0.1]} scale={[0.29, 0.42, 0.16]}><coneGeometry args={[1, 1, 40, 1]} /><Vinyl color={inner} /></mesh>
+        <group position={[side * 0.56, 2.5, -0.28]} rotation={[-0.15, 0, -side * 0.38]}>
+          <mesh geometry={CAT_OUTER} castShadow><Vinyl color={color} /></mesh>
+          <mesh geometry={CAT_INNER} position={[0, 0.06, 0.185]}><Vinyl color={inner} /></mesh>
         </group>
       );
     case "bunny":
