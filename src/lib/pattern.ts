@@ -36,6 +36,8 @@ const BODY = {
 
 function earSection(c: CharacterConfig, main: string, accent: string): Section[] {
   switch (c.ears) {
+    case "none":
+      return [];
     case "round":
       return [
         {
@@ -131,8 +133,8 @@ function accessorySections(c: CharacterConfig, acc: string, bodyK: number): Sect
       ],
       note:
         c.ears === "round"
-          ? "Leave ear holes: in R10 replace 4 sts with ch 4 at two points, 10 sts apart."
-          : "Leave ear holes: in R11 replace 3 sts with ch 3 at two points, 10 sts apart.",
+      ? "Leave ear holes: in R10 replace 4 sts with ch 4 at two points, 10 sts apart."
+          : c.ears === "none" ? "Work every round continuously; no ear holes are needed." : "Leave ear holes: in R11 replace 3 sts with ch 3 at two points, 10 sts apart.",
     });
   return out;
 }
@@ -147,7 +149,8 @@ export function generatePattern(c: CharacterConfig): Pattern {
 
   const materials = [
     `DK / light worsted cotton yarn — ${main} (main, ~60 g)`,
-    `${accent} (accent, ~15 g)`,
+    ...(c.ears !== "none" ? [`${accent} (inner ears, ~15 g)`] : []),
+    ...(c.face.cheeks ? ["Blush Pink (cheeks, small amount)"] : []),
     ...(hasAcc ? [`${acc} (accessories, ~15 g)`] : []),
     `${eyes} (embroidery, small amount)`,
     "3.0 mm crochet hook",
@@ -156,23 +159,12 @@ export function generatePattern(c: CharacterConfig): Pattern {
   ];
 
   const sections: Section[] = [
-    { title: "Head", yarn: main, rounds: shapeRounds(7, 7, 2), note: "Stuff firmly before the last decreases. Leave a long tail for sewing." },
+    { title: "Head", yarn: main, rounds: shapeRounds(10, 8, 2), note: "The oversized round head is worked in one color. Embroider the face or fit safety eyes before stuffing and decreasing. Stuff firmly; leave the 12-stitch opening for the neck and a long sewing tail." },
     {
       title: `Body (${c.body}, ${body.size})`,
       yarn: main,
-      rounds: shapeRounds(body.maxK, body.plain, 3),
-      note: "Stuff as you go. Fasten off leaving a tail; the open end attaches to the head.",
-    },
-    {
-      title: "Belly patch",
-      yarn: accent,
-      rounds: [
-        { label: "Foundation", text: "ch 5" },
-        { label: "R1", text: "sc in 2nd ch from hook, 2 sc, 3 sc in last ch; working along other side, 2 sc, 2 sc in last", count: 12 },
-        { label: "R2", text: "inc, 2 sc, inc × 3, 2 sc, inc × 2", count: 18 },
-        ...(c.body === "chubby" ? [{ label: "R3", text: "(2 sc, inc) × 6", count: 24 }] : []),
-      ],
-      note: `Color change: belly is worked separately in ${accent} and sewn flat to the body front.`,
+      rounds: [...shapeRounds(body.maxK, body.plain, 2), { label: "Neck (2 rounds)", text: "sc around for 2 rounds", count: 12 }],
+      note: "Work from the rounded hip base upward in main yarn only, with no belly patch or clothing. The decreases taper the shoulders into the short neck. Stuff firmly and leave the 12-stitch neck open with a sewing tail.",
     },
     ...earSection(c, main, accent),
     {
@@ -180,10 +172,10 @@ export function generatePattern(c: CharacterConfig): Pattern {
       yarn: main,
       rounds: [
         { label: "R1", text: "6 sc in magic ring", count: 6 },
-        { label: "R2", text: "(sc, inc) × 3", count: 9 },
-        { label: c.body === "tall" ? "R3–10" : "R3–7", text: "sc around", count: 9 },
+        { label: "R2", text: "inc × 6", count: 12 },
+        { label: c.body === "tall" ? "R3–14" : "R3–11", text: "sc around", count: 12 },
       ],
-      note: "Stuff the tips only; flatten and sew closed.",
+      note: "Use main yarn throughout. Stuff lightly for relaxed arms, flatten the 12-stitch opening and sc through both layers across 6 sts. Leave a sewing tail; attach so the arms hang down beside the torso.",
     },
     {
       title: "Legs (make 2)",
@@ -192,28 +184,25 @@ export function generatePattern(c: CharacterConfig): Pattern {
         { label: "R1", text: "6 sc in magic ring", count: 6 },
         { label: "R2", text: "inc × 6", count: 12 },
         { label: "R3", text: "(sc, inc) × 6", count: 18 },
-        { label: "R4", text: "BLO sc around (creates the foot edge)", count: 18 },
-        { label: "R5–6", text: "sc around", count: 18 },
-        { label: "R7", text: "(sc, dec) × 6", count: 12 },
-        { label: c.body === "tall" ? "R8–15" : c.body === "chubby" ? "R8–10" : "R8–12", text: "sc around", count: 12 },
+        { label: c.body === "tall" ? "R4–15" : c.body === "chubby" ? "R4–9" : "R4–11", text: "sc around", count: 18 },
       ],
-      note: `Stuff firmly. Fasten off leaving a long tail and flatten the open end. Embroider 3 small toe stitches in ${accent} on each foot if you like.`,
+      note: "Work in main yarn with no color change. These are straight legs with rounded ends, not separate shoes. Stuff firmly and leave the 18-stitch top open with a long tail for sewing to the hip base.",
     },
     ...accessorySections(c, acc, body.maxK),
   ];
 
   const assembly = [
-    "Sew the body to the head over R13–15 of the head, stuffing the neck firmly.",
+    "Align the 12-stitch neck opening with the 12-stitch opening at the bottom of the head. Sew stitch for stitch, adding firm neck stuffing before closing the seam.",
     ...faceSteps(c, eyes, accent),
-    `Sew ears to the top of the head ${c.ears === "long" ? "close together, 3 sts apart" : "about 8 sts apart"}.`,
-    "Sew the belly patch centered on the body front; sew arms at the top body rounds and legs at the bottom, feet pointing forward.",
+    ...(c.ears !== "none" ? [`Sew ears to the top of the head ${c.ears === "long" ? "close together, 3 sts apart" : "about 8 sts apart"}.`] : []),
+    "Sew the arms to either side just below the neck, letting them hang down. Sew the open tops of the two legs side by side to the bottom of the torso, leaving a small gap between them; keep both rounded ends level.",
     ...(c.accessories.includes("scarf") ? ["Wrap the scarf around the neck and tack in place."] : []),
     ...(c.accessories.includes("beanie") ? ["Pull the beanie on, threading ears through the holes; fold the brim up."] : []),
     ...(c.accessories.includes("bow") ? ["Sew the bow to the head beside one ear."] : []),
   ];
 
   return {
-    title: `Custom ${c.ears === "long" ? "Bunny" : c.ears === "pointy" ? "Kitty" : "Bear"} — ${main}`,
+    title: `Custom ${c.ears === "none" ? "Doll" : c.ears === "long" ? "Bunny" : c.ears === "pointy" ? "Kitty" : "Bear"} — ${main}`,
     materials,
     abbreviations: ["MR – magic ring", "ch – chain", "sc – single crochet", "hdc – half double crochet", "inc – 2 sc in same st", "dec – invisible decrease", "BLO – back loop only", "(n) – stitch count at end of round"],
     sections,
