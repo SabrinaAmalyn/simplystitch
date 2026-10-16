@@ -5,8 +5,6 @@ import { BASE_ART, CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer, typ
 
 const TABS = [
   { label: "Body", slot: null }, { label: "Ears", slot: "ears" },
-  { label: "Hair", slot: "hair" }, { label: "Face", slot: "face" },
-  { label: "Outfits", slot: "outfit" }, { label: "Accessories", slot: "accessory" },
 ] as const;
 
 export function CustomizerPanel({ config, onChange }: { config: CharacterConfig; onChange: (c: CharacterConfig) => void }) {
