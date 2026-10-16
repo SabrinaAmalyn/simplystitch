@@ -78,20 +78,6 @@ function Leg({ side, color }: { side: 1 | -1; color: string }) {
   return <mesh position={[side * 0.22, 0.24, 0]} castShadow><capsuleGeometry args={[0.19, 0.14, 8, 20]} /><Vinyl color={color} /></mesh>;
 }
 
-/** Rounded triangle (base on y=0) with soft corners. */
-function roundedTriangle(w: number, h: number, r: number) {
-  const p = [new THREE.Vector2(-w / 2, 0), new THREE.Vector2(0, h), new THREE.Vector2(w / 2, 0)];
-  const s = new THREE.Shape();
-  for (let i = 0; i < 3; i++) {
-    const prev = p[(i + 2) % 3]!, cur = p[i]!, next = p[(i + 1) % 3]!;
-    const a = cur.clone().add(prev.clone().sub(cur).normalize().multiplyScalar(r));
-    const b = cur.clone().add(next.clone().sub(cur).normalize().multiplyScalar(r));
-    if (i === 0) s.moveTo(a.x, a.y); else s.lineTo(a.x, a.y);
-    s.quadraticCurveTo(cur.x, cur.y, b.x, b.y);
-  }
-  s.closePath();
-  return s;
-}
 /** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */
 function catEarGeometry() {
   const g = new THREE.SphereGeometry(1, 48, 32);
