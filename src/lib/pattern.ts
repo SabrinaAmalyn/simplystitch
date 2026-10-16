@@ -1,5 +1,5 @@
 // Deterministic crochet pattern generator: maps a CharacterConfig to templates.
-import { type CharacterConfig, yarnById } from "./character";
+import { BODY_PARTS, type CharacterConfig, partYarn, yarnById } from "./character";
 
 export type Round = { label: string; text: string; count?: number };
 export type Section = { title: string; yarn?: string; note?: string; rounds: Round[] };
@@ -98,6 +98,26 @@ function faceSteps(c: CharacterConfig, eyes: string, accent: string): string[] {
   return steps;
 }
 
+function coloredEarSections(c: CharacterConfig, accent: string): Section[] {
+  const left = partYarn(c, "leftEar").name;
+  const right = partYarn(c, "rightEar").name;
+  if (left === right) return earSection(c, left, accent);
+  return ([['Left', left], ['Right', right]] as const).flatMap(([side, yarn]) =>
+    earSection(c, yarn, accent).map((section) => ({
+      ...section,
+      title: `${side} ear${c.ears === "round" ? " (make 1 outer + 1 inner)" : " (make 1)"}`,
+    })),
+  );
+}
+
+function coloredPair(section: Section, left: string, right: string, part: string): Section[] {
+  if (left === right) return [{ ...section, yarn: left }];
+  return [
+    { ...section, title: `Left ${part} (make 1)`, yarn: left },
+    { ...section, title: `Right ${part} (make 1)`, yarn: right },
+  ];
+}
+
 function accessorySections(c: CharacterConfig, acc: string, bodyK: number): Section[] {
   const out: Section[] = [];
   if (c.accessories.includes("scarf"))
@@ -140,15 +160,24 @@ function accessorySections(c: CharacterConfig, acc: string, bodyK: number): Sect
 }
 
 export function generatePattern(c: CharacterConfig): Pattern {
-  const main = yarnById(c.colors.main).name;
+  const main = partYarn(c, "body").name;
   const accent = yarnById(c.colors.accent).name;
   const acc = yarnById(c.colors.accessory).name;
   const eyes = yarnById(c.colors.eyes).name;
   const body = BODY[c.body];
   const hasAcc = c.accessories.length > 0;
 
+  const partMaterials = new Map<string, string[]>();
+  for (const part of BODY_PARTS) {
+    if (c.ears === "none" && (part === "leftEar" || part === "rightEar")) continue;
+    const name = partYarn(c, part).name;
+    const label = part.replace(/([A-Z])/g, " $1").toLowerCase();
+    partMaterials.set(name, [...(partMaterials.get(name) ?? []), label]);
+  }
+
   const materials = [
-    `DK / light worsted cotton yarn — ${main} (main, ~60 g)`,
+    "DK / light worsted cotton yarn — ~60 g total for the doll (estimate)",
+    ...Array.from(partMaterials, ([name, parts]) => `${name} (${parts.join(", ")})`),
     ...(c.ears !== "none" ? [`${accent} (inner ears, ~15 g)`] : []),
     ...(c.face.cheeks ? ["Blush Pink (cheeks, small amount)"] : []),
     ...(hasAcc ? [`${acc} (accessories, ~15 g)`] : []),
@@ -159,15 +188,15 @@ export function generatePattern(c: CharacterConfig): Pattern {
   ];
 
   const sections: Section[] = [
-    { title: "Head", yarn: main, rounds: shapeRounds(10, 8, 2), note: "The oversized round head is worked in one color. Embroider the face or fit safety eyes before stuffing and decreasing. Stuff firmly; leave the 12-stitch opening for the neck and a long sewing tail." },
+    { title: "Head", yarn: partYarn(c, "head").name, rounds: shapeRounds(10, 8, 2), note: "The oversized round head is worked in its selected yarn throughout. Embroider the face or fit safety eyes before stuffing and decreasing. Stuff firmly; leave the 12-stitch opening for the neck and a long sewing tail." },
     {
       title: `Body (${c.body}, ${body.size})`,
       yarn: main,
       rounds: [...shapeRounds(body.maxK, body.plain, 2), { label: "Neck (2 rounds)", text: "sc around for 2 rounds", count: 12 }],
-      note: "Work from the rounded hip base upward in main yarn only, with no belly patch or clothing. The decreases taper the shoulders into the short neck. Stuff firmly and leave the 12-stitch neck open with a sewing tail.",
+      note: "Work from the rounded hip base upward in the body yarn only, with no belly patch or clothing. The decreases taper the shoulders into the short neck. Stuff firmly and leave the 12-stitch neck open with a sewing tail.",
     },
-    ...earSection(c, main, accent),
-    {
+    ...coloredEarSections(c, accent),
+    ...coloredPair({
       title: "Arms (make 2)",
       yarn: main,
       rounds: [
@@ -175,9 +204,9 @@ export function generatePattern(c: CharacterConfig): Pattern {
         { label: "R2", text: "inc × 6", count: 12 },
         { label: c.body === "tall" ? "R3–14" : "R3–11", text: "sc around", count: 12 },
       ],
-      note: "Use main yarn throughout. Stuff lightly for relaxed arms, flatten the 12-stitch opening and sc through both layers across 6 sts. Leave a sewing tail; attach so the arms hang down beside the torso.",
-    },
-    {
+      note: "Use the listed yarn throughout. Stuff lightly for relaxed arms, flatten the 12-stitch opening and sc through both layers across 6 sts. Leave a sewing tail; attach so the arms hang down beside the torso.",
+    }, partYarn(c, "leftArm").name, partYarn(c, "rightArm").name, "arm"),
+    ...coloredPair({
       title: "Legs (make 2)",
       yarn: main,
       rounds: [
@@ -186,12 +215,13 @@ export function generatePattern(c: CharacterConfig): Pattern {
         { label: "R3", text: "(sc, inc) × 6", count: 18 },
         { label: c.body === "tall" ? "R4–15" : c.body === "chubby" ? "R4–9" : "R4–11", text: "sc around", count: 18 },
       ],
-      note: "Work in main yarn with no color change. These are straight legs with rounded ends, not separate shoes. Stuff firmly and leave the 18-stitch top open with a long tail for sewing to the hip base.",
-    },
+      note: "Work in the listed yarn with no color change. These are straight legs with rounded ends, not separate shoes. Stuff firmly and leave the 18-stitch top open with a long tail for sewing to the hip base.",
+    }, partYarn(c, "leftLeg").name, partYarn(c, "rightLeg").name, "leg"),
     ...accessorySections(c, acc, body.maxK),
   ];
 
   const assembly = [
+    "Left and right refer to the doll's own sides. Attach each individually colored piece on its named side.",
     "Align the 12-stitch neck opening with the 12-stitch opening at the bottom of the head. Sew stitch for stitch, adding firm neck stuffing before closing the seam.",
     ...faceSteps(c, eyes, accent),
     ...(c.ears !== "none" ? [`Sew ears to the top of the head ${c.ears === "long" ? "close together, 3 sts apart" : "about 8 sts apart"}.`] : []),
