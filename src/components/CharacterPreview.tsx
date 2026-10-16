@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { type CharacterConfig } from "@/lib/character";
 import { BASE_ART, createLayeredCharacter, renderLayers } from "@/lib/character-layers";
-import maskAsset from "@/assets/character/base-display-mask.png.asset.json";
+import maskAsset from "@/assets/character/base-display-mask-corrected.png.asset.json";
 
 export function CharacterPreview({ config }: { config: CharacterConfig }) {
   const [failed, setFailed] = useState(false);
@@ -15,7 +15,7 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
           </mask>
         </defs>
         {layers.map((layer) => layer.base ? (
-          <image key={layer.id} data-layer={layer.id} data-base-source={BASE_ART.url} href={BASE_ART.url} x="0" y="0" width={BASE_ART.source.width} height={BASE_ART.source.height} mask="url(#canonical-base-mask)" onError={() => setFailed(true)} />
+          <image key={layer.id} data-layer={layer.id} data-base-source={BASE_ART.url} href={BASE_ART.url} x="0" y="0" width={BASE_ART.source.width} height={BASE_ART.source.height} preserveAspectRatio="none" mask="url(#canonical-base-mask)" onError={() => setFailed(true)} />
         ) : (
           <image key={layer.id} data-layer={layer.id} href={layer.url} x="0" y="0" width={BASE_ART.canvas.width} height={BASE_ART.canvas.height} onError={() => setFailed(true)} />
         ))}
