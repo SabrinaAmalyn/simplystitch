@@ -50,9 +50,9 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
     case "cat":
       // Wide, thick triangle with rounded edges; inner inset hugs the outer boundary.
       return (
-        <group position={[side * 0.62, 2.62, 0]} rotation={[0, 0, -side * 0.45]}>
-          <mesh scale={[0.5, 0.56, 0.3]} castShadow><coneGeometry args={[1, 1, 32, 1]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, -0.07, 0.1]} scale={[0.36, 0.4, 0.2]}><coneGeometry args={[1, 1, 32, 1]} /><Vinyl color={inner} /></mesh>
+        <group position={[side * 0.58, 2.6, 0]} rotation={[0, 0, -side * 0.35]}>
+          <mesh scale={[0.62, 0.52, 0.34]} castShadow><coneGeometry args={[1, 1, 32, 1]} /><Vinyl color={color} /></mesh>
+          <mesh position={[0, -0.06, 0.11]} scale={[0.46, 0.37, 0.22]}><coneGeometry args={[1, 1, 32, 1]} /><Vinyl color={inner} /></mesh>
         </group>
       );
     case "bunny":
