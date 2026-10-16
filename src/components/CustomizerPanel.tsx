@@ -6,6 +6,7 @@ import {
   type CharacterConfig,
   EAR_OPTIONS,
   EXPRESSION_OPTIONS,
+  partYarn,
   YARNS,
 } from "@/lib/character";
 
@@ -66,6 +67,8 @@ export function CustomizerPanel({ config, onChange }: Props) {
               <Choice key={o.value} on={config.ears === o.value} onClick={() => set({ ears: o.value })} label={o.label} hint={o.hint} />
             ))}
           </div>
+          <Swatches label="Left ear" value={partYarn(config, "leftEar").id} onPick={(id) => set({ colors: { ...config.colors, leftEar: id } })} />
+          <Swatches label="Right ear" value={partYarn(config, "rightEar").id} onPick={(id) => set({ colors: { ...config.colors, rightEar: id } })} />
           <Swatches label="Inner ears" value={config.colors.accent} onPick={(id) => set({ colors: { ...config.colors, accent: id } })} />
         </div>
       )}
@@ -89,7 +92,13 @@ export function CustomizerPanel({ config, onChange }: Props) {
               <Choice key={o.value} on={config.body === o.value} onClick={() => set({ body: o.value })} label={o.label} hint={o.hint} />
             ))}
           </div>
-          <Swatches label="Main yarn" value={config.colors.main} onPick={(id) => set({ colors: { ...config.colors, main: id } })} />
+          {([
+            ["head", "Head"], ["body", "Body"],
+            ["leftArm", "Left arm"], ["rightArm", "Right arm"],
+            ["leftLeg", "Left leg"], ["rightLeg", "Right leg"],
+          ] as const).map(([part, label]) => (
+            <Swatches key={part} label={label} value={partYarn(config, part).id} onPick={(id) => set({ colors: { ...config.colors, [part]: id } })} />
+          ))}
         </div>
       )}
 
