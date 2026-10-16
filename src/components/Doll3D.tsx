@@ -16,10 +16,10 @@ function Vinyl({ color }: { color: string }) {
   return (
     <meshPhysicalMaterial
       color={color}
-      roughness={0.7}
+      roughness={0.55}
       sheen={1}
       sheenRoughness={0.45}
-      sheenColor="#fff1e6"
+      sheenColor="#ffe4d2"
       clearcoat={0.15}
       clearcoatRoughness={0.6}
     />
@@ -62,7 +62,7 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
       );
     case "dog":
       return (
-        <group position={[side * 0.98, 1.6, 0.05]} rotation={[0, side * 0.25, side * 0.28]}>
+        <group position={[side * 1.05, 1.62, 0.1]} rotation={[0, side * 0.35, side * 0.4]}>
           <mesh scale={[0.18, 0.62, 0.3]} castShadow><sphereGeometry args={[1, 28, 18]} /><Vinyl color={color} /></mesh>
           <mesh position={[side * 0.06, -0.05, 0.18]} rotation={[0, side * 0.5, 0]} scale={[0.09, 0.45, 0.1]}><sphereGeometry args={[1, 24, 16]} /><Vinyl color={inner} /></mesh>
         </group>
@@ -83,7 +83,7 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
       ))}
       {/* Large round blush patches */}
       {config.face.cheeks && [-1, 1].map((s) => (
-        <mesh key={`c${s}`} position={[s * 0.62, 1.46, 0.69]} rotation={[0, s * 0.72, 0]} scale={[0.23, 0.22, 0.05]}><sphereGeometry args={[1, 28, 18]} /><meshPhysicalMaterial color={c("blush")} roughness={0.9} /></mesh>
+        <mesh key={`c${s}`} position={[s * 0.62, 1.46, 0.69]} rotation={[0, s * 0.72, 0]} scale={[0.23, 0.22, 0.05]}><sphereGeometry args={[1, 28, 18]} /><meshPhysicalMaterial color={c("blush")} roughness={0.8} emissive={c("blush")} emissiveIntensity={0.25} /></mesh>
       ))}
       {/* Small rounded body */}
       <mesh position={[0, 0.48, 0]} scale={[0.38, 0.42, 0.34]} castShadow><sphereGeometry args={[1, 40, 28]} /><Vinyl color={c("body")} /></mesh>
@@ -101,14 +101,14 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
 
 export default function Doll3D({ config, ears }: { config: CharacterConfig; ears: EarType }) {
   return (
-    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.6, 5.4], fov: 40 }} gl={{ toneMappingExposure: 1.05 }}>
-      <hemisphereLight args={["#fff4ea", "#f3d9e6", 0.8]} />
+    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.7, 6.2], fov: 40 }} gl={{ toneMappingExposure: 1.05 }}>
+      <hemisphereLight args={["#fff6ec", "#ffd9c4", 1.1]} />
       {/* Warm key */}
       <directionalLight position={[3, 5, 4]} intensity={1.6} color="#fff0e0" castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
       {/* Soft fill */}
       <directionalLight position={[-4, 2, 3]} intensity={0.5} color="#e8f0ff" />
       {/* Rim light for the glowing silhouette */}
-      <directionalLight position={[0, 3, -5]} intensity={2.2} color="#ffe6f0" />
+      <directionalLight position={[0, 3, -5]} intensity={1.4} color="#fff0e4" />
       <Environment>
         <Lightformer intensity={1.2} position={[0, 5, 0]} scale={[10, 10, 1]} />
         <Lightformer intensity={1} color="#ffe8d6" position={[-5, 1, -1]} rotation-y={Math.PI / 2} scale={[20, 2, 1]} />
