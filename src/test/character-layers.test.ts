@@ -16,12 +16,12 @@ describe("layered characters", () => {
     for (const view of ["front", "right", "back", "left"] as const) {
       const layers = renderLayers(next, view);
       expect(layers).toHaveLength(1);
-      expect(layers[0].url).toBe(view === "front" ? item.sprites!.front : view === "back" ? item.sprites!.back : item.sprites!.side);
+      expect(layers[0]!.url).toBe(view === "front" ? item.sprites!.front : view === "back" ? item.sprites!.back : item.sprites!.side);
     }
   });
   it("removing ears restores the base in every view", () => {
     const next = selectLayer(selectLayer(createLayeredCharacter(), "ears", "ears-cat"), "ears", null);
-    expect(renderLayers(next, "back")[0].url).toBe(BASE_ART.sprites.back);
+    expect(renderLayers(next, "back")[0]!.url).toBe(BASE_ART.sprites.back);
   });
   it("orders hairstyle pieces behind and in front of the base", () => {
     const layers = renderLayers(selectLayer(createLayeredCharacter(), "hair", "sample-hair"));
