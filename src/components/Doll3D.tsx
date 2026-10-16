@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment, Lightformer, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
+import { JoinedBody } from "./JoinedBody";
 import { partYarn, yarnById, type BodyPart, type CharacterConfig } from "@/lib/character";
 
 // Dev tooling injects `data-tsd-source` onto JSX. R3F reads hyphenated props as
@@ -32,7 +33,6 @@ type Ears = Exclude<EarType, null>;
 // Shared base anatomy. Each part is an independent component positioned
 // against these constants so parts stay seamlessly attached.
 const HEAD = { y: 1.95, scale: [1.02, 0.94, 0.96] as [number, number, number] };
-const TORSO = { y: 0.66, scale: [0.49, 0.54, 0.44] as [number, number, number] };
 
 /** Point on the head's unit sphere (before scaling) as a quaternion turning +y toward it. */
 function capRotation(x: number, y: number, z: number) {
@@ -58,24 +58,16 @@ function Eyes({ color }: { color: string }) {
 function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
   return (
     <group position={[0, HEAD.y, 0]} scale={HEAD.scale}>
-      <group quaternion={capRotation(side * 0.62, -0.3, 0.72)}>
+      <group quaternion={capRotation(side * 0.62, -0.38, 0.72)}>
         <mesh><sphereGeometry args={[1.008, 40, 8, 0, Math.PI * 2, 0, 0.3]} /><meshPhysicalMaterial color={color} roughness={0.9} polygonOffset polygonOffsetFactor={-2} /></mesh>
       </group>
     </group>
   );
 }
 
-function Torso({ color }: { color: string }) {
-  return <mesh position={[0, TORSO.y, 0]} scale={TORSO.scale} castShadow><sphereGeometry args={[1, 40, 28]} /><Vinyl color={color} /></mesh>;
-}
-
 function Arm({ side, color }: { side: 1 | -1; color: string }) {
   // Upper end tucks into the torso shoulder; thicker and slightly longer.
   return <mesh position={[side * 0.44, 0.8, 0.02]} rotation={[0, 0, side * 0.45]} castShadow><capsuleGeometry args={[0.17, 0.3, 8, 20]} /><Vinyl color={color} /></mesh>;
-}
-
-function Leg({ side, color }: { side: 1 | -1; color: string }) {
-  return <mesh position={[side * 0.22, 0.24, 0]} castShadow><capsuleGeometry args={[0.19, 0.14, 8, 20]} /><Vinyl color={color} /></mesh>;
 }
 
 /** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */
@@ -142,11 +134,9 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
       <Head color={c("head")} />
       <Eyes color={yarnById(config.colors.eyes).hex} />
       {config.face.cheeks && <><BlushPatch side={1} color={c("blush")} /><BlushPatch side={-1} color={c("blush")} /></>}
-      <Torso color={c("body")} />
+      <JoinedBody torso={c("body")} leftLeg={c("leftLeg")} rightLeg={c("rightLeg")} />
       <Arm side={1} color={c("leftArm")} />
       <Arm side={-1} color={c("rightArm")} />
-      <Leg side={1} color={c("leftLeg")} />
-      <Leg side={-1} color={c("rightLeg")} />
       {ears && <Ear type={ears} side={1} color={c("leftEar")} inner={c("leftInnerEar")} />}
       {ears && <Ear type={ears} side={-1} color={c("rightEar")} inner={c("rightInnerEar")} />}
     </group>

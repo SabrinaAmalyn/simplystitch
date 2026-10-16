@@ -1,4 +1,7 @@
 # Tasks
+- [x] Lower blush and rename Human to Monkey without losing saved selections.
+- [x] Join modular legs and torso into a seamless surface, retaining independent colors.
+- [x] Verify geometry and front, side and back views.
 - [x] Update the base preview and default choices to the reference doll, without ears or clothes.
 - [x] Match the crochet pattern to the new anatomy and verify generation.
 - [x] Add individual body-part colors in the matching tabs and preview.
