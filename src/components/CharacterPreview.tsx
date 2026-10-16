@@ -7,14 +7,14 @@ const Doll3D = lazy(() => import("./Doll3D"));
 
 /** Keeps 3D render failures inside the preview instead of crashing the page. */
 class PreviewBoundary extends Component<{ children: ReactNode; resetKey: string }, { failed: boolean }> {
-  state = { failed: false };
+  override state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
-  componentDidUpdate(prev: { resetKey: string }) {
+  override componentDidUpdate(prev: { resetKey: string }) {
     if (prev.resetKey !== this.props.resetKey && this.state.failed) this.setState({ failed: false });
   }
-  render() {
+  override render() {
     if (this.state.failed)
       return (
         <div className="flex h-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground">

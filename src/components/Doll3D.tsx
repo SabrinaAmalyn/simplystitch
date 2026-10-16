@@ -12,7 +12,7 @@ if (!Object.prototype.hasOwnProperty.call(Object.prototype, "data-tsd-source")) 
 export type EarType = "human" | "dog" | "cat" | "bear" | "bunny" | null;
 
 /** Soft vinyl-toy material with a velvety sheen glow at the edges. */
-function Vinyl({ color, side }: { color: string; side?: number }) {
+function Vinyl({ color }: { color: string }) {
   return (
     <meshPhysicalMaterial
       color={color}
@@ -22,7 +22,6 @@ function Vinyl({ color, side }: { color: string; side?: number }) {
       sheenColor="#fff1e6"
       clearcoat={0.15}
       clearcoatRoughness={0.6}
-      side={side}
     />
   );
 }
