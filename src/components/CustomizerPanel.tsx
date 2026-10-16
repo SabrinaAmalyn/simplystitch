@@ -1,44 +1,57 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { type CharacterConfig } from "@/lib/character";
-import { BASE_ART, CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer, type LayerSlot } from "@/lib/character-layers";
+import { YARNS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
+import { CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 
-const TABS = [
-  { label: "Body", slot: null }, { label: "Ears", slot: "ears" },
-] as const;
+const TABS = ["Body", "Ears"] as const;
+const PART_LABEL: Record<BodyPart, string> = {
+  head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm",
+  leftLeg: "Left leg", rightLeg: "Right leg", leftEar: "Left ear", rightEar: "Right ear",
+};
+const TAB_PARTS: Record<(typeof TABS)[number], BodyPart[]> = {
+  Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg"],
+  Ears: ["leftEar", "rightEar"],
+};
+
+function ColorRow({ part, config, onChange }: { part: BodyPart; config: CharacterConfig; onChange: (c: CharacterConfig) => void }) {
+  const current = partYarn(config, part);
+  return (
+    <div className="flex flex-col gap-1.5">
+      <p className="text-sm font-semibold">{PART_LABEL[part]} <span className="font-normal text-muted-foreground">· {current.name}</span></p>
+      <div className="flex flex-wrap gap-1.5">
+        {YARNS.map((y) => (
+          <button key={y.id} type="button" aria-label={`${PART_LABEL[part]}: ${y.name}`} aria-pressed={current.id === y.id}
+            onClick={() => onChange({ ...config, colors: { ...config.colors, [part]: y.id } })}
+            className={`h-7 w-7 rounded-full border border-border transition ${current.id === y.id ? "ring-2 ring-ring ring-offset-2 ring-offset-background" : ""}`}
+            style={{ backgroundColor: y.hex }} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function CustomizerPanel({ config, onChange }: { config: CharacterConfig; onChange: (c: CharacterConfig) => void }) {
-  const [tab, setTab] = useState<(typeof TABS)[number]>(TABS[0]);
+  const [tab, setTab] = useState<(typeof TABS)[number]>("Body");
   const layered = config.layered ?? createLayeredCharacter();
-  const pick = (slot: LayerSlot, id: string | null) => onChange({ ...config, layered: selectLayer(layered, slot, id) });
+  const pickEars = (id: string | null) => onChange({ ...config, layered: selectLayer(layered, "ears", id) });
+  const earItems = CUSTOMIZATION_ITEMS.filter((i) => i.slot === "ears");
   return (
     <div className="panel flex flex-col gap-5">
       <div role="tablist" aria-label="Character options" className="flex flex-wrap gap-1 rounded-full bg-muted p-1">
-        {TABS.map((item) => (
-          <Button key={item.label} variant="ghost" role="tab" aria-selected={tab.label === item.label} aria-controls="character-options" onClick={() => setTab(item)} className={tab.label === item.label ? "tab tab-on" : "tab"}>{item.label}</Button>
+        {TABS.map((t) => (
+          <Button key={t} variant="ghost" role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={tab === t ? "tab tab-on" : "tab"}>{t}</Button>
         ))}
       </div>
-      <div id="character-options" role="tabpanel" aria-label={tab.label} className="flex flex-col gap-4">
-        {tab.slot === null ? (
-          <div className="flex items-center gap-4">
-            <img src={BASE_ART.url} alt="" className="h-32 w-24 shrink-0 object-contain" />
-            <div><h3 className="font-semibold">Base character</h3><p className="text-sm text-muted-foreground">From your reference · no ears by default</p></div>
+      <div role="tabpanel" aria-label={tab} className="flex flex-col gap-4">
+        {tab === "Ears" && (
+          <div className="grid grid-cols-3 gap-2">
+            <Button variant="ghost" aria-pressed={layered.selections.ears === null} onClick={() => pickEars(null)} className={layered.selections.ears === null ? "choice choice-on" : "choice"}>None</Button>
+            {earItems.map((item) => (
+              <Button key={item.id} variant="ghost" aria-pressed={layered.selections.ears === item.id} onClick={() => pickEars(item.id)} className={layered.selections.ears === item.id ? "choice choice-on" : "choice"}>{item.label}</Button>
+            ))}
           </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="ghost" aria-pressed={layered.selections[tab.slot] === null} onClick={() => { if (tab.slot) pick(tab.slot, null); }} className={`h-auto whitespace-normal ${layered.selections[tab.slot] === null ? "choice choice-on" : "choice"}`}>
-                <span className="font-semibold">None</span><span className="text-xs text-muted-foreground">Original artwork</span>
-              </Button>
-              {CUSTOMIZATION_ITEMS.filter((item) => item.slot === tab.slot).map((item) => (
-                <Button variant="ghost" key={item.id} aria-label={`${item.label} — ${item.placeholder ? "Sample placeholder" : "Artwork"}`} aria-pressed={layered.selections[item.slot] === item.id} onClick={() => pick(item.slot, item.id)} className={`h-auto whitespace-normal ${layered.selections[item.slot] === item.id ? "choice choice-on" : "choice"}`}>
-                  <span className="font-semibold">{item.label}</span><span className="text-xs text-muted-foreground">{item.placeholder ? "Sample placeholder" : "Artwork"}</span>
-                </Button>
-              ))}
-            </div>
-            {layered.selections[tab.slot] && <Button variant="outline" onClick={() => { if (tab.slot) pick(tab.slot, null); }} className="self-start">Remove {tab.label.toLowerCase()}</Button>}
-          </>
         )}
+        {(tab === "Body" || layered.selections.ears) && TAB_PARTS[tab].map((p) => <ColorRow key={p} part={p} config={config} onChange={onChange} />)}
       </div>
     </div>
   );
