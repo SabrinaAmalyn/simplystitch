@@ -58,7 +58,7 @@ function Eyes({ color }: { color: string }) {
 function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
   return (
     <group position={[0, HEAD.y, 0]} scale={HEAD.scale}>
-      <group quaternion={capRotation(side * 0.62, -0.38, 0.72)}>
+      <group quaternion={capRotation(side * 0.62, -0.54, 0.72)}>
         <mesh><sphereGeometry args={[1.008, 40, 8, 0, Math.PI * 2, 0, 0.3]} /><meshPhysicalMaterial color={color} roughness={0.9} polygonOffset polygonOffsetFactor={-2} /></mesh>
       </group>
     </group>
