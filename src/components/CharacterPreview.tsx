@@ -74,7 +74,7 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
   };
 
   return (
-    <svg viewBox="0 0 300 380" className="h-full w-full drop-shadow-xl" role="img" aria-label="Crochet character preview">
+    <svg viewBox="0 -30 300 410" className="h-full w-full drop-shadow-xl" role="img" aria-label="Crochet character preview">
       <ellipse cx={150} cy={368} rx={90} ry={8} fill="rgba(60,40,30,0.12)" />
       {/* feet */}
       <ellipse cx={b.cy > 275 ? 122 : 115} cy={b.cy + b.ry - 6} rx={22} ry={14} fill={main} stroke={stroke} strokeWidth={2} />
