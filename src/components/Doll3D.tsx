@@ -78,23 +78,18 @@ function Leg({ side, color }: { side: 1 | -1; color: string }) {
   return <mesh position={[side * 0.22, 0.24, 0]} castShadow><capsuleGeometry args={[0.19, 0.14, 8, 20]} /><Vinyl color={color} /></mesh>;
 }
 
-/** Rounded triangle (base on y=0) with soft corners. */
-function roundedTriangle(w: number, h: number, r: number) {
-  const p = [new THREE.Vector2(-w / 2, 0), new THREE.Vector2(0, h), new THREE.Vector2(w / 2, 0)];
-  const s = new THREE.Shape();
-  for (let i = 0; i < 3; i++) {
-    const prev = p[(i + 2) % 3]!, cur = p[i]!, next = p[(i + 1) % 3]!;
-    const a = cur.clone().add(prev.clone().sub(cur).normalize().multiplyScalar(r));
-    const b = cur.clone().add(next.clone().sub(cur).normalize().multiplyScalar(r));
-    if (i === 0) s.moveTo(a.x, a.y); else s.lineTo(a.x, a.y);
-    s.quadraticCurveTo(cur.x, cur.y, b.x, b.y);
+/** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */
+function catEarGeometry() {
+  const g = new THREE.SphereGeometry(1, 48, 32);
+  const pos = g.attributes["position"] as THREE.BufferAttribute;
+  for (let i = 0; i < pos.count; i++) {
+    const t = (pos.getY(i) + 1) / 2;
+    pos.setX(i, pos.getX(i) * (1 - 0.62 * Math.pow(t, 1.3)));
   }
-  s.closePath();
-  return s;
+  g.computeVertexNormals();
+  return g;
 }
-const CAT_OUTER = new THREE.ExtrudeGeometry(roundedTriangle(0.86, 0.72, 0.2), { depth: 0.12, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.06, bevelSegments: 5, curveSegments: 16 });
-CAT_OUTER.translate(0, 0, -0.06);
-const CAT_INNER = new THREE.ExtrudeGeometry(roundedTriangle(0.56, 0.48, 0.13), { depth: 0.02, bevelEnabled: false, curveSegments: 16 });
+const CAT_EAR = catEarGeometry();
 
 // Doll faces +z; the doll's left side is +x (named from the doll's perspective).
 function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: string; inner: string }) {
@@ -116,9 +111,9 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
     case "cat":
       // Short, wide, soft rounded triangles; bases tucked behind the upper head.
       return (
-        <group position={[side * 0.56, 2.5, -0.28]} rotation={[-0.15, 0, -side * 0.38]}>
-          <mesh geometry={CAT_OUTER} castShadow><Vinyl color={color} /></mesh>
-          <mesh geometry={CAT_INNER} position={[0, 0.06, 0.112]}><Vinyl color={inner} /></mesh>
+        <group position={[side * 0.56, 2.72, -0.28]} rotation={[-0.15, 0, -side * 0.38]}>
+          <mesh geometry={CAT_EAR} scale={[0.5, 0.46, 0.18]} castShadow><Vinyl color={color} /></mesh>
+          <mesh geometry={CAT_EAR} position={[0, -0.03, 0.12]} scale={[0.32, 0.3, 0.08]}><Vinyl color={inner} /></mesh>
         </group>
       );
     case "bunny":
