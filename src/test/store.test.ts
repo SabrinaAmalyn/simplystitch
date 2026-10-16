@@ -18,7 +18,7 @@ it("migrates legacy colors without overwriting edited or recoverable drafts", as
   expect(saved.config.colors.leftLeg).toBe("sage");
   expect(saved.draft).toEqual(draft);
   expect(saved.previous).toEqual(previous);
-  expect(saved.config.layered.baseId).toBe("lined-front-v1");
+  expect(saved.config.layered.baseId).toBe("reference-v2");
   expect(Object.values(saved.config.layered.selections)).toEqual([null, null, null, null, null]);
 });
 

@@ -84,7 +84,7 @@ function Workspace() {
         <section className="flex flex-col gap-4">
           <div>
             <h2 className="font-display text-2xl font-semibold">Make it yours</h2>
-            <p className="text-muted-foreground">Original lined doll</p>
+            <p className="text-muted-foreground">Base character from your reference</p>
           </div>
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           {selected.length > 0 && (
