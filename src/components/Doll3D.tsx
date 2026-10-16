@@ -56,11 +56,11 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
 
 export default function Doll3D({ config, ears }: { config: CharacterConfig; ears: EarType }) {
   return (
-    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.6, 5.2], fov: 40 }}>
+    <Canvas shadows flat dpr={[1, 2]} camera={{ position: [0, 0.6, 5.2], fov: 40 }}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[3, 5, 4]} intensity={1.4} castShadow />
       <Environment>
-        <Lightformer intensity={2} position={[0, 5, 0]} scale={[10, 10, 1]} />
+        <Lightformer intensity={1} position={[0, 5, 0]} scale={[10, 10, 1]} />
         <Lightformer intensity={1} color="#ffe8d6" position={[-5, 1, -1]} rotation-y={Math.PI / 2} scale={[20, 1, 1]} />
       </Environment>
       <Doll config={config} ears={ears} />
