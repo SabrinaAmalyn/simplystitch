@@ -7,10 +7,11 @@ const TABS = ["Body", "Ears"] as const;
 const PART_LABEL: Record<BodyPart, string> = {
   head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm",
   leftLeg: "Left leg", rightLeg: "Right leg", leftEar: "Left ear", rightEar: "Right ear",
+  leftInnerEar: "Left inner ear", rightInnerEar: "Right inner ear", blush: "Blush cheeks",
 };
 const TAB_PARTS: Record<(typeof TABS)[number], BodyPart[]> = {
-  Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg"],
-  Ears: ["leftEar", "rightEar"],
+  Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "blush"],
+  Ears: ["leftEar", "leftInnerEar", "rightEar", "rightInnerEar"],
 };
 
 function ColorRow({ part, config, onChange }: { part: BodyPart; config: CharacterConfig; onChange: (c: CharacterConfig) => void }) {
