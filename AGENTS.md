@@ -12,3 +12,5 @@
 - Keep character configuration, SVG preview, and deterministic pattern generation separate; anatomy changes must update the preview and pattern together to keep them aligned.
 - Version the base anatomy in pattern keys and migrate saved configurations without overwriting draft text; existing edited patterns must remain recoverable when defaults change.
 - Resolve individual part yarns through the shared character helper with legacy main-yarn fallback; backfill missing saved part colors without modifying draft records, and name sides from the doll's perspective so preview and assembly agree.
+- The canonical layered renderer uses the original image pointer through a separate display mask and a shared fixed canvas; registry entries define slot, ordered PNG/SVG asset pieces, component IDs and rule references, so adding artwork never requires editing the renderer.
+- Layered configuration is versioned separately from legacy crochet configuration; migrate missing layer selections to empty slots without changing drafts, and block pattern generation until the base and selected components have explicit supported rules.
