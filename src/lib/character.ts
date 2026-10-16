@@ -80,5 +80,5 @@ export function migratePartColors(c: CharacterConfig): CharacterConfig {
 }
 
 export const configKey = (c: CharacterConfig) => c.layered
-  ? JSON.stringify({ base: "lined-front-v1", colorSchema: 2, colors: c.colors, layered: normalizeLayers(c.layered) })
+  ? JSON.stringify({ base: "reference-v2", colorSchema: 2, colors: c.colors, layered: normalizeLayers(c.layered) })
   : JSON.stringify({ base: "doll-v2", colorSchema: 2, ...c });
