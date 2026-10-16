@@ -9,7 +9,7 @@ import {
   YARNS,
 } from "@/lib/character";
 
-const TABS = ["Colors", "Ears", "Face", "Body", "Accessories"] as const;
+const TABS = ["Body", "Ears", "Face", "Accessories"] as const;
 type Tab = (typeof TABS)[number];
 
 type Props = { config: CharacterConfig; onChange: (c: CharacterConfig) => void };
@@ -46,7 +46,7 @@ function Choice({ on, onClick, label, hint }: { on: boolean; onClick: () => void
 }
 
 export function CustomizerPanel({ config, onChange }: Props) {
-  const [tab, setTab] = useState<Tab>("Colors");
+  const [tab, setTab] = useState<Tab>("Body");
   const set = (patch: Partial<CharacterConfig>) => onChange({ ...config, ...patch });
 
   return (
@@ -59,26 +59,14 @@ export function CustomizerPanel({ config, onChange }: Props) {
         ))}
       </div>
 
-      {tab === "Colors" && (
-        <div className="flex flex-col gap-5">
-          {(
-            [
-              ["main", "Main yarn"],
-              ["accent", "Inner ears"],
-              ["accessory", "Accessories"],
-              ["eyes", "Face details"],
-            ] as const
-          ).map(([k, l]) => (
-            <Swatches key={k} label={l} value={config.colors[k]} onPick={(id) => set({ colors: { ...config.colors, [k]: id } })} />
-          ))}
-        </div>
-      )}
-
       {tab === "Ears" && (
-        <div className="grid grid-cols-2 gap-2">
-          {EAR_OPTIONS.map((o) => (
-            <Choice key={o.value} on={config.ears === o.value} onClick={() => set({ ears: o.value })} label={o.label} hint={o.hint} />
-          ))}
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-2">
+            {EAR_OPTIONS.map((o) => (
+              <Choice key={o.value} on={config.ears === o.value} onClick={() => set({ ears: o.value })} label={o.label} hint={o.hint} />
+            ))}
+          </div>
+          <Swatches label="Inner ears" value={config.colors.accent} onPick={(id) => set({ colors: { ...config.colors, accent: id } })} />
         </div>
       )}
 
@@ -90,20 +78,25 @@ export function CustomizerPanel({ config, onChange }: Props) {
             ))}
           </div>
           <Choice on={config.face.cheeks} onClick={() => set({ face: { ...config.face, cheeks: !config.face.cheeks } })} label={config.face.cheeks ? "Rosy cheeks: on" : "Rosy cheeks: off"} />
+          <Swatches label="Face details" value={config.colors.eyes} onPick={(id) => set({ colors: { ...config.colors, eyes: id } })} />
         </div>
       )}
 
       {tab === "Body" && (
-        <div className="grid grid-cols-3 gap-2">
-          {BODY_OPTIONS.map((o) => (
-            <Choice key={o.value} on={config.body === o.value} onClick={() => set({ body: o.value })} label={o.label} hint={o.hint} />
-          ))}
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-3 gap-2">
+            {BODY_OPTIONS.map((o) => (
+              <Choice key={o.value} on={config.body === o.value} onClick={() => set({ body: o.value })} label={o.label} hint={o.hint} />
+            ))}
+          </div>
+          <Swatches label="Main yarn" value={config.colors.main} onPick={(id) => set({ colors: { ...config.colors, main: id } })} />
         </div>
       )}
 
       {tab === "Accessories" && (
-        <div className="grid grid-cols-3 gap-2">
-          {ACCESSORY_OPTIONS.map((o) => {
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-3 gap-2">
+            {ACCESSORY_OPTIONS.map((o) => {
             const on = config.accessories.includes(o.value);
             return (
               <Choice
@@ -114,7 +107,9 @@ export function CustomizerPanel({ config, onChange }: Props) {
                 label={o.label}
               />
             );
-          })}
+            })}
+          </div>
+          <Swatches label="Accessories" value={config.colors.accessory} onPick={(id) => set({ colors: { ...config.colors, accessory: id } })} />
         </div>
       )}
     </div>
