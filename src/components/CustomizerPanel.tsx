@@ -23,8 +23,8 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
       <div id="character-options" role="tabpanel" aria-label={tab.label} className="flex flex-col gap-4">
         {tab.slot === null ? (
           <div className="flex items-center gap-4">
-            <svg viewBox="50 45 155 280" className="h-32 w-20 shrink-0" aria-hidden="true"><image href={BASE_ART.url} width="768" height="877" /></svg>
-            <div><h3 className="font-semibold">Original lined body</h3><p className="text-sm text-muted-foreground">Front view · Original artwork</p></div>
+            <img src={BASE_ART.url} alt="" className="h-32 w-24 shrink-0 object-contain" />
+            <div><h3 className="font-semibold">Base character</h3><p className="text-sm text-muted-foreground">From your reference · no ears by default</p></div>
           </div>
         ) : (
           <>
