@@ -81,7 +81,7 @@ function Leg({ side, color }: { side: 1 | -1; color: string }) {
 /** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */
 function catEarGeometry() {
   const g = new THREE.SphereGeometry(1, 48, 32);
-  const pos = g.attributes.position as THREE.BufferAttribute;
+  const pos = g.attributes["position"] as THREE.BufferAttribute;
   for (let i = 0; i < pos.count; i++) {
     const t = (pos.getY(i) + 1) / 2;
     pos.setX(i, pos.getX(i) * (1 - 0.62 * Math.pow(t, 1.3)));
