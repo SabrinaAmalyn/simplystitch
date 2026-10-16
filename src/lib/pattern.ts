@@ -1,5 +1,5 @@
 // Deterministic crochet pattern generator: maps a CharacterConfig to templates.
-import { BODY_PARTS, type CharacterConfig, partYarn, yarnById } from "./character";
+import { CROCHET_PARTS, type CharacterConfig, partYarn, yarnById } from "./character";
 import { patternBlockers } from "./character-layers";
 
 export type Round = { label: string; text: string; count?: number };
@@ -175,7 +175,7 @@ export function generatePattern(c: CharacterConfig): Pattern {
   const hasAcc = c.accessories.length > 0;
 
   const partMaterials = new Map<string, string[]>();
-  for (const part of BODY_PARTS) {
+  for (const part of CROCHET_PARTS) {
     if (c.ears === "none" && (part === "leftEar" || part === "rightEar")) continue;
     const name = partYarn(c, part).name;
     const label = part.replace(/([A-Z])/g, " $1").toLowerCase();
