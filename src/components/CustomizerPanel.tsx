@@ -1,126 +1,47 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  ACCESSORY_OPTIONS,
-  BODY_OPTIONS,
-  type CharacterConfig,
-  EAR_OPTIONS,
-  EXPRESSION_OPTIONS,
-  partYarn,
-  YARNS,
-} from "@/lib/character";
+import { type CharacterConfig } from "@/lib/character";
+import { BASE_ART, CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer, type LayerSlot } from "@/lib/character-layers";
 
-const TABS = ["Body", "Ears", "Face", "Accessories"] as const;
-type Tab = (typeof TABS)[number];
+const TABS = [
+  { label: "Body", slot: null }, { label: "Ears", slot: "ears" },
+  { label: "Hair", slot: "hair" }, { label: "Face", slot: "face" },
+  { label: "Outfits", slot: "outfit" }, { label: "Accessories", slot: "accessory" },
+] as const;
 
-type Props = { config: CharacterConfig; onChange: (c: CharacterConfig) => void };
-
-function Swatches({ value, onPick, label }: { value: string; onPick: (id: string) => void; label: string }) {
-  return (
-    <div>
-      <p className="mb-2 text-sm font-semibold">{label}</p>
-      <div className="flex flex-wrap gap-2">
-        {YARNS.map((y) => (
-          <Button variant="ghost" size="icon"
-            key={y.id}
-            type="button"
-            title={y.name}
-            aria-label={`${label}: ${y.name}`}
-            aria-pressed={value === y.id}
-            onClick={() => onPick(y.id)}
-            className={value === y.id ? "swatch swatch-on" : "swatch"}
-            style={{ backgroundColor: y.hex }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Choice({ on, onClick, label, hint }: { on: boolean; onClick: () => void; label: string; hint?: string }) {
-  return (
-    <Button variant="ghost" type="button" aria-pressed={on} onClick={onClick} className={`h-auto whitespace-normal ${on ? "choice choice-on" : "choice"}`}>
-      <span className="font-semibold">{label}</span>
-      {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
-    </Button>
-  );
-}
-
-export function CustomizerPanel({ config, onChange }: Props) {
-  const [tab, setTab] = useState<Tab>("Body");
-  const set = (patch: Partial<CharacterConfig>) => onChange({ ...config, ...patch });
-
+export function CustomizerPanel({ config, onChange }: { config: CharacterConfig; onChange: (c: CharacterConfig) => void }) {
+  const [tab, setTab] = useState<(typeof TABS)[number]>(TABS[0]);
+  const layered = config.layered ?? createLayeredCharacter();
+  const pick = (slot: LayerSlot, id: string | null) => onChange({ ...config, layered: selectLayer(layered, slot, id) });
   return (
     <div className="panel flex flex-col gap-5">
-      <div role="tablist" className="flex flex-wrap gap-1 rounded-full bg-muted p-1">
-        {TABS.map((t) => (
-          <Button variant="ghost" key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={tab === t ? "tab tab-on" : "tab"}>
-            {t}
-          </Button>
+      <div role="tablist" aria-label="Character options" className="flex flex-wrap gap-1 rounded-full bg-muted p-1">
+        {TABS.map((item) => (
+          <Button key={item.label} variant="ghost" role="tab" aria-selected={tab.label === item.label} aria-controls="character-options" onClick={() => setTab(item)} className={tab.label === item.label ? "tab tab-on" : "tab"}>{item.label}</Button>
         ))}
       </div>
-
-      {tab === "Ears" && (
-        <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-2 gap-2">
-            {EAR_OPTIONS.map((o) => (
-              <Choice key={o.value} on={config.ears === o.value} onClick={() => set({ ears: o.value })} label={o.label} hint={o.hint} />
-            ))}
+      <div id="character-options" role="tabpanel" aria-label={tab.label} className="flex flex-col gap-4">
+        {tab.slot === null ? (
+          <div className="flex items-center gap-4">
+            <svg viewBox="50 45 155 280" className="h-32 w-20 shrink-0" aria-hidden="true"><image href={BASE_ART.url} width="768" height="877" /></svg>
+            <div><h3 className="font-semibold">Original lined body</h3><p className="text-sm text-muted-foreground">Front view · Original artwork</p></div>
           </div>
-          <Swatches label="Left ear" value={partYarn(config, "leftEar").id} onPick={(id) => set({ colors: { ...config.colors, leftEar: id } })} />
-          <Swatches label="Right ear" value={partYarn(config, "rightEar").id} onPick={(id) => set({ colors: { ...config.colors, rightEar: id } })} />
-          <Swatches label="Inner ears" value={config.colors.accent} onPick={(id) => set({ colors: { ...config.colors, accent: id } })} />
-        </div>
-      )}
-
-      {tab === "Face" && (
-        <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-3 gap-2">
-            {EXPRESSION_OPTIONS.map((o) => (
-              <Choice key={o.value} on={config.face.expression === o.value} onClick={() => set({ face: { ...config.face, expression: o.value } })} label={o.label} />
-            ))}
-          </div>
-          <Choice on={config.face.cheeks} onClick={() => set({ face: { ...config.face, cheeks: !config.face.cheeks } })} label={config.face.cheeks ? "Rosy cheeks: on" : "Rosy cheeks: off"} />
-          <Swatches label="Face details" value={config.colors.eyes} onPick={(id) => set({ colors: { ...config.colors, eyes: id } })} />
-        </div>
-      )}
-
-      {tab === "Body" && (
-        <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-3 gap-2">
-            {BODY_OPTIONS.map((o) => (
-              <Choice key={o.value} on={config.body === o.value} onClick={() => set({ body: o.value })} label={o.label} hint={o.hint} />
-            ))}
-          </div>
-          {([
-            ["head", "Head"], ["body", "Body"],
-            ["leftArm", "Left arm"], ["rightArm", "Right arm"],
-            ["leftLeg", "Left leg"], ["rightLeg", "Right leg"],
-          ] as const).map(([part, label]) => (
-            <Swatches key={part} label={label} value={partYarn(config, part).id} onPick={(id) => set({ colors: { ...config.colors, [part]: id } })} />
-          ))}
-        </div>
-      )}
-
-      {tab === "Accessories" && (
-        <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-3 gap-2">
-            {ACCESSORY_OPTIONS.map((o) => {
-            const on = config.accessories.includes(o.value);
-            return (
-              <Choice
-                key={o.value}
-                on={on}
-                hint={on ? "Added" : "Tap to add"}
-                onClick={() => set({ accessories: on ? config.accessories.filter((a) => a !== o.value) : [...config.accessories, o.value] })}
-                label={o.label}
-              />
-            );
-            })}
-          </div>
-          <Swatches label="Accessories" value={config.colors.accessory} onPick={(id) => set({ colors: { ...config.colors, accessory: id } })} />
-        </div>
-      )}
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="ghost" aria-pressed={layered.selections[tab.slot] === null} onClick={() => { if (tab.slot) pick(tab.slot, null); }} className={`h-auto whitespace-normal ${layered.selections[tab.slot] === null ? "choice choice-on" : "choice"}`}>
+                <span className="font-semibold">None</span><span className="text-xs text-muted-foreground">Original artwork</span>
+              </Button>
+              {CUSTOMIZATION_ITEMS.filter((item) => item.slot === tab.slot).map((item) => (
+                <Button variant="ghost" key={item.id} aria-label={`${item.label} — ${item.placeholder ? "Sample placeholder" : "Artwork"}`} aria-pressed={layered.selections[item.slot] === item.id} onClick={() => pick(item.slot, item.id)} className={`h-auto whitespace-normal ${layered.selections[item.slot] === item.id ? "choice choice-on" : "choice"}`}>
+                  <span className="font-semibold">{item.label}</span><span className="text-xs text-muted-foreground">{item.placeholder ? "Sample placeholder" : "Artwork"}</span>
+                </Button>
+              ))}
+            </div>
+            {layered.selections[tab.slot] && <Button variant="outline" onClick={() => { if (tab.slot) pick(tab.slot, null); }} className="self-start">Remove {tab.label.toLowerCase()}</Button>}
+          </>
+        )}
+      </div>
     </div>
   );
 }
