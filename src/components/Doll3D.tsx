@@ -118,7 +118,7 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
       return (
         <group position={[side * 0.56, 2.5, -0.28]} rotation={[-0.15, 0, -side * 0.38]}>
           <mesh geometry={CAT_OUTER} castShadow><Vinyl color={color} /></mesh>
-          <mesh geometry={CAT_INNER} position={[0, 0.06, 0.185]}><Vinyl color={inner} /></mesh>
+          <mesh geometry={CAT_INNER} position={[0, 0.06, 0.112]}><Vinyl color={inner} /></mesh>
         </group>
       );
     case "bunny":
