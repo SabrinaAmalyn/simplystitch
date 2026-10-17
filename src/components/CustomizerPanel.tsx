@@ -4,15 +4,16 @@ import { Switch } from "@/components/ui/switch";
 import { YARNS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 
-const TABS = ["Body", "Ears"] as const;
+const TABS = ["Body", "Ears", "Tail"] as const;
 const PART_LABEL: Record<BodyPart, string> = {
   head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm",
   leftLeg: "Left leg", rightLeg: "Right leg", leftEar: "Left ear", rightEar: "Right ear",
-  leftInnerEar: "Left inner ear", rightInnerEar: "Right inner ear", blush: "Blush cheeks",
+  leftInnerEar: "Left inner ear", rightInnerEar: "Right inner ear", blush: "Blush cheeks", tail: "Tail",
 };
 const TAB_PARTS: Record<(typeof TABS)[number], BodyPart[]> = {
   Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "blush"],
   Ears: ["leftEar", "leftInnerEar", "rightEar", "rightInnerEar"],
+  Tail: ["tail"],
 };
 
 function ColorRow({ part, config, onChange }: { part: BodyPart; config: CharacterConfig; onChange: (c: CharacterConfig) => void }) {
@@ -40,6 +41,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
   const layered = config.layered ?? createLayeredCharacter();
   const pickEars = (id: string | null) => onChange({ ...config, layered: selectLayer(layered, "ears", id) });
   const earItems = CUSTOMIZATION_ITEMS.filter((i) => i.slot === "ears");
+  const tailItems = CUSTOMIZATION_ITEMS.filter((i) => i.slot === "tail");
   return (
     <div className="panel flex flex-col gap-5">
       <div role="tablist" aria-label="Character options" className="flex flex-wrap gap-1 rounded-full bg-muted p-1">
@@ -56,7 +58,15 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
             ))}
           </div>
         )}
-        {(tab === "Body" || layered.selections.ears) && TAB_PARTS[tab].map((p) => <ColorRow key={p} part={p} config={config} onChange={onChange} />)}
+        {tab === "Tail" && (
+          <div className="grid grid-cols-3 gap-2">
+            <Button variant="ghost" aria-pressed={!layered.selections.tail} onClick={() => onChange({ ...config, layered: selectLayer(layered, "tail", null) })} className={!layered.selections.tail ? "choice choice-on" : "choice"}>None</Button>
+            {tailItems.map((item) => (
+              <Button key={item.id} variant="ghost" aria-pressed={layered.selections.tail === item.id} onClick={() => onChange({ ...config, layered: selectLayer(layered, "tail", item.id) })} className={layered.selections.tail === item.id ? "choice choice-on" : "choice"}>{item.label}</Button>
+            ))}
+          </div>
+        )}
+        {(tab === "Body" || (tab === "Ears" && layered.selections.ears) || (tab === "Tail" && layered.selections.tail)) && TAB_PARTS[tab].map((p) => <ColorRow key={p} part={p} config={config} onChange={onChange} />)}
       </div>
     </div>
   );

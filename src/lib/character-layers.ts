@@ -20,7 +20,7 @@ import vest from "@/assets/character/outfit-vest.svg.asset.json";
 import scarf from "@/assets/character/accessory-scarf.svg.asset.json";
 import bow from "@/assets/character/accessory-bow.png.asset.json";
 
-export const LAYER_SLOTS = ["ears", "hair", "face", "outfit", "accessory"] as const;
+export const LAYER_SLOTS = ["ears", "hair", "face", "outfit", "accessory", "tail"] as const;
 export type LayerSlot = (typeof LAYER_SLOTS)[number];
 export type LayerSelections = Record<LayerSlot, string | null>;
 export const BASE_ID = "reference-v2" as const;
@@ -58,13 +58,15 @@ export const CUSTOMIZATION_ITEMS: CustomizationItem[] = [
   ear("cat", "Cat", catFront, catSide, catBack),
   ear("bear", "Bear", bearFront, bearSide, bearBack),
   ear("bunny", "Bunny", bunnyFront, bunnySide, bunnyBack),
+  { id: "tail-round", slot: "tail", label: "Round", placeholder: false, component: "tail.round", patternRuleId: null, assets: [] },
+  { id: "tail-long", slot: "tail", label: "Long", placeholder: false, component: "tail.long", patternRuleId: null, assets: [] },
   { id: "sample-hair", slot: "hair", label: "Long hair", placeholder: true, component: "hair.long", patternRuleId: null, assets: [{ id: "hair-back", url: hairBack.url, order: LAYER_ORDER.behind }, { id: "hair-front", url: hairFront.url, order: LAYER_ORDER.hair }] },
   { id: "sample-freckles", slot: "face", label: "Freckles", placeholder: true, component: "face.freckles", patternRuleId: null, assets: [{ id: "freckles", url: freckles.url, order: LAYER_ORDER.face }] },
   { id: "sample-vest", slot: "outfit", label: "Vest", placeholder: true, component: "outfit.vest", patternRuleId: null, assets: [{ id: "vest", url: vest.url, order: LAYER_ORDER.outfit }] },
   { id: "sample-scarf", slot: "accessory", label: "Scarf", placeholder: true, component: "accessory.scarf", patternRuleId: null, assets: [{ id: "scarf", url: scarf.url, order: LAYER_ORDER.accessory }] },
   { id: "sample-bow", slot: "accessory", label: "Bow", placeholder: true, component: "accessory.bow", patternRuleId: null, assets: [{ id: "bow", url: bow.url, order: LAYER_ORDER.accessory }] },
 ];
-export const createLayeredCharacter = (): LayeredCharacter => ({ version: 1, baseId: BASE_ID, selections: { ears: null, hair: null, face: null, outfit: null, accessory: null } });
+export const createLayeredCharacter = (): LayeredCharacter => ({ version: 1, baseId: BASE_ID, selections: { ears: null, hair: null, face: null, outfit: null, accessory: null, tail: null } });
 export function normalizeLayers(value?: { selections?: Partial<LayerSelections> }): LayeredCharacter {
   const next = createLayeredCharacter();
   for (const slot of LAYER_SLOTS) {

@@ -6,7 +6,7 @@ import { generatePattern } from "@/lib/pattern";
 describe("layered characters", () => {
   it("starts with the reference base and no ears", () => {
     const character = createLayeredCharacter();
-    expect(Object.values(character.selections)).toEqual([null, null, null, null, null]);
+    expect(Object.values(character.selections)).toEqual([null, null, null, null, null, null]);
     expect(renderLayers(character)).toEqual([{ id: "reference-v2", url: BASE_ART.sprites.front, order: 20, base: true }]);
   });
   it.each(["human", "dog", "cat", "bear", "bunny"])("%s ears replace previous ears with a single character", (kind) => {
@@ -46,5 +46,31 @@ describe("layered characters", () => {
     const config = { ...DEFAULT_CONFIG, layered };
     expect(configKey({ ...config, layered: selectLayer(layered, "ears", "ears-dog") })).not.toBe(configKey(config));
     expect(patternBlockers(layered)).toHaveLength(1);
+  });
+  it("replaces round tails with long tails independently of ears", () => {
+    const ears = selectLayer(createLayeredCharacter(), "ears", "ears-cat");
+    const round = selectLayer(ears, "tail", "tail-round");
+    const long = selectLayer(round, "tail", "tail-long");
+    expect(long.selections.tail).toBe("tail-long");
+    expect(long.selections.ears).toBe("ears-cat");
+    expect(characterRecord(long).components.filter((item) => item.slot === "tail")).toEqual([
+      { assetId: "tail-long", slot: "tail", component: "tail.long", placeholder: false, patternRuleId: null },
+    ]);
+    expect(configKey({ ...DEFAULT_CONFIG, layered: round })).not.toBe(configKey({ ...DEFAULT_CONFIG, layered: long }));
+  });
+  it("removes tails without removing ears", () => {
+    const current = selectLayer(selectLayer(createLayeredCharacter(), "ears", "ears-bear"), "tail", "tail-round");
+    const removed = selectLayer(current, "tail", null);
+    expect(removed.selections.tail).toBeNull();
+    expect(removed.selections.ears).toBe("ears-bear");
+  });
+  it("backfills missing tails in legacy selections", () => {
+    const migrated = normalizeLayers({ selections: { ears: "ears-human" } });
+    expect(migrated.selections.tail).toBeNull();
+    expect(migrated.selections.ears).toBe("ears-human");
+  });
+  it.each(["tail-round", "tail-long"])("keeps %s unsupported crochet rules blocked", (tail) => {
+    const layered = selectLayer(createLayeredCharacter(), "tail", tail);
+    expect(patternBlockers(layered)).toContain(`${tail === "tail-round" ? "Round" : "Long"}: crochet rule not defined.`);
   });
 });

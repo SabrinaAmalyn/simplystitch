@@ -25,8 +25,8 @@ export type Expression = "happy" | "sleepy" | "surprised";
 export type BodyShape = "chubby" | "standard" | "tall";
 export type Accessory = "scarf" | "bow" | "beanie";
 
-export const BODY_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar", "leftInnerEar", "rightInnerEar", "blush"] as const;
-/** Parts that have crochet pattern rules; inner ears and blush are preview-only details. */
+export const BODY_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar", "leftInnerEar", "rightInnerEar", "blush", "tail"] as const;
+/** Parts that have crochet pattern rules; inner ears, blush and tails are preview-only details. */
 export const CROCHET_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar"] as const;
 /** Detail parts default to their own yarn instead of the main yarn. */
 export const DETAIL_DEFAULTS: Partial<Record<string, string>> = { leftInnerEar: "blush", rightInnerEar: "blush", blush: "blush" };

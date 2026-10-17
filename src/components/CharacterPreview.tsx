@@ -35,7 +35,7 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
     <div className="flex h-full min-h-[360px] w-full flex-col items-center gap-2" role="img" aria-label="3D character preview">
       <div className="h-full min-h-[340px] w-full flex-1">
         {mounted && (
-          <PreviewBoundary resetKey={JSON.stringify(config.colors) + String(ears)}>
+          <PreviewBoundary resetKey={JSON.stringify(config.colors) + String(ears) + String(config.layered?.selections.tail)}>
             <Suspense fallback={<p className="text-sm text-muted-foreground">Loading character…</p>}>
               <Doll3D config={config} ears={ears} />
             </Suspense>

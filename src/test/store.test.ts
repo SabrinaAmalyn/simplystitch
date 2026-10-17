@@ -16,10 +16,11 @@ it("migrates legacy colors without overwriting edited or recoverable drafts", as
   const saved = JSON.parse(localStorage.getItem("stitchling-state-v1") ?? "{}");
   expect(saved.config.colors.head).toBe("sage");
   expect(saved.config.colors.leftLeg).toBe("sage");
+  expect(saved.config.colors.tail).toBe("sage");
   expect(saved.draft).toEqual(draft);
   expect(saved.previous).toEqual(previous);
   expect(saved.config.layered.baseId).toBe("reference-v2");
-  expect(Object.values(saved.config.layered.selections)).toEqual([null, null, null, null, null]);
+  expect(Object.values(saved.config.layered.selections)).toEqual([null, null, null, null, null, null]);
 });
 
 it("keeps selected layers when reopening a saved character", async () => {
@@ -30,6 +31,21 @@ it("keeps selected layers when reopening a saved character", async () => {
   const { hydrateStore } = await import("@/lib/store");
   hydrateStore();
   expect(JSON.parse(localStorage.getItem("stitchling-state-v1") ?? "{}").config.layered).toEqual(layered);
+});
+
+it("keeps the tail choice and yarn when reopening without changing drafts", async () => {
+  const { createLayeredCharacter, selectLayer } = await import("@/lib/character-layers");
+  const layered = selectLayer(createLayeredCharacter(), "tail", "tail-long");
+  const draft = { text: "My saved draft", configKey: "existing", edited: true, generatedAt: 100 };
+  localStorage.setItem("stitchling-doll-base-v2", "true");
+  localStorage.setItem("stitchling-state-v1", JSON.stringify({ config: { ...DEFAULT_CONFIG, colors: { ...DEFAULT_CONFIG.colors, tail: "blush" }, layered }, draft, previous: draft }));
+  const { hydrateStore } = await import("@/lib/store");
+  hydrateStore();
+  const saved = JSON.parse(localStorage.getItem("stitchling-state-v1") ?? "{}");
+  expect(saved.config.layered.selections.tail).toBe("tail-long");
+  expect(saved.config.colors.tail).toBe("blush");
+  expect(saved.draft).toEqual(draft);
+  expect(saved.previous).toEqual(draft);
 });
 
 it("retains the renamed ear selection and drafts across the joined anatomy update", async () => {
