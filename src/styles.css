@@ -195,6 +195,7 @@
   .subcategory-nav { display: flex; min-width: 0; overflow-x: auto; border-bottom: 1px solid var(--border); padding: 8px 20px; gap: 4px; }
   .subcategory-tab { border-radius: 4px; padding: 0 12px; font-size: 12px; height: 32px; color: var(--muted-foreground); flex-shrink: 0; }
   .subcategory-active { background: var(--accent); color: var(--accent-foreground); }
+  .subcategory-empty::after { content: ""; display: block; height: 32px; }
   .workspace-content { padding: 24px; }
   .feature-area { min-height: 240px; max-height: 360px; overflow-y: auto; }
   .feature-card { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; height: 112px; min-width: 0; width: 100%; padding: 10px 4px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); white-space: normal; }
