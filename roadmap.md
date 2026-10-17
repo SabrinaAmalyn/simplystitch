@@ -77,4 +77,4 @@
 - [ ] Saved pattern: breadcrumb missing / back button still shown in the user preview — confirm build is clean and the change is live
 - [x] Mobile saved pattern: "Go to" button moved to the bottom corner; the character view is now a contents link
 - [ ] Add the character 3D view as a link in the contents nav
-- [ ] Pattern review page: icon-only Go Back and Save on phones
+- [x] Pattern review page: icon-only Go Back and Save on phones
