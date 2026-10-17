@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { ArrowLeft, BookOpen, Menu, User } from "lucide-react";
+import { ArrowLeft, BookOpen, LogOut, Menu, User } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 
 const NAV = [
@@ -14,7 +14,7 @@ export function AccountLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen w-full bg-background">
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col border-r border-border bg-card px-4 py-6 transition-transform md:static md:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col overflow-hidden border-r border-border bg-card px-4 py-6 transition-transform md:sticky md:top-0 md:bottom-auto md:h-screen md:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
         <Link to="/" className="px-2 font-display text-2xl font-semibold">Stitchling</Link>
         <p className="mt-8 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Menu</p>
@@ -31,9 +31,14 @@ export function AccountLayout({ children }: { children: ReactNode }) {
             </Link>
           ))}
         </nav>
-        <Link to="/customize" className="mt-auto flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted">
-          <ArrowLeft size={16} /> Back to customizer
-        </Link>
+        <div className="mt-auto flex flex-col gap-1 pt-4">
+          <Link to="/customize" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted">
+            <ArrowLeft size={16} /> Back to customizer
+          </Link>
+          <Link to="/" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted">
+            <LogOut size={16} /> Log out
+          </Link>
+        </div>
       </aside>
       {open && <button aria-label="Close menu" className="fixed inset-0 z-30 bg-foreground/20 md:hidden" onClick={() => setOpen(false)} />}
       <div className="flex min-w-0 flex-1 flex-col">
