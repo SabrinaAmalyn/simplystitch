@@ -138,11 +138,11 @@ const shortTitle = (t: string) => t.replace(/\s*\(.*?\)\s*/g, " ").replace(/\s*[
 
 type SectionEditProps = {
   s: ReaderSection; done: Set<string>; toggle: (k: string[], v: boolean) => void;
-  editing: boolean; onStart: () => void; onDone: () => void; onChange: (body: string) => void;
+  editing: boolean; initialBody: string; onStart: () => void; onDone: () => void; onChange: (body: string) => void;
 };
 
-function SectionView({ s, done, toggle, editing, onStart, onDone, onChange }: SectionEditProps) {
-  const [draft, setDraft] = useState(() => sectionBodySource(s));
+function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, onChange }: SectionEditProps) {
+  const [draft, setDraft] = useState(initialBody);
   return (
     <section id={s.id} className="reader-section">
       <div className="flex items-center justify-between gap-2">
