@@ -5,9 +5,9 @@ import { ProfileMenu } from "@/components/ProfileMenu";
 
 type Props = {
   title: string;
-  back: ReactNode;
-  status: string;
-  actions: ReactNode;
+  back?: ReactNode;
+  status?: string;
+  actions?: ReactNode;
   nameField?: ReactNode;
   /** Middle slot, e.g. journey steps. */
   center?: ReactNode;
@@ -20,16 +20,16 @@ export function PatternWorkspaceHeader({ title, back, status, actions, nameField
   return (
     <header className="pattern-header">
       <div className="pattern-header-brand">
-        <Button variant="outline" size="icon" asChild>{back}</Button>
+        {back && <Button variant="outline" size="icon" asChild>{back}</Button>}
         <div className="min-w-0">
           <Link to="/" className="block font-logo text-2xl uppercase leading-tight">SimplyStitch</Link>
-          <span className="block truncate text-xs text-muted-foreground" title={title}>{title} · {status}</span>
+          {status && <span className="block truncate text-xs text-muted-foreground" title={title}>{title} · {status}</span>}
         </div>
       </div>
       {center && <div className="pattern-header-center">{center}</div>}
       <div className="pattern-header-controls">
         {nameField && <div className="pattern-name-field min-w-0">{nameField}</div>}
-        <div className="pattern-header-actions">{actions}</div>
+        {actions && <div className="pattern-header-actions">{actions}</div>}
         {profile && <ProfileMenu />}
       </div>
     </header>

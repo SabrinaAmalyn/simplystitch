@@ -13,6 +13,8 @@ type Props = {
   onTextChange?: (text: string) => void;
   /** Primary action placed in the preview's bottom-right corner. */
   previewAction?: ReactNode;
+  /** Secondary action placed in the preview's bottom-left corner. */
+  previewBack?: ReactNode;
 };
 
 /** Which single crochet piece a pattern section makes. */
@@ -26,7 +28,7 @@ export function focusForSection(title: string | undefined): PartFocus {
   return null;
 }
 
-export function PatternReader({ text, config, progressKey, name, header, onTextChange, previewAction }: Props) {
+export function PatternReader({ text, config, progressKey, name, header, onTextChange, previewAction, previewBack }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);
   const doneList = useStore((s) => s.progress?.[progressKey]);
   const done = useMemo(() => new Set(doneList ?? []), [doneList]);
@@ -65,6 +67,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
           </div>
           <div className="review-canvas"><CharacterPreview config={config} focus={focus} /></div>
           {previewAction && <div className="review-preview-action">{previewAction}</div>}
+          {previewBack && <div className="review-preview-back">{previewBack}</div>}
         </section>
         <section className="review-content">
           <nav className="category-nav review-category-nav" role="tablist" aria-label="Pattern categories" style={{ gridTemplateColumns: `repeat(${tabs.filter(([, , on]) => on).length}, minmax(0, 1fr))` }}>
