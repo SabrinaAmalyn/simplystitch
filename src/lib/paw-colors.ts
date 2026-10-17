@@ -9,9 +9,9 @@ export function pawYarn(config: CharacterConfig, region: PawRegion) {
   return yarnById(config.colors[region] ?? partYarn(config, "body").id);
 }
 
-/** Preserve legacy limb colours until a marking is chosen, without overwriting them. */
-export function limbSurfaceYarn(config: CharacterConfig, part: BodyPart, region: PawRegion) {
-  return partYarn(config, config.colors[region] ? "body" : part);
+/** Paw markings only override tips; the rest retains the individual limb yarn. */
+export function limbSurfaceYarn(config: CharacterConfig, part: BodyPart, _region: PawRegion) {
+  return partYarn(config, part);
 }
 
 export function isPawTip(region: PawRegion, localY: number) {
