@@ -86,6 +86,16 @@
   --ring: oklch(0.62 0.15 245);
   --stage: oklch(1 0 0);
   --landing-sky: oklch(0.78 0.11 235);
+  --ink: oklch(0.25 0.12 270);
+  --ill-ink-dot: oklch(0.25 0.12 270);
+  --ill-white: oklch(1 0 0);
+  --ill-cream: oklch(0.97 0.03 85);
+  --ill-yellow: oklch(0.86 0.16 85);
+  --ill-lilac: oklch(0.78 0.1 290);
+  --ill-blue: oklch(0.82 0.1 230);
+  --ill-pink: oklch(0.82 0.1 10);
+  --ill-green: oklch(0.72 0.15 150);
+  --grid-line: oklch(0.88 0.05 240 / 0.6);
   --shadow-soft: 0 10px 30px -12px oklch(0.4 0.06 45 / 0.25);
   --doll-outline: oklch(0.35 0.035 45 / 0.65);
   --doll-shadow: oklch(0.35 0.035 45 / 0.12);
@@ -314,3 +324,10 @@
 .piece-nav { background: var(--muted); }
 .font-heavy { font-family: "Archivo Black", "Nunito", system-ui, sans-serif; letter-spacing: -0.02em; }
 .font-logo { font-family: "Montserrat", "Nunito", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.01em; }
+
+.landing-grid {
+  background-color: var(--background);
+  background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
