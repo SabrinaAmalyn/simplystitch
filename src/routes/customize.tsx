@@ -100,7 +100,6 @@ function Workspace() {
   const config = useStore((s) => s.config);
   const draft = useStore((s) => s.draft);
   const navigate = useNavigate();
-  const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -110,8 +109,6 @@ function Workspace() {
 
   const generate = () => {
     if (blockers.length) return;
-    if (draft?.edited && stale && !confirming) return setConfirming(true);
-    setConfirming(false);
     setBusy(true);
     setError(null);
     setTimeout(() => {
@@ -156,18 +153,6 @@ function Workspace() {
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           <div className="workspace-actions flex flex-col gap-4">
           
-          {confirming && (
-            <div className="alert">
-              <p className="font-semibold">Your edited pattern will be replaced.</p>
-              <p className="text-sm">You rewrote this pattern, and your character has changed since it was made. Generating again writes a fresh pattern for the new character and overwrites your rewritten text.</p>
-              <p className="text-sm">Want to keep it? Save a copy to My Patterns first, then generate the new one.</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Button onClick={() => { savePatternToLibrary(""); generate(); }}>Save a copy, then generate</Button>
-                <Button variant="outline" onClick={generate}>Generate anyway</Button>
-                <Button variant="ghost" onClick={() => setConfirming(false)}>Cancel</Button>
-              </div>
-            </div>
-          )}
           {error && <div className="alert alert-error">{error}</div>}
 
           <div className="flex flex-wrap items-center gap-3">
