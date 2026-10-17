@@ -64,7 +64,6 @@ function PreviewActions() {
         onClick={() => setState((s) => ({ ...s, editingPatternId: null, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}
       >
         <RotateCcw size={14} />
-        <span className="preview-action-label">Reset</span>
       </Button>
       <Button
         variant="outline"
@@ -76,7 +75,6 @@ function PreviewActions() {
         onClick={() => setState((s) => ({ ...s, config: randomConfig() }))}
       >
         <Dices size={14} />
-        <span className="preview-action-label">Randomize</span>
       </Button>
     </div>
   );
