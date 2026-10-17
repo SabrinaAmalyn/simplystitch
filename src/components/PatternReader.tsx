@@ -19,7 +19,7 @@ export function PatternReader({ text, config, progressKey, name, toolbar, editin
   const [active, setActive] = useState(doc.sections[0]?.id);
 
   const allKeys = useMemo(() => doc.sections.flatMap(sectionRowKeys), [doc]);
-  const total = allKeys.length;
+
   const completed = allKeys.filter((k) => done.has(k)).length;
 
   useEffect(() => {
@@ -132,7 +132,6 @@ function NavItem({ s, active, onGo, done }: { s: ReaderSection; active: boolean;
       className={`reader-nav-item ${active ? "bg-accent font-semibold text-accent-foreground" : ""}`}
     >
       <span className="min-w-0 whitespace-normal">{s.title}</span>
-      {keys.length > 0 && <span className="shrink-0 text-sm text-muted-foreground">{n}/{keys.length}</span>}
     </Button>
   );
 }
