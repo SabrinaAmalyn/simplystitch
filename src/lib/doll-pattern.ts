@@ -4,7 +4,7 @@ import { type CharacterConfig, partYarn } from "./character";
 import { pawYarn } from "./paw-colors";
 import type { Pattern, Round, Section } from "./pattern";
 
-const R = (label: string, text: string, count?: number): Round => ({ label, text, count });
+const R = (label: string, text: string, count?: number): Round => (count === undefined ? { label, text } : { label, text, count });
 
 export const HEAD_ROUNDS: Round[] = [
   R("R1", "6 sc in MR", 6),
