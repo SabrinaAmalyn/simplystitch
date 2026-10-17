@@ -301,3 +301,4 @@
   .review-preview-action { right: 12px; bottom: 12px; }
   .review-body { padding: 16px; }
 }
+.pattern-stale-alert { margin: 0; border-radius: 0; border-width: 0 0 1px; }

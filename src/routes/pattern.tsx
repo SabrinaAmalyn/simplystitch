@@ -75,16 +75,10 @@ function PatternPage() {
 
   return (
     <main className="pattern-page">
-      {stale && (
-        <div className="alert">
-          <p>Your character has changed since this pattern was made. Press <strong>Back</strong> at the top left to update it.</p>
-        </div>
-      )}
-
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined}
         
         previewAction={<Button onClick={save}><Save /> Save</Button>}
-        header={<PatternWorkspaceHeader
+        header={<><PatternWorkspaceHeader
           profile
           center={<JourneySteps active={1} />}
           title={name.trim() || defaultPatternName(library)}
@@ -95,7 +89,12 @@ function PatternPage() {
             <Button variant="ghost" size="icon" onClick={copy} aria-label="Copy pattern" title="Copy pattern"><Copy /></Button>
             <Button variant="outline" size="icon" onClick={download} aria-label="Download .txt" title="Download .txt"><Download /></Button>
           </>}
-        />}
+        />
+        {stale && (
+          <div className="alert pattern-stale-alert">
+            <p>Your character has changed since this pattern was made. Press <strong>Back</strong> at the top left to update it.</p>
+          </div>
+        )}</>}
         editing={<section className="reader-editor">
           <textarea
             aria-label="Edit pattern"
