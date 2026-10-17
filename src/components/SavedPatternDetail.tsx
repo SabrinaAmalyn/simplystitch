@@ -50,7 +50,7 @@ export function SavedPatternDetail({ p }: { p: SavedPattern }) {
   return (
     <div className="saved-pattern-workspace">
       <PatternDocument text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}
-        header={<PatternWorkspaceHeader title={p.name}
+        header={<PatternWorkspaceHeader title={p.name} logo={false}
           back={<Link to="/my-patterns" aria-label="All patterns" title="All patterns"><ArrowLeft /></Link>}
           actions={
             <DropdownMenu>
