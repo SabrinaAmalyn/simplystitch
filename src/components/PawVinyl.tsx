@@ -3,8 +3,7 @@ import * as THREE from "three";
 import { PAW_BOUNDARY, type PawRegion } from "@/lib/paw-colors";
 
 /** Recolour fragments of the original surface; positions and normals are untouched. */
-export function PawVinyl({ color, pawColor, region, enabled, vertexColors = false, boundaryShift = 0 }: {
-  boundaryShift?: number;
+export function PawVinyl({ color, pawColor, region, enabled, vertexColors = false }: {
   color?: string;
   pawColor: string;
   region: PawRegion;
@@ -13,14 +12,14 @@ export function PawVinyl({ color, pawColor, region, enabled, vertexColors = fals
 }) {
   const uniforms = useMemo(() => ({
     pawTint: { value: new THREE.Color(pawColor) },
-    pawBoundary: { value: (PAW_BOUNDARY[region] as number) + boundaryShift },
+    pawBoundary: { value: PAW_BOUNDARY[region] as number },
     pawEnabled: { value: enabled ? 1 : 0 },
   }), []);
   useEffect(() => {
     uniforms.pawTint.value.set(pawColor);
-    uniforms.pawBoundary.value = PAW_BOUNDARY[region] + boundaryShift;
+    uniforms.pawBoundary.value = PAW_BOUNDARY[region];
     uniforms.pawEnabled.value = enabled ? 1 : 0;
-  }, [uniforms, pawColor, region, enabled, boundaryShift]);
+  }, [uniforms, pawColor, region, enabled]);
   const patch = useCallback((shader: THREE.WebGLProgramParametersWithUniforms) => {
     Object.assign(shader.uniforms, uniforms);
     shader.vertexShader = shader.vertexShader

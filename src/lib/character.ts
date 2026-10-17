@@ -38,7 +38,6 @@ export type CharacterConfig = {
   face: { expression: Expression; cheeks: boolean };
   body: BodyShape;
   accessories: Accessory[];
-  limbs?: { arms: number; legs: number };
   layered?: LayeredCharacter;
 };
 
@@ -92,5 +91,5 @@ export function migratePartColors(c: CharacterConfig): CharacterConfig {
 }
 
 export const configKey = (c: CharacterConfig) => c.layered
-  ? JSON.stringify({ base: "reference-v2", anatomy: "joined-body-v2", colorSchema: 2, colors: c.colors, face: c.face, limbs: c.limbs ?? { arms: 1, legs: 1 }, layered: normalizeLayers(c.layered) })
+  ? JSON.stringify({ base: "reference-v2", anatomy: "joined-body-v2", colorSchema: 2, colors: c.colors, face: c.face, layered: normalizeLayers(c.layered) })
   : JSON.stringify({ base: "doll-v2", anatomy: "joined-body-v2", colorSchema: 2, ...c });
