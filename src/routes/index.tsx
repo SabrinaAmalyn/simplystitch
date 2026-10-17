@@ -64,14 +64,14 @@ function Landing() {
         <div className="marquee-track font-heavy text-sm uppercase text-primary">
           {items.map((t, i) => (
             <span key={i} className="flex items-center gap-10 pr-10">
-              <span aria-hidden="true">✿</span>
+              <span aria-hidden="true" className="text-5xl leading-none md:text-6xl">✿</span>
               <span>{t}</span>
             </span>
           ))}
         </div>
       </div>
 
-      <section className="mx-auto flex min-h-[42vh] max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
+      <section className="mx-auto flex min-h-[50vh] max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
         <h2 className="font-heavy text-2xl uppercase text-primary md:text-4xl">About SimplyStitch</h2>
         <p className="mt-10 text-base text-muted-foreground md:text-lg">
           Amigurumi is made up of simple stitches and familiar shapes. SimplyStitch brings them together to help you
@@ -79,19 +79,9 @@ function Landing() {
         </p>
       </section>
 
-      <section id="how" className="landing-grid px-4 py-12 md:px-8 md:py-16">
+      <section id="how" className="landing-grid flex min-h-[45vh] flex-col justify-center px-4 py-12 md:px-8 md:py-16">
         <div className="mx-auto max-w-6xl">
           <h2 className="font-heavy text-center text-2xl uppercase text-primary md:text-4xl">How it works</h2>
-          <ol className="mt-10 grid gap-10 sm:grid-cols-3">
-            {HOW.map(({ n, Art, title, body, tags }) => (
-              <li key={n} className="flex flex-col items-center text-center">
-                <div className="w-48 md:w-56"><Art /></div>
-                <h3 className="font-heavy mt-4 text-xl uppercase text-primary">{n}. {title}</h3>
-                <p className="mt-1 text-xs font-semibold text-primary/80">{tags.join(" ✦ ")}</p>
-                <p className="mt-2 max-w-xs text-sm text-muted-foreground">{body}</p>
-              </li>
-            ))}
-          </ol>
         </div>
       </section>
 
