@@ -47,3 +47,4 @@
 - [x] Place Reset before Randomize in the preview button pair.
 - Decrease landing page footer height
 - [ ] Switch every page (headings, body, logo) to Poppins; verify no Montserrat/Nunito remains.
+- [ ] Add more space under the "About SimplyStitch" heading; verify on phone and desktop.
