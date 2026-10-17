@@ -126,20 +126,18 @@ function Tail({ selection, color }: { selection?: string | null; color: string }
 }
 
 // Doll faces +z; the doll's left side is +x (named from the doll's perspective).
-function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: string; inner: string }) {
+function Ear({ type, side, color }: { type: Ears; side: 1 | -1; color: string }) {
   switch (type) {
     case "human":
       return (
         <group position={[side * 1.0, 1.95, 0.05]} rotation={[0, side * 0.45, 0]}>
           <mesh scale={[0.38, 0.38, 0.18]} castShadow><sphereGeometry args={[1, 32, 20]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, 0, 0.12]} scale={[0.22, 0.22, 0.08]}><sphereGeometry args={[1, 28, 18]} /><Vinyl color={inner} /></mesh>
         </group>
       );
     case "bear":
       return (
         <group position={[side * 0.78, 2.66, -0.05]} rotation={[0, 0, -side * 0.6]}>
           <mesh scale={[0.38, 0.38, 0.18]} castShadow><sphereGeometry args={[1, 32, 20]} /><Vinyl color={color} /></mesh>
-          <mesh position={[0, 0, 0.12]} scale={[0.22, 0.22, 0.08]}><sphereGeometry args={[1, 28, 18]} /><Vinyl color={inner} /></mesh>
         </group>
       );
     case "cat":
@@ -147,7 +145,6 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
       return (
         <group position={[side * 0.56, 2.72, 0.02]} rotation={[-0.06, 0, -side * 0.38]}>
           <mesh geometry={CAT_EAR} scale={[0.5, 0.46, 0.18]} castShadow><Vinyl color={color} /></mesh>
-          <mesh geometry={CAT_EAR} position={[0, -0.03, 0.12]} scale={[0.32, 0.3, 0.08]}><Vinyl color={inner} /></mesh>
         </group>
       );
     case "bunny":
@@ -181,8 +178,8 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
       <Arm side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />
       <Arm side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />
       <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>
-        {ears && <Ear type={ears} side={1} color={c("leftEar")} inner={c("leftInnerEar")} />}
-        {ears && <Ear type={ears} side={-1} color={c("rightEar")} inner={c("rightInnerEar")} />}
+        {ears && <Ear type={ears} side={1} color={c("leftEar")} />}
+        {ears && <Ear type={ears} side={-1} color={c("rightEar")} />}
       </group>
     </group>
   );
