@@ -18,7 +18,7 @@ export type BodyPart = (typeof BODY_PARTS)[number];
 
 /** Embroidered face features, mixed and matched independently. */
 export type NoseStyle = "none" | "teddy" | "cat" | "round";
-export type MouthStyle = "none" | "x" | "w" | "smile" | "cat3";
+export type MouthStyle = "none" | "x" | "w" | "smile";
 
 export type CharacterConfig = {
   colors: { main: string; accent: string; accessory: string; eyes: string; hands?: string; feet?: string } & Partial<Record<BodyPart, string>>;
@@ -56,7 +56,6 @@ export const MOUTH_OPTIONS: { value: MouthStyle; label: string }[] = [
   { value: "x", label: "Miffy X" },
   { value: "w", label: "Cat W" },
   { value: "smile", label: "Happy" },
-  { value: "cat3", label: "Cat :3" },
 ];
 
 export const EXPRESSION_OPTIONS: { value: Expression; label: string }[] = [

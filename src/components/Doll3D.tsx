@@ -68,7 +68,7 @@ function onFace(x: number, y: number, lift = 0.012) {
 }
 
 /** One embroidered stitch line following the head surface. */
-function Stitch({ points, radius = 0.014 }: { points: [number, number][]; radius?: number }) {
+function Stitch({ points, radius = 0.02 }: { points: [number, number][]; radius?: number }) {
   const curve = new THREE.CatmullRomCurve3(points.map(([x, y]) => onFace(x, y)));
   return (
     <>
@@ -80,25 +80,29 @@ function Stitch({ points, radius = 0.014 }: { points: [number, number][]; radius
   );
 }
 
-const NOSE_Y = -0.12;
-const MOUTH_Y = -0.24;
+const NOSE_Y = -0.13;
+const MOUTH_Y = -0.27;
 
 function Nose({ style }: { style: NoseStyle }) {
-  if (style === "teddy") return <><Stitch points={[[-0.06, NOSE_Y], [0.06, NOSE_Y]]} radius={0.018} /><Stitch points={[[0, NOSE_Y], [0, NOSE_Y - 0.11]]} /></>;
+  if (style === "teddy") return <><Stitch points={[[-0.08, NOSE_Y], [0.08, NOSE_Y]]} radius={0.026} /><Stitch points={[[0, NOSE_Y], [0, NOSE_Y - 0.13]]} radius={0.022} /></>;
   if (style === "cat") {
-    const tri = new THREE.Shape([new THREE.Vector2(-0.05, 0.025), new THREE.Vector2(0.05, 0.025), new THREE.Vector2(0, -0.035)]);
-    return <mesh position={onFace(0, NOSE_Y, 0.006)}><extrudeGeometry args={[tri, { depth: 0.018, bevelEnabled: true, bevelSize: 0.008, bevelThickness: 0.008, bevelSegments: 3 }]} /><meshStandardMaterial color={STITCH} roughness={0.7} /></mesh>;
+    // Softly rounded triangle: curved sides and a rounded tip, no sharp corners.
+    const tri = new THREE.Shape();
+    tri.moveTo(-0.065, 0.03);
+    tri.quadraticCurveTo(0, 0.062, 0.065, 0.03);
+    tri.quadraticCurveTo(0.045, -0.018, 0, -0.048);
+    tri.quadraticCurveTo(-0.045, -0.018, -0.065, 0.03);
+    return <mesh position={onFace(0, NOSE_Y, 0.006)}><extrudeGeometry args={[tri, { depth: 0.02, bevelEnabled: true, bevelSize: 0.014, bevelThickness: 0.014, bevelSegments: 4 }]} /><meshStandardMaterial color={STITCH} roughness={0.7} /></mesh>;
   }
-  if (style === "round") return <mesh position={onFace(0, NOSE_Y, 0)} scale={[0.045, 0.04, 0.025]}><sphereGeometry args={[1, 20, 14]} /><meshStandardMaterial color={STITCH} roughness={0.7} /></mesh>;
+  if (style === "round") return <mesh position={onFace(0, NOSE_Y, 0)} scale={[0.062, 0.056, 0.032]}><sphereGeometry args={[1, 20, 14]} /><meshStandardMaterial color={STITCH} roughness={0.7} /></mesh>;
   return null;
 }
 
 function Mouth({ style }: { style: MouthStyle }) {
   const y = MOUTH_Y;
-  if (style === "x") return <><Stitch points={[[-0.05, y + 0.05], [0.05, y - 0.05]]} /><Stitch points={[[0.05, y + 0.05], [-0.05, y - 0.05]]} /></>;
-  if (style === "w") return <Stitch points={[[-0.1, y + 0.02], [-0.05, y - 0.03], [0, y + 0.01], [0.05, y - 0.03], [0.1, y + 0.02]]} />;
-  if (style === "smile") return <Stitch points={[[-0.08, y + 0.02], [-0.04, y - 0.025], [0, y - 0.035], [0.04, y - 0.025], [0.08, y + 0.02]]} />;
-  if (style === "cat3") return <><Stitch points={[[0, y + 0.02], [-0.035, y - 0.025], [-0.075, y - 0.005]]} /><Stitch points={[[0, y + 0.02], [0.035, y - 0.025], [0.075, y - 0.005]]} /></>;
+  if (style === "x") return <><Stitch points={[[-0.065, y + 0.06], [0.065, y - 0.06]]} /><Stitch points={[[0.065, y + 0.06], [-0.065, y - 0.06]]} /></>;
+  if (style === "w") return <Stitch points={[[-0.13, y + 0.03], [-0.065, y - 0.045], [0, y + 0.012], [0.065, y - 0.045], [0.13, y + 0.03]]} />;
+  if (style === "smile") return <Stitch points={[[-0.11, y + 0.03], [-0.055, y - 0.035], [0, y - 0.05], [0.055, y - 0.035], [0.11, y + 0.03]]} />;
   return null;
 }
 
