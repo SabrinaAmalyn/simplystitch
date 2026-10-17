@@ -18,9 +18,11 @@ it("uses an independent shared foot colour with body-coloured remaining legs", (
 
 it("bounds hands to distal caps and feet to bottom tips, never shoulders or torso", () => {
   expect(isPawTip("hands", -0.3)).toBe(true);
+  expect(isPawTip("hands", -0.1)).toBe(true);
   expect(isPawTip("hands", 0)).toBe(false);
   expect(isPawTip("hands", 0.3)).toBe(false);
   expect(isPawTip("feet", 0)).toBe(true);
+  expect(isPawTip("feet", 0.15)).toBe(true);
   expect(isPawTip("feet", 0.25)).toBe(false);
   expect(isPawTip("feet", 0.6)).toBe(false);
 });
