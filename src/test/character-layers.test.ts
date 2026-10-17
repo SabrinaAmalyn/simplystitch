@@ -39,13 +39,13 @@ describe("layered characters", () => {
   });
   it("blocks unsupported pattern instructions", () => {
     const layered = selectLayer(createLayeredCharacter(), "outfit", "sample-vest");
-    expect(() => generatePattern({ ...DEFAULT_CONFIG, layered })).toThrow("no defined crochet pattern rule");
+    expect(() => generatePattern({ ...DEFAULT_CONFIG, layered })).toThrow("Vest: crochet rule not defined");
   });
   it("versions selections in pattern keys", () => {
     const layered = createLayeredCharacter();
     const config = { ...DEFAULT_CONFIG, layered };
     expect(configKey({ ...config, layered: selectLayer(layered, "ears", "ears-dog") })).not.toBe(configKey(config));
-    expect(patternBlockers(layered)).toHaveLength(1);
+    expect(patternBlockers(layered)).toHaveLength(0);
   });
   it("replaces round tails with long tails independently of ears", () => {
     const ears = selectLayer(createLayeredCharacter(), "ears", "ears-cat");
@@ -54,7 +54,7 @@ describe("layered characters", () => {
     expect(long.selections.tail).toBe("tail-long");
     expect(long.selections.ears).toBe("ears-cat");
     expect(characterRecord(long).components.filter((item) => item.slot === "tail")).toEqual([
-      { assetId: "tail-long", slot: "tail", component: "tail.long", placeholder: false, patternRuleId: null },
+      { assetId: "tail-long", slot: "tail", component: "tail.long", placeholder: false, patternRuleId: "tail.long" },
     ]);
     expect(configKey({ ...DEFAULT_CONFIG, layered: round })).not.toBe(configKey({ ...DEFAULT_CONFIG, layered: long }));
   });
@@ -69,8 +69,8 @@ describe("layered characters", () => {
     expect(migrated.selections.tail).toBeNull();
     expect(migrated.selections.ears).toBe("ears-human");
   });
-  it.each(["tail-round", "tail-long"])("keeps %s unsupported crochet rules blocked", (tail) => {
+  it.each(["tail-round", "tail-long"])("allows %s now that its crochet rule exists", (tail) => {
     const layered = selectLayer(createLayeredCharacter(), "tail", tail);
-    expect(patternBlockers(layered)).toContain(`${tail === "tail-round" ? "Round" : "Long"}: crochet rule not defined.`);
+    expect(patternBlockers(layered)).toEqual([]);
   });
 });

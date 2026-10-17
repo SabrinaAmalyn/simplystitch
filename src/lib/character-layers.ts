@@ -38,7 +38,7 @@ export const BASE_ART = {
   sprites: { front: humanFront.url, side: humanSide.url, back: humanBack.url } as ViewSprites,
   url: humanFront.url,
   canvas: { width: 256, height: 360 },
-  patternRuleId: null,
+  patternRuleId: "base.doll-v1" as string | null,
 };
 export const LAYER_ORDER = { behind: 10, base: 20, face: 30, outfit: 40, hair: 50, accessory: 60 } as const;
 export type OverlayAsset = { id: string; url: string; order: number };
@@ -49,7 +49,7 @@ export type CustomizationItem = {
   sprites?: ViewSprites;
 };
 const ear = (id: string, label: string, f: { url: string }, s: { url: string }, b: { url: string }): CustomizationItem => ({
-  id: `ears-${id}`, slot: "ears", label, placeholder: false, component: `ears.${id}`, patternRuleId: null, assets: [],
+  id: `ears-${id}`, slot: "ears", label, placeholder: false, component: `ears.${id}`, patternRuleId: `ears.${id}`, assets: [],
   sprites: { front: f.url, side: s.url, back: b.url },
 });
 export const CUSTOMIZATION_ITEMS: CustomizationItem[] = [
@@ -58,8 +58,8 @@ export const CUSTOMIZATION_ITEMS: CustomizationItem[] = [
   ear("cat", "Cat", catFront, catSide, catBack),
   ear("bear", "Bear", bearFront, bearSide, bearBack),
   ear("bunny", "Bunny", bunnyFront, bunnySide, bunnyBack),
-  { id: "tail-round", slot: "tail", label: "Round", placeholder: false, component: "tail.round", patternRuleId: null, assets: [] },
-  { id: "tail-long", slot: "tail", label: "Long", placeholder: false, component: "tail.long", patternRuleId: null, assets: [] },
+  { id: "tail-round", slot: "tail", label: "Round", placeholder: false, component: "tail.round", patternRuleId: "tail.round", assets: [] },
+  { id: "tail-long", slot: "tail", label: "Long", placeholder: false, component: "tail.long", patternRuleId: "tail.long", assets: [] },
   { id: "sample-hair", slot: "hair", label: "Long hair", placeholder: true, component: "hair.long", patternRuleId: null, assets: [{ id: "hair-back", url: hairBack.url, order: LAYER_ORDER.behind }, { id: "hair-front", url: hairFront.url, order: LAYER_ORDER.hair }] },
   { id: "sample-freckles", slot: "face", label: "Freckles", placeholder: true, component: "face.freckles", patternRuleId: null, assets: [{ id: "freckles", url: freckles.url, order: LAYER_ORDER.face }] },
   { id: "sample-vest", slot: "outfit", label: "Vest", placeholder: true, component: "outfit.vest", patternRuleId: null, assets: [{ id: "vest", url: vest.url, order: LAYER_ORDER.outfit }] },
