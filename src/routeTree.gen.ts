@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MyPatternsRouteImport } from './routes/my-patterns'
 import { Route as PatternRouteImport } from './routes/pattern'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyPatternsRoute = MyPatternsRouteImport.update({
+  id: '/my-patterns',
+  path: '/my-patterns',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PatternRoute = PatternRouteImport.update({
@@ -25,27 +31,31 @@ const PatternRoute = PatternRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/my-patterns': typeof MyPatternsRoute
   '/pattern': typeof PatternRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/my-patterns': typeof MyPatternsRoute
   '/pattern': typeof PatternRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/my-patterns': typeof MyPatternsRoute
   '/pattern': typeof PatternRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pattern'
+  fullPaths: '/' | '/my-patterns' | '/pattern'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pattern'
-  id: '__root__' | '/' | '/pattern'
+  to: '/' | '/my-patterns' | '/pattern'
+  id: '__root__' | '/' | '/my-patterns' | '/pattern'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MyPatternsRoute: typeof MyPatternsRoute
   PatternRoute: typeof PatternRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-patterns': {
+      id: '/my-patterns'
+      path: '/my-patterns'
+      fullPath: '/my-patterns'
+      preLoaderRoute: typeof MyPatternsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pattern': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MyPatternsRoute: MyPatternsRoute,
   PatternRoute: PatternRoute,
 }
 export const routeTree = rootRouteImport
