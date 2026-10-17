@@ -67,25 +67,27 @@ export function PatternReader({ text, config, progressKey, name, header, editing
           {previewAction && <div className="review-preview-action">{previewAction}</div>}
         </section>
         <section className="review-content">
-          <div className="category-tabs" role="tablist" aria-label="Pattern categories">
+          <nav className="category-nav review-category-nav" role="tablist" aria-label="Pattern categories" style={{ gridTemplateColumns: `repeat(${tabs.filter(([, , on]) => on).length}, minmax(0, 1fr))` }}>
             {tabs.filter(([, , on]) => on).map(([id, text]) => (
-              <button key={id} type="button" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "active" : ""}`} onClick={() => pick(id)}>{text}</button>
+              <Button key={id} variant="ghost" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "category-active" : ""}`} onClick={() => pick(id)}>{text}</Button>
             ))}
-          </div>
+          </nav>
           {tab === "instructions" && parts.length > 1 && (
-            <div className="subcategory-tabs review-subtabs" role="tablist" aria-label="Pattern pieces">
+            <nav className="subcategory-nav" role="tablist" aria-label="Pattern pieces">
               {parts.map((p) => (
-                <button key={p.id} type="button" role="tab" aria-selected={part?.id === p.id} className={`subcategory-tab ${part?.id === p.id ? "active" : ""}`} onClick={() => setPartId(p.id)}>{shortTitle(p.title)}</button>
+                <Button key={p.id} variant="ghost" role="tab" aria-selected={part?.id === p.id} className={`subcategory-tab ${part?.id === p.id ? "subcategory-active" : ""}`} onClick={() => setPartId(p.id)}>{shortTitle(p.title)}</Button>
               ))}
-            </div>
+            </nav>
           )}
-          {tab === "edit" ? editing : (
+          {tab === "edit" ? <div className="review-body">{editing}</div> : (
+            <div className="review-body">
             <article className="reader-instructions">
               {shown.map((s) => <SectionView key={s.id} s={s} done={done} toggle={toggle} />)}
               {completed > 0 && (
                 <Button variant="ghost" className="self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</Button>
               )}
             </article>
+            </div>
           )}
         </section>
       </div>

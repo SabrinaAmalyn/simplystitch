@@ -85,27 +85,26 @@ function PatternPage() {
       )}
 
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined}
-        onNavigateSection={() => setMode("read")}
-        toolbar={(openSections) => <PatternWorkspaceHeader
+        onEditChange={(e) => setMode(e ? "edit" : "read")}
+        previewAction={<Button onClick={save}><Save /> Save</Button>}
+        header={<PatternWorkspaceHeader
           title={name.trim() || defaultPatternName(library)}
           back={<Link to="/customize" aria-label="Back to character editor" title="Back to character editor"><ArrowLeft /></Link>}
-          openSections={openSections} mode={mode} onModeChange={setMode}
           status={draft.saved ? "Saved to My Patterns" : draft.edited ? "Changes kept on this device" : "Draft · Not saved"}
           nameField={<input aria-label="Pattern name" className="h-9 w-full rounded-md border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder={defaultPatternName(library)} value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />}
           actions={<>
             <Button variant="ghost" size="icon" onClick={copy} aria-label="Copy pattern" title="Copy pattern"><Copy /></Button>
             <Button variant="outline" size="icon" onClick={download} aria-label="Download .txt" title="Download .txt"><Download /></Button>
-            <Button onClick={save}><Save /> Save</Button>
           </>}
         />}
-        editing={mode === "edit" ? <section className="reader-editor">
+        editing={<section className="reader-editor">
           <textarea
             aria-label="Edit pattern"
-            className="min-h-[70vh] w-full resize-y rounded-lg bg-card p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
+            className="min-h-[60vh] w-full resize-y rounded-lg border border-border bg-background p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
             value={draft.text}
             onChange={(e) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text: e.target.value, edited: true, saved: false } }))}
           />
-        </section> : undefined}
+        </section>}
       />
       {draft.edited && <p className="text-sm text-muted-foreground">Edits are saved automatically on this device.</p>}
       {toast && <div role="status" className="toast">{toast}</div>}
