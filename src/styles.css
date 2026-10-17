@@ -112,6 +112,7 @@
   --doll-cheeks: oklch(0.75 0.13 25);
   --doll-eye-glint: oklch(1 0 0);
   --background: oklch(0.129 0.042 264.695);
+  --landing-sky: oklch(0.35 0.08 240);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
   --card-foreground: oklch(0.984 0.003 247.858);
