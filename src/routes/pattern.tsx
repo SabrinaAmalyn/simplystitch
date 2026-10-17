@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { JourneySteps } from "@/components/JourneySteps";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { configKey } from "@/lib/character";
-import { setState, useStore } from "@/lib/store";
+import { defaultPatternName, savePatternToLibrary, setState, useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/pattern")({
   head: () => ({
@@ -44,8 +44,10 @@ function PatternPage() {
   const draft = useStore((s) => s.draft);
   const previous = useStore((s) => s.previous);
   const config = useStore((s) => s.config);
+  const library = useStore((s) => s.library);
   const [mode, setMode] = useState<"read" | "edit">("read");
   const [toast, setToast] = useState<string | null>(null);
+  const [name, setName] = useState("");
 
   useEffect(() => {
     if (!toast) return;
@@ -85,8 +87,10 @@ function PatternPage() {
 
   const initialText = draft.initialText ?? draft.text;
   const save = () => {
-    setState((s) => ({ ...s, draft: s.draft && { ...s.draft, saved: true } }));
+    savePatternToLibrary(name);
+    setName("");
     setMode("read");
+    setToast("Saved to My Patterns");
     window.scrollTo({ top: 0 });
   };
 
@@ -100,6 +104,7 @@ function PatternPage() {
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-display text-2xl font-semibold">Saved</h1>
           <div className="ml-auto flex flex-wrap gap-2">
+            <Link to="/my-patterns" className="btn-ghost">My Patterns</Link>
             <button className="btn-ghost" onClick={() => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, saved: false } }))}>Back to edit</button>
             <button className="btn-ghost" onClick={copy}>Copy</button>
             <button className="btn-primary" onClick={download}>Download .txt</button>
@@ -157,8 +162,16 @@ function PatternPage() {
           <button className={mode === "read" ? "tab tab-on" : "tab"} onClick={() => setMode("read")}>Read</button>
           <button className={mode === "edit" ? "tab tab-on" : "tab"} onClick={() => setMode("edit")}>Edit</button>
         </div>
-        <div className="ml-auto flex flex-wrap gap-2">
+        <div className="ml-auto flex flex-wrap items-center gap-2">
           <Link to="/" className="btn-ghost">Back to character</Link>
+          <input
+            aria-label="Pattern name"
+            className="h-9 w-44 rounded-lg border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+            placeholder={defaultPatternName(library)}
+            value={name}
+            maxLength={60}
+            onChange={(e) => setName(e.target.value)}
+          />
           <button className="btn-primary" onClick={save}>Save</button>
         </div>
       </div>
