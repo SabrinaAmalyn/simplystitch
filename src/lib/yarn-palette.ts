@@ -18,7 +18,7 @@ export const YARN_GROUPS: YarnGroup[] = [
     { id: "charcoal", name: "Dark Cocoa", hex: "#4B3028" },
   ] },
   { name: "Fox & autumn tones", yarns: [
-    { id: "peach", name: "Peach", hex: "#F2B49A" },
+    { id: "peach", name: "Peach", hex: "#F9CDB9" },
     { id: "terracotta", name: "Terracotta", hex: "#D47A59" },
     { id: "fox-red", name: "Fox Red", hex: "#C65A35" },
     { id: "rust", name: "Rust", hex: "#A9492D" },
