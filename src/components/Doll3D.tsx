@@ -67,8 +67,9 @@ function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
 }
 
 function Arm({ side, color }: { side: 1 | -1; color: string }) {
-  // Horizontal T-pose: slimmer and a touch shorter, still tucked into the shoulders.
-  return <mesh position={[side * 0.62, 0.74, 0.02]} rotation={[0, 0, side * Math.PI / 2]} castShadow><capsuleGeometry args={[0.19, 0.25, 12, 24]} /><Vinyl color={color} /></mesh>;
+  // Tilted up from the horizontal T-pose by about 10°, still tucked into the shoulders.
+  const tilt = 0.18;
+  return <mesh position={[side * 0.62, 0.74, 0.02]} rotation={[0, 0, side * (Math.PI / 2 + tilt)]} castShadow><capsuleGeometry args={[0.19, 0.25, 12, 24]} /><Vinyl color={color} /></mesh>;
 }
 
 /** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */
