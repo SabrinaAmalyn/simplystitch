@@ -1,7 +1,10 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { ArrowLeft, Download, Palette } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowLeft, Download, MoreVertical, Palette, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { PatternDocument } from "@/components/PatternDocument";
 import { loadPatternIntoCustomizer, progressKey, renamePattern, type SavedPattern } from "@/lib/store";
@@ -15,36 +18,57 @@ export function downloadPattern(p: SavedPattern) {
   URL.revokeObjectURL(a.href);
 }
 
-function NameField({ p }: { p: SavedPattern }) {
+function RenameDialog({ p, open, onOpenChange }: { p: SavedPattern; open: boolean; onOpenChange: (v: boolean) => void }) {
   const [value, setValue] = useState(p.name);
+  useEffect(() => { if (open) setValue(p.name); }, [open, p.name]);
+  const save = () => {
+    if (value.trim()) renamePattern(p.id, value.trim());
+    onOpenChange(false);
+  };
   return (
-    <input
-      aria-label="Pattern name"
-      className="h-9 w-full rounded-md border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-      value={value}
-      maxLength={60}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={() => (value.trim() ? renamePattern(p.id, value) : setValue(p.name))}
-      onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
-    />
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Rename pattern</DialogTitle>
+          <DialogDescription>Give this pattern a name you will recognise in your library.</DialogDescription>
+        </DialogHeader>
+        <Input aria-label="Pattern name" value={value} maxLength={60} onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && save()} />
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button onClick={save} disabled={!value.trim()}>Save</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
-/** One saved pattern: name, 3D preview and its interactive pattern. */
+/** One saved pattern: the pattern document first, with a table of contents beside it. */
 export function SavedPatternDetail({ p }: { p: SavedPattern }) {
   const navigate = useNavigate();
+  const [renaming, setRenaming] = useState(false);
   return (
     <div className="saved-pattern-workspace">
       <PatternDocument text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}
         header={<PatternWorkspaceHeader title={p.name}
           back={<Link to="/my-patterns" aria-label="All patterns" title="All patterns"><ArrowLeft /></Link>}
-          status="Saved to My Patterns" nameField={<NameField p={p} />}
-          actions={<>
-            <Button variant="outline" onClick={() => { loadPatternIntoCustomizer(p.id); navigate({ to: "/customize" }); }}><Palette /> Customize</Button>
-            <Button variant="outline" onClick={() => downloadPattern(p)}><Download /> Download .txt</Button>
-          </>}
+          actions={
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" aria-label="Pattern options" title="Pattern options"><MoreVertical /></Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-56">
+                <DropdownMenuLabel className="truncate">{p.name}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => setRenaming(true)}><Pencil /> Rename</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => { loadPatternIntoCustomizer(p.id); navigate({ to: "/customize" }); }}><Palette /> Customize</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => downloadPattern(p)}><Download /> Download .txt</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          }
         />}
       />
+      <RenameDialog p={p} open={renaming} onOpenChange={setRenaming} />
     </div>
   );
 }
