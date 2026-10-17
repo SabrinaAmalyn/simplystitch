@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { CharacterPreview } from "@/components/CharacterPreview";
+import { AccountLayout } from "@/components/AccountLayout";
 import { deletePattern, loadPatternIntoCustomizer, renamePattern, useStore, type SavedPattern } from "@/lib/store";
 
 export const Route = createFileRoute("/my-patterns")({
@@ -32,11 +33,8 @@ function MyPatternsPage() {
   const open = library.find((p) => p.id === openId);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-6 md:px-8">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
-        <Link to="/" className="btn-ghost">Back to customizer</Link>
-      </header>
+    <AccountLayout>
+      <div className="flex flex-col gap-6">
       <h1 className="font-display text-2xl font-semibold">My Patterns</h1>
 
       {open ? (
@@ -47,13 +45,14 @@ function MyPatternsPage() {
           <Link to="/" className="btn-primary mt-4 inline-flex">Start customizing</Link>
         </section>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {library.map((p) => (
             <PatternCard key={p.id} p={p} onOpen={() => setOpenId(p.id)} />
           ))}
         </div>
       )}
-    </main>
+      </div>
+    </AccountLayout>
   );
 }
 

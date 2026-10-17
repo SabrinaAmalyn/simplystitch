@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers";
 import { YARNS } from "@/lib/yarn-palette";
 import { Dices, RotateCcw } from "lucide-react";
+import { ProfileMenu } from "@/components/ProfileMenu";
 
 const pick = <T,>(list: readonly T[]): T => list[Math.floor(Math.random() * list.length)]!;
 const EAR_IDS = ["ears-human", "ears-dog", "ears-cat", "ears-bear", "ears-bunny"] as const;
@@ -133,7 +134,7 @@ function Workspace() {
     <main className="min-h-screen bg-background">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
         <h1 className="min-w-0 font-display text-2xl font-semibold">Stitchling</h1>
-        <Link to="/my-patterns" className="btn-ghost text-sm">My Patterns</Link>
+        <ProfileMenu />
       </header>
 
       <div className="creator-layout">
