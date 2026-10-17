@@ -60,9 +60,8 @@ const SHOWCASE = showcaseConfig();
 
 const HOW = [
   { n: 1, title: "Customize", body: "Choose ears, tail, embroidered face details and a yarn colour for every part." },
-  { n: 2, title: "Generate", body: "Get a written draft: rounds, stitch counts and colour switches for your doll." },
-  { n: 3, title: "Edit", body: "Reword anything in the draft. The original stays beside it for comparison." },
-  { n: 4, title: "Save", body: "Name it, keep it in My Patterns, then copy or download the text." },
+  { n: 2, title: "Generate & Edit", body: "Get a written draft with rounds, stitch counts and colour switches, and reword anything you like." },
+  { n: 3, title: "Save", body: "Name it and keep it in My Patterns, where you can copy or download it any time." },
 ];
 
 function Landing() {
