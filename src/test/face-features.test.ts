@@ -4,7 +4,7 @@ import { DEFAULT_CONFIG, MOUTH_OPTIONS, NOSE_OPTIONS, configKey, type CharacterC
 describe("embroidered face features", () => {
   it("offers independent nose and mouth options, each removable", () => {
     expect(NOSE_OPTIONS.map((o) => o.value)).toEqual(["none", "teddy", "cat", "round"]);
-    expect(MOUTH_OPTIONS.map((o) => o.value)).toEqual(["none", "x", "w", "smile", "cat3"]);
+    expect(MOUTH_OPTIONS.map((o) => o.value)).toEqual(["none", "x", "w", "smile"]);
   });
 
   it("defaults to no nose and no mouth", () => {

@@ -6,7 +6,7 @@ const STROKE = "#4B3028";
 function NoseThumb({ style }: { style: NoseStyle }) {
   if (style === "none") return <line x1="10" y1="18" x2="22" y2="18" stroke={STROKE} strokeWidth="2" strokeLinecap="round" opacity="0.25" />;
   if (style === "teddy") return <g stroke={STROKE} strokeWidth="2.6" strokeLinecap="round" fill="none"><line x1="9" y1="13" x2="23" y2="13" /><line x1="16" y1="13" x2="16" y2="24" /></g>;
-  if (style === "cat") return <path d="M 10 12 L 22 12 L 16 21 Z" fill={STROKE} strokeLinejoin="round" />;
+  if (style === "cat") return <path d="M 9 12 Q 16 8 23 12 Q 20 19 16 21 Q 12 19 9 12 Z" fill={STROKE} strokeLinejoin="round" />;
   return <circle cx="16" cy="16" r="5" fill={STROKE} />;
 }
 
@@ -15,7 +15,7 @@ function MouthThumb({ style }: { style: MouthStyle }) {
   if (style === "x") return <g stroke={STROKE} strokeWidth="2.4" strokeLinecap="round"><line x1="10" y1="10" x2="22" y2="22" /><line x1="22" y1="10" x2="10" y2="22" /></g>;
   if (style === "w") return <path d="M 7 13 Q 10 20 13 14 Q 16 21 19 14 Q 22 20 25 13" fill="none" stroke={STROKE} strokeWidth="2.4" strokeLinecap="round" />;
   if (style === "smile") return <path d="M 8 13 Q 16 24 24 13" fill="none" stroke={STROKE} strokeWidth="2.4" strokeLinecap="round" />;
-  return <g stroke={STROKE} strokeWidth="2.4" strokeLinecap="round" fill="none"><path d="M 16 12 Q 8 14 11 19" /><path d="M 16 12 Q 24 14 21 19" /></g>;
+  return null;
 }
 
 type CardProps<T extends string> = {
