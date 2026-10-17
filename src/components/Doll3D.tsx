@@ -171,7 +171,7 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
       <Eyes color={yarnById(config.colors.eyes).hex} />
       {config.face.cheeks && <><BlushPatch side={1} color={c("blush")} /><BlushPatch side={-1} color={c("blush")} /></>}
       <JoinedBody torso={c("body")} leftLeg={c("leftLeg")} rightLeg={c("rightLeg")} />
-      <Tail selection={config.layered?.selections.tail} color={c("tail")} />
+      <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />
       <Arm side={1} color={c("leftArm")} />
       <Arm side={-1} color={c("rightArm")} />
       <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>
