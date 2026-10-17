@@ -1,5 +1,5 @@
 // Thumbnail cards for embroidered face features (noses and mouths).
-import { yarnById, type BlushShape, type EyeStyle, type MouthStyle, type NoseStyle } from "@/lib/character";
+import { yarnById, type BlushShape, type BrowStyle, type EyeStyle, type MouthStyle, type NoseStyle } from "@/lib/character";
 import { Button } from "@/components/ui/button";
 
 const STROKE = yarnById("charcoal").hex;
@@ -21,6 +21,19 @@ function NoseThumb({ style }: { style: NoseStyle }) {
   if (style === "teddy") return <g stroke={STROKE} strokeWidth="2.6" strokeLinecap="round" fill="none"><line x1="9" y1="13" x2="23" y2="13" /><line x1="16" y1="13" x2="16" y2="24" /></g>;
   if (style === "cat") return <path d="M 9 12 Q 16 8 23 12 Q 20 19 16 21 Q 12 19 9 12 Z" fill={STROKE} strokeLinejoin="round" />;
   return <circle cx="16" cy="16" r="5" fill={STROKE} />;
+}
+
+function BrowThumb({ style }: { style: BrowStyle }) {
+  const g = { fill: "none" as const, stroke: STROKE, strokeWidth: 2.2, strokeLinecap: "round" as const };
+  if (style === "none") return <line x1="10" y1="18" x2="22" y2="18" stroke={STROKE} strokeWidth="2" strokeLinecap="round" opacity="0.25" />;
+  if (style === "dots") return <g fill={STROKE}><circle cx="10" cy="15" r="2.4" /><circle cx="22" cy="15" r="2.4" /></g>;
+  if (style === "straight") return <g {...g}><line x1="5" y1="15" x2="14" y2="15" /><line x1="18" y1="15" x2="27" y2="15" /></g>;
+  if (style === "soft-arch") return <g {...g}><path d="M 5 16 Q 9.5 11 14 16" /><path d="M 18 16 Q 22.5 11 27 16" /></g>;
+  if (style === "high-arch") return <g {...g}><path d="M 5 17 Q 9.5 8 14 17" /><path d="M 18 17 Q 22.5 8 27 17" /></g>;
+  if (style === "angry") return <g {...g}><line x1="5" y1="11" x2="14" y2="17" /><line x1="18" y1="17" x2="27" y2="11" /></g>;
+  if (style === "worried") return <g {...g}><line x1="5" y1="18" x2="14" y2="11" /><line x1="18" y1="11" x2="27" y2="18" /></g>;
+  if (style === "thick") return <g {...g} strokeWidth="4"><path d="M 5 16 Q 9.5 11.5 14 16" /><path d="M 18 16 Q 22.5 11.5 27 16" /></g>;
+  return <g {...g}><path d="M 5 12 Q 9.5 6 14 12" /><line x1="18" y1="17" x2="27" y2="17" /></g>;
 }
 
 function MouthThumb({ style }: { style: MouthStyle }) {
@@ -69,3 +82,4 @@ export const NoseCards = (p: Omit<CardProps<NoseStyle>, "label" | "Thumb">) => <
 export const MouthCards = (p: Omit<CardProps<MouthStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Mouth" Thumb={MouthThumb} />;
 export const EyeCards = (p: Omit<CardProps<EyeStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Eyes" Thumb={EyeThumb} />;
 export const BlushCards = (p: Omit<CardProps<BlushShape>, "label" | "Thumb">) => <FeatureCards {...p} label="Blush shape" Thumb={BlushThumb} />;
+export const BrowCards = (p: Omit<CardProps<BrowStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Eyebrows" Thumb={BrowThumb} />;
