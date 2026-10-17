@@ -26,11 +26,13 @@ function randomConfig(): CharacterConfig {
   return {
     ...DEFAULT_CONFIG,
     colors: {
+      ...DEFAULT_CONFIG.colors,
       main: body, head: body, body, leftArm: body, rightArm: body, leftLeg: body, rightLeg: body,
       leftEar: yarn(), rightEar: yarn(), tail: yarn(), hands: paw, feet: paw,
       leftEye: "charcoal", rightEye: "charcoal", brows: "charcoal", leftBlush: blushYarn, rightBlush: blushYarn,
     },
     face: {
+      ...DEFAULT_CONFIG.face,
       cheeks: Math.random() < 0.7,
       blushShape: pick(BLUSH_OPTIONS).value,
       eyeStyle: pick(EYE_OPTIONS).value,
