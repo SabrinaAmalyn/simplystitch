@@ -10,10 +10,16 @@ function EyeThumb({ style }: { style: EyeStyle }) {
     : <g fill={STROKE}><circle cx="10" cy="16" r="3" /><circle cx="24" cy="16" r="3" /></g>;
 }
 
-function BlushThumb({ style }: { style: BlushShape }) {
+function BlushThumb({ style }: { style: BlushShape | "none" }) {
+  if (style === "none") return <NoseThumb style="none" />;
   return style === "oval"
     ? <ellipse cx="16" cy="16" rx="7" ry="3" fill={yarnById("blush").hex} />
     : <circle cx="16" cy="16" r="8" fill={yarnById("blush").hex} />;
+}
+
+function WhiskerThumb({ style }: { style: "none" | "whiskers" }) {
+  if (style === "none") return <NoseThumb style="none" />;
+  return <g fill="none" stroke={STROKE} strokeWidth="2" strokeLinecap="round"><path d="M3 10L11 13M3 16H11M3 22L11 19M21 13L29 10M21 16H29M21 19L29 22" /></g>;
 }
 
 function NoseThumb({ style }: { style: NoseStyle }) {
@@ -81,5 +87,6 @@ function FeatureCards<T extends string>({ label, options, value, onSelect, Thumb
 export const NoseCards = (p: Omit<CardProps<NoseStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Nose" Thumb={NoseThumb} />;
 export const MouthCards = (p: Omit<CardProps<MouthStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Mouth" Thumb={MouthThumb} />;
 export const EyeCards = (p: Omit<CardProps<EyeStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Eyes" Thumb={EyeThumb} />;
-export const BlushCards = (p: Omit<CardProps<BlushShape>, "label" | "Thumb">) => <FeatureCards {...p} label="Blush shape" Thumb={BlushThumb} />;
+export const BlushCards = (p: Omit<CardProps<BlushShape | "none">, "label" | "Thumb">) => <FeatureCards {...p} label="Blush shape" Thumb={BlushThumb} />;
+export const WhiskerCards = (p: Omit<CardProps<"none" | "whiskers">, "label" | "Thumb">) => <FeatureCards {...p} label="Whiskers" Thumb={WhiskerThumb} />;
 export const BrowCards = (p: Omit<CardProps<BrowStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Eyebrows" Thumb={BrowThumb} />;
