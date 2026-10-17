@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BLUSH_OPTIONS, EYE_OPTIONS, DEFAULT_CONFIG, MOUTH_OPTIONS, NOSE_OPTIONS, configKey, type CharacterConfig } from "@/lib/character";
+import { BLUSH_OPTIONS, BROW_OPTIONS, EYE_OPTIONS, DEFAULT_CONFIG, MOUTH_OPTIONS, NOSE_OPTIONS, configKey, migratePartColors, type CharacterConfig } from "@/lib/character";
 
 describe("embroidered face features", () => {
   it("offers round and small oval blush independently of other face features", () => {
@@ -39,5 +39,19 @@ describe("embroidered face features", () => {
     const base = configKey(DEFAULT_CONFIG);
     expect(configKey({ ...DEFAULT_CONFIG, face: { ...DEFAULT_CONFIG.face, nose: "cat" } })).not.toBe(base);
     expect(configKey({ ...DEFAULT_CONFIG, face: { ...DEFAULT_CONFIG.face, mouth: "smile" } })).not.toBe(base);
+  });
+
+  it("offers eight eyebrow styles plus none, independent of other face features", () => {
+    expect(BROW_OPTIONS.map((o) => o.value)).toEqual(["none", "straight", "soft-arch", "high-arch", "angry", "worried", "thick", "dots", "asymmetrical"]);
+    expect(DEFAULT_CONFIG.face.brow).toBe("none");
+    expect(configKey({ ...DEFAULT_CONFIG, face: { ...DEFAULT_CONFIG.face, brow: "angry" } })).not.toBe(configKey(DEFAULT_CONFIG));
+  });
+
+  it("defaults eyebrow colour to the eye colour and backfills legacy saves without mutating drafts", () => {
+    const legacy: CharacterConfig = { ...DEFAULT_CONFIG, face: { expression: "happy", cheeks: true } };
+    expect(legacy.face.brow ?? "none").toBe("none");
+    expect(legacy.face).not.toHaveProperty("brow");
+    const migrated = migratePartColors({ ...DEFAULT_CONFIG, colors: { ...DEFAULT_CONFIG.colors, eyes: "teal" } });
+    expect(migrated.colors.brows).toBe("teal");
   });
 });
