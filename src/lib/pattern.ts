@@ -1,6 +1,7 @@
 // Deterministic crochet pattern generator: maps a CharacterConfig to templates.
 import { CROCHET_PARTS, type CharacterConfig, partYarn, yarnById } from "./character";
 import { patternBlockers } from "./character-layers";
+import { generateDollPattern } from "./doll-pattern";
 
 export type Round = { label: string; text: string; count?: number };
 export type Section = { title: string; yarn?: string; note?: string; rounds: Round[] };
@@ -164,8 +165,7 @@ export function generatePattern(c: CharacterConfig): Pattern {
   if (c.layered) {
     const blockers = patternBlockers(c.layered);
     if (blockers.length) throw new Error(blockers.join(" "));
-    // New bases must have explicit rule dispatch before generation is enabled.
-    throw new Error("No pattern generator is registered for this base.");
+    return generateDollPattern(c);
   }
   const main = partYarn(c, "body").name;
   const accent = yarnById(c.colors.accent).name;
