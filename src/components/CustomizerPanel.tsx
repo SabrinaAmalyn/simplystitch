@@ -11,10 +11,9 @@ import { CircleUserRound, Smile, Rabbit, Spline } from "lucide-react";
 
 const CATEGORIES = ["Body", "Face", "Ears", "Tail"] as const;
 type Category = (typeof CATEGORIES)[number];
-const SUBCATEGORIES: Record<Category, string[]> = {
+const SUBCATEGORIES: Partial<Record<Category, string[]>> = {
   Body: ["Head", "Torso", "Arms", "Legs", "Paws"],
   Face: ["Eyes", "Eyebrows", "Nose", "Mouth", "Blush", "Whiskers"],
-  Ears: ["Style"], Tail: ["Style"],
 };
 const ICONS = { Body: CircleUserRound, Face: Smile, Ears: Rabbit, Tail: Spline };
 const LABELS: Partial<Record<BodyPart | PawRegion, string>> = {
