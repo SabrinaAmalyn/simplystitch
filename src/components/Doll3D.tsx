@@ -67,8 +67,9 @@ function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
 }
 
 function Arm({ side, color }: { side: 1 | -1; color: string }) {
-  // Horizontal, set high on the torso so each arm sits directly under the head.
-  return <mesh position={[side * 0.58, 0.88, 0.02]} rotation={[0, 0, side * Math.PI / 2]} castShadow><capsuleGeometry args={[0.19, 0.25, 12, 24]} /><Vinyl color={color} /></mesh>;
+  // Tilted up 20° and set high: the arm's top rests against the head's underside without sinking into it.
+  const tilt = 0.35;
+  return <mesh position={[side * 0.58, 0.818, 0.02]} rotation={[0, 0, side * (Math.PI / 2 + tilt)]} castShadow><capsuleGeometry args={[0.19, 0.25, 12, 24]} /><Vinyl color={color} /></mesh>;
 }
 
 /** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */
