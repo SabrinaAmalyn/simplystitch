@@ -66,16 +66,18 @@ function ProfilePage() {
   return (
     <AccountLayout>
       <div className="flex flex-col gap-6">
-        <section className="panel flex flex-wrap items-center gap-5">
-          <div aria-hidden className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-accent font-display text-xl font-semibold text-primary">
-            {PROFILE.initials}
+        <section className="panel flex flex-col gap-4 md:flex-row md:items-center md:gap-5">
+          <div className="flex min-w-0 flex-1 items-center gap-4">
+            <div aria-hidden className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-accent font-display text-xl font-semibold text-primary">
+              {PROFILE.initials}
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="font-display text-2xl font-semibold">{PROFILE.name}</h1>
+              <p className="text-sm text-muted-foreground">{PROFILE.handle} · {PROFILE.plan}</p>
+              <p className="mt-2 text-sm">{PROFILE.bio}</p>
+            </div>
           </div>
-          <div className="min-w-0 flex-1">
-            <h1 className="font-display text-2xl font-semibold">{PROFILE.name}</h1>
-            <p className="text-sm text-muted-foreground">{PROFILE.handle} · {PROFILE.plan}</p>
-            <p className="mt-2 text-sm">{PROFILE.bio}</p>
-          </div>
-          <Link to="/my-patterns" className="btn-ghost">View my patterns</Link>
+          <Link to="/my-patterns" className="btn-ghost w-full justify-center md:ml-auto md:w-auto">View my patterns</Link>
         </section>
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
