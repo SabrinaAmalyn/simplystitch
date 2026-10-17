@@ -30,3 +30,4 @@
 - [x] Add Eyebrows section: 8 styles + None, thumbnails, eye-colour default, persistence verified.
 - [x] Double bunny ear radius and verify from front/side.
 - [x] Replace the panel heading with the 1 Customize / 2 Generate / 3 Edit / 4 Export steps.
+- [x] Hide the subcategory row when a category has none (Ears, Tail) and drop the "Style" placeholder; verified desktop and mobile.
