@@ -141,8 +141,7 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
   return {
     title: `Stitchling ${ear ? ear.name.replace(" ears", "") : "Doll"}`,
     materials: [
-      "DK / light worsted yarn in:",
-      ...Array.from(yarns).map((n) => `${n}`),
+      `DK / light worsted yarn in ${Array.from(yarns).join(", ")}`,
       `${eyes} for the eyes${brow !== "none" ? ` and ${y("brows")} for embroidery` : ""}`,
       "Crochet hook to suit your yarn, fiberfill, stitch marker, tapestry needle",
     ],
