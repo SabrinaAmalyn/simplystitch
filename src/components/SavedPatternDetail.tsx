@@ -1,6 +1,8 @@
-import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { CharacterPreview } from "@/components/CharacterPreview";
+import { ArrowLeft, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { PatternReader } from "@/components/PatternReader";
 import { progressKey, renamePattern, type SavedPattern } from "@/lib/store";
 
@@ -18,7 +20,7 @@ function NameField({ p }: { p: SavedPattern }) {
   return (
     <input
       aria-label="Pattern name"
-      className="w-full rounded-lg border border-transparent bg-transparent px-2 py-1 font-display text-lg font-semibold outline-none hover:border-border focus:border-border focus:bg-card"
+      className="h-9 w-full rounded-md border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
       value={value}
       maxLength={60}
       onChange={(e) => setValue(e.target.value)}
@@ -30,15 +32,15 @@ function NameField({ p }: { p: SavedPattern }) {
 
 /** One saved pattern: name, 3D preview and its interactive pattern. */
 export function SavedPatternDetail({ p }: { p: SavedPattern }) {
-  const navigate = useNavigate();
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="min-w-0 flex-1"><NameField p={p} /></div>
-        <button className="btn-ghost" onClick={() => navigate({ to: "/my-patterns" })}>All patterns</button>
-        <button className="btn-primary" onClick={() => downloadPattern(p)}>Download .txt</button>
-      </div>
-      <PatternReader text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name} />
+    <div className="saved-pattern-workspace">
+      <PatternReader text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}
+        toolbar={(openSections) => <PatternWorkspaceHeader title={p.name}
+          back={<Link to="/my-patterns" aria-label="All patterns" title="All patterns"><ArrowLeft /></Link>}
+          openSections={openSections} status="Saved to My Patterns" nameField={<NameField p={p} />}
+          actions={<Button variant="outline" onClick={() => downloadPattern(p)}><Download /> Download .txt</Button>}
+        />}
+      />
     </div>
   );
 }

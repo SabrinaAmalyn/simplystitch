@@ -1,10 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Copy, Download, Save } from "lucide-react";
 import { JourneySteps } from "@/components/JourneySteps";
 import { configKey } from "@/lib/character";
 import { defaultPatternName, progressKey, savePatternToLibrary, setState, useStore } from "@/lib/store";
 import { PatternReader } from "@/components/PatternReader";
+import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/pattern")({
   head: () => ({
@@ -73,14 +75,8 @@ function PatternPage() {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-6 md:px-8">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <Link to="/customize" className="btn-ghost" aria-label="Back to character editor"><ArrowLeft size={16} /> Back</Link>
-          <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
-        </div>
-        <JourneySteps active={1} />
-      </header>
+    <main className="pattern-page">
+      <div className="flex justify-center py-1"><JourneySteps active={1} /></div>
 
       {stale && (
         <div className="alert">
@@ -88,38 +84,29 @@ function PatternPage() {
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="flex gap-1 rounded-full bg-muted p-1">
-          <button className={mode === "read" ? "tab tab-on" : "tab"} onClick={() => setMode("read")}>Read</button>
-          <button className={mode === "edit" ? "tab tab-on" : "tab"} onClick={() => setMode("edit")}>Edit</button>
-        </div>
-        <div className="ml-auto flex flex-wrap items-center gap-2">
-          <input
-            aria-label="Pattern name"
-            className="h-9 w-44 rounded-lg border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-            placeholder={defaultPatternName(library)}
-            value={name}
-            maxLength={60}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <button className="btn-ghost" onClick={copy}>Copy</button>
-          <button className="btn-ghost" onClick={download}>Download .txt</button>
-          <button className="btn-primary" onClick={save}>Save</button>
-        </div>
-      </div>
-
-      {mode === "read" ? (
-        <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined} />
-      ) : (
-      <section className="panel">
+      <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined}
+        onNavigateSection={() => setMode("read")}
+        toolbar={(openSections) => <PatternWorkspaceHeader
+          title={name.trim() || defaultPatternName(library)}
+          back={<Link to="/customize" aria-label="Back to character editor" title="Back to character editor"><ArrowLeft /></Link>}
+          openSections={openSections} mode={mode} onModeChange={setMode}
+          status={draft.saved ? "Saved to My Patterns" : draft.edited ? "Changes kept on this device" : "Draft · Not saved"}
+          nameField={<input aria-label="Pattern name" className="h-9 w-full rounded-md border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder={defaultPatternName(library)} value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />}
+          actions={<>
+            <Button variant="ghost" size="icon" onClick={copy} aria-label="Copy pattern" title="Copy pattern"><Copy /></Button>
+            <Button variant="outline" size="icon" onClick={download} aria-label="Download .txt" title="Download .txt"><Download /></Button>
+            <Button onClick={save}><Save /> Save</Button>
+          </>}
+        />}
+        editing={mode === "edit" ? <section className="reader-editor">
           <textarea
             aria-label="Edit pattern"
-            className="min-h-[70vh] w-full resize-y rounded-xl bg-muted/50 p-4 font-mono text-sm leading-relaxed outline-none focus:ring-2 focus:ring-ring"
+            className="min-h-[70vh] w-full resize-y rounded-lg bg-card p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
             value={draft.text}
             onChange={(e) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text: e.target.value, edited: true, saved: false } }))}
           />
-      </section>
-      )}
+        </section> : undefined}
+      />
       {draft.edited && <p className="text-sm text-muted-foreground">Edits are saved automatically on this device.</p>}
       {toast && <div role="status" className="toast">{toast}</div>}
     </main>
