@@ -18,15 +18,15 @@ const RANGE = /^(R|Round )?(\d+)\s*[–-]\s*(?:R)?(\d+)$/i;
 /** Returns the individual round numbers for a range label like "R4–R6", else null. */
 export function expandRange(label: string): number[] | null {
   const m = label.trim().match(RANGE);
-  if (!m) return null;
+  if (!m?.[2] || !m[3]) return null;
   const a = +m[2], b = +m[3];
   if (b <= a || b - a > 60) return null;
   return Array.from({ length: b - a + 1 }, (_, i) => a + i);
 }
 
-function splitCount(text: string): { text: string; count?: number } {
+function splitCount(text: string): { text: string; count?: number | undefined } {
   const m = text.match(/^(.*?)\s*\((\d+)\)\s*$/);
-  return m ? { text: m[1], count: +m[2] } : { text };
+  return m?.[1] && m[2] ? { text: m[1], count: +m[2] } : { text };
 }
 
 const badgeOf = (label: string) => label.replace(/^R(?=\d)/i, "").replace(/\s*[–-]\s*R?/i, "–").replace(/^Round /i, "");
