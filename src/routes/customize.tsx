@@ -82,7 +82,7 @@ function PreviewActions() {
   );
 }
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/customize")({
   head: () => ({
     meta: [
       { title: "Stitchling — Design your crochet character" },
