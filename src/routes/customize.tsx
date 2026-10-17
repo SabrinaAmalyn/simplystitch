@@ -156,7 +156,7 @@ function Workspace() {
 
           <div className="flex flex-wrap items-center gap-3">
             <Button type="button" className="hidden h-auto whitespace-normal md:inline-flex" onClick={generate} disabled={busy || blockers.length > 0}>
-              {busy ? "Stitching your pattern…" : draft ? "Generate new pattern" : "Generate Pattern"}
+              {busy ? "Stitching your pattern…" : "Generate"}
             </Button>
           </div>
           </div>
