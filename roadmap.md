@@ -24,4 +24,4 @@
 - [x] Verify ordering, persistence, original artwork, and saved draft recovery.
 - [x] Shorten the torso and lower the blush further, checked from front and side.- [x] Straighten small oval blush (no downward slant)
 - [x] Add Eyebrows section: 8 styles + None, thumbnails, eye-colour default, persistence verified.
-- [ ] Double bunny ear radius and verify from front/side.
+- [x] Double bunny ear radius and verify from front/side.
