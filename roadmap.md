@@ -73,3 +73,4 @@
 - [x] Fix the alignment problem shown in the user's screenshot of the page they are viewing; verified phone and desktop.
 - [x] Saved pattern page: show the finished 3D character above the first written section; verified phone and desktop.
 - [ ] Saved pattern: drop the back button, show the pattern name in its place, add a breadcrumb (profile icon bar) at the far left
+- [ ] Customizer: eyebrows subsection is hidden/unreachable — fix
