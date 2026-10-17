@@ -1,8 +1,7 @@
-// ============= Full file contents =============
-
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { ChevronDown, Info, Menu } from "lucide-react";
 import { ItemView, groupParts } from "@/components/PatternReader";
+import { CharacterPreview } from "@/components/CharacterPreview";
 import type { CharacterConfig } from "@/lib/character";
 import { parsePatternText, sectionRowKeys, type ReaderSection } from "@/lib/pattern-reader";
 import { resetProgress, toggleRows, useStore } from "@/lib/store";
@@ -15,7 +14,7 @@ const ORDER = [/^introduction|overview/i, /^measurements/i, /^materials/i, /^abb
 const rank = (s: ReaderSection) => (s.parent ? 4 : Math.max(0, ORDER.findIndex((r) => r && r.test(s.title))));
 
 /** Continuous, scrolling pattern document with a table of contents and progress. */
-export function PatternDocument({ text, progressKey, name, header }: Props) {
+export function PatternDocument({ text, config, progressKey, name, header }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);
   const sections = useMemo(() => [...doc.sections].sort((a, b) => rank(a) - rank(b)), [doc]);
   const doneList = useStore((s) => s.progress?.[progressKey]);
@@ -93,6 +92,11 @@ export function PatternDocument({ text, progressKey, name, header }: Props) {
             </div>
             <div className="doc-progress-track"><div className="doc-progress-fill" style={{ width: `${allKeys.length ? (completed / allKeys.length) * 100 : 0}%` }} /></div>
           </div>
+          {config && (
+            <div className="doc-hero" aria-label="Final character">
+              <CharacterPreview config={config} />
+            </div>
+          )}
           {sections.map((s, i) => {
             const keys = sectionRowKeys(s);
             const n = keys.filter((k) => done.has(k)).length;
@@ -103,9 +107,9 @@ export function PatternDocument({ text, progressKey, name, header }: Props) {
                 {firstPart && <p className="doc-kicker">Instructions</p>}
                 <h2 id={`${s.id}-h`} className="text-2xl font-bold md:text-3xl">
                   <button type="button" className="doc-section-toggle" aria-expanded={open} aria-controls={`${s.id}-body`} onClick={() => toggleSection(s.id)}>
-                    <ChevronDown size={22} className={`doc-section-caret ${open ? "" : "doc-section-closed"}`} aria-hidden />
                     <span className="flex-1 text-left">{s.title}</span>
                     {keys.length > 0 && <span className="shrink-0 text-sm font-medium text-muted-foreground">{n}/{keys.length}</span>}
+                    <ChevronDown size={20} className={`doc-section-caret ${open ? "" : "doc-section-closed"}`} aria-hidden />
                   </button>
                 </h2>
                 {open && (

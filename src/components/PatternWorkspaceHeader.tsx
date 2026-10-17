@@ -13,18 +13,22 @@ type Props = {
   center?: ReactNode;
   /** Show the profile icon (omit inside the account layout, which has its own). */
   profile?: boolean;
+  /** Show the SimplyStitch wordmark (off on the saved pattern page). */
+  logo?: boolean;
 };
 
 /** Full-width top bar matching the customizer header. */
-export function PatternWorkspaceHeader({ title, back, status, actions, nameField, center, profile }: Props) {
+export function PatternWorkspaceHeader({ title, back, status, actions, nameField, center, profile, logo = true }: Props) {
   return (
     <header className="pattern-header">
       <div className="pattern-header-brand">
         {back && <Button variant="outline" size="icon" asChild>{back}</Button>}
-        <div className="min-w-0">
-          <Link to="/" className="pattern-header-logo block font-logo text-2xl uppercase leading-tight">SimplyStitch</Link>
-          {status && <span className="block truncate text-xs text-muted-foreground" title={title}>{title} · {status}</span>}
-        </div>
+        {(logo || status) && (
+          <div className="min-w-0">
+            {logo && <Link to="/" className="pattern-header-logo block font-logo text-2xl uppercase leading-tight">SimplyStitch</Link>}
+            {status && <span className="block truncate text-xs text-muted-foreground" title={title}>{title} · {status}</span>}
+          </div>
+        )}
       </div>
       {center && <div className="pattern-header-center">{center}</div>}
       <div className="pattern-header-controls">
