@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CustomizeArt, GenerateArt, ReviewArt } from "@/components/HowIllustrations";
+import customiseArt from "@/assets/how-customise.png.asset.json";
+import generateArt from "@/assets/how-generate.png.asset.json";
+import reviewArt from "@/assets/how-review.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,9 +18,9 @@ export const Route = createFileRoute("/")({
 });
 
 const HOW = [
-  { n: 1, Art: CustomizeArt, tags: ["Features", "Colours", "Details"], title: "Customise", body: "You personalise your character with features, colours, and little details that make it yours." },
-  { n: 2, Art: GenerateArt, tags: ["Rounds", "Stitch counts", "Assembly"], title: "Generate", body: "We turn your design into a step-by-step crochet pattern with stitch counts and assembly instructions." },
-  { n: 3, Art: ReviewArt, tags: ["Track", "Edit", "Save"], title: "Review", body: "You review your pattern, track your progress, make edits, and save when you're ready." },
+  { n: 1, art: customiseArt.url, title: "Customise", body: "Personalise your character with features, colors, and little details that make it yours." },
+  { n: 2, art: generateArt.url, title: "Generate", body: "Turn your design into a step-by-step crochet pattern with stitch counts and assembly instructions." },
+  { n: 3, art: reviewArt.url, title: "Review", body: "Review your pattern, track your progress, add notes, and export when you're ready." },
 ];
 
 const TICKER = [
@@ -79,9 +81,21 @@ function Landing() {
         </p>
       </section>
 
-      <section id="how" className="landing-grid flex min-h-[45vh] flex-col justify-center px-4 py-12 md:px-8 md:py-16">
-        <div className="mx-auto max-w-6xl">
+      <section id="how" className="landing-grid flex min-h-[45vh] flex-col justify-center px-4 py-16 md:px-8 md:py-20">
+        <div className="mx-auto w-full max-w-6xl">
           <h2 className="font-heavy text-center text-2xl uppercase text-primary md:text-4xl">How it works</h2>
+          <ol className="mt-12 grid gap-12 md:mt-16 md:grid-cols-3 md:gap-10">
+            {HOW.map((s) => (
+              <li key={s.n} className="flex flex-col items-center text-center">
+                <img src={s.art} alt={`${s.title} illustration`} className="h-40 w-auto md:h-48" />
+                <h3 className="font-heavy mt-8 text-lg uppercase text-primary md:text-xl">
+                  <span className="mr-2 text-muted-foreground">{s.n}</span>
+                  {s.title}
+                </h3>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground md:text-base">{s.body}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
