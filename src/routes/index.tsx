@@ -36,11 +36,13 @@ function Landing() {
   const items = [...TICKER, ...TICKER];
   return (
     <main className="min-h-screen bg-background">
-      <header className="flex items-center justify-between gap-4 border-b border-border px-4 py-4 md:px-8">
-        <Link to="/" className="font-logo text-2xl uppercase">SimplyStitch</Link>
-        <nav className="flex items-center gap-2">
-          <Link to="/customize" className="btn-primary">Try Demo</Link>
-        </nav>
+      <header className="border-b border-border px-4 py-4 md:px-8">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
+          <Link to="/" className="font-logo text-2xl uppercase">SimplyStitch</Link>
+          <nav className="flex items-center gap-2">
+            <Link to="/customize" className="btn-primary">Try Demo</Link>
+          </nav>
+        </div>
       </header>
 
       <section className="landing-sky flex min-h-[72vh] items-center px-4 py-16 md:px-8">
