@@ -69,8 +69,12 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
             {name && <span className="truncate text-xs text-muted-foreground">{name}</span>}
           </div>
           <div className="review-canvas"><CharacterPreview config={config} focus={focus} /></div>
-          {previewAction && <div className="review-preview-action">{previewAction}</div>}
-          {previewBack && <div className="review-preview-back">{previewBack}</div>}
+          {(previewBack || previewAction) && (
+            <div className="review-preview-bar">
+              {previewBack}
+              {previewAction}
+            </div>
+          )}
         </section>
         <section className="review-content">
           <nav className="category-nav review-category-nav" role="tablist" aria-label="Pattern categories" style={{ gridTemplateColumns: `repeat(${tabs.filter(([, , on]) => on).length}, minmax(0, 1fr))` }}>
