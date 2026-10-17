@@ -74,3 +74,4 @@
 - [x] Saved pattern page: show the finished 3D character above the first written section; verified phone and desktop.
 - [ ] Saved pattern: drop the back button, show the pattern name in its place, add a breadcrumb (profile icon bar) at the far left
 - [ ] Customizer: eyebrows subsection is hidden/unreachable — fix
+- [ ] Saved pattern: breadcrumb missing / back button still shown in the user preview — confirm build is clean and the change is live

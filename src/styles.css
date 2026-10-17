@@ -235,8 +235,10 @@
   .creator-layout { flex: 1 1 auto; min-height: 0; }
   .preview-panel { position: relative; top: auto; height: 100%; }
   .options-column { min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
-  .options-column .category-nav { position: sticky; top: 0; z-index: 6; background: var(--card); }
-  .options-column .subcategory-nav { position: sticky; top: 54px; z-index: 5; background: var(--card); }
+  /* The nav rows keep their full height: overflow-x on the sub-nav otherwise lets
+     the short column squeeze it until only a slice of the labels is visible. */
+  .options-column .category-nav { position: sticky; top: 0; z-index: 7; background: var(--card); flex-shrink: 0; }
+  .options-column .subcategory-nav { position: sticky; top: 55px; z-index: 6; background: var(--card); flex-shrink: 0; }
   .options-column .feature-area { min-height: 0; max-height: none; overflow: visible; }
   /* Fill the column: the options take the spare height and the swatches sit at the foot. */
   .options-column .customization-workspace { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
