@@ -137,22 +137,16 @@ function Workspace() {
 
       <div className="creator-layout">
         <section className="preview-panel" aria-label="Character preview">
-          <div className="preview-topbar md:hidden">
+          <div className="preview-topbar">
             <span className="preview-topbar-spacer" aria-hidden="true" />
+            <PreviewActions />
             <Button type="button" size="sm" onClick={generate} disabled={busy || blockers.length > 0}>
               Save
             </Button>
           </div>
           <div className="character-canvas">
             <CharacterPreview config={config} />
-            <div className="preview-actions">
-              <Button variant="outline" size="sm" type="button" aria-label="Randomize character" onClick={() => setState((s) => ({ ...s, config: randomConfig() }))}>
-                <Dices size={14} />Randomize
-              </Button>
-              <Button variant="outline" size="sm" type="button" aria-label="Reset character" onClick={() => setState((s) => ({ ...s, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}>
-                <RotateCcw size={14} />Reset
-              </Button>
-            </div>
+            <PreviewActions />
           </div>
         </section>
 
