@@ -75,3 +75,5 @@
 - [ ] Saved pattern: drop the back button, show the pattern name in its place, add a breadcrumb (profile icon bar) at the far left
 - [ ] Customizer: eyebrows subsection is hidden/unreachable — fix
 - [ ] Saved pattern: breadcrumb missing / back button still shown in the user preview — confirm build is clean and the change is live
+- [ ] Mobile saved pattern: "Go to" button sits too high before scrolling
+- [ ] Add the character 3D view as a link in the contents nav
