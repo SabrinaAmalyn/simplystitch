@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { partYarn, type CharacterConfig } from "@/lib/character";
 import { CUSTOMIZATION_ITEMS, type LayerSlot } from "@/lib/character-layers";
 
-function LayerThumb({ id, color }: { id: string | null; color: string }) {
+export function LayerThumb({ id, color }: { id: string | null; color: string }) {
   if (!id) return <path d="M24 32h16" stroke="currentColor" strokeWidth="3" strokeLinecap="round" opacity=".35" />;
   if (id === "tail-round") return <circle cx="32" cy="32" r="13" fill={color} />;
   if (id === "tail-long") return <path d="M30 12C20 19 17 43 26 51C39 60 47 38 37 23C34 19 33 15 30 12Z" fill={color} />;

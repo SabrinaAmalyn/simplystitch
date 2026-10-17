@@ -5,7 +5,7 @@ import { BLUSH_OPTIONS, BROW_OPTIONS, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, 
 import { BLUSH_YARN_GROUPS } from "@/lib/yarn-palette";
 import { YarnSwatches } from "@/components/YarnSwatches";
 import { BlushCards, BrowCards, EyeCards, MouthCards, NoseCards } from "@/components/FaceFeatureCards";
-import { LayerFeatureCards } from "@/components/LayerFeatureCards";
+import { LayerFeatureCards, LayerThumb } from "@/components/LayerFeatureCards";
 import { createLayeredCharacter, selectLayer, selectedItems } from "@/lib/character-layers";
 import { pawYarn, type PawRegion } from "@/lib/paw-colors";
 import { CircleUserRound, Smile, Rabbit, Spline, X } from "lucide-react";
@@ -87,7 +87,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
       {relevant.length > 0 && <section className="layered-area" aria-label="Selected components">
         <h3 className="mb-3 text-sm font-semibold">Layered items</h3>
         <div className="grid grid-cols-3 gap-2">{relevant.map((item) => <div key={item.id} className="relative flex min-w-0 flex-col items-center gap-2 rounded-md border border-primary bg-primary/5 px-2 py-4">
-          <div className="h-10 w-10"><RegionThumb region={item.slot === "ears" ? "head" : "body"} /></div><span className="text-xs">{item.label}</span>
+          <svg viewBox="0 0 64 64" className="h-12 w-12" aria-hidden="true"><LayerThumb id={item.id} color={partYarn(config, item.slot === "ears" ? "leftEar" : "tail").hex} /></svg><span className="text-xs">{item.label}</span>
           <Button variant="ghost" size="icon" className="absolute right-0 top-0 h-6 w-6" aria-label={`Remove ${item.label}`}
             onClick={() => onChange({ ...config, layered: selectLayer(layered, item.slot, null) })}><X size={12} /></Button>
         </div>)}</div>
