@@ -32,8 +32,8 @@ type State = {
   library: SavedPattern[];
   progress?: Progress | undefined;
   /** Saved pattern the customizer was opened from, so Save can update it. */
-  editingPatternId?: string | null;
-  hydrated?: boolean;
+  editingPatternId?: string | null | undefined;
+  hydrated?: boolean | undefined;
 };
 
 const KEY = "stitchling-state-v1";
