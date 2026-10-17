@@ -307,10 +307,9 @@
 
 /* Landing page */
 .landing-sky { background: var(--landing-sky); }
-.landing-cloud { background: var(--background); border-radius: 46% 54% 50% 50% / 55% 50% 50% 45%; }
 .marquee { overflow: hidden; white-space: nowrap; }
 .marquee-track { display: inline-flex; gap: 2.5rem; animation: marquee 28s linear infinite; padding-right: 2.5rem; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 .piece-nav { background: var(--muted); }
-.font-rounded { font-family: "Fredoka", "Nunito", system-ui, sans-serif; }
+.font-heavy { font-family: "Archivo Black", "Nunito", system-ui, sans-serif; letter-spacing: -0.02em; }
