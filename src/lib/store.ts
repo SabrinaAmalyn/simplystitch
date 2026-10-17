@@ -4,7 +4,7 @@ import { type CharacterConfig, DEFAULT_CONFIG, migratePartColors } from "./chara
 import { createLayeredCharacter, normalizeLayers } from "./character-layers";
 import { generatePattern, patternToText } from "./pattern";
 
-const SAMPLE_KEY = "simplystitch-sample-v1";
+const SAMPLE_KEY = "simplystitch-sample-v2";
 /** Example pattern added once for first-time visitors so My Patterns is never empty. */
 export function buildSamplePattern(): SavedPattern {
   const config: CharacterConfig = {
@@ -12,10 +12,10 @@ export function buildSamplePattern(): SavedPattern {
     colors: { ...DEFAULT_CONFIG.colors, main: "cream", leftInnerEar: "blush", rightInnerEar: "blush" },
     ears: "long",
     face: { ...DEFAULT_CONFIG.face, expression: "happy", cheeks: true },
-    layered: createLayeredCharacter(),
+    layered: { ...createLayeredCharacter(), selections: { ...createLayeredCharacter().selections, ears: "ears-bunny", tail: "tail-round" } },
   };
   const text = patternToText(generatePattern(config));
-  return { id: "sample-berry-bunny", name: "Berry Bunny (example)", savedAt: Date.now(), config, initialText: text, text };
+  return { id: "sample-berry-bunny-v2", name: "Berry Bunny (example)", savedAt: Date.now(), config, initialText: text, text };
 }
 
 export type Draft = {
@@ -186,7 +186,9 @@ export function hydrateStore() {
     }
     if (!localStorage.getItem(SAMPLE_KEY)) {
       localStorage.setItem(SAMPLE_KEY, "true");
-      if (state.library.length === 0) state = { ...state, library: [buildSamplePattern()] };
+      const old = state.library.filter((p) => p.id !== "sample-berry-bunny");
+      if (old.length === 0) state = { ...state, library: [buildSamplePattern()] };
+      else if (old.length !== state.library.length) state = { ...state, library: old };
     }
     localStorage.setItem(BASE_KEY, "true");
     localStorage.setItem(KEY, JSON.stringify(state));
