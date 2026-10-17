@@ -6,7 +6,7 @@ export function YarnSwatches({ label, current, onSelect, groups = YARN_GROUPS, d
   label: string;
   current: Yarn;
   onSelect: (id: string) => void;
-  groups?: YarnGroup[];
+  groups?: YarnGroup[] | undefined;
   defaultOpen?: boolean;
 }) {
   return <details open={defaultOpen || undefined} className="min-w-0 border-b border-border pb-2">
