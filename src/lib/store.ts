@@ -3,7 +3,15 @@ import { useSyncExternalStore } from "react";
 import { type CharacterConfig, DEFAULT_CONFIG, migratePartColors } from "./character";
 import { createLayeredCharacter, normalizeLayers } from "./character-layers";
 
-export type Draft = { text: string; configKey: string; edited: boolean; generatedAt: number };
+export type Draft = {
+  text: string;
+  /** Pattern exactly as first generated; kept so the edited version can be compared. */
+  initialText?: string;
+  configKey: string;
+  edited: boolean;
+  saved?: boolean;
+  generatedAt: number;
+};
 type State = { config: CharacterConfig; draft: Draft | null; previous: Draft | null };
 
 const KEY = "stitchling-state-v1";

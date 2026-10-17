@@ -1,4 +1,4 @@
-const STEPS = ["Customize", "Generate", "Edit", "Export"];
+const STEPS = ["Customize", "Generate", "Edit", "Save"];
 
 export function JourneySteps({ active, size = "sm" }: { active: number; size?: "sm" | "lg" }) {
   const big = size === "lg";
