@@ -67,7 +67,7 @@ function ProfilePage() {
     <AccountLayout>
       <div className="flex flex-col gap-6">
         <section className="panel flex flex-col gap-4 md:flex-row md:items-center md:gap-5">
-          <div className="flex min-w-0 flex-1 items-center gap-4">
+          <div className="flex min-w-0 flex-1 flex-col items-start gap-4 md:flex-row md:items-center">
             <div aria-hidden className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-accent font-display text-xl font-semibold text-primary">
               {PROFILE.initials}
             </div>
