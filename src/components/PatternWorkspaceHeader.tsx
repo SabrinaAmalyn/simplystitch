@@ -24,7 +24,7 @@ export function PatternWorkspaceHeader({ title, back, openSections, mode, onMode
         </div>
         <Button variant="outline" size="icon" onClick={openSections} aria-label="Open pattern sections" title="Pattern sections"><Menu /></Button>
       </div>
-      <div className="pattern-header-controls">
+      <div className={`pattern-header-controls ${mode ? "" : "pattern-header-saved"}`}>
         {mode && onModeChange && (
           <div className="inline-flex shrink-0 gap-1 rounded-lg bg-muted p-1" aria-label="Pattern mode">
             <Button variant={mode === "read" ? "outline" : "ghost"} aria-pressed={mode === "read"} onClick={() => onModeChange("read")}>Read</Button>

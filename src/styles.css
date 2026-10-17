@@ -268,6 +268,7 @@
   .pattern-header-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
   .pattern-save-status { text-align: right; }
   .pattern-name-field { width: 100%; margin-left: 0; }
+  .pattern-header-saved .pattern-save-status { grid-column: 1 / -1; text-align: left; }
   .reader-preview { padding: 0; }
   .reader-preview h2 { font-size: 20px; }
   .reader-preview button { padding-left: 6px; padding-right: 6px; font-size: 13px; }
