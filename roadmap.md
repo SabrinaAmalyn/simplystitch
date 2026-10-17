@@ -55,3 +55,4 @@
 - [x] Remove the copy and download buttons from the review page; move back to a "Go Back" button at the bottom-left of the right panel; verified Go Back goes to /customize and the saved page keeps its own controls.
 - [x] Marquee: larger fonts
 - [x] Hero: slightly shorter
+- [x] How it works: dot after each number
