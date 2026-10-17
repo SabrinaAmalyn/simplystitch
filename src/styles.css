@@ -174,9 +174,17 @@
 @layer components {
   .panel { @apply rounded-lg border border-border bg-card p-5 md:p-7; }
   .stage { background: var(--stage); }
-  .btn-primary { @apply inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 font-semibold text-primary-foreground transition hover:brightness-105 active:scale-95 disabled:cursor-wait disabled:opacity-70; box-shadow: var(--shadow-soft); }
-  .btn-lg { @apply px-8 py-4 text-lg; }
-  .btn-ghost { @apply inline-flex items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-muted; }
+  /* One button system: shared shape + typography, three sizes, five colour tones.
+     Tone classes carry the medium size; the size classes below override it. */
+  .btn, .btn-primary, .btn-outline, .btn-light, .btn-outline-light, .btn-ghost { @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 text-base font-semibold transition active:scale-95 disabled:cursor-wait disabled:opacity-70; }
+  .btn-primary { @apply bg-primary text-primary-foreground hover:brightness-105; box-shadow: var(--shadow-soft); }
+  .btn-outline { @apply border border-primary bg-transparent text-primary hover:bg-primary/10; }
+  .btn-light { @apply bg-background text-primary hover:brightness-95; }
+  .btn-outline-light { @apply border border-primary-foreground bg-transparent text-primary-foreground hover:bg-primary-foreground/10; }
+  .btn-ghost { @apply border border-border bg-card text-foreground hover:bg-muted; }
+  .btn-sm { @apply h-9 px-4 text-sm; }
+  .btn-md { @apply h-11 px-6 text-base; }
+  .btn-lg { @apply h-14 px-8 text-lg; }
   .tab { @apply rounded-full px-4 py-1.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground; }
   .tab-on { @apply bg-card text-foreground shadow-sm; }
   .choice { @apply flex flex-col items-center gap-0.5 rounded-md border-2 border-border bg-card px-3 py-4 text-center transition hover:border-primary/50; }
@@ -301,18 +309,27 @@
 .review-layout { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); background: var(--background); min-height: calc(100dvh - 82px); }
 .review-content { order: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
 .review-preview { order: 2; position: sticky; top: 0; height: calc(100dvh - 82px); min-height: 420px; background: var(--stage); align-self: start; display: flex; flex-direction: column; }
+.review-preview-name { padding: 14px 16px 0; }
+.review-name-input { width: 100%; max-width: 260px; height: 44px; padding: 0 16px; border: 1px solid var(--border); border-radius: 9999px; background: var(--card); color: var(--foreground); font: inherit; font-size: 1rem; font-weight: 600; outline: none; }
+.review-name-input::placeholder { color: var(--muted-foreground); font-weight: 400; }
+.review-name-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 25%, transparent); }
 .review-preview-label { display: flex; flex-direction: column; min-width: 0; padding: 14px 16px 0; }
 .review-canvas { flex: 1; min-height: 0; }
-.review-preview-action { position: absolute; right: 16px; bottom: 16px; z-index: 10; }
-.review-preview-back { position: absolute; left: 16px; bottom: 16px; z-index: 10; }
+/* Desktop: the button pair floats in the preview's bottom corners. */
+.review-preview-bar { position: absolute; inset: 0; z-index: 10; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 16px; pointer-events: none; }
+.review-preview-bar > * { pointer-events: auto; }
 .review-body { padding: 20px; }
 .review-body .reader-instructions { padding: 0; background: transparent; }
 @media (max-width: 767px) {
   .review-layout { grid-template-columns: minmax(0, 1fr); min-height: 0; }
-  .review-preview { order: 0; position: relative; height: 300px; min-height: 0; border-bottom: 1px solid var(--border); }
+  .review-preview { order: 0; position: relative; height: auto; min-height: 0; border-bottom: 1px solid var(--border); }
   .review-content { border-right: 0; }
-  .review-preview-action { right: 12px; bottom: 12px; }
-  .review-preview-back { left: 12px; bottom: 12px; }
+  /* Phone: the name and the buttons get their own rows above the 3D view. */
+  .review-preview-name { order: 0; padding: 12px 12px 0; }
+  .review-name-input { max-width: none; height: 40px; font-size: 0.9375rem; }
+  .review-preview-label { order: 1; padding: 10px 12px 0; }
+  .review-preview-bar { position: static; inset: auto; order: 2; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--card); }
+  .review-canvas { order: 3; flex: 0 0 260px; height: 260px; }
   .review-body { padding: 16px; }
 }
 .pattern-stale-alert { margin: 0; border-radius: 0; border-width: 0 0 1px; }
@@ -325,7 +342,7 @@
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 .piece-nav { background: var(--muted); }
 .font-heavy { font-family: "Poppins", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.02em; }
-.font-logo { font-family: "Poppins", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.01em; }
+.font-logo { font-family: "Poppins", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.01em; color: var(--primary); }
 
 .landing-grid {
   background-color: var(--background);

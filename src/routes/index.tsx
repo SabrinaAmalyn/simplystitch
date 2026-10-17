@@ -52,12 +52,8 @@ function Landing() {
             colour changes included.
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <Link to="/customize" className="btn-lg inline-flex items-center rounded-full bg-background px-6 font-semibold text-primary">
-              Try Demo
-            </Link>
-            <a href="#how" className="inline-flex items-center rounded-full border border-primary-foreground px-5 py-2 font-semibold">
-              See how it works
-            </a>
+            <Link to="/customize" className="btn-light btn-lg">Try Demo</Link>
+            <a href="#how" className="btn-outline-light btn-lg">See how it works</a>
           </div>
         </div>
       </section>
@@ -73,7 +69,7 @@ function Landing() {
         </div>
       </div>
 
-      <section className="mx-auto flex min-h-[50vh] max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
+      <section className="mx-auto flex min-h-[62vh] max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
         <h2 className="font-heavy text-2xl uppercase text-primary md:text-4xl">About SimplyStitch</h2>
         <p className="mt-10 text-base text-muted-foreground md:text-lg">
           Amigurumi is made up of simple stitches and familiar shapes. SimplyStitch brings them together to help you
@@ -106,12 +102,10 @@ function Landing() {
           <h2 className="font-heavy text-2xl leading-tight uppercase md:text-4xl">
             A few simple stitches. A character all your own.
           </h2>
-          <p className="text-sm md:text-base">
+          <p className="text-base md:text-lg">
             Let SimplyStitch help make designing your next amigurumi a little easier.
           </p>
-          <Link to="/customize" className="btn-lg inline-flex items-center rounded-full bg-background px-6 font-semibold text-primary">
-            Start designing
-          </Link>
+          <Link to="/customize" className="btn-light btn-lg">Start designing</Link>
         </div>
       </section>
 
