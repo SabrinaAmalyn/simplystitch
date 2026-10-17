@@ -110,7 +110,8 @@ function Mouth({ style }: { style: MouthStyle }) {
   const y = MOUTH_Y;
   if (style === "x") return <><Stitch points={[[-0.065, y + 0.06], [0.065, y - 0.06]]} /><Stitch points={[[0.065, y + 0.06], [-0.065, y - 0.06]]} /></>;
   if (style === "w") return <Stitch points={[[-0.14, y + 0.05], [-0.1, y - 0.01], [-0.065, y - 0.045], [-0.03, y - 0.005], [0, y + 0.03], [0.03, y - 0.005], [0.065, y - 0.045], [0.1, y - 0.01], [0.14, y + 0.05]]} />;
-  if (style === "smile") return <Stitch points={[[-0.11, y + 0.03], [-0.055, y - 0.035], [0, y - 0.05], [0.055, y - 0.035], [0.11, y + 0.03]]} />;
+  // Same gentle arc as a sleepy eye: drop 0.051 over half-width 0.09.
+  if (style === "smile") return <Stitch points={[[-0.09, y + 0.015], [-0.045, y - 0.024], [0, y - 0.036], [0.045, y - 0.024], [0.09, y + 0.015]]} />;
   return null;
 }
 
