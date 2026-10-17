@@ -39,7 +39,6 @@ function Landing() {
       <header className="flex items-center justify-between gap-4 border-b border-border px-4 py-4 md:px-8">
         <span className="font-rounded text-2xl font-semibold">SimplyStitch</span>
         <nav className="flex items-center gap-2">
-          <Link to="/my-patterns" className="btn-ghost hidden sm:inline-flex">My Patterns</Link>
           <Link to="/customize" className="btn-primary">Try Demo</Link>
         </nav>
       </header>
