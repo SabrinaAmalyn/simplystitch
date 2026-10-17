@@ -377,8 +377,14 @@
 .doc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; padding: 24px; align-items: start; }
 .doc-main { min-width: 0; display: flex; flex-direction: column; gap: 40px; }
 .doc-section { scroll-margin-top: 96px; }
+.doc-section-toggle { display: flex; width: 100%; align-items: center; gap: 10px; border: 0; background: none; padding: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.doc-section-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; border-radius: 8px; }
+.doc-section-caret { flex: 0 0 auto; color: var(--primary); transition: transform .18s ease; }
+.doc-section-closed { transform: rotate(-90deg); }
 .doc-kicker { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--primary); margin-bottom: 4px; }
-.doc-progress { position: sticky; top: 0; z-index: 15; display: flex; flex-direction: column; gap: 8px; padding: 12px 0; background: var(--background); }
+.doc-progress { display: flex; flex-direction: column; gap: 8px; padding: 12px 0; }
+.doc-clear { color: var(--primary); font-weight: 600; }
+.doc-clear:hover { background: transparent; color: var(--primary); }
 .doc-progress-track { height: 6px; border-radius: 9999px; background: var(--muted); overflow: hidden; }
 .doc-progress-fill { height: 100%; background: var(--primary); transition: width .2s; }
 .doc-side { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 16px; max-height: calc(100dvh - 32px); min-width: 0; }

@@ -64,7 +64,8 @@
 - [x] Review page: remove the name input field and ask for the pattern name in a pop-up instead.
 - [x] Place the supplied badge artwork on the right side of the hero, sized large but not dominant.
 - [x] Pull the landing header's logo and Try Demo button in from the page edges so they align with the hero content.
-- [ ] Hide the logo and profile picture in the workspace header on small screens; verify phone and desktop.
-- [ ] Remove the empty gap under the 3D view and the right side when the customise page scrolls; verify phone and desktop.
-- [ ] Saved pattern page: drop the 3D view, show the pattern first, right side is table of contents only (no name above it); replace the name input, Customize and Download buttons with a three-dot menu shown as tabs.
-- [ ] Logged-in sidebar: remove the logo and the label under it.
+- [x] Hide the logo and profile picture in the workspace header on small screens; verified phone and desktop.
+- [x] Remove the empty gap under the 3D view and the right side when the customise page scrolls; verified phone and desktop.
+- [x] Saved pattern page: drop the 3D view, show the pattern first, right side is table of contents only (no name above it); replace the name input, Customize and Download buttons with a three-dot menu shown as tabs.
+- [x] Logged-in sidebar: remove the logo and the label under it.
+- [ ] Saved pattern page: make every section name collapsible, and remove the sticky behaviour of the progress bar plus the hover effect on the Clear button; verify phone and desktop.
