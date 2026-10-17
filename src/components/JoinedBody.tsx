@@ -2,10 +2,12 @@ import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { MarchingCubes } from "three/addons/objects/MarchingCubes.js";
 import { bodyColorWeights, joinedBodyDistance } from "@/lib/joined-body";
+import { legShape } from "@/lib/limb-lengths";
 import { PawVinyl } from "./PawVinyl";
 
 /** Polygonize one smooth union, rather than overlapping separately shaded capsules. */
-function buildJoinedGeometry() {
+function buildJoinedGeometry(legs: number) {
+  const { shape } = legShape(legs);
   const resolution = 64;
   const extent = 0.8;
   const centerY = 0.6;
@@ -19,6 +21,7 @@ function buildJoinedGeometry() {
           (x / resolution * 2 - 1) * extent,
           (y / resolution * 2 - 1) * extent + centerY,
           (z / resolution * 2 - 1) * extent,
+          shape,
         );
       }
     }
@@ -38,16 +41,17 @@ function buildJoinedGeometry() {
   return geometry;
 }
 
-export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked }: { torso: string; leftLeg: string; rightLeg: string; pawColor: string; marked: boolean }) {
-  const geometry = useMemo(buildJoinedGeometry, []);
+export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked, legs = 1 }: { legs?: number; torso: string; leftLeg: string; rightLeg: string; pawColor: string; marked: boolean }) {
+  const geometry = useMemo(() => buildJoinedGeometry(legs), [legs]);
   useEffect(() => () => geometry.dispose(), [geometry]);
+  const lift = legShape(legs).lift;
   useEffect(() => {
     const colors = { torso: new THREE.Color(torso), leftLeg: new THREE.Color(leftLeg), rightLeg: new THREE.Color(rightLeg) };
     const position = geometry.getAttribute("position");
     const values = new Float32Array(position.count * 3);
     const color = new THREE.Color();
     for (let i = 0; i < position.count; i++) {
-      const weights = bodyColorWeights(position.getX(i), position.getY(i));
+      const weights = bodyColorWeights(position.getX(i), position.getY(i), lift);
       color.setRGB(
         colors.torso.r * weights.torso + colors.leftLeg.r * weights.leftLeg + colors.rightLeg.r * weights.rightLeg,
         colors.torso.g * weights.torso + colors.leftLeg.g * weights.leftLeg + colors.rightLeg.g * weights.rightLeg,
@@ -56,7 +60,7 @@ export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked }: { tor
       color.toArray(values, i * 3);
     }
     geometry.setAttribute("color", new THREE.BufferAttribute(values, 3));
-  }, [geometry, torso, leftLeg, rightLeg]);
+  }, [geometry, torso, leftLeg, rightLeg, lift]);
   return (
     <mesh geometry={geometry} castShadow>
       <PawVinyl vertexColors pawColor={pawColor} region="feet" enabled={marked} />

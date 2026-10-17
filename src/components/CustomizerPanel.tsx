@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { LIMB_RANGE, limbLengths } from "@/lib/limb-lengths";
 import { Switch } from "@/components/ui/switch";
 import { YARNS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer } from "@/lib/character-layers";
@@ -70,6 +72,15 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
           </div>
         )}
         {(tab === "Body" || tab === "Face" || (tab === "Ears" && layered.selections.ears) || (tab === "Tail" && layered.selections.tail)) && TAB_PARTS[tab].filter((p) => config.face.cheeks || (p !== "leftBlush" && p !== "rightBlush")).map((p) => <ColorRow key={p} part={p} config={config} onChange={onChange} />)}
+        {tab === "Body" && (["arms", "legs"] as const).map((limb) => {
+          const lengths = limbLengths(config);
+          const label = limb === "arms" ? "Arm length" : "Leg length";
+          return <div key={limb} className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">{label} <span className="font-normal text-muted-foreground">· {Math.round(lengths[limb] * 100)}%</span></p>
+            <Slider aria-label={label} min={LIMB_RANGE.min} max={LIMB_RANGE.max} step={LIMB_RANGE.step} value={[lengths[limb]]}
+              onValueChange={([v]) => onChange({ ...config, limbs: { ...lengths, [limb]: v ?? 1 } })} />
+          </div>;
+        })}
         {tab === "Body" && PAW_REGIONS.map((region: PawRegion) => {
           const label = region === "hands" ? "Hands / paws" : "Feet / paws";
           const current = pawYarn(config, region);
