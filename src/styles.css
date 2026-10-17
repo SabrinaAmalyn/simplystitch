@@ -342,7 +342,7 @@
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 .piece-nav { background: var(--muted); }
 .font-heavy { font-family: "Poppins", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.02em; }
-.font-logo { font-family: "Poppins", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.01em; }
+.font-logo { font-family: "Poppins", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.01em; color: var(--primary); }
 
 .landing-grid {
   background-color: var(--background);
