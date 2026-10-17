@@ -188,6 +188,7 @@ export function hydrateStore() {
       localStorage.setItem(SAMPLE_KEY, "true");
       const old = state.library.filter((p) => p.id !== "sample-berry-bunny");
       if (old.length === 0) state = { ...state, library: [buildSamplePattern()] };
+      else if (old.length !== state.library.length) state = { ...state, library: old };
     }
     localStorage.setItem(BASE_KEY, "true");
     localStorage.setItem(KEY, JSON.stringify(state));
