@@ -245,10 +245,15 @@ function bunnyEarGeometry(straight: number, radius: number) {
   return new THREE.LatheGeometry(profile, 48);
 }
 
-// The cut base sits below the head's surface across its whole footprint, and
-// the rounded top stays exactly where the full capsule's top was.
+// The cut base sits below the head's surface across its whole footprint, so it
+// never shows. The ear is about 30% shorter than the full capsule it replaced.
+const BUNNY_EAR_RADIUS = 0.4;
 const BUNNY_EAR_BOTTOM_Y = 2.3;
-const BUNNY_EAR = bunnyEarGeometry(4.075 - BUNNY_EAR_BOTTOM_Y - 0.4, 0.4);
+const BUNNY_EAR_TOP_Y = 3.54;
+const BUNNY_EAR = bunnyEarGeometry(
+  BUNNY_EAR_TOP_Y - BUNNY_EAR_BOTTOM_Y - BUNNY_EAR_RADIUS,
+  BUNNY_EAR_RADIUS,
+);
 
 // Doll faces +z; the doll's left side is +x (named from the doll's perspective).
 function Ear({ type, side, color }: { type: Ears; side: 1 | -1; color: string }) {
