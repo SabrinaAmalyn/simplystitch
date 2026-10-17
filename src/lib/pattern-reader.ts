@@ -68,14 +68,14 @@ export function parsePatternText(src: string): ReaderDoc {
       const label = r[1].trim();
       const { text, count } = splitCount(r[2]);
       const nums = expandRange(label);
-      const base = `${cur.id}:${label}`;
+      const base = `${cur!.id}:${label}`;
       if (nums) {
         push({ kind: "group", key: base, badge: badgeOf(label), text, count, rows: nums.map((n) => ({ key: `${base}:${n}`, badge: String(n), text, count })) });
       } else push({ kind: "row", row: { key: base, badge: badgeOf(label), text, count } });
       continue;
     }
     const step = l.match(/^(\d+)\.\s+(.*)$/);
-    if (step && cur.trackable) {
+    if (step && cur) {
       push({ kind: "row", row: { key: `${cur.id}:step${step[1]}`, badge: step[1], text: step[2] } });
       continue;
     }
