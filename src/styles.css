@@ -64,27 +64,27 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
   --background: oklch(0.97 0.018 80);
   --foreground: oklch(0.28 0.04 45);
   --card: oklch(0.99 0.01 85);
   --card-foreground: oklch(0.28 0.04 45);
   --popover: oklch(0.99 0.01 85);
   --popover-foreground: oklch(0.28 0.04 45);
-  --primary: oklch(0.6 0.13 40);
+  --primary: oklch(0.64 0.135 32);
   --primary-foreground: oklch(0.99 0.01 85);
   --secondary: oklch(0.88 0.05 130);
   --secondary-foreground: oklch(0.3 0.05 140);
   --muted: oklch(0.93 0.022 75);
   --muted-foreground: oklch(0.5 0.04 50);
-  --accent: oklch(0.86 0.06 130);
-  --accent-foreground: oklch(0.3 0.05 140);
+  --accent: oklch(0.94 0.035 35);
+  --accent-foreground: oklch(0.4 0.095 32);
   --destructive: oklch(0.577 0.2 27);
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.87 0.03 70);
   --input: oklch(0.87 0.03 70);
-  --ring: oklch(0.6 0.13 40);
-  --stage: radial-gradient(circle at 50% 40%, oklch(0.95 0.04 95), oklch(0.89 0.05 130));
+  --ring: oklch(0.64 0.135 32);
+  --stage: oklch(0.96 0.018 80);
   --shadow-soft: 0 10px 30px -12px oklch(0.4 0.06 45 / 0.25);
   --doll-outline: oklch(0.35 0.035 45 / 0.65);
   --doll-shadow: oklch(0.35 0.035 45 / 0.12);
@@ -160,14 +160,14 @@
 }
 
 @layer components {
-  .panel { @apply rounded-3xl border border-border bg-card p-5 md:p-7; box-shadow: var(--shadow-soft); }
-  .stage { @apply rounded-[2rem] border border-border; background: var(--stage); box-shadow: var(--shadow-soft); }
+  .panel { @apply rounded-lg border border-border bg-card p-5 md:p-7; }
+  .stage { background: var(--stage); }
   .btn-primary { @apply inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 font-semibold text-primary-foreground transition hover:brightness-105 active:scale-95 disabled:cursor-wait disabled:opacity-70; box-shadow: var(--shadow-soft); }
   .btn-lg { @apply px-8 py-4 text-lg; }
   .btn-ghost { @apply inline-flex items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-muted; }
   .tab { @apply rounded-full px-4 py-1.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground; }
   .tab-on { @apply bg-card text-foreground shadow-sm; }
-  .choice { @apply flex flex-col items-center gap-0.5 rounded-2xl border-2 border-border bg-card px-3 py-4 text-center transition hover:border-primary/50; }
+  .choice { @apply flex flex-col items-center gap-0.5 rounded-md border-2 border-border bg-card px-3 py-4 text-center transition hover:border-primary/50; }
   .choice-on { @apply border-primary bg-primary/10; }
   .swatch { @apply h-9 w-9 rounded-full border-2 border-border transition hover:scale-110; }
   .swatch-on { @apply scale-110 ring-2 ring-primary ring-offset-2 ring-offset-card; }
@@ -177,4 +177,43 @@
   .alert { @apply rounded-2xl border border-secondary bg-secondary/50 p-4 text-secondary-foreground; }
   .alert-error { @apply border-destructive/40 bg-destructive/10 text-destructive; }
   .toast { @apply fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow-lg; }
+}
+
+@layer components {
+  .creator-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); min-height: calc(100dvh - 82px); }
+  .preview-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; position: sticky; top: 0; height: calc(100dvh - 82px); border-right: 1px solid var(--border); background: var(--stage); }
+  .character-canvas { width: 100%; height: min(620px, calc(100dvh - 180px)); min-height: 360px; }
+  .customization-workspace { min-width: 0; }
+  .category-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
+  .category-tab { border-radius: 0; min-width: 0; height: 54px; gap: 8px; color: var(--muted-foreground); border-bottom: 2px solid transparent; }
+  .category-active { color: var(--primary); background: var(--accent); border-bottom-color: var(--primary); }
+  .subcategory-nav { display: flex; min-width: 0; overflow-x: auto; border-bottom: 1px solid var(--border); padding: 8px 20px; gap: 4px; }
+  .subcategory-tab { border-radius: 4px; padding: 0 12px; font-size: 12px; height: 32px; color: var(--muted-foreground); flex-shrink: 0; }
+  .subcategory-active { background: var(--accent); color: var(--accent-foreground); }
+  .workspace-content { padding: 24px; }
+  .feature-area { min-height: 240px; max-height: 360px; overflow-y: auto; }
+  .feature-card { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; height: 112px; min-width: 0; width: 100%; padding: 10px 4px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); white-space: normal; }
+  .feature-card svg { width: 44px; height: 44px; flex-shrink: 0; }
+  .feature-card span { font-size: 12px; line-height: 1.25; text-align: center; }
+  .feature-card.choice-on { border: 2px solid var(--primary); background: var(--accent); }
+  .palette-area { border-top: 1px solid var(--border); margin-top: 20px; padding-top: 20px; }
+  .palette-grid { display: grid; grid-template-columns: repeat(auto-fill, 32px); gap: 10px; padding: 4px; }
+  .palette-swatch { height: 32px; width: 32px; padding: 0; border: 1px solid var(--border); border-radius: 50%; }
+  .region-active { border-color: var(--primary); background: var(--accent); color: var(--accent-foreground); }
+  .layered-area { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 20px; }
+  .workspace-actions { padding: 0 24px 24px; }
+  @media (max-width: 767px) {
+    .creator-layout { grid-template-columns: minmax(0, 1fr); }
+    .preview-panel { position: relative; height: 350px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .character-canvas { height: 300px; min-height: 0; }
+    .category-tab { height: 46px; gap: 5px; font-size: 12px; }
+    .subcategory-nav { padding: 8px 12px; gap: 0; }
+    .subcategory-tab { padding: 0 8px; font-size: 11px; }
+    .workspace-content { padding: 16px; }
+    .feature-area { min-height: 128px; max-height: 350px; }
+    .feature-card { height: 96px; gap: 8px; }
+    .feature-card svg { width: 36px; height: 36px; }
+    .feature-card span { font-size: 11px; }
+    .workspace-actions { padding: 0 16px 20px; }
+  }
 }

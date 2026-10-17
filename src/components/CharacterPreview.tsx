@@ -32,8 +32,8 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
   const earId = (config.layered ?? createLayeredCharacter()).selections.ears;
   const ears = (earId ? earId.replace("ears-", "") : null) as EarType;
   return (
-    <div className="flex h-full min-h-[360px] w-full flex-col items-center gap-2" role="img" aria-label="3D character preview">
-      <div className="h-full min-h-[340px] w-full flex-1">
+    <div className="flex h-full w-full flex-col items-center" role="img" aria-label="3D character preview">
+      <div className="h-full w-full flex-1">
         {mounted && (
           <PreviewBoundary resetKey={JSON.stringify(config.colors) + String(ears) + String(config.layered?.selections.tail)}>
             <Suspense fallback={<p className="text-sm text-muted-foreground">Loading character…</p>}>
@@ -42,7 +42,6 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
           </PreviewBoundary>
         )}
       </div>
-      <p className="text-xs text-muted-foreground">Drag to rotate · scroll or pinch to zoom</p>
     </div>
   );
 }
