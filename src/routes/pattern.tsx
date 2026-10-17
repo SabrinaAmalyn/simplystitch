@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { JourneySteps } from "@/components/JourneySteps";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { configKey } from "@/lib/character";
@@ -42,7 +43,6 @@ function Rendered({ text }: { text: string }) {
 
 function PatternPage() {
   const draft = useStore((s) => s.draft);
-  const previous = useStore((s) => s.previous);
   const config = useStore((s) => s.config);
   const library = useStore((s) => s.library);
   const [mode, setMode] = useState<"read" | "edit">("read");
@@ -98,7 +98,10 @@ function PatternPage() {
     return (
       <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-6 md:px-8">
         <header className="flex flex-wrap items-center justify-between gap-4">
-          <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
+          <div className="flex min-w-0 items-center gap-3">
+            <Link to="/customize" className="btn-ghost" aria-label="Back to character editor"><ArrowLeft size={16} /> Back</Link>
+            <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
+          </div>
           <JourneySteps active={3} />
         </header>
         <div className="flex flex-wrap items-center gap-2">
@@ -138,22 +141,16 @@ function PatternPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-6 md:px-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
-        <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
+        <div className="flex min-w-0 items-center gap-3">
+          <Link to="/customize" className="btn-ghost" aria-label="Back to character editor"><ArrowLeft size={16} /> Back</Link>
+          <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
+        </div>
         <JourneySteps active={mode === "edit" || draft.edited ? 2 : 1} />
       </header>
 
       {stale && (
-        <div className="alert flex flex-wrap items-center justify-between gap-3">
-          <span>Your character changed since this pattern was made.</span>
-          <Link to="/customize" className="btn-ghost">Back to regenerate</Link>
-        </div>
-      )}
-      {previous && (
-        <div className="alert flex flex-wrap items-center justify-between gap-3">
-          <span>Your earlier edited pattern was saved.</span>
-          <button className="btn-ghost" onClick={() => setState((s) => ({ ...s, draft: s.previous, previous: s.draft }))}>
-            Swap back to it
-          </button>
+        <div className="alert">
+          <p>Your character has changed since this pattern was made. Press <strong>Back</strong> at the top left to update it.</p>
         </div>
       )}
 
@@ -163,7 +160,6 @@ function PatternPage() {
           <button className={mode === "edit" ? "tab tab-on" : "tab"} onClick={() => setMode("edit")}>Edit</button>
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-2">
-          <Link to="/customize" className="btn-ghost">Back to character</Link>
           <input
             aria-label="Pattern name"
             className="h-9 w-44 rounded-lg border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"

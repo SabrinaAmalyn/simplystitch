@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Remove the Open pattern link from the editor, replace the earlier-pattern swap notice with a top-left Back on the pattern page, and rewrite the edited-pattern warning so its purpose and safe path are clear; verify in preview.
 - [x] Add a mobile top bar above the character holding the pattern action labelled "Save", and remove the empty strip between the header and that bar; verified on phone widths and hidden on desktop.
 - [x] Hide Layered items, place mobile Generate above the character at right with room for future back navigation, lower Dog thumbnail and verify category-only removal.
 - [x] Remove Save Character and lower journey steps; replace blush/whisker switches with None thumbnail selections and verify persistence.
