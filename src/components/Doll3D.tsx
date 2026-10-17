@@ -67,8 +67,8 @@ function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
 }
 
 function Arm({ side, color }: { side: 1 | -1; color: string }) {
-  // Tilted up from the horizontal T-pose by about 10°, still tucked into the shoulders.
-  const tilt = 0.18;
+  // Tilted up from the horizontal T-pose by about 20°, still tucked into the shoulders.
+  const tilt = 0.35;
   return <mesh position={[side * 0.62, 0.74, 0.02]} rotation={[0, 0, side * (Math.PI / 2 + tilt)]} castShadow><capsuleGeometry args={[0.19, 0.25, 12, 24]} /><Vinyl color={color} /></mesh>;
 }
 
