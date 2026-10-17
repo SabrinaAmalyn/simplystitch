@@ -1,10 +1,10 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { CustomizerPanel } from "@/components/CustomizerPanel";
 import { BLUSH_OPTIONS, BROW_OPTIONS, configKey, DEFAULT_CONFIG, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, type CharacterConfig } from "@/lib/character";
 import { generatePattern, patternToText } from "@/lib/pattern";
-import { setState, useStore } from "@/lib/store";
+import { savePatternToLibrary, setState, useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers";
 import { YARNS } from "@/lib/yarn-palette";
@@ -158,11 +158,13 @@ function Workspace() {
           
           {confirming && (
             <div className="alert">
-              <p className="font-semibold">You've edited your current pattern.</p>
-              <p className="text-sm">Generating a new one replaces it. Your edited version stays available to restore on the pattern page.</p>
-              <div className="mt-3 flex gap-2">
-                <Button onClick={generate}>Generate anyway</Button>
-                <Button variant="outline" onClick={() => setConfirming(false)}>Cancel</Button>
+              <p className="font-semibold">Your edited pattern will be replaced.</p>
+              <p className="text-sm">You rewrote this pattern, and your character has changed since it was made. Generating again writes a fresh pattern for the new character and overwrites your rewritten text.</p>
+              <p className="text-sm">Want to keep it? Save a copy to My Patterns first, then generate the new one.</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button onClick={() => { savePatternToLibrary(""); generate(); }}>Save a copy, then generate</Button>
+                <Button variant="outline" onClick={generate}>Generate anyway</Button>
+                <Button variant="ghost" onClick={() => setConfirming(false)}>Cancel</Button>
               </div>
             </div>
           )}
@@ -172,11 +174,6 @@ function Workspace() {
             <Button type="button" className="hidden h-auto whitespace-normal md:inline-flex" onClick={generate} disabled={busy || blockers.length > 0}>
               {busy ? "Stitching your pattern…" : draft ? "Generate new pattern" : "Generate Pattern"}
             </Button>
-            {draft && (
-              <Link to="/pattern" className="btn-ghost">
-                {stale ? "Open previous pattern (outdated)" : "Open pattern"}
-              </Link>
-            )}
           </div>
           </div>
         </section>
