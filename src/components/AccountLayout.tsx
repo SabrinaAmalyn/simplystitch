@@ -4,8 +4,8 @@ import { ArrowLeft, BookOpen, Menu, User } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 
 const NAV = [
-  { to: "/profile", label: "My Profile", icon: User },
   { to: "/my-patterns", label: "My Patterns", icon: BookOpen },
+  { to: "/profile", label: "My Profile", icon: User },
 ] as const;
 
 /** Demo signed-in shell: left sidebar + top bar with the profile picture menu. */

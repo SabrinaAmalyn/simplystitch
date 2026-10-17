@@ -14,10 +14,10 @@ export function ProfileMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-44">
         <DropdownMenuItem asChild>
-          <Link to="/profile" className="flex items-center gap-2"><User size={15} /> My Profile</Link>
+          <Link to="/my-patterns" className="flex items-center gap-2"><BookOpen size={15} /> My Patterns</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/my-patterns" className="flex items-center gap-2"><BookOpen size={15} /> My Patterns</Link>
+          <Link to="/profile" className="flex items-center gap-2"><User size={15} /> My Profile</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
