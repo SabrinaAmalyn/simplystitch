@@ -31,7 +31,7 @@ it("keeps the head inside the torso shoulder rather than leaving a gap", () => {
   }
 });
 
-it("raises the blush centre while keeping every edge outside the head", () => {
+it("raises the round blush centre while keeping every edge outside the head", () => {
   const geometry = createBlushGeometry();
   const positions = geometry.getAttribute("position");
   let minimum = Infinity, maximum = 0;
@@ -42,5 +42,19 @@ it("raises the blush centre while keeping every edge outside the head", () => {
   }
   expect(minimum).toBeCloseTo(1.008, 5);
   expect(maximum).toBeCloseTo(1.043, 5);
+  geometry.dispose();
+});
+
+it("keeps the oval blush flat with no raised centre", () => {
+  const geometry = createBlushGeometry("oval");
+  const positions = geometry.getAttribute("position");
+  let minimum = Infinity, maximum = 0;
+  for (let i = 0; i < positions.count; i++) {
+    const radius = Math.hypot(positions.getX(i), positions.getY(i), positions.getZ(i));
+    minimum = Math.min(minimum, radius);
+    maximum = Math.max(maximum, radius);
+  }
+  expect(minimum).toBeCloseTo(1.008, 5);
+  expect(maximum).toBeCloseTo(1.008, 5);
   geometry.dispose();
 });
