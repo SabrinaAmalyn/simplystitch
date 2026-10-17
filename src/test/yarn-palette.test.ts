@@ -6,7 +6,7 @@ import { pawYarn } from "@/lib/paw-colors";
 const expected = {
   "Warm White": "#FFF9F0", Ivory: "#F5EAD7", Vanilla: "#EAD9B9", Oatmeal: "#D6C2A3", Stone: "#B9A58D",
   "Milk Tea": "#CBA889", Caramel: "#B78055", Cinnamon: "#995D3B", Chestnut: "#78462F", "Dark Cocoa": "#4B3028",
-  Peach: "#F2B49A", Terracotta: "#D47A59", "Fox Red": "#C65A35", Rust: "#A9492D", Brick: "#873D32",
+  Peach: "#F9CDB9", Terracotta: "#D47A59", "Fox Red": "#C65A35", Rust: "#A9492D", Brick: "#873D32",
   "Blush Pink": "#EFA6A5", "Baby Pink": "#F6CDD0", "Butter Yellow": "#F1D78B", "Sage Green": "#A8B99A", "Powder Blue": "#A9CCDF",
   Moss: "#87966C", Olive: "#68784F", Eucalyptus: "#7EA69B", "Dusty Teal": "#588D8A", Lavender: "#B8A5CF",
 };
@@ -30,7 +30,7 @@ it("uses the same exact yarns for every body region and both paw selections", ()
 
 it("limits new blush choices to the dedicated pink and peach yarns", () => {
   expect(BLUSH_YARN_GROUPS.flatMap((group) => group.yarns.map((yarn) => [yarn.name, yarn.hex]))).toEqual([
-    ["Blush Pink", "#EFA6A5"], ["Baby Pink", "#F6CDD0"], ["Peach", "#F2B49A"],
+    ["Blush Pink", "#EFA6A5"], ["Baby Pink", "#F6CDD0"], ["Peach", "#F9CDB9"],
   ]);
 });
 

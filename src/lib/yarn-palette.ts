@@ -41,7 +41,8 @@ export const YARN_GROUPS: YarnGroup[] = [
 ];
 
 export const YARNS = YARN_GROUPS.flatMap((group) => group.yarns);
-const peach: Yarn = { id: "peach", name: "Peach", hex: "#F2B49A" };
+// Fallback resolves from the registry so the default skin can never drift from the swatch.
+const peach: Yarn = YARNS.find((yarn) => yarn.id === "peach")!;
 export const yarnById = (id: string): Yarn => YARNS.find((yarn) => yarn.id === id) ?? peach;
 export const BLUSH_YARN_GROUPS: YarnGroup[] = [{
   name: "Pinks & peach",
