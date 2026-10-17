@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { configKey } from "@/lib/character";
 import { defaultPatternName, progressKey, savePatternToLibrary, setState, updatePatternInLibrary, useStore } from "@/lib/store";
 import { PatternReader } from "@/components/PatternReader";
@@ -71,7 +71,7 @@ function PatternPage() {
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)}
         onTextChange={(text) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text, edited: true, saved: false } }))}
 
-        previewAction={<Button onClick={openNaming} aria-label="Save"><Save /> <span>Save</span></Button>}
+        previewAction={<Button onClick={openNaming} aria-label="Save">Save</Button>}
         previewBack={<Button variant="outline" asChild><Link to="/customize" aria-label="Go Back"><ArrowLeft /> <span className="max-md:hidden">Go Back</span></Link></Button>}
         header={<><div className="review-header"><PatternWorkspaceHeader
           profile
