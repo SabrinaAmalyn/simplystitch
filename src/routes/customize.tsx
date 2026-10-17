@@ -136,8 +136,8 @@ function Workspace() {
       <div className="creator-layout">
         <section className="preview-panel" aria-label="Character preview">
           <div className="preview-topbar">
-            <span className="preview-topbar-spacer" aria-hidden="true" />
             <PreviewActions />
+            <span className="preview-topbar-spacer" aria-hidden="true" />
             <Button type="button" size="sm" onClick={generate} disabled={busy || blockers.length > 0}>
               Generate
             </Button>
