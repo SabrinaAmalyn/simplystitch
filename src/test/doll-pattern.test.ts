@@ -58,3 +58,11 @@ describe("base doll pattern", () => {
     expect(patternToText(generatePattern(make(null, null)))).toContain("leaving 8 stitches between the eyes");
   });
 });
+
+it("names the paw yarn alongside the limb yarn in arm and leg headings", async () => {
+  const { DEFAULT_CONFIG } = await import("@/lib/character");
+  const { generatePattern, patternToText } = await import("@/lib/pattern");
+  const text = patternToText(generatePattern({ ...DEFAULT_CONFIG, colors: { ...DEFAULT_CONFIG.colors, leftArm: "sage", rightArm: "sage", leftLeg: "sage", rightLeg: "sage", hands: "teal", feet: "cocoa" } }));
+  expect(text).toMatch(/## Arms \(make 2\) — yarn: .+ \(paw\) \+ /);
+  expect(text).toMatch(/## Legs \(make 2\) — yarn: .+ \(paw\) \+ /);
+});
