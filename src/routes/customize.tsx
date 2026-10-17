@@ -4,7 +4,7 @@ import { CharacterPreview } from "@/components/CharacterPreview";
 import { CustomizerPanel } from "@/components/CustomizerPanel";
 import { BLUSH_OPTIONS, BROW_OPTIONS, configKey, DEFAULT_CONFIG, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, type CharacterConfig } from "@/lib/character";
 import { generatePattern, patternToText } from "@/lib/pattern";
-import { savePatternToLibrary, setState, useStore } from "@/lib/store";
+import { setState, useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers";
 import { YARNS } from "@/lib/yarn-palette";
@@ -103,7 +103,6 @@ function Workspace() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const stale = draft && draft.configKey !== configKey(config);
   const layered = config.layered ?? createLayeredCharacter();
   const blockers = patternBlockers(layered);
 
