@@ -4,14 +4,16 @@ import { Switch } from "@/components/ui/switch";
 import { YARNS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 
-const TABS = ["Body", "Ears", "Tail"] as const;
+const TABS = ["Body", "Face", "Ears", "Tail"] as const;
 const PART_LABEL: Record<BodyPart, string> = {
   head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm",
   leftLeg: "Left leg", rightLeg: "Right leg", leftEar: "Left ear", rightEar: "Right ear",
   leftInnerEar: "Left inner ear", rightInnerEar: "Right inner ear", blush: "Blush cheeks", tail: "Tail",
+  leftBlush: "Left blush", rightBlush: "Right blush", leftEye: "Left eye", rightEye: "Right eye",
 };
 const TAB_PARTS: Record<(typeof TABS)[number], BodyPart[]> = {
-  Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "blush"],
+  Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg"],
+  Face: ["leftEye", "rightEye", "leftBlush", "rightBlush"],
   Ears: ["leftEar", "leftInnerEar", "rightEar", "rightInnerEar"],
   Tail: ["tail"],
 };
@@ -22,16 +24,15 @@ function ColorRow({ part, config, onChange }: { part: BodyPart; config: Characte
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-semibold">{PART_LABEL[part]} <span className="font-normal text-muted-foreground">· {current.name}</span></p>
-        {part === "blush" && <Switch aria-label="Show blush" checked={config.face.cheeks} onCheckedChange={(cheeks) => onChange({ ...config, face: { ...config.face, cheeks } })} />}
       </div>
-      {(part !== "blush" || config.face.cheeks) && <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1.5">
         {YARNS.map((y) => (
           <Button key={y.id} variant="ghost" type="button" aria-label={`${PART_LABEL[part]}: ${y.name}`} aria-pressed={current.id === y.id}
             onClick={() => onChange({ ...config, colors: { ...config.colors, [part]: y.id } })}
             className={`h-7 w-7 rounded-full border border-border p-0 transition ${current.id === y.id ? "ring-2 ring-ring ring-offset-2 ring-offset-background" : ""}`}
             style={{ backgroundColor: y.hex }} />
         ))}
-      </div>}
+      </div>
     </div>
   );
 }
@@ -50,6 +51,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
         ))}
       </div>
       <div role="tabpanel" aria-label={tab} className="flex flex-col gap-4">
+        {tab === "Face" && <div className="flex items-center justify-between gap-3"><span className="text-sm font-semibold">Show blush</span><Switch aria-label="Show blush" checked={config.face.cheeks} onCheckedChange={(cheeks) => onChange({ ...config, face: { ...config.face, cheeks } })} /></div>}
         {tab === "Ears" && (
           <div className="grid grid-cols-3 gap-2">
             <Button variant="ghost" aria-pressed={layered.selections.ears === null} onClick={() => pickEars(null)} className={layered.selections.ears === null ? "choice choice-on" : "choice"}>None</Button>
@@ -66,7 +68,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
             ))}
           </div>
         )}
-        {(tab === "Body" || (tab === "Ears" && layered.selections.ears) || (tab === "Tail" && layered.selections.tail)) && TAB_PARTS[tab].map((p) => <ColorRow key={p} part={p} config={config} onChange={onChange} />)}
+        {(tab === "Body" || tab === "Face" || (tab === "Ears" && layered.selections.ears) || (tab === "Tail" && layered.selections.tail)) && TAB_PARTS[tab].filter((p) => config.face.cheeks || (p !== "leftBlush" && p !== "rightBlush")).map((p) => <ColorRow key={p} part={p} config={config} onChange={onChange} />)}
       </div>
     </div>
   );

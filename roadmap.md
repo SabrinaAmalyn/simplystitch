@@ -1,4 +1,6 @@
 # Tasks
+- [ ] Add independent cheek and eye colours in Face, preserving saved colours and drafts.
+- [ ] Verify face colour selection, removal, and reload.
 - [x] Add optional round and long tails with matching colour controls and saved selections.
 - [x] Verify tail replacement, removal, and front/side/back rendering.
 - [x] Close the head–body gap without lengthening the compact torso.
