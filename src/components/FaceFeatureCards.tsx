@@ -13,7 +13,7 @@ function NoseThumb({ style }: { style: NoseStyle }) {
 function MouthThumb({ style }: { style: MouthStyle }) {
   if (style === "none") return <line x1="10" y1="18" x2="22" y2="18" stroke={STROKE} strokeWidth="2" strokeLinecap="round" opacity="0.25" />;
   if (style === "x") return <g stroke={STROKE} strokeWidth="2.4" strokeLinecap="round"><line x1="10" y1="10" x2="22" y2="22" /><line x1="22" y1="10" x2="10" y2="22" /></g>;
-  if (style === "w") return <path d="M 7 13 Q 10 20 13 14 Q 16 21 19 14 Q 22 20 25 13" fill="none" stroke={STROKE} strokeWidth="2.4" strokeLinecap="round" />;
+  if (style === "w") return <path d="M 6 12 Q 9.5 21 13 16 Q 16 10 19 16 Q 22.5 21 26 12" fill="none" stroke={STROKE} strokeWidth="2.4" strokeLinecap="round" />;
   if (style === "smile") return <path d="M 8 13 Q 16 24 24 13" fill="none" stroke={STROKE} strokeWidth="2.4" strokeLinecap="round" />;
   return null;
 }
