@@ -1,6 +1,6 @@
 # Tasks
-- [ ] Add optional round and long tails with matching colour controls and saved selections.
-- [ ] Verify tail replacement, removal, and front/side/back rendering.
+- [x] Add optional round and long tails with matching colour controls and saved selections.
+- [x] Verify tail replacement, removal, and front/side/back rendering.
 - [x] Close the head–body gap without lengthening the compact torso.
 - [x] Raise the blush and support colour selection and removal with saved-state preservation.
 - [x] Verify front, side, back, colour changes, removal, and reload.
