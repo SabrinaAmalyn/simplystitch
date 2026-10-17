@@ -70,7 +70,6 @@ function Workspace() {
     <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-6 md:px-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-display text-3xl font-semibold">Stitchling</h1>
-        <JourneySteps active={0} />
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
