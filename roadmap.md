@@ -38,3 +38,4 @@
 - [x] Double bunny ear radius and verify from front/side.
 - [x] Replace the panel heading with the 1 Customize / 2 Generate / 3 Edit / 4 Export steps.
 - [x] Hide the subcategory row when a category has none (Ears, Tail) and drop the "Style" placeholder; verified desktop and mobile.
+- [ ] Pattern reader: collapse/expand whole sections by their title (e.g. "Head"); remove the "Go to" label, keep the hamburger icon opening the section drawer
