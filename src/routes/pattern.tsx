@@ -11,9 +11,9 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/pattern")({
   head: () => ({
     meta: [
-      { title: "Your pattern draft — Stitchling" },
+      { title: "Your pattern draft — SimplyStitch" },
       { name: "description", content: "Review, edit, copy and download your generated crochet pattern draft." },
-      { property: "og:title", content: "Your pattern draft — Stitchling" },
+      { property: "og:title", content: "Your pattern draft — SimplyStitch" },
       { property: "og:description", content: "Edit and export your generated crochet pattern." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

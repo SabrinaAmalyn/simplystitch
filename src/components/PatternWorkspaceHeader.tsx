@@ -21,7 +21,7 @@ export function PatternWorkspaceHeader({ title, back, status, actions, nameField
       <div className="pattern-header-brand">
         <Button variant="outline" size="icon" asChild>{back}</Button>
         <div className="min-w-0">
-          <span className="block font-display text-2xl font-semibold leading-tight">Stitchling</span>
+          <span className="block font-display text-2xl font-semibold leading-tight">SimplyStitch</span>
           <span className="block truncate text-xs text-muted-foreground" title={title}>{title} · {status}</span>
         </div>
       </div>
