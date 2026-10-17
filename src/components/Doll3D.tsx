@@ -85,14 +85,14 @@ function catEarGeometry() {
 }
 const CAT_EAR = catEarGeometry();
 
-/** One elongated teardrop, rooted centrally in the butt and hanging down behind the feet. */
+/** One elongated teardrop, rooted low between the legs and hanging down behind the feet. */
 function longTailGeometry() {
   const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0.53, -0.23),
-    new THREE.Vector3(0, 0.46, -0.4),
-    new THREE.Vector3(0, 0.32, -0.58),
-    new THREE.Vector3(0, 0.15, -0.7),
-    new THREE.Vector3(0, 0.005, -0.74),
+    new THREE.Vector3(0, 0.37, -0.22),
+    new THREE.Vector3(0, 0.31, -0.4),
+    new THREE.Vector3(0, 0.22, -0.53),
+    new THREE.Vector3(0, 0.12, -0.61),
+    new THREE.Vector3(0, 0.01, -0.65),
   ]);
   const geometry = new THREE.SphereGeometry(1, 48, 96);
   const positions = geometry.attributes["position"] as THREE.BufferAttribute;
@@ -107,7 +107,7 @@ function longTailGeometry() {
     // A steadily widening envelope times the sphere's round cross-section
     // produces one plump lower-middle peak, without a Gaussian neck or lobes.
     // The closed sphere supplies a smooth rounded tip rather than a cone cap.
-    const radius = 0.095 + 0.16 * t;
+    const radius = 0.09 + 0.17 * t;
     center.addScaledVector(right, positions.getX(i) * radius);
     center.addScaledVector(up, positions.getZ(i) * radius);
     positions.setXYZ(i, center.x, center.y, center.z);
@@ -118,7 +118,7 @@ function longTailGeometry() {
 const LONG_TAIL = longTailGeometry();
 
 function Tail({ selection, color }: { selection?: string | null; color: string }) {
-  if (selection === "tail-round") return <mesh position={[0, 0.48, -0.4]} castShadow><sphereGeometry args={[0.23, 40, 28]} /><Vinyl color={color} /></mesh>;
+  if (selection === "tail-round") return <mesh position={[0, 0.38, -0.42]} castShadow><sphereGeometry args={[0.23, 40, 28]} /><Vinyl color={color} /></mesh>;
   if (selection === "tail-long") return <mesh geometry={LONG_TAIL} castShadow><Vinyl color={color} /></mesh>;
   return null;
 }
