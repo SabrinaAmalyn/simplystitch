@@ -105,10 +105,17 @@ function Workspace() {
               {busy ? "Stitching your pattern…" : draft ? "Generate new pattern" : "Generate Pattern"}
             </Button>
           </div>
-          <div className="character-canvas"><CharacterPreview config={config} /></div>
-          <Button variant="ghost" type="button" className="mb-3" onClick={() => setState((s) => ({ ...s, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}>
-            <RotateCcw size={14} />Reset
-          </Button>
+          <div className="character-canvas">
+            <CharacterPreview config={config} />
+            <div className="preview-actions">
+              <Button variant="outline" size="sm" type="button" aria-label="Randomize character" onClick={() => setState((s) => ({ ...s, config: randomConfig() }))}>
+                <Dices size={14} />Randomize
+              </Button>
+              <Button variant="outline" size="sm" type="button" aria-label="Reset character" onClick={() => setState((s) => ({ ...s, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}>
+                <RotateCcw size={14} />Reset
+              </Button>
+            </div>
+          </div>
         </section>
 
         <section className="min-w-0">
