@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { BLUSH_OPTIONS, BROW_OPTIONS, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { BLUSH_YARN_GROUPS } from "@/lib/yarn-palette";
 import { YarnSwatches } from "@/components/YarnSwatches";
-import { BlushCards, BrowCards, EyeCards, MouthCards, NoseCards, WhiskerCards } from "@/components/FaceFeatureCards";
+import { BrowCards, CheekCards, EyeCards, MouthCards, NoseCards } from "@/components/FaceFeatureCards";
 import { LayerFeatureCards } from "@/components/LayerFeatureCards";
 import { createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 import { pawYarn, type PawRegion } from "@/lib/paw-colors";
@@ -11,7 +11,7 @@ const CATEGORIES = ["Body", "Face", "Ears", "Tail"] as const;
 type Category = (typeof CATEGORIES)[number];
 const SUBCATEGORIES: Partial<Record<Category, string[]>> = {
   Body: ["Head", "Torso", "Arms", "Legs", "Paws"],
-  Face: ["Eyes", "Eyebrows", "Nose", "Mouth", "Blush", "Whiskers"],
+  Face: ["Eyes", "Eyebrows", "Nose", "Mouth", "Blush"],
 };
 const LABELS: Partial<Record<BodyPart | PawRegion, string>> = {
   head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm", leftLeg: "Left leg", rightLeg: "Right leg",
@@ -64,10 +64,9 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
           {sub === "Eyebrows" && <BrowCards options={BROW_OPTIONS} value={config.face.brow ?? "none"} onSelect={(brow) => changeFace({ brow })} />}
           {sub === "Nose" && <NoseCards options={NOSE_OPTIONS} value={config.face.nose ?? "none"} onSelect={(nose) => changeFace({ nose })} />}
           {sub === "Mouth" && <MouthCards options={MOUTH_OPTIONS} value={config.face.mouth ?? "none"} onSelect={(mouth) => changeFace({ mouth })} />}
-          {sub === "Blush" && <BlushCards options={[{ value: "none", label: "None" }, ...BLUSH_OPTIONS]} value={config.face.cheeks ? config.face.blushShape ?? "round" : "none"}
-            onSelect={(blushShape) => changeFace(blushShape === "none" ? { cheeks: false } : { cheeks: true, blushShape })} />}
-          {sub === "Whiskers" && <WhiskerCards options={[{ value: "none", label: "None" }, { value: "whiskers", label: "Whiskers" }]}
-            value={config.face.whiskers ? "whiskers" : "none"} onSelect={(value) => changeFace({ whiskers: value === "whiskers" })} />}
+          {sub === "Blush" && <CheekCards options={[{ value: "none", label: "None" }, ...BLUSH_OPTIONS, { value: "whiskers", label: "Whiskers" }]}
+            value={config.face.cheeks ? config.face.blushShape ?? "round" : config.face.whiskers ? "whiskers" : "none"}
+            onSelect={(v) => changeFace(v === "none" ? { cheeks: false, whiskers: false } : v === "whiskers" ? { cheeks: false, whiskers: true } : { cheeks: true, blushShape: v, whiskers: false })} />}
         </>}
         {(category === "Ears" || category === "Tail") && <LayerFeatureCards slot={category === "Ears" ? "ears" : "tail"} config={config}
           value={category === "Ears" ? layered.selections.ears : layered.selections.tail}

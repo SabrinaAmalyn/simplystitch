@@ -39,7 +39,7 @@ function randomConfig(): CharacterConfig {
       brow: pick(BROW_OPTIONS).value,
       nose: pick(NOSE_OPTIONS).value,
       mouth: pick(MOUTH_OPTIONS).value,
-      whiskers: Math.random() < 0.3,
+      whiskers: false,
     },
     layered,
   };
