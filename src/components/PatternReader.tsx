@@ -1,18 +1,16 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { Check, ChevronDown, Info } from "lucide-react";
+import { Check, ChevronDown, Info, Pencil } from "lucide-react";
 import { CharacterPreview, type PartFocus } from "@/components/CharacterPreview";
 import type { CharacterConfig } from "@/lib/character";
-import { parsePatternText, sectionRowKeys, type ReaderItem, type ReaderRow  , type ReaderSection } from "@/lib/pattern-reader";
+import { parsePatternText, sectionBody, sectionRowKeys, withSectionBody, type ReaderItem, type ReaderRow, type ReaderSection } from "@/lib/pattern-reader";
 import { resetProgress, toggleRows, useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 
-type Tab = "materials" | "instructions" | "assembly" | "edit";
 type Props = {
   text: string; config: CharacterConfig; progressKey: string; name?: string | undefined;
   header?: ReactNode;
-  /** Editor shown in the Edit tab; omit to hide the tab. */
-  editing?: ReactNode;
-  onEditChange?: (editing: boolean) => void;
+  /** Called with the full pattern text after one section's body is edited. */
+  onTextChange?: (text: string) => void;
   /** Primary action placed in the preview's bottom-right corner. */
   previewAction?: ReactNode;
 };
