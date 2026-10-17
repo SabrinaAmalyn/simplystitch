@@ -49,15 +49,15 @@ function PatternPage() {
 
   return (
     <main className="pattern-page">
-      <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined}
+      <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)}
         onTextChange={(text) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text, edited: true, saved: false } }))}
 
         previewAction={<Button onClick={save}><Save /> Save</Button>}
         previewBack={<Button variant="outline" asChild><Link to="/customize"><ArrowLeft /> Go Back</Link></Button>}
+        previewName={<input aria-label="Pattern name" className="review-name-input" placeholder={defaultPatternName(library)} value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />}
         header={<><PatternWorkspaceHeader
           profile
           title={name.trim() || defaultPatternName(library)}
-          nameField={<input aria-label="Pattern name" className="h-9 w-full rounded-md border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder={defaultPatternName(library)} value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />}
         />
         {stale && (
           <div className="alert pattern-stale-alert">

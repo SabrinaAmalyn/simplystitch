@@ -15,6 +15,8 @@ type Props = {
   previewAction?: ReactNode;
   /** Secondary action placed in the preview's bottom-left corner. */
   previewBack?: ReactNode;
+  /** Pattern-name field placed in the preview's top-left corner. */
+  previewName?: ReactNode;
 };
 
 /** Which single crochet piece a pattern section makes. */
@@ -28,7 +30,7 @@ export function focusForSection(title: string | undefined): PartFocus {
   return null;
 }
 
-export function PatternReader({ text, config, progressKey, name, header, onTextChange, previewAction, previewBack }: Props) {
+export function PatternReader({ text, config, progressKey, name, header, onTextChange, previewAction, previewBack, previewName }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);
   const doneList = useStore((s) => s.progress?.[progressKey]);
   const done = useMemo(() => new Set(doneList ?? []), [doneList]);
@@ -61,6 +63,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
       {header}
       <div className="review-layout">
         <section className="review-preview" aria-label="Piece preview">
+          {previewName && <div className="review-preview-name">{previewName}</div>}
           <div className="review-preview-label">
             <span className="truncate text-sm font-semibold">{label}</span>
             {name && <span className="truncate text-xs text-muted-foreground">{name}</span>}
