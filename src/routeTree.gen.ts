@@ -14,6 +14,7 @@ import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as MyPatternsRouteImport } from './routes/my-patterns'
 import { Route as PatternRouteImport } from './routes/pattern'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MyPatternsIndexRouteImport } from './routes/my-patterns.index'
 import { Route as MyPatternsPatternIdRouteImport } from './routes/my-patterns.$patternId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MyPatternsIndexRoute = MyPatternsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MyPatternsRoute,
+} as any)
 const MyPatternsPatternIdRoute = MyPatternsPatternIdRouteImport.update({
   id: '/$patternId',
   path: '/$patternId',
@@ -54,14 +60,15 @@ export interface FileRoutesByFullPath {
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
+  '/my-patterns/': typeof MyPatternsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customize': typeof CustomizeRoute
-  '/my-patterns': typeof MyPatternsRouteWithChildren
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
+  '/my-patterns': typeof MyPatternsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +78,7 @@ export interface FileRoutesById {
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
+  '/my-patterns/': typeof MyPatternsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,14 +89,15 @@ export interface FileRouteTypes {
     | '/pattern'
     | '/profile'
     | '/my-patterns/$patternId'
+    | '/my-patterns/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/customize'
-    | '/my-patterns'
     | '/pattern'
     | '/profile'
     | '/my-patterns/$patternId'
+    | '/my-patterns'
   id:
     | '__root__'
     | '/'
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/pattern'
     | '/profile'
     | '/my-patterns/$patternId'
+    | '/my-patterns/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,6 +154,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/my-patterns/': {
+      id: '/my-patterns/'
+      path: '/'
+      fullPath: '/my-patterns/'
+      preLoaderRoute: typeof MyPatternsIndexRouteImport
+      parentRoute: typeof MyPatternsRoute
+    }
     '/my-patterns/$patternId': {
       id: '/my-patterns/$patternId'
       path: '/$patternId'
@@ -156,10 +173,12 @@ declare module '@tanstack/react-router' {
 
 interface MyPatternsRouteChildren {
   MyPatternsPatternIdRoute: typeof MyPatternsPatternIdRoute
+  MyPatternsIndexRoute: typeof MyPatternsIndexRoute
 }
 
 const MyPatternsRouteChildren: MyPatternsRouteChildren = {
   MyPatternsPatternIdRoute: MyPatternsPatternIdRoute,
+  MyPatternsIndexRoute: MyPatternsIndexRoute,
 }
 
 const MyPatternsRouteWithChildren = MyPatternsRoute._addFileChildren(

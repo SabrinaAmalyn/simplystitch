@@ -1,5 +1,4 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
-import { AccountLayout } from "@/components/AccountLayout";
 import { SavedPatternDetail } from "@/components/SavedPatternDetail";
 import { useStore } from "@/lib/store";
 
@@ -21,9 +20,5 @@ function SavedPatternPage() {
   const { patternId } = Route.useParams();
   const p = useStore((s) => s.library.find((x) => x.id === patternId));
   if (!p) return <Navigate to="/my-patterns" replace />;
-  return (
-    <AccountLayout>
-      <SavedPatternDetail p={p} />
-    </AccountLayout>
-  );
+  return <SavedPatternDetail p={p} />;
 }
