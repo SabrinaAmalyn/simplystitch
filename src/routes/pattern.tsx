@@ -26,7 +26,6 @@ function PatternPage() {
   const draft = useStore((s) => s.draft);
   const config = useStore((s) => s.config);
   const library = useStore((s) => s.library);
-  const [mode, setMode] = useState<"read" | "edit">("read");
   const [toast, setToast] = useState<string | null>(null);
   const [name, setName] = useState("");
   const navigate = useNavigate();
@@ -85,7 +84,7 @@ function PatternPage() {
       )}
 
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined}
-        onEditChange={(e) => setMode(e ? "edit" : "read")}
+        
         previewAction={<Button onClick={save}><Save /> Save</Button>}
         header={<PatternWorkspaceHeader
           title={name.trim() || defaultPatternName(library)}
