@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { ArrowLeft, BookOpen, LogOut, Menu, User } from "lucide-react";
+import { BookOpen, LogOut, Menu, User } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 
 const NAV = [
@@ -32,9 +32,6 @@ export function AccountLayout({ children }: { children: ReactNode }) {
           ))}
         </nav>
         <div className="mt-auto flex flex-col gap-1 pt-4">
-          <Link to="/customize" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted">
-            <ArrowLeft size={16} /> Back to customizer
-          </Link>
           <Link to="/" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted">
             <LogOut size={16} /> Log out
           </Link>
