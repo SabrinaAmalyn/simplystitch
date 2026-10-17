@@ -1,5 +1,5 @@
 # Tasks
-- [ ] Restore independent limb colours with paw markings and verify colour changes in the preview.
+- [x] Restore independent limb colours with paw markings and verify colour changes in the preview.
 - [x] Add symmetric hand and foot paw colours on existing limb surfaces only.
 - [x] Verify bounded markings, unchanged geometry, colour saving, and all viewing angles.
 - [x] Add independent cheek and eye colours in Face, preserving saved colours and drafts.
