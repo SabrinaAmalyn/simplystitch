@@ -63,3 +63,4 @@
 - [x] Standardize buttons and fonts: one pill scale (sm/md/lg) shared by the CSS classes and the button component; hero Try Demo and See how it works now identical size.
 - [x] Review page: remove the name input field and ask for the pattern name in a pop-up instead.
 - [x] Place the supplied badge artwork on the right side of the hero, sized large but not dominant.
+- [x] Pull the landing header's logo and Try Demo button in from the page edges so they align with the hero content.
