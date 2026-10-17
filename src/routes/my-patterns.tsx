@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { AccountLayout } from "@/components/AccountLayout";
 import { downloadPattern } from "@/components/SavedPatternDetail";
@@ -40,6 +41,21 @@ function MyPatternsPage() {
       )}
       </div>
     </AccountLayout>
+  );
+}
+
+function NameField({ p }: { p: SavedPattern }) {
+  const [value, setValue] = useState(p.name);
+  return (
+    <input
+      aria-label="Pattern name"
+      className="w-full rounded-lg border border-transparent bg-transparent px-2 py-1 font-display text-lg font-semibold outline-none hover:border-border focus:border-border focus:bg-card"
+      value={value}
+      maxLength={60}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={() => (value.trim() ? renamePattern(p.id, value) : setValue(p.name))}
+      onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
+    />
   );
 }
 
