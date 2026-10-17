@@ -102,7 +102,8 @@ function longTailGeometry() {
     const center = curve.getPoint(t);
     const tangent = curve.getTangent(t).normalize();
     const right = new THREE.Vector3().crossVectors(reference, tangent).normalize();
-    const up = new THREE.Vector3().crossVectors(tangent, right).normalize();
+    // Preserve the sphere's winding so the outer surface, not its inside, renders.
+    const up = new THREE.Vector3().crossVectors(right, tangent).normalize();
     // The sphere closes both ends smoothly; fullness peaks below the midpoint.
     const radius = 0.07 + 0.19 * Math.exp(-Math.pow((t - 0.64) / 0.27, 2));
     center.addScaledVector(right, positions.getX(i) * radius);
