@@ -34,7 +34,7 @@ export function hydrateStore() {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as State;
-      state = { ...initial, ...parsed, config: { ...DEFAULT_CONFIG, ...parsed.config } };
+      state = { ...initial, ...parsed, config: { ...DEFAULT_CONFIG, ...parsed.config, face: { ...DEFAULT_CONFIG.face, ...parsed.config?.face } } };
       if (!localStorage.getItem(BASE_KEY)) {
         state = { ...state, config: { ...state.config, ears: "none", accessories: [], colors: { ...state.config.colors, main: "peach" } } };
       }
