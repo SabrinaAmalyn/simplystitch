@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
+import { MOUTH_OPTIONS, NOSE_OPTIONS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { BLUSH_YARN_GROUPS } from "@/lib/yarn-palette";
 import { YarnSwatches } from "@/components/YarnSwatches";
+import { MouthCards, NoseCards } from "@/components/FaceFeatureCards";
 import { CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 import { PAW_REGIONS, pawYarn, type PawRegion } from "@/lib/paw-colors";
 
@@ -43,6 +44,12 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
       </div>
       <div role="tabpanel" aria-label={tab} className="flex flex-col gap-4">
         {tab === "Face" && <div className="flex items-center justify-between gap-3"><span className="text-sm font-semibold">Show blush</span><Switch aria-label="Show blush" checked={config.face.cheeks} onCheckedChange={(cheeks) => onChange({ ...config, face: { ...config.face, cheeks } })} /></div>}
+        {tab === "Face" && (
+          <>
+            <NoseCards options={NOSE_OPTIONS} value={config.face.nose ?? "none"} onSelect={(nose) => onChange({ ...config, face: { ...config.face, nose } })} />
+            <MouthCards options={MOUTH_OPTIONS} value={config.face.mouth ?? "none"} onSelect={(mouth) => onChange({ ...config, face: { ...config.face, mouth } })} />
+          </>
+        )}
         {tab === "Ears" && (
           <div className="grid grid-cols-3 gap-2">
             <Button variant="ghost" aria-pressed={layered.selections.ears === null} onClick={() => pickEars(null)} className={layered.selections.ears === null ? "choice choice-on" : "choice"}>None</Button>

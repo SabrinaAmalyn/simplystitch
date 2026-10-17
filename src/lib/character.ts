@@ -16,10 +16,14 @@ export const CROCHET_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", 
 export const DETAIL_DEFAULTS: Partial<Record<string, string>> = { leftInnerEar: "blush", rightInnerEar: "blush", blush: "blush" };
 export type BodyPart = (typeof BODY_PARTS)[number];
 
+/** Embroidered face features, mixed and matched independently. */
+export type NoseStyle = "none" | "teddy" | "cat" | "round";
+export type MouthStyle = "none" | "x" | "w" | "smile" | "cat3";
+
 export type CharacterConfig = {
   colors: { main: string; accent: string; accessory: string; eyes: string; hands?: string; feet?: string } & Partial<Record<BodyPart, string>>;
   ears: EarStyle;
-  face: { expression: Expression; cheeks: boolean };
+  face: { expression: Expression; cheeks: boolean; nose?: NoseStyle; mouth?: MouthStyle };
   body: BodyShape;
   accessories: Accessory[];
   layered?: LayeredCharacter;
@@ -28,7 +32,7 @@ export type CharacterConfig = {
 export const DEFAULT_CONFIG: CharacterConfig = {
   colors: { main: "peach", accent: "cream", accessory: "terracotta", eyes: "charcoal" },
   ears: "none",
-  face: { expression: "sleepy", cheeks: true },
+  face: { expression: "sleepy", cheeks: true, nose: "none", mouth: "none" },
   body: "standard",
   accessories: [],
 };
@@ -38,6 +42,21 @@ export const EAR_OPTIONS: { value: EarStyle; label: string; hint: string }[] = [
   { value: "round", label: "Round", hint: "Teddy-style" },
   { value: "long", label: "Long", hint: "Bunny-style" },
   { value: "pointy", label: "Pointy", hint: "Kitty-style" },
+];
+
+export const NOSE_OPTIONS: { value: NoseStyle; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "teddy", label: "Teddy Bear" },
+  { value: "cat", label: "Cat" },
+  { value: "round", label: "Round" },
+];
+
+export const MOUTH_OPTIONS: { value: MouthStyle; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "x", label: "Miffy X" },
+  { value: "w", label: "Cat W" },
+  { value: "smile", label: "Happy" },
+  { value: "cat3", label: "Cat :3" },
 ];
 
 export const EXPRESSION_OPTIONS: { value: Expression; label: string }[] = [

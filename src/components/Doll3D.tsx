@@ -5,7 +5,7 @@ import { JoinedBody } from "./JoinedBody";
 import { PawVinyl } from "./PawVinyl";
 import { limbSurfaceYarn, pawYarn } from "@/lib/paw-colors";
 import { HEAD, HEAD_ATTACHMENT_OFFSET, createBlushGeometry } from "@/lib/doll-anatomy";
-import { partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
+import { partYarn, type BodyPart, type CharacterConfig, type MouthStyle, type NoseStyle } from "@/lib/character";
 
 // Dev tooling injects `data-tsd-source` onto JSX. R3F reads hyphenated props as
 // nested paths (data.tsd.source) and throws. Declaring it as a flat, harmless
@@ -51,10 +51,55 @@ function Eyes({ left, right }: { left: string; right: string }) {
   return (
     <>
       {[-1, 1].map((s) => (
-        <mesh key={s} position={[s * 0.34, HEAD.y, 0.9]} rotation={[0, s * 0.36, 0]} scale={[0.06, 0.09, 0.03]}><sphereGeometry args={[1, 20, 14]} /><meshPhysicalMaterial color={s === 1 ? left : right} roughness={0.3} clearcoat={1} /></mesh>
+        <mesh key={s} position={[s * 0.34, HEAD.y, 0.9]} rotation={[0, s * 0.36, 0]} scale={[0.078, 0.084, 0.035]}><sphereGeometry args={[1, 24, 16]} /><meshPhysicalMaterial color={s === 1 ? left : right} roughness={0.3} clearcoat={1} /></mesh>
       ))}
     </>
   );
+}
+
+const STITCH = "#4B3028"; // Dark Cocoa embroidery thread
+
+/** Project a face-space point (x right, y up from the eye line) onto the head front. */
+function onFace(x: number, y: number, lift = 0.012) {
+  const [sx, sy, sz] = HEAD.scale;
+  const r = 1 - (x / sx) ** 2 - (y / sy) ** 2;
+  const z = sz * Math.sqrt(Math.max(r, 0)) + lift;
+  return new THREE.Vector3(x, HEAD.y + y, z);
+}
+
+/** One embroidered stitch line following the head surface. */
+function Stitch({ points, radius = 0.014 }: { points: [number, number][]; radius?: number }) {
+  const curve = new THREE.CatmullRomCurve3(points.map(([x, y]) => onFace(x, y)));
+  return (
+    <>
+      <mesh><tubeGeometry args={[curve, 24, radius, 8, false]} /><meshStandardMaterial color={STITCH} roughness={0.8} /></mesh>
+      {[points[0]!, points[points.length - 1]!].map(([x, y], i) => (
+        <mesh key={i} position={onFace(x, y)}><sphereGeometry args={[radius, 8, 6]} /><meshStandardMaterial color={STITCH} roughness={0.8} /></mesh>
+      ))}
+    </>
+  );
+}
+
+const NOSE_Y = -0.12;
+const MOUTH_Y = -0.24;
+
+function Nose({ style }: { style: NoseStyle }) {
+  if (style === "teddy") return <><Stitch points={[[-0.06, NOSE_Y], [0.06, NOSE_Y]]} radius={0.018} /><Stitch points={[[0, NOSE_Y], [0, NOSE_Y - 0.11]]} /></>;
+  if (style === "cat") {
+    const tri = new THREE.Shape([new THREE.Vector2(-0.05, 0.025), new THREE.Vector2(0.05, 0.025), new THREE.Vector2(0, -0.035)]);
+    return <mesh position={onFace(0, NOSE_Y, 0.006)}><extrudeGeometry args={[tri, { depth: 0.018, bevelEnabled: true, bevelSize: 0.008, bevelThickness: 0.008, bevelSegments: 3 }]} /><meshStandardMaterial color={STITCH} roughness={0.7} /></mesh>;
+  }
+  if (style === "round") return <mesh position={onFace(0, NOSE_Y, 0)} scale={[0.045, 0.04, 0.025]}><sphereGeometry args={[1, 20, 14]} /><meshStandardMaterial color={STITCH} roughness={0.7} /></mesh>;
+  return null;
+}
+
+function Mouth({ style }: { style: MouthStyle }) {
+  const y = MOUTH_Y;
+  if (style === "x") return <><Stitch points={[[-0.05, y + 0.05], [0.05, y - 0.05]]} /><Stitch points={[[0.05, y + 0.05], [-0.05, y - 0.05]]} /></>;
+  if (style === "w") return <Stitch points={[[-0.1, y + 0.02], [-0.05, y - 0.03], [0, y + 0.01], [0.05, y - 0.03], [0.1, y + 0.02]]} />;
+  if (style === "smile") return <Stitch points={[[-0.08, y + 0.02], [-0.04, y - 0.025], [0, y - 0.035], [0.04, y - 0.025], [0.08, y + 0.02]]} />;
+  if (style === "cat3") return <><Stitch points={[[0, y + 0.02], [-0.035, y - 0.025], [-0.075, y - 0.005]]} /><Stitch points={[[0, y + 0.02], [0.035, y - 0.025], [0.075, y - 0.005]]} /></>;
+  return null;
 }
 
 /** Raised circular blush with a rim that stays on the head surface. */
@@ -172,6 +217,8 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
     <group position={[0, -1.1, 0]}>
       <Head color={c("head")} />
       <Eyes left={c("leftEye")} right={c("rightEye")} />
+      <Nose style={config.face.nose ?? "none"} />
+      <Mouth style={config.face.mouth ?? "none"} />
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} /><BlushPatch side={-1} color={c("rightBlush")} /></>}
       <JoinedBody torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "feet").hex} marked={Boolean(config.colors.feet)} />
       <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />
