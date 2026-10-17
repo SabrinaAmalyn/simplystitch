@@ -1,24 +1,8 @@
 // Character configuration: data only, no rendering or pattern logic.
 import { normalizeLayers, type LayeredCharacter } from "./character-layers";
 
-export type Yarn = { id: string; name: string; hex: string };
-
-export const YARNS: Yarn[] = [
-  { id: "peach", name: "Peach", hex: "#ffddcb" },
-  { id: "oat", name: "Oatmeal", hex: "#e9dcc4" },
-  { id: "cream", name: "Cream", hex: "#f8f1e3" },
-  { id: "blush", name: "Blush Pink", hex: "#f2b8b0" },
-  { id: "terracotta", name: "Terracotta", hex: "#c8694a" },
-  { id: "mustard", name: "Mustard", hex: "#e0a93b" },
-  { id: "sage", name: "Sage", hex: "#a3b48c" },
-  { id: "teal", name: "Deep Teal", hex: "#3f7a78" },
-  { id: "sky", name: "Sky Blue", hex: "#9cc3dd" },
-  { id: "lilac", name: "Lilac", hex: "#c3b2d6" },
-  { id: "cocoa", name: "Cocoa", hex: "#7a5340" },
-  { id: "charcoal", name: "Charcoal", hex: "#3c3a3a" },
-];
-
-export const yarnById = (id: string): Yarn => YARNS.find((y) => y.id === id) ?? { id: "peach", name: "Peach", hex: "#ffddcb" };
+import { yarnById } from "./yarn-palette";
+export { YARNS, yarnById, type Yarn } from "./yarn-palette";
 
 export type EarStyle = "none" | "round" | "long" | "pointy";
 export type Expression = "happy" | "sleepy" | "surprised";
