@@ -61,4 +61,5 @@
 - [x] Increase the height of the About SimplyStitch section on the landing page.
 - [x] Make the SimplyStitch logo blue on every page.
 - [x] Standardize buttons and fonts: one pill scale (sm/md/lg) shared by the CSS classes and the button component; hero Try Demo and See how it works now identical size.
-- [ ] Review page: remove the name input field and ask for the pattern name in a pop-up instead.
+- [x] Review page: remove the name input field and ask for the pattern name in a pop-up instead.
+- [x] Place the supplied badge artwork on the right side of the hero, sized large but not dominant.
