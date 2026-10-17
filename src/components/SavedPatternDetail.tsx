@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ArrowLeft, Download, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
-import { PatternReader } from "@/components/PatternReader";
+import { PatternDocument } from "@/components/PatternDocument";
 import { loadPatternIntoCustomizer, progressKey, renamePattern, type SavedPattern } from "@/lib/store";
 
 export function downloadPattern(p: SavedPattern) {
@@ -35,7 +35,7 @@ export function SavedPatternDetail({ p }: { p: SavedPattern }) {
   const navigate = useNavigate();
   return (
     <div className="saved-pattern-workspace">
-      <PatternReader text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}
+      <PatternDocument text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}
         header={<PatternWorkspaceHeader title={p.name}
           back={<Link to="/my-patterns" aria-label="All patterns" title="All patterns"><ArrowLeft /></Link>}
           status="Saved to My Patterns" nameField={<NameField p={p} />}

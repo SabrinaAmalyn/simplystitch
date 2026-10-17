@@ -187,8 +187,9 @@ function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, o
   );
 }
 
-function ItemView({ item, done, toggle }: { item: ReaderItem; done: Set<string>; toggle: (k: string[], v: boolean) => void }) {
+export function ItemView({ item, done, toggle, current }: { item: ReaderItem; done: Set<string>; toggle: (k: string[], v: boolean) => void; current?: string | undefined }) {
   const [open, setOpen] = useState(false);
+  const hasCurrent = item.kind === "group" && item.rows.some((r) => r.key === current);
   if (item.kind === "note")
     return (
       <div className="reader-note">
@@ -203,14 +204,14 @@ function ItemView({ item, done, toggle }: { item: ReaderItem; done: Set<string>;
         {item.items.map((t, i) => <li key={i} className="py-1.5 leading-relaxed">{t}</li>)}
       </ul>
     );
-  if (item.kind === "row") return <RowView row={item.row} done={done.has(item.row.key)} onToggle={(v) => toggle([item.row.key], v)} />;
+  if (item.kind === "row") return <RowView row={item.row} current={current === item.row.key} done={done.has(item.row.key)} onToggle={(v) => toggle([item.row.key], v)} />;
 
   const keys = item.rows.map((r) => r.key);
   const n = keys.filter((k) => done.has(k)).length;
   const all = n === keys.length;
   return (
     <div className={open ? "rounded-lg bg-primary/5" : ""}>
-      <div className={`reader-row ${all ? "reader-row-done" : ""}`}>
+      <div className={`reader-row ${all ? "reader-row-done" : ""} ${hasCurrent && !open ? "reader-row-current" : ""}`}>
         <Button variant="ghost" className="reader-badge flex items-center gap-1" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-label={`${open ? "Hide" : "Show"} rounds ${item.badge}`}>
           {item.badge}
           <ChevronDown size={14} className={`transition-transform ${open ? "rotate-180" : ""}`} />
@@ -220,14 +221,14 @@ function ItemView({ item, done, toggle }: { item: ReaderItem; done: Set<string>;
           <span className="shrink-0 text-xs text-muted-foreground">{n}/{keys.length}</span>
         </Button>
       </div>
-      {open && <div className="reader-subrounds">{item.rows.map((r) => <RowView key={r.key} row={r} done={done.has(r.key)} onToggle={(v) => toggle([r.key], v)} />)}</div>}
+      {open && <div className="reader-subrounds">{item.rows.map((r) => <RowView key={r.key} row={r} current={current === r.key} done={done.has(r.key)} onToggle={(v) => toggle([r.key], v)} />)}</div>}
     </div>
   );
 }
 
-function RowView({ row, done, onToggle }: { row: ReaderRow; done: boolean; onToggle: (v: boolean) => void }) {
+export function RowView({ row, done, onToggle, current }: { row: ReaderRow; done: boolean; onToggle: (v: boolean) => void; current?: boolean }) {
   return (
-    <Button variant="ghost" className={`reader-row w-full text-left ${done ? "reader-row-done" : ""}`} onClick={() => onToggle(!done)} aria-pressed={done}>
+    <Button variant="ghost" className={`reader-row w-full text-left ${done ? "reader-row-done" : ""} ${current ? "reader-row-current" : ""}`} aria-current={current ? "step" : undefined} aria-label={`Round ${row.badge}: ${row.text}${done ? ", completed" : ""}`} onClick={() => onToggle(!done)} aria-pressed={done}>
       <span className="reader-badge">{done ? <Check size={14} /> : row.badge}</span>
       <span className="reader-text flex-1">{row.text}{row.count !== undefined && <span className="reader-count"> ({row.count})</span>}</span>
     </Button>
