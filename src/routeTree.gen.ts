@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as MyPatternsRouteImport } from './routes/my-patterns'
 import { Route as PatternRouteImport } from './routes/pattern'
 import { Route as ProfileRouteImport } from './routes/profile'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CustomizeRoute = CustomizeRouteImport.update({
   id: '/customize',
   path: '/customize',
@@ -36,12 +42,14 @@ const ProfileRoute = ProfileRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/customize': typeof CustomizeRoute
   '/my-patterns': typeof MyPatternsRoute
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/customize': typeof CustomizeRoute
   '/my-patterns': typeof MyPatternsRoute
   '/pattern': typeof PatternRoute
@@ -49,6 +57,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/customize': typeof CustomizeRoute
   '/my-patterns': typeof MyPatternsRoute
   '/pattern': typeof PatternRoute
@@ -56,13 +65,14 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/customize' | '/my-patterns' | '/pattern' | '/profile'
+  fullPaths: '/' | '/customize' | '/my-patterns' | '/pattern' | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/customize' | '/my-patterns' | '/pattern' | '/profile'
-  id: '__root__' | '/customize' | '/my-patterns' | '/pattern' | '/profile'
+  to: '/' | '/customize' | '/my-patterns' | '/pattern' | '/profile'
+  id: '__root__' | '/' | '/customize' | '/my-patterns' | '/pattern' | '/profile'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   CustomizeRoute: typeof CustomizeRoute
   MyPatternsRoute: typeof MyPatternsRoute
   PatternRoute: typeof PatternRoute
@@ -71,6 +81,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/customize': {
       id: '/customize'
       path: '/customize'
@@ -103,6 +120,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   CustomizeRoute: CustomizeRoute,
   MyPatternsRoute: MyPatternsRoute,
   PatternRoute: PatternRoute,

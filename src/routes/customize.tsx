@@ -85,10 +85,10 @@ function PreviewActions() {
 export const Route = createFileRoute("/customize")({
   head: () => ({
     meta: [
-      { title: "Stitchling — Design your crochet character" },
-      { name: "description", content: "Customize the original Stitchling lined doll with layered artwork and save structured character selections." },
-      { property: "og:title", content: "Stitchling — Design your crochet character" },
-      { property: "og:description", content: "Customize the original lined doll with ears, hair, facial details, outfits and accessory layers." },
+      { title: "Customize your character — Stitchling" },
+      { name: "description", content: "Pick ears, tail, face details and yarn colours, then generate a matching amigurumi crochet pattern draft." },
+      { property: "og:title", content: "Customize your character — Stitchling" },
+      { property: "og:description", content: "Choose ears, tail, facial details and yarn colours for your doll, then generate its pattern." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
