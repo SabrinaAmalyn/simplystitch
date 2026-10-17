@@ -85,16 +85,16 @@ function catEarGeometry() {
 }
 const CAT_EAR = catEarGeometry();
 
-/** A downward teardrop swept from a closed sphere, with a narrow buried root. */
+/** One elongated teardrop, rooted centrally in the butt and hanging down behind the feet. */
 function longTailGeometry() {
   const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0.49, -0.22),
-    new THREE.Vector3(0, 0.4, -0.4),
-    new THREE.Vector3(0, 0.27, -0.56),
-    new THREE.Vector3(0, 0.14, -0.6),
-    new THREE.Vector3(0, 0.035, -0.56),
+    new THREE.Vector3(0, 0.53, -0.23),
+    new THREE.Vector3(0, 0.46, -0.4),
+    new THREE.Vector3(0, 0.32, -0.58),
+    new THREE.Vector3(0, 0.15, -0.7),
+    new THREE.Vector3(0, 0.005, -0.74),
   ]);
-  const geometry = new THREE.SphereGeometry(1, 32, 64);
+  const geometry = new THREE.SphereGeometry(1, 48, 96);
   const positions = geometry.attributes["position"] as THREE.BufferAttribute;
   const reference = new THREE.Vector3(1, 0, 0);
   for (let i = 0; i < positions.count; i++) {
@@ -104,8 +104,10 @@ function longTailGeometry() {
     const right = new THREE.Vector3().crossVectors(reference, tangent).normalize();
     // Preserve the sphere's winding so the outer surface, not its inside, renders.
     const up = new THREE.Vector3().crossVectors(right, tangent).normalize();
-    // The sphere closes both ends smoothly; fullness peaks below the midpoint.
-    const radius = 0.07 + 0.19 * Math.exp(-Math.pow((t - 0.64) / 0.27, 2));
+    // A steadily widening envelope times the sphere's round cross-section
+    // produces one plump lower-middle peak, without a Gaussian neck or lobes.
+    // The closed sphere supplies a smooth rounded tip rather than a cone cap.
+    const radius = 0.095 + 0.16 * t;
     center.addScaledVector(right, positions.getX(i) * radius);
     center.addScaledVector(up, positions.getZ(i) * radius);
     positions.setXYZ(i, center.x, center.y, center.z);
