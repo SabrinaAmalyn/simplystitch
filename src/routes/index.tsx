@@ -33,7 +33,7 @@ function Landing() {
   return (
     <main className="min-h-screen bg-background">
       <header className="flex items-center justify-between gap-4 border-b border-border px-4 py-4 md:px-8">
-        <Link to="/" className="font-logo text-2xl">SimplyStitch</Link>
+        <Link to="/" className="font-logo text-2xl uppercase">SimplyStitch</Link>
         <nav className="flex items-center gap-2">
           <Link to="/customize" className="btn-primary">Try Demo</Link>
         </nav>
@@ -70,7 +70,7 @@ function Landing() {
         </div>
       </div>
 
-      <section className="mx-auto max-w-3xl px-4 py-12 md:px-8 md:py-16">
+      <section className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
         <h2 className="font-heavy text-2xl uppercase text-primary md:text-4xl">About SimplyStitch</h2>
         <p className="mt-4 text-base text-muted-foreground md:text-lg">
           Amigurumi is made up of simple stitches and familiar shapes. SimplyStitch brings them together to help you
@@ -93,7 +93,7 @@ function Landing() {
         </div>
       </section>
 
-      <section className="landing-sky px-4 py-12 text-center text-primary-foreground md:py-16">
+      <section className="landing-sky px-4 py-8 text-center text-primary-foreground md:py-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-4">
           <h2 className="font-heavy text-2xl leading-tight uppercase md:text-4xl">
             A few simple stitches. A character all your own.

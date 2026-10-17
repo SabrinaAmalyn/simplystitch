@@ -129,7 +129,7 @@ function Workspace() {
   return (
     <main className="min-h-screen bg-background">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
-        <h1 className="min-w-0 font-logo text-2xl"><Link to="/">SimplyStitch</Link></h1>
+        <h1 className="min-w-0 font-logo text-2xl uppercase"><Link to="/">SimplyStitch</Link></h1>
         <ProfileMenu />
       </header>
 
