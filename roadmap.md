@@ -72,11 +72,12 @@
 - [x] Saved pattern page: remove the SimplyStitch wordmark next to the Go Back button; verified phone and desktop.
 - [x] Fix the alignment problem shown in the user's screenshot of the page they are viewing; verified phone and desktop.
 - [x] Saved pattern page: show the finished 3D character above the first written section; verified phone and desktop.
-- [ ] Saved pattern: drop the back button, show the pattern name in its place, add a breadcrumb (profile icon bar) at the far left
-- [ ] Customizer: eyebrows subsection is hidden/unreachable — fix
-- [ ] Saved pattern: breadcrumb missing / back button still shown in the user preview — confirm build is clean and the change is live
+- [x] Saved pattern: drop the back button, show the pattern name in its place, add a breadcrumb (profile icon bar) at the far left; verified live (breadcrumb "My Patterns > <name>", pattern name in the header, no back arrow)
+- [x] Customizer: eyebrows subsection is hidden/unreachable — fix; verified live, Face now shows Eyes/Eyebrows/Nose/Mouth/Cheeks at full 36px height inside the sub-tab row
+- [x] Saved pattern: breadcrumb missing / back button still shown in the user preview — confirm build is clean and the change is live; confirmed on a fresh direct load of /my-patterns/<id>
 - [x] Mobile saved pattern: "Go to" button moved to the bottom corner; the character view is now a contents link
-- [ ] Add the character 3D view as a link in the contents nav
+- [x] Add the character 3D view as a link in the contents nav; verified the list starts with "Character" and the finished character panel renders above Materials
 - [x] Pattern review page: icon-only Go Back and Save on phones
 - [x] Customize (phone): Randomize at bottom-right of 3D view
 - [x] Phone buttons: consistent size and font
+- [x] Recolour the supplied character artwork to the app blue, remove its background, and use it as the browser tab icon
