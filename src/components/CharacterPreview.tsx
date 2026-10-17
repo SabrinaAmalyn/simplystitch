@@ -1,6 +1,4 @@
 import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import { Move, ZoomIn } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { type CharacterConfig } from "@/lib/character";
 import { createLayeredCharacter } from "@/lib/character-layers";
 import type { EarType } from "./Doll3D";
@@ -21,7 +19,7 @@ class PreviewBoundary extends Component<{ children: ReactNode; resetKey: string 
       return (
         <div className="flex h-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
           <p>The preview hit a snag.</p>
-          <Button variant="outline" type="button" className="btn-ghost" onClick={() => this.setState({ failed: false })}>Reload preview</Button>
+          <button type="button" className="btn-ghost" onClick={() => this.setState({ failed: false })}>Reload preview</button>
         </div>
       );
     return this.props.children;
@@ -34,8 +32,8 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
   const earId = (config.layered ?? createLayeredCharacter()).selections.ears;
   const ears = (earId ? earId.replace("ears-", "") : null) as EarType;
   return (
-    <div className="relative flex h-full w-full flex-col items-center" role="img" aria-label="3D character preview">
-      <div className="h-full w-full flex-1">
+    <div className="flex h-full min-h-[360px] w-full flex-col items-center gap-2" role="img" aria-label="3D character preview">
+      <div className="h-full min-h-[340px] w-full flex-1">
         {mounted && (
           <PreviewBoundary resetKey={JSON.stringify(config.colors) + String(ears) + String(config.layered?.selections.tail)}>
             <Suspense fallback={<p className="text-sm text-muted-foreground">Loading character…</p>}>
@@ -44,7 +42,7 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
           </PreviewBoundary>
         )}
       </div>
-      <div className="preview-hints" aria-label="Preview gestures"><span title="Drag to rotate"><Move className="size-4" /></span><span title="Scroll or pinch to zoom"><ZoomIn className="size-4" /></span></div>
+      <p className="text-xs text-muted-foreground">Drag to rotate · scroll or pinch to zoom</p>
     </div>
   );
 }
