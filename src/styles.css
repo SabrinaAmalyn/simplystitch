@@ -174,9 +174,17 @@
 @layer components {
   .panel { @apply rounded-lg border border-border bg-card p-5 md:p-7; }
   .stage { background: var(--stage); }
-  .btn-primary { @apply inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 font-semibold text-primary-foreground transition hover:brightness-105 active:scale-95 disabled:cursor-wait disabled:opacity-70; box-shadow: var(--shadow-soft); }
-  .btn-lg { @apply px-8 py-4 text-lg; }
-  .btn-ghost { @apply inline-flex items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-muted; }
+  /* One button system: shared shape + typography, three sizes, five colour tones.
+     Tone classes carry the medium size; the size classes below override it. */
+  .btn, .btn-primary, .btn-outline, .btn-light, .btn-outline-light, .btn-ghost { @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 text-base font-semibold transition active:scale-95 disabled:cursor-wait disabled:opacity-70; }
+  .btn-primary { @apply bg-primary text-primary-foreground hover:brightness-105; box-shadow: var(--shadow-soft); }
+  .btn-outline { @apply border border-primary bg-transparent text-primary hover:bg-primary/10; }
+  .btn-light { @apply bg-background text-primary hover:brightness-95; }
+  .btn-outline-light { @apply border border-primary-foreground bg-transparent text-primary-foreground hover:bg-primary-foreground/10; }
+  .btn-ghost { @apply border border-border bg-card text-foreground hover:bg-muted; }
+  .btn-sm { @apply h-9 px-4 text-sm; }
+  .btn-md { @apply h-11 px-6 text-base; }
+  .btn-lg { @apply h-14 px-8 text-lg; }
   .tab { @apply rounded-full px-4 py-1.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground; }
   .tab-on { @apply bg-card text-foreground shadow-sm; }
   .choice { @apply flex flex-col items-center gap-0.5 rounded-md border-2 border-border bg-card px-3 py-4 text-center transition hover:border-primary/50; }
