@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Check, ChevronDown, ChevronUp, Info, Menu, X } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, Info, Menu } from "lucide-react";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import type { CharacterConfig } from "@/lib/character";
 import { parsePatternText, sectionRowKeys, type ReaderItem, type ReaderRow, type ReaderSection } from "@/lib/pattern-reader";
@@ -33,7 +33,7 @@ export function PatternReader({ text, config, progressKey, name, toolbar, editin
     );
     els.forEach((e) => io.observe(e));
     return () => io.disconnect();
-  }, [doc]);
+  }, [doc, editing]);
 
   const go = (id: string) => {
     onNavigateSection?.();
@@ -107,7 +107,7 @@ export function PatternReader({ text, config, progressKey, name, toolbar, editin
 
       </>}
       <Sheet open={drawer} onOpenChange={setDrawer}>
-        <SheetContent className="w-[min(22rem,90vw)] overflow-y-auto bg-card">
+        <SheetContent className="w-[min(22rem,90vw)] overflow-y-auto bg-card" aria-describedby={undefined}>
           <SheetHeader><SheetTitle className="font-sans">Pattern sections</SheetTitle></SheetHeader>
           <nav className="mt-5" aria-label="Pattern sections">
             <NavList meta={meta} parts={parts} assembly={assembly} active={active} go={go} done={done} />
@@ -123,13 +123,13 @@ function NavList({ meta, parts, assembly, active, go, done }: { meta: ReaderSect
     <div className="flex flex-col">
       {meta.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
       {parts.length > 0 && <p className="mt-2 px-3 py-2 text-sm font-semibold">Instructions</p>}
-      {parts.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} indent />)}
+      {parts.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
       {assembly.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
     </div>
   );
 }
 
-function NavItem({ s, active, onGo, done, indent }: { s: ReaderSection; active: boolean; onGo: (id: string) => void; done: Set<string>; indent?: boolean }) {
+function NavItem({ s, active, onGo, done }: { s: ReaderSection; active: boolean; onGo: (id: string) => void; done: Set<string> }) {
   const keys = sectionRowKeys(s);
   const n = keys.filter((k) => done.has(k)).length;
   return (

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowLeft, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Props = {
@@ -38,5 +38,3 @@ export function PatternWorkspaceHeader({ title, back, openSections, mode, onMode
     </header>
   );
 }
-
-export function PatternBackIcon() { return <ArrowLeft />; }
