@@ -74,16 +74,16 @@ function onFace(x: number, y: number, lift = 0.012) {
 }
 
 /** One embroidered stitch line following the head surface. */
-function Stitch({ points, radius = 0.02, color = STITCH }: { points: [number, number][]; radius?: number; color?: string }) {
+function Stitch({ points, radius = 0.02, color = STITCH, lift = 0.012 }: { points: [number, number][]; radius?: number; color?: string; lift?: number }) {
   const first = points[0];
   const last = points[points.length - 1];
   if (!first || !last || points.length < 2) return null;
-  const curve = new THREE.CatmullRomCurve3(points.map(([x, y]) => onFace(x, y)));
+  const curve = new THREE.CatmullRomCurve3(points.map(([x, y]) => onFace(x, y, lift)));
   return (
     <>
       <mesh><tubeGeometry args={[curve, 24, radius, 8, false]} /><meshStandardMaterial color={color} roughness={0.8} /></mesh>
       {[first, last].map(([x, y], i) => (
-        <mesh key={i} position={onFace(x, y)}><sphereGeometry args={[radius, 8, 6]} /><meshStandardMaterial color={color} roughness={0.8} /></mesh>
+        <mesh key={i} position={onFace(x, y, lift)}><sphereGeometry args={[radius, 8, 6]} /><meshStandardMaterial color={color} roughness={0.8} /></mesh>
       ))}
     </>
   );
@@ -140,9 +140,10 @@ function Eyebrows({ style, color }: { style: BrowStyle; color: string }) {
 }
 
 /** Raised circular blush with a rim that stays on the head surface. */
-function Whiskers() {
+// Whiskers lift over the blush when both are worn so neither hides the other.
+function Whiskers({ overBlush = false }: { overBlush?: boolean }) {
   return <>{[-1, 1].flatMap((side) => [-0.04, -0.14, -0.24].map((y, i) => (
-    <Stitch key={`${side}-${i}`} radius={0.013} points={[[side * 0.69, y], [side * 0.77, y + (1 - i) * 0.014], [side * 0.85, y + (1 - i) * 0.028]]} />
+    <Stitch key={`${side}-${i}`} radius={0.013} lift={overBlush ? 0.07 : 0.012} points={[[side * 0.69, y], [side * 0.77, y + (1 - i) * 0.014], [side * 0.85, y + (1 - i) * 0.028]]} />
   )))}</>;
 }
 
@@ -309,7 +310,7 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
       <Eyebrows style={config.face.brow ?? "none"} color={c("brows")} />
       <Nose style={config.face.nose ?? "none"} />
       <Mouth style={config.face.mouth ?? "none"} />
-      {config.face.whiskers && <Whiskers />}
+      {config.face.whiskers && <Whiskers overBlush={config.face.cheeks} />}
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
       <JoinedBody torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "feet").hex} marked={Boolean(config.colors.feet)} />
       <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />
