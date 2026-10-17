@@ -246,10 +246,10 @@ function bunnyEarGeometry(straight: number, radius: number) {
 }
 
 // The cut base sits below the head's surface across its whole footprint, so it
-// never shows. The ear is about 30% shorter than the full capsule it replaced.
+// never shows. The ear stays shorter than the long capsule first modelled.
 const BUNNY_EAR_RADIUS = 0.4;
 const BUNNY_EAR_BOTTOM_Y = 2.3;
-const BUNNY_EAR_TOP_Y = 3.54;
+const BUNNY_EAR_TOP_Y = 3.75;
 const BUNNY_EAR = bunnyEarGeometry(
   BUNNY_EAR_TOP_Y - BUNNY_EAR_BOTTOM_Y - BUNNY_EAR_RADIUS,
   BUNNY_EAR_RADIUS,
