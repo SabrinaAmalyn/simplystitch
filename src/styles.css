@@ -312,3 +312,5 @@
 .marquee-track { display: inline-flex; gap: 2.5rem; animation: marquee 28s linear infinite; padding-right: 2.5rem; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+.piece-nav { background: var(--muted); }
+.font-rounded { font-family: "Fredoka", "Nunito", system-ui, sans-serif; }
