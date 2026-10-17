@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { JourneySteps } from "@/components/JourneySteps";
 import { configKey } from "@/lib/character";
-import { defaultPatternName, savePatternToLibrary, setState, useStore } from "@/lib/store";
+import { defaultPatternName, progressKey, savePatternToLibrary, setState, useStore } from "@/lib/store";
+import { PatternReader } from "@/components/PatternReader";
 
 export const Route = createFileRoute("/pattern")({
   head: () => ({
@@ -18,27 +19,6 @@ export const Route = createFileRoute("/pattern")({
   }),
   component: PatternPage,
 });
-
-function Rendered({ text }: { text: string }) {
-  return (
-    <div className="pattern-doc">
-      {text.split("\n").map((l, i) => {
-        if (l.startsWith("# ")) return <h2 key={i} className="font-display text-3xl font-semibold">{l.slice(2)}</h2>;
-        if (l.startsWith("## ")) return <h3 key={i} className="mt-6 font-display text-xl font-semibold text-primary">{l.slice(3)}</h3>;
-        if (l.startsWith("DRAFT")) return <p key={i} className="alert mt-3 text-sm">{l}</p>;
-        if (!l.trim()) return null;
-        const m = l.match(/^([^:]{1,14}):\s(.*)$/);
-        if (m && !l.startsWith("Note") && !/^\d+\.\s/.test(l)) return (
-          <p key={i} className="flex gap-3 border-b border-border/60 py-1.5">
-            <span className="w-24 shrink-0 font-semibold">{m[1]}</span>
-            <span>{m[2]}</span>
-          </p>
-        );
-        return <p key={i} className={l.startsWith("Note") ? "mt-2 text-sm italic text-muted-foreground" : "py-0.5"}>{l}</p>;
-      })}
-    </div>
-  );
-}
 
 function PatternPage() {
   const draft = useStore((s) => s.draft);
@@ -127,18 +107,18 @@ function PatternPage() {
         </div>
       </div>
 
+      {mode === "read" ? (
+        <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined} />
+      ) : (
       <section className="panel">
-        {mode === "read" ? (
-          <Rendered text={draft.text} />
-        ) : (
           <textarea
             aria-label="Edit pattern"
             className="min-h-[70vh] w-full resize-y rounded-xl bg-muted/50 p-4 font-mono text-sm leading-relaxed outline-none focus:ring-2 focus:ring-ring"
             value={draft.text}
             onChange={(e) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text: e.target.value, edited: true, saved: false } }))}
           />
-        )}
       </section>
+      )}
       {draft.edited && <p className="text-sm text-muted-foreground">Edits are saved automatically on this device.</p>}
       {toast && <div role="status" className="toast">{toast}</div>}
     </main>

@@ -2,7 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { AccountLayout } from "@/components/AccountLayout";
-import { deletePattern, loadPatternIntoCustomizer, renamePattern, useStore, type SavedPattern } from "@/lib/store";
+import { PatternReader } from "@/components/PatternReader";
+import { deletePattern, progressKey, loadPatternIntoCustomizer, renamePattern, useStore, type SavedPattern } from "@/lib/store";
 
 export const Route = createFileRoute("/my-patterns")({
   head: () => ({
@@ -98,13 +99,7 @@ function PatternDetail({ p, onBack }: { p: SavedPattern; onBack: () => void }) {
         <button className="btn-ghost" onClick={onBack}>All patterns</button>
         <button className="btn-primary" onClick={() => download(p)}>Download .txt</button>
       </div>
-      <section className="panel">
-        <div className="h-[360px] w-full md:h-[440px]"><CharacterPreview config={p.config} /></div>
-      </section>
-      <section className="panel min-w-0">
-        <h2 className="mb-2 font-display text-xl font-semibold">Pattern</h2>
-        <pre className="whitespace-pre-wrap text-sm">{p.text}</pre>
-      </section>
+      <PatternReader text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name} />
     </div>
   );
 }
