@@ -87,4 +87,7 @@ export const MouthCards = (p: Omit<CardProps<MouthStyle>, "label" | "Thumb">) =>
 export const EyeCards = (p: Omit<CardProps<EyeStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Eyes" Thumb={EyeThumb} />;
 export const BlushCards = (p: Omit<CardProps<BlushShape | "none">, "label" | "Thumb">) => <FeatureCards {...p} label="Blush shape" Thumb={BlushThumb} />;
 export const WhiskerCards = (p: Omit<CardProps<"none" | "whiskers">, "label" | "Thumb">) => <FeatureCards {...p} label="Whiskers" Thumb={WhiskerThumb} />;
+export type CheekDetail = BlushShape | "none" | "whiskers";
+const CheekThumb = ({ style }: { style: CheekDetail }) => (style === "whiskers" ? <WhiskerThumb style="whiskers" /> : <BlushThumb style={style} />);
+export const CheekCards = (p: Omit<CardProps<CheekDetail>, "label" | "Thumb">) => <FeatureCards {...p} label="Cheeks & whiskers" Thumb={CheekThumb} />;
 export const BrowCards = (p: Omit<CardProps<BrowStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Eyebrows" Thumb={BrowThumb} />;

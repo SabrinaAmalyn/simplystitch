@@ -27,7 +27,7 @@ function Rendered({ text }: { text: string }) {
         if (l.startsWith("DRAFT")) return <p key={i} className="alert mt-3 text-sm">{l}</p>;
         if (!l.trim()) return null;
         const m = l.match(/^([^:]{1,14}):\s(.*)$/);
-        if (m && !l.startsWith("Note")) return (
+        if (m && !l.startsWith("Note") && !/^\d+\.\s/.test(l)) return (
           <p key={i} className="flex gap-3 border-b border-border/60 py-1.5">
             <span className="w-24 shrink-0 font-semibold">{m[1]}</span>
             <span>{m[2]}</span>
