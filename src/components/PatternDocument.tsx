@@ -41,9 +41,20 @@ export function PatternDocument({ text, config, progressKey, name, header }: Pro
   useEffect(() => {
     const els = sections.map((s) => document.getElementById(s.id)).filter(Boolean) as HTMLElement[];
     const hero = config ? document.getElementById(CHARACTER_ID) : null;
+    const visible = new Map<string, boolean>();
     const io = new IntersectionObserver((entries) => {
-      const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-      if (vis[0]) setActive(vis[0].target.id);
+      entries.forEach((e) => visible.set(e.target.id, e.isIntersecting));
+      const shown = [...visible].filter(([, v]) => v).map(([id]) => id);
+      if (!shown.length) return;
+      let top = shown[0];
+      let topY = Infinity;
+      shown.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const y = el.getBoundingClientRect().top;
+        if (y < topY) { topY = y; top = id; }
+      });
+      setActive(top);
     }, { rootMargin: "-90px 0px -60% 0px" });
     [...(hero ? [hero] : []), ...els].forEach((el) => io.observe(el));
     return () => io.disconnect();
