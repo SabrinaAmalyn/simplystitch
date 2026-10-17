@@ -87,7 +87,7 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
 
       <article className="panel flex flex-col gap-8">
         {doc.sections.map((s) => (
-          <SectionView key={s.id} s={s} done={done} toggle={toggle} />
+          <SectionView key={s.id} s={s} done={done} toggle={toggle} collapsed={collapsed.has(s.id)} onToggleCollapse={() => toggleCollapse(s.id)} />
         ))}
         {completed > 0 && (
           <button className="btn-ghost self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</button>
