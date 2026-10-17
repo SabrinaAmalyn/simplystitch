@@ -75,8 +75,9 @@ export function parsePatternText(src: string): ReaderDoc {
       continue;
     }
     const step = l.match(/^(\d+)\.\s+(.*)$/);
-    if (step && cur) {
-      push({ kind: "row", row: { key: `${cur.id}:step${step[1]}`, badge: step[1], text: step[2] } });
+    if (step) {
+      if (cur?.trackable) push({ kind: "row", row: { key: `${cur.id}:step${step[1]}`, badge: step[1], text: step[2] } });
+      else push({ kind: "list", items: [`${step[1]}. ${step[2]}`] });
       continue;
     }
     push({ kind: "text", text: l });
