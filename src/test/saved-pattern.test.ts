@@ -1,4 +1,5 @@
 import { beforeEach, expect, it, vi } from "vitest";
+import { DEFAULT_CONFIG } from "@/lib/character";
 
 beforeEach(() => {
   vi.resetModules();
@@ -12,7 +13,7 @@ function readLibrary() {
 it("saves the edited text as the pattern shown in the library", async () => {
   const { setState, savePatternToLibrary } = await import("@/lib/store");
   setState(() => ({
-    config: (await import("@/lib/character")).DEFAULT_CONFIG,
+    config: DEFAULT_CONFIG,
     draft: { text: "Generated rounds", configKey: "k", edited: false, generatedAt: 100 },
     previous: null,
     library: [],
@@ -28,7 +29,7 @@ it("saves the edited text as the pattern shown in the library", async () => {
 it("saves the generated text unchanged when nothing was edited", async () => {
   const { setState, savePatternToLibrary } = await import("@/lib/store");
   setState(() => ({
-    config: (await import("@/lib/character")).DEFAULT_CONFIG,
+    config: DEFAULT_CONFIG,
     draft: { text: "Generated rounds", configKey: "k", edited: false, generatedAt: 100 },
     previous: null,
     library: [],
