@@ -75,8 +75,6 @@ function PatternPage() {
 
   return (
     <main className="pattern-page">
-      <div className="flex justify-center py-1"><JourneySteps active={1} /></div>
-
       {stale && (
         <div className="alert">
           <p>Your character has changed since this pattern was made. Press <strong>Back</strong> at the top left to update it.</p>
@@ -87,6 +85,8 @@ function PatternPage() {
         
         previewAction={<Button onClick={save}><Save /> Save</Button>}
         header={<PatternWorkspaceHeader
+          profile
+          center={<JourneySteps active={1} />}
           title={name.trim() || defaultPatternName(library)}
           back={<Link to="/customize" aria-label="Back to character editor" title="Back to character editor"><ArrowLeft /></Link>}
           status={draft.saved ? "Saved to My Patterns" : draft.edited ? "Changes kept on this device" : "Draft · Not saved"}
