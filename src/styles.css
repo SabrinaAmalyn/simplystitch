@@ -329,7 +329,7 @@
   .review-name-input { max-width: none; height: 40px; font-size: 0.9375rem; }
   .review-preview-label { order: 1; padding: 10px 12px 0; }
   .review-preview-bar { position: static; inset: auto; order: 2; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--card); }
-  .review-canvas { order: 3; height: 260px; }
+  .review-canvas { order: 3; flex: 0 0 260px; height: 260px; }
   .review-body { padding: 16px; }
 }
 .pattern-stale-alert { margin: 0; border-radius: 0; border-width: 0 0 1px; }
