@@ -45,3 +45,4 @@
 - [x] Move the Generate button to the bottom-right corner of the character preview side on landscape screens.
 - [x] Move Randomize and Reset to the top-left corner of the character preview side on landscape screens.
 - [x] Place Reset before Randomize in the preview button pair.
+- Decrease landing page footer height
