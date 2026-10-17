@@ -109,8 +109,8 @@ function Landing() {
         </div>
       </section>
 
-      <footer className="border-t border-border px-4 py-3 text-center">
-        <p className="text-sm text-muted-foreground">Copyright © 2026 SimplyStitch. All rights reserved.</p>
+      <footer className="border-t border-border px-4 py-1.5 text-center">
+        <p className="text-xs text-muted-foreground">Copyright © 2026 SimplyStitch. All rights reserved.</p>
       </footer>
     </main>
   );
