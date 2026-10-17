@@ -75,27 +75,39 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
           {tab === "instructions" && groups.length > 1 && (
             <nav className="subcategory-nav" role="tablist" aria-label="Pattern groups">
               {groups.map((g) => (
-                <Button key={g.id} variant="ghost" role="tab" aria-selected={activeGroup?.id === g.id} className={`subcategory-tab ${activeGroup?.id === g.id ? "subcategory-active" : ""}`} onClick={() => setPartId(g.parts[0]?.id)}>{g.label}</Button>
+                <Button key={g.id} variant="ghost" role="tab" aria-selected={activeGroup?.id === g.id} className={`subcategory-tab ${activeGroup?.id === g.id ? "subcategory-active" : ""}`} onClick={() => { setPartId(g.parts[0]?.id); setEditId(null); }}>{g.label}</Button>
               ))}
             </nav>
           )}
           {tab === "instructions" && activeGroup && activeGroup.parts.length > 1 && (
             <nav className="subcategory-nav piece-nav" role="tablist" aria-label="Pattern pieces">
               {activeGroup.parts.map((p) => (
-                <Button key={p.id} variant="ghost" role="tab" aria-selected={part?.id === p.id} className={`subcategory-tab ${part?.id === p.id ? "subcategory-active" : ""}`} onClick={() => setPartId(p.id)}>{shortTitle(p.title)}</Button>
+                <Button key={p.id} variant="ghost" role="tab" aria-selected={part?.id === p.id} className={`subcategory-tab ${part?.id === p.id ? "subcategory-active" : ""}`} onClick={() => { setPartId(p.id); setEditId(null); }}>{shortTitle(p.title)}</Button>
               ))}
             </nav>
           )}
-          {tab === "edit" ? <div className="review-body">{editing}</div> : (
-            <div className="review-body">
+          <div className="review-body">
             <article className="reader-instructions">
-              {shown.map((s) => <SectionView key={s.id} s={s} done={done} toggle={toggle} />)}
+              {shown.map((s) => (
+                <SectionView
+                  key={s.id + (editId === s.id ? ":edit" : "")}
+                  s={s}
+                  done={done}
+                  toggle={toggle}
+                  editing={editId === s.id}
+                  onStart={() => setEditId(s.id)}
+                  onDone={() => setEditId(null)}
+                  onChange={(body) => {
+                    const idx = Number(s.id.match(/^sec-(\d+)-/)?.[1]);
+                    if (Number.isFinite(idx)) onTextChange?.(withSectionBody(text, idx, body));
+                  }}
+                />
+              ))}
               {completed > 0 && (
                 <Button variant="ghost" className="self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</Button>
               )}
             </article>
-            </div>
-          )}
+          </div>
         </section>
       </div>
     </div>
