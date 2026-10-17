@@ -121,6 +121,8 @@ function PatternPage() {
             maxLength={60}
             onChange={(e) => setName(e.target.value)}
           />
+          <button className="btn-ghost" onClick={copy}>Copy</button>
+          <button className="btn-ghost" onClick={download}>Download .txt</button>
           <button className="btn-primary" onClick={save}>Save</button>
         </div>
       </div>

@@ -103,7 +103,7 @@ function Landing() {
 
       <section id="how" className="mx-auto max-w-6xl px-4 pb-14 md:px-8">
         <h2 className="font-display text-2xl font-semibold">How it works</h2>
-        <ol className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-5 grid gap-4 sm:grid-cols-3">
           {HOW.map((s) => (
             <li key={s.n} className="panel flex flex-col gap-2">
               <span className="step-dot step-dot-on">{s.n}</span>
