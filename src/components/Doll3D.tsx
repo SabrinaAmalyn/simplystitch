@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
-import { ContactShadows, Environment, Lightformer, OrbitControls } from "@react-three/drei";
+import { Bounds, ContactShadows, Environment, Float, Lightformer, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { JoinedBody } from "./JoinedBody";
 import { PawVinyl } from "./PawVinyl";
@@ -16,6 +16,8 @@ if (!Object.prototype.hasOwnProperty.call(Object.prototype, "data-tsd-source")) 
 }
 
 export type EarType = "human" | "dog" | "cat" | "bear" | "bunny" | null;
+/** A single crochet piece to show floating on its own; null shows the whole doll. */
+export type PartFocus = "head" | "body" | "arm" | "ears" | "tail" | null;
 
 /** Soft vinyl-toy material with a velvety sheen glow at the edges. */
 function Vinyl({ color, sheenColor = "#ffe4d2" }: { color: string; sheenColor?: string }) {
@@ -306,8 +308,23 @@ function Ear({ type, side, color }: { type: Ears; side: 1 | -1; color: string })
   }
 }
 
-function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
+function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: EarType; focus?: PartFocus }) {
   const c = (p: BodyPart) => partYarn(config, p).hex;
+  if (focus === "head") return (
+    <group>
+      <Head color={c("head")} />
+      <Eyes left={c("leftEye")} right={c("rightEye")} style={config.face.eyeStyle ?? "open"} />
+      <Eyebrows style={config.face.brow ?? "none"} color={c("brows")} />
+      <Nose style={config.face.nose ?? "none"} />
+      <Mouth style={config.face.mouth ?? "none"} />
+      {config.face.whiskers && <Whiskers overBlush={config.face.cheeks} />}
+      {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
+    </group>
+  );
+  if (focus === "body") return <JoinedBody torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "feet").hex} marked={Boolean(config.colors.feet)} />;
+  if (focus === "arm") return <Arm side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />;
+  if (focus === "tail") return <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />;
+  if (focus === "ears") return <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>{ears && <><Ear type={ears} side={1} color={c("leftEar")} /><Ear type={ears} side={-1} color={c("rightEar")} /></>}</group>;
   return (
     <group position={[0, -1.1, 0]}>
       <Head color={c("head")} />
@@ -329,7 +346,7 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
   );
 }
 
-export default function Doll3D({ config, ears }: { config: CharacterConfig; ears: EarType }) {
+export default function Doll3D({ config, ears, focus = null }: { config: CharacterConfig; ears: EarType; focus?: PartFocus }) {
   return (
     <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.9, 5.5], fov: 40 }} gl={{ toneMappingExposure: 1.05 }}>
       <hemisphereLight args={["#fff6ec", "#ffd9c4", 1.1]} />
@@ -344,9 +361,22 @@ export default function Doll3D({ config, ears }: { config: CharacterConfig; ears
         <Lightformer intensity={1} color="#ffe8d6" position={[-5, 1, -1]} rotation-y={Math.PI / 2} scale={[20, 2, 1]} />
         <Lightformer intensity={1.5} color="#ffdff0" position={[0, 1, -6]} scale={[12, 4, 1]} />
       </Environment>
-      <Doll config={config} ears={ears} />
-      <ContactShadows position={[0, -1.11, 0]} opacity={0.28} blur={3} scale={5} far={2} />
-      <OrbitControls enablePan={false} minDistance={3.5} maxDistance={9} minPolarAngle={0.5} maxPolarAngle={1.9} target={[0, 0.65, 0]} />
+      {focus ? (
+        <>
+          <Bounds key={focus} fit clip margin={1.6}>
+            <Float speed={1.6} rotationIntensity={0.25} floatIntensity={0.4}>
+              <Doll config={config} ears={ears} focus={focus} />
+            </Float>
+          </Bounds>
+          <OrbitControls makeDefault enablePan={false} />
+        </>
+      ) : (
+        <>
+          <Doll config={config} ears={ears} />
+          <ContactShadows position={[0, -1.11, 0]} opacity={0.28} blur={3} scale={5} far={2} />
+          <OrbitControls enablePan={false} minDistance={3.5} maxDistance={9} minPolarAngle={0.5} maxPolarAngle={1.9} target={[0, 0.65, 0]} />
+        </>
+      )}
     </Canvas>
   );
 }

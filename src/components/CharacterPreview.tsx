@@ -1,7 +1,8 @@
 import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { type CharacterConfig } from "@/lib/character";
 import { createLayeredCharacter } from "@/lib/character-layers";
-import type { EarType } from "./Doll3D";
+import type { EarType, PartFocus } from "./Doll3D";
+export type { PartFocus };
 
 const Doll3D = lazy(() => import("./Doll3D"));
 
@@ -26,7 +27,7 @@ class PreviewBoundary extends Component<{ children: ReactNode; resetKey: string 
   }
 }
 
-export function CharacterPreview({ config }: { config: CharacterConfig }) {
+export function CharacterPreview({ config, focus = null }: { config: CharacterConfig; focus?: PartFocus }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const earId = (config.layered ?? createLayeredCharacter()).selections.ears;
@@ -37,7 +38,7 @@ export function CharacterPreview({ config }: { config: CharacterConfig }) {
         {mounted && (
           <PreviewBoundary resetKey={JSON.stringify(config.colors) + String(ears) + String(config.layered?.selections.tail)}>
             <Suspense fallback={<p className="text-sm text-muted-foreground">Loading character…</p>}>
-              <Doll3D config={config} ears={ears} />
+              <Doll3D config={config} ears={ears} focus={focus} />
             </Suspense>
           </PreviewBoundary>
         )}

@@ -35,9 +35,9 @@ export function SavedPatternDetail({ p }: { p: SavedPattern }) {
   return (
     <div className="saved-pattern-workspace">
       <PatternReader text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}
-        toolbar={(openSections) => <PatternWorkspaceHeader title={p.name}
+        header={<PatternWorkspaceHeader title={p.name}
           back={<Link to="/my-patterns" aria-label="All patterns" title="All patterns"><ArrowLeft /></Link>}
-          openSections={openSections} status="Saved to My Patterns" nameField={<NameField p={p} />}
+          status="Saved to My Patterns" nameField={<NameField p={p} />}
           actions={<Button variant="outline" onClick={() => downloadPattern(p)}><Download /> Download .txt</Button>}
         />}
       />
