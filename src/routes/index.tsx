@@ -133,6 +133,9 @@ function Workspace() {
     <main className="min-h-screen bg-background">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
         <h1 className="min-w-0 font-display text-2xl font-semibold">Stitchling</h1>
+        <Button type="button" size="sm" className="header-save" onClick={generate} disabled={busy || blockers.length > 0}>
+          Save
+        </Button>
       </header>
 
       <div className="creator-layout">
@@ -140,9 +143,6 @@ function Workspace() {
           <div className="preview-topbar">
             <span className="preview-topbar-spacer" aria-hidden="true" />
             <PreviewActions />
-            <Button type="button" size="sm" onClick={generate} disabled={busy || blockers.length > 0}>
-              Save
-            </Button>
           </div>
           <div className="character-canvas">
             <CharacterPreview config={config} />
