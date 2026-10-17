@@ -53,3 +53,5 @@
 - [x] Remove the content under "How it works", leaving the section empty for now; only the title remains on the grid.
 - [x] Remove the "… · Draft · Not saved" line and the 1 Customize / 2 Review / 3 Save steps from the review page; verified header shows only SIMPLYSTITCH.
 - [x] Remove the copy and download buttons from the review page; move back to a "Go Back" button at the bottom-left of the right panel; verified Go Back goes to /customize and the saved page keeps its own controls.
+- [ ] Marquee: larger fonts
+- [ ] Hero: slightly shorter
