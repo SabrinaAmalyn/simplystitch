@@ -48,5 +48,5 @@ it("retains the renamed ear selection and drafts across the joined anatomy updat
   expect(saved.draft).toEqual(draft);
   expect(saved.previous).toEqual(previous);
   expect(configKey(saved.config)).not.toBe(oldKey);
-  expect(JSON.parse(configKey(saved.config)).anatomy).toBe("joined-body-v1");
+  expect(JSON.parse(configKey(saved.config)).anatomy).toBe("joined-body-v2");
 });

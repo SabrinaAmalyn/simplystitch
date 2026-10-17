@@ -2,6 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment, Lightformer, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { JoinedBody } from "./JoinedBody";
+import { HEAD, HEAD_ATTACHMENT_OFFSET, createBlushGeometry } from "@/lib/doll-anatomy";
 import { partYarn, yarnById, type BodyPart, type CharacterConfig } from "@/lib/character";
 
 // Dev tooling injects `data-tsd-source` onto JSX. R3F reads hyphenated props as
@@ -32,7 +33,7 @@ type Ears = Exclude<EarType, null>;
 
 // Shared base anatomy. Each part is an independent component positioned
 // against these constants so parts stay seamlessly attached.
-const HEAD = { y: 1.95, scale: [1.02, 0.94, 0.96] as [number, number, number] };
+const BLUSH_GEOMETRY = createBlushGeometry();
 
 /** Point on the head's unit sphere (before scaling) as a quaternion turning +y toward it. */
 function capRotation(x: number, y: number, z: number) {
@@ -54,12 +55,12 @@ function Eyes({ color }: { color: string }) {
   );
 }
 
-/** Blush is a spherical cap that hugs the head surface, so no edge sinks inside. */
+/** Raised circular blush with a rim that stays on the head surface. */
 function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
   return (
     <group position={[0, HEAD.y, 0]} scale={HEAD.scale}>
       <group quaternion={capRotation(side * 0.62, -0.54, 0.72)}>
-        <mesh><sphereGeometry args={[1.008, 40, 8, 0, Math.PI * 2, 0, 0.3]} /><meshPhysicalMaterial color={color} roughness={0.9} polygonOffset polygonOffsetFactor={-2} /></mesh>
+        <mesh geometry={BLUSH_GEOMETRY}><meshPhysicalMaterial color={color} roughness={0.9} /></mesh>
       </group>
     </group>
   );
@@ -137,8 +138,10 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
       <JoinedBody torso={c("body")} leftLeg={c("leftLeg")} rightLeg={c("rightLeg")} />
       <Arm side={1} color={c("leftArm")} />
       <Arm side={-1} color={c("rightArm")} />
-      {ears && <Ear type={ears} side={1} color={c("leftEar")} inner={c("leftInnerEar")} />}
-      {ears && <Ear type={ears} side={-1} color={c("rightEar")} inner={c("rightInnerEar")} />}
+      <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>
+        {ears && <Ear type={ears} side={1} color={c("leftEar")} inner={c("leftInnerEar")} />}
+        {ears && <Ear type={ears} side={-1} color={c("rightEar")} inner={c("rightInnerEar")} />}
+      </group>
     </group>
   );
 }

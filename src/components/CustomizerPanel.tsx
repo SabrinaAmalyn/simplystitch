@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { YARNS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 
@@ -18,15 +19,18 @@ function ColorRow({ part, config, onChange }: { part: BodyPart; config: Characte
   const current = partYarn(config, part);
   return (
     <div className="flex flex-col gap-1.5">
-      <p className="text-sm font-semibold">{PART_LABEL[part]} <span className="font-normal text-muted-foreground">· {current.name}</span></p>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-semibold">{PART_LABEL[part]} <span className="font-normal text-muted-foreground">· {current.name}</span></p>
+        {part === "blush" && <Switch aria-label="Show blush" checked={config.face.cheeks} onCheckedChange={(cheeks) => onChange({ ...config, face: { ...config.face, cheeks } })} />}
+      </div>
+      {(part !== "blush" || config.face.cheeks) && <div className="flex flex-wrap gap-1.5">
         {YARNS.map((y) => (
-          <button key={y.id} type="button" aria-label={`${PART_LABEL[part]}: ${y.name}`} aria-pressed={current.id === y.id}
+          <Button key={y.id} variant="ghost" type="button" aria-label={`${PART_LABEL[part]}: ${y.name}`} aria-pressed={current.id === y.id}
             onClick={() => onChange({ ...config, colors: { ...config.colors, [part]: y.id } })}
-            className={`h-7 w-7 rounded-full border border-border transition ${current.id === y.id ? "ring-2 ring-ring ring-offset-2 ring-offset-background" : ""}`}
+            className={`h-7 w-7 rounded-full border border-border p-0 transition ${current.id === y.id ? "ring-2 ring-ring ring-offset-2 ring-offset-background" : ""}`}
             style={{ backgroundColor: y.hex }} />
         ))}
-      </div>
+      </div>}
     </div>
   );
 }
