@@ -232,12 +232,15 @@
   }
 
 /* Interactive pattern reader */
-.pattern-page { max-width: 1200px; margin: 0 auto; padding: 20px 32px 48px; min-height: 100vh; display: flex; flex-direction: column; gap: 16px; }
-.pattern-workspace { display: flex; flex-direction: column; gap: 24px; font-family: var(--font-sans); }
+.pattern-page { min-height: 100vh; display: flex; flex-direction: column; background: var(--background); }
+.pattern-page > .alert, .pattern-page > p { margin: 12px 16px; }
+.pattern-workspace { display: flex; flex-direction: column; gap: 0; font-family: var(--font-sans); }
 .saved-pattern-workspace { max-width: 1200px; margin: 0 auto; }
-.pattern-header { border-bottom: 1px solid var(--border); padding: 0 0 16px; }
-.pattern-header-controls { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
-.pattern-name-field { width: 190px; margin-left: auto; }
+.pattern-header { display: flex; align-items: center; gap: 16px; min-height: 82px; border-bottom: 1px solid var(--border); padding: 12px 24px; }
+.pattern-header-brand { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 0; }
+.pattern-header-center { display: flex; justify-content: center; flex-shrink: 0; }
+.pattern-header-controls { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex: 1 1 0; min-width: 0; }
+.pattern-name-field { width: 190px; }
 .pattern-header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .reader-preview { padding: 0 8px; }
 .reader-character { width: 100%; height: 340px; max-width: 560px; margin: 0 auto; }
@@ -265,12 +268,10 @@
   .reader-navigation { display: none; }
 }
 @media (max-width: 767px) {
-  .pattern-page { padding: 16px 16px 32px; }
-  .pattern-workspace { gap: 20px; }
-  .pattern-header-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
-  .pattern-save-status { text-align: right; }
-  .pattern-name-field { width: 100%; margin-left: 0; }
-  .pattern-header-saved .pattern-save-status { grid-column: 1 / -1; text-align: left; }
+  .pattern-header { flex-wrap: wrap; padding: 12px 16px; gap: 10px; min-height: 0; }
+  .pattern-header-center { display: none; }
+  .pattern-header-controls { flex-basis: 100%; }
+  .pattern-name-field { width: auto; flex: 1; }
   .reader-preview { padding: 0; }
   .reader-preview h2 { font-size: 20px; }
   .reader-preview button { padding-left: 6px; padding-right: 6px; font-size: 13px; }
@@ -285,9 +286,9 @@
 }
 
 /* Review page: customizer-style split — pattern tabs left, floating piece preview right. */
-.review-layout { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 4fr); border: 1px solid var(--border); border-radius: 8px; background: var(--card); overflow: hidden; min-height: 70vh; }
+.review-layout { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); background: var(--background); min-height: calc(100dvh - 82px); }
 .review-content { order: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
-.review-preview { order: 2; position: sticky; top: 0; height: calc(100vh - 240px); max-height: 760px; min-height: 420px; align-self: start; display: flex; flex-direction: column; background: var(--background); }
+.review-preview { order: 2; position: sticky; top: 0; height: calc(100dvh - 82px); min-height: 420px; background: var(--stage); align-self: start; display: flex; flex-direction: column; }
 .review-preview-label { display: flex; flex-direction: column; min-width: 0; padding: 14px 16px 0; }
 .review-canvas { flex: 1; min-height: 0; }
 .review-preview-action { position: absolute; right: 16px; bottom: 16px; z-index: 10; }
