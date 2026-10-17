@@ -1,18 +1,16 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { Check, ChevronDown, Info } from "lucide-react";
+import { Check, ChevronDown, Info, Pencil } from "lucide-react";
 import { CharacterPreview, type PartFocus } from "@/components/CharacterPreview";
 import type { CharacterConfig } from "@/lib/character";
-import { parsePatternText, sectionRowKeys, type ReaderItem, type ReaderRow  , type ReaderSection } from "@/lib/pattern-reader";
+import { parsePatternText, sectionBody, sectionRowKeys, withSectionBody, type ReaderItem, type ReaderRow, type ReaderSection } from "@/lib/pattern-reader";
 import { resetProgress, toggleRows, useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 
-type Tab = "materials" | "instructions" | "assembly" | "edit";
 type Props = {
   text: string; config: CharacterConfig; progressKey: string; name?: string | undefined;
   header?: ReactNode;
-  /** Editor shown in the Edit tab; omit to hide the tab. */
-  editing?: ReactNode;
-  onEditChange?: (editing: boolean) => void;
+  /** Called with the full pattern text after one section's body is edited. */
+  onTextChange?: (text: string) => void;
   /** Primary action placed in the preview's bottom-right corner. */
   previewAction?: ReactNode;
 };
@@ -28,14 +26,15 @@ export function focusForSection(title: string | undefined): PartFocus {
   return null;
 }
 
-export function PatternReader({ text, config, progressKey, name, header, editing, onEditChange, previewAction }: Props) {
+export function PatternReader({ text, config, progressKey, name, header, onTextChange, previewAction }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);
   const doneList = useStore((s) => s.progress?.[progressKey]);
   const done = useMemo(() => new Set(doneList ?? []), [doneList]);
   const meta = doc.sections.filter((s) => !s.parent && !/^assembly/i.test(s.title));
   const parts = doc.sections.filter((s) => s.parent);
   const assembly = doc.sections.filter((s) => /^assembly/i.test(s.title));
-  const [tab, setTab] = useState<Tab>(parts.length ? "instructions" : "materials");
+  const [tab, setTab] = useState<"materials" | "instructions" | "assembly">(parts.length ? "instructions" : "materials");
+  const [editId, setEditId] = useState<string | null>(null);
   const [partId, setPartId] = useState(parts[0]?.id);
   const part = parts.find((p) => p.id === partId) ?? parts[0];
   const groups = useMemo(() => groupParts(parts), [parts]);
@@ -45,12 +44,11 @@ export function PatternReader({ text, config, progressKey, name, header, editing
   const completed = allKeys.filter((k) => done.has(k)).length;
   const toggle = (keys: string[], value: boolean) => toggleRows(progressKey, keys, value);
 
-  const pick = (t: Tab) => { setTab(t); onEditChange?.(t === "edit"); };
-  const tabs: [Tab, string, boolean][] = [
+  const pick = (t: "materials" | "instructions" | "assembly") => { setTab(t); setEditId(null); };
+  const tabs: ["materials" | "instructions" | "assembly", string, boolean][] = [
     ["materials", "Materials", meta.length > 0],
     ["instructions", "Instructions", parts.length > 0],
     ["assembly", "Assembly", assembly.length > 0],
-    ["edit", "Edit", Boolean(editing)],
   ];
   const shown = tab === "materials" ? meta : tab === "assembly" ? assembly : tab === "instructions" && part ? [part] : [];
   const focus = tab === "instructions" ? focusForSection(part?.title) : null;
@@ -77,27 +75,40 @@ export function PatternReader({ text, config, progressKey, name, header, editing
           {tab === "instructions" && groups.length > 1 && (
             <nav className="subcategory-nav" role="tablist" aria-label="Pattern groups">
               {groups.map((g) => (
-                <Button key={g.id} variant="ghost" role="tab" aria-selected={activeGroup?.id === g.id} className={`subcategory-tab ${activeGroup?.id === g.id ? "subcategory-active" : ""}`} onClick={() => setPartId(g.parts[0]?.id)}>{g.label}</Button>
+                <Button key={g.id} variant="ghost" role="tab" aria-selected={activeGroup?.id === g.id} className={`subcategory-tab ${activeGroup?.id === g.id ? "subcategory-active" : ""}`} onClick={() => { setPartId(g.parts[0]?.id); setEditId(null); }}>{g.label}</Button>
               ))}
             </nav>
           )}
           {tab === "instructions" && activeGroup && activeGroup.parts.length > 1 && (
             <nav className="subcategory-nav piece-nav" role="tablist" aria-label="Pattern pieces">
               {activeGroup.parts.map((p) => (
-                <Button key={p.id} variant="ghost" role="tab" aria-selected={part?.id === p.id} className={`subcategory-tab ${part?.id === p.id ? "subcategory-active" : ""}`} onClick={() => setPartId(p.id)}>{shortTitle(p.title)}</Button>
+                <Button key={p.id} variant="ghost" role="tab" aria-selected={part?.id === p.id} className={`subcategory-tab ${part?.id === p.id ? "subcategory-active" : ""}`} onClick={() => { setPartId(p.id); setEditId(null); }}>{shortTitle(p.title)}</Button>
               ))}
             </nav>
           )}
-          {tab === "edit" ? <div className="review-body">{editing}</div> : (
-            <div className="review-body">
+          <div className="review-body">
             <article className="reader-instructions">
-              {shown.map((s) => <SectionView key={s.id} s={s} done={done} toggle={toggle} />)}
+              {shown.map((s) => {
+                const idx = Number(s.id.match(/^sec-(\d+)-/)?.[1]);
+                return (
+                  <SectionView
+                    key={s.id + (editId === s.id ? ":edit" : "")}
+                    s={s}
+                    done={done}
+                    toggle={toggle}
+                    editing={editId === s.id}
+                    initialBody={Number.isFinite(idx) ? sectionBody(text, idx) : ""}
+                    onStart={() => setEditId(s.id)}
+                    onDone={() => setEditId(null)}
+                    onChange={(body) => { if (Number.isFinite(idx)) onTextChange?.(withSectionBody(text, idx, body)); }}
+                  />
+                );
+              })}
               {completed > 0 && (
                 <Button variant="ghost" className="self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</Button>
               )}
             </article>
-            </div>
-          )}
+          </div>
         </section>
       </div>
     </div>
@@ -126,19 +137,42 @@ export function groupParts<T extends { title: string }>(parts: T[]) {
 
 const shortTitle = (t: string) => t.replace(/\s*\(.*?\)\s*/g, " ").replace(/\s*[—–-].*$/, "").trim() || t;
 
-function SectionView({ s, done, toggle }: { s: ReaderSection; done: Set<string>; toggle: (k: string[], v: boolean) => void }) {
+type SectionEditProps = {
+  s: ReaderSection; done: Set<string>; toggle: (k: string[], v: boolean) => void;
+  editing: boolean; initialBody: string; onStart: () => void; onDone: () => void; onChange: (body: string) => void;
+};
+
+function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, onChange }: SectionEditProps) {
+  const [draft, setDraft] = useState(initialBody);
   return (
     <section id={s.id} className="reader-section">
-      <h2 className="text-xl font-bold">{s.title}</h2>
-      <div className="mt-3 flex flex-col">
-        {s.yarn && (
-          <div className="reader-note">
-            <Info size={16} className="mt-0.5 shrink-0 text-primary" aria-hidden />
-            <p><span className="font-semibold">Yarn:</span> {s.yarn}</p>
-          </div>
-        )}
-        {s.items.map((item, i) => <ItemView key={i} item={item} done={done} toggle={toggle} />)}
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-xl font-bold">{s.title}</h2>
+        <Button variant="ghost" size="icon" className="reader-edit-btn shrink-0" aria-label={editing ? `Done editing ${s.title}` : `Edit ${s.title}`} aria-pressed={editing} title={editing ? "Done editing" : "Edit this section"} onClick={editing ? onDone : onStart}>
+          <Pencil size={16} />
+        </Button>
       </div>
+      {editing ? (
+        <div className="mt-3 flex flex-col gap-2">
+          <textarea
+            aria-label={`Edit ${s.title}`}
+            className="min-h-[30vh] w-full resize-y rounded-lg border border-border bg-background p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
+            value={draft}
+            onChange={(e) => { setDraft(e.target.value); onChange(e.target.value); }}
+          />
+          <Button variant="outline" className="self-start" onClick={onDone}>Done</Button>
+        </div>
+      ) : (
+        <div className="mt-3 flex flex-col">
+          {s.yarn && (
+            <div className="reader-note">
+              <Info size={16} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+              <p><span className="font-semibold">Yarn:</span> {s.yarn}</p>
+            </div>
+          )}
+          {s.items.map((item, i) => <ItemView key={i} item={item} done={done} toggle={toggle} />)}
+        </div>
+      )}
     </section>
   );
 }
