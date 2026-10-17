@@ -133,6 +133,7 @@ function Workspace() {
     <main className="min-h-screen bg-background">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
         <h1 className="min-w-0 font-display text-2xl font-semibold">Stitchling</h1>
+        <Link to="/my-patterns" className="btn-ghost text-sm">My Patterns</Link>
       </header>
 
       <div className="creator-layout">
