@@ -82,17 +82,19 @@ function Landing() {
       </section>
 
       <section id="how" className="landing-grid flex min-h-[45vh] flex-col justify-center px-4 py-16 md:px-8 md:py-20">
-        <div className="mx-auto w-full max-w-6xl">
+        <div className="mx-auto w-full max-w-7xl">
           <h2 className="font-heavy text-center text-2xl uppercase text-primary md:text-4xl">How it works</h2>
-          <ol className="mt-12 grid gap-12 md:mt-16 md:grid-cols-3 md:gap-10">
+          <ol className="mt-12 grid gap-14 md:mt-16 md:grid-cols-3 md:gap-8">
             {HOW.map((s) => (
               <li key={s.n} className="flex flex-col items-center text-center">
-                <img src={s.art} alt={`${s.title} illustration`} className="h-40 w-auto md:h-48" />
-                <h3 className="font-heavy mt-8 text-lg uppercase text-primary md:text-xl">
-                  <span className="mr-2 text-muted-foreground">{s.n}</span>
+                <div className="flex h-72 w-full items-center justify-center md:h-96">
+                  <img src={s.art} alt={`${s.title} illustration`} className="max-h-full w-auto max-w-full object-contain" />
+                </div>
+                <h3 className="font-heavy mt-6 text-xl uppercase text-primary md:text-2xl">
+                  <span className="mr-2">{s.n}</span>
                   {s.title}
                 </h3>
-                <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground md:text-base">{s.body}</p>
+                <p className="mt-3 max-w-sm text-base leading-relaxed text-muted-foreground md:text-lg">{s.body}</p>
               </li>
             ))}
           </ol>
