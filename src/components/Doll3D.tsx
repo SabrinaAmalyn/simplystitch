@@ -142,12 +142,13 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
         </mesh>
       );
     case "dog":
-      // Solid floppy ear, no inner insert.
+      // Solid floppy ear with a flat straight top and a rounded U bottom; no inner insert.
       return (
-        <mesh position={[side * 1.08, 1.78, 0.1]} rotation={[0, side * 0.3, side * 0.3]} scale={[0.25, 0.84, 0.36]} castShadow>
-          <sphereGeometry args={[1, 32, 20]} />
-          <Vinyl color={color} />
-        </mesh>
+        <group position={[side * 0.98, 2.02, 0.04]} rotation={[0, side * 0.22, -side * 0.14]}>
+          <mesh geometry={DOG_EAR} rotation={[0, Math.PI / 2, 0]} scale={[1.1, 1.1, 1]} castShadow>
+            <Vinyl color={color} />
+          </mesh>
+        </group>
       );
   }
 }
