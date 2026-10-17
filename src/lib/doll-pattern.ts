@@ -85,7 +85,7 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
 
   const legL = y("leftLeg"), legR = y("rightLeg");
   const sections: Section[] = [
-    { title: "Head (make 1)", yarn: y("head"), rounds: HEAD_ROUNDS, note: "Embroider the face before closing. Stuff the head firmly with fiberfill before fastening off. Fasten off without leaving a long tail." },
+    { title: "Head (make 1)", yarn: y("head"), rounds: HEAD_ROUNDS, note: "Stuff the head firmly with fiberfill before fastening off. Fasten off without leaving a long tail." },
     ...pair("Legs", legL, legR, { rounds: withPaw(LEG_ROUNDS, feet, "leg yarn"), note: "After completing the first leg, fasten off. Keep the second leg on the hook to join." }),
     { title: "Body (continues from the legs)", yarn: y("body"), rounds: BODY_ROUNDS, note: "Stuff the legs and body firmly as you crochet. Fasten off, leaving a long yarn tail for sewing the body onto the head." },
     ...pair("Arms", y("leftArm"), y("rightArm"), { rounds: withPaw(ARM_ROUNDS, hands, "arm yarn"), note: "Lightly stuff. Fasten off, leaving a long yarn tail for sewing." }),
