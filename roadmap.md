@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Remove Save Character and lower journey steps; replace blush/whisker switches with None thumbnail selections and verify persistence.
 - [x] Match the flat desktop/mobile wireframe with contextual navigation, feature thumbnails, one palette and relevant layered items.
 - [x] Verify colour targeting, feature selection, removal, saved-state retention and desktop/mobile layout.
 - [x] Add smaller oval blush near the eyes, optional whiskers, and closed sleepy eyes in Face; preserve colours and saved drafts.

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { BLUSH_OPTIONS, BROW_OPTIONS, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { BLUSH_YARN_GROUPS } from "@/lib/yarn-palette";
 import { YarnSwatches } from "@/components/YarnSwatches";
-import { BlushCards, BrowCards, EyeCards, MouthCards, NoseCards } from "@/components/FaceFeatureCards";
+import { BlushCards, BrowCards, EyeCards, MouthCards, NoseCards, WhiskerCards } from "@/components/FaceFeatureCards";
 import { LayerFeatureCards, LayerThumb } from "@/components/LayerFeatureCards";
 import { createLayeredCharacter, selectLayer, selectedItems } from "@/lib/character-layers";
 import { pawYarn, type PawRegion } from "@/lib/paw-colors";
@@ -70,9 +69,10 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
           {sub === "Eyebrows" && <BrowCards options={BROW_OPTIONS} value={config.face.brow ?? "none"} onSelect={(brow) => changeFace({ brow })} />}
           {sub === "Nose" && <NoseCards options={NOSE_OPTIONS} value={config.face.nose ?? "none"} onSelect={(nose) => changeFace({ nose })} />}
           {sub === "Mouth" && <MouthCards options={MOUTH_OPTIONS} value={config.face.mouth ?? "none"} onSelect={(mouth) => changeFace({ mouth })} />}
-          {sub === "Blush" && <><div className="mb-4 flex items-center justify-between gap-3 text-sm font-semibold"><span>Show blush</span><Switch aria-label="Show blush" checked={config.face.cheeks} onCheckedChange={(cheeks) => changeFace({ cheeks })} /></div>
-            {config.face.cheeks && <BlushCards options={BLUSH_OPTIONS} value={config.face.blushShape ?? "round"} onSelect={(blushShape) => changeFace({ blushShape })} />}</>}
-          {sub === "Whiskers" && <div className="flex items-center justify-between gap-3 text-sm font-semibold"><span>Whiskers</span><Switch aria-label="Whiskers" checked={config.face.whiskers ?? false} onCheckedChange={(whiskers) => changeFace({ whiskers })} /></div>}
+          {sub === "Blush" && <BlushCards options={[{ value: "none", label: "None" }, ...BLUSH_OPTIONS]} value={config.face.cheeks ? config.face.blushShape ?? "round" : "none"}
+            onSelect={(blushShape) => changeFace(blushShape === "none" ? { cheeks: false } : { cheeks: true, blushShape })} />}
+          {sub === "Whiskers" && <WhiskerCards options={[{ value: "none", label: "None" }, { value: "whiskers", label: "Whiskers" }]}
+            value={config.face.whiskers ? "whiskers" : "none"} onSelect={(value) => changeFace({ whiskers: value === "whiskers" })} />}
         </>}
         {(category === "Ears" || category === "Tail") && <LayerFeatureCards slot={category === "Ears" ? "ears" : "tail"} config={config}
           value={category === "Ears" ? layered.selections.ears : layered.selections.tail}

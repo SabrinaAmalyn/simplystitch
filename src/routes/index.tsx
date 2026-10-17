@@ -2,13 +2,12 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { CustomizerPanel } from "@/components/CustomizerPanel";
-import { JourneySteps } from "@/components/JourneySteps";
 import { configKey, DEFAULT_CONFIG } from "@/lib/character";
 import { generatePattern, patternToText } from "@/lib/pattern";
 import { setState, useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
-import { characterRecord, createLayeredCharacter, patternBlockers } from "@/lib/character-layers";
-import { RotateCcw, Download } from "lucide-react";
+import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers";
+import { RotateCcw } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,14 +34,6 @@ function Workspace() {
   const stale = draft && draft.configKey !== configKey(config);
   const layered = config.layered ?? createLayeredCharacter();
   const blockers = patternBlockers(layered);
-  const exportCharacter = () => {
-    const url = URL.createObjectURL(new Blob([JSON.stringify(characterRecord(layered), null, 2)], { type: "application/json" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "stitchling-character.json";
-    link.click();
-    URL.revokeObjectURL(url);
-  };
 
   const generate = () => {
     if (blockers.length) return;
@@ -70,7 +61,6 @@ function Workspace() {
     <main className="min-h-screen bg-background">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
         <h1 className="min-w-0 font-display text-2xl font-semibold">Stitchling</h1>
-        <Button variant="outline" className="shrink-0" onClick={exportCharacter}><Download size={15} />Save character</Button>
       </header>
 
       <div className="creator-layout">
@@ -84,7 +74,6 @@ function Workspace() {
         <section className="min-w-0">
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           <div className="workspace-actions flex flex-col gap-4">
-          <JourneySteps active={0} />
           {blockers.length > 0 && <p className="text-xs text-muted-foreground">Pattern rules pending</p>}
           {confirming && (
             <div className="alert">
