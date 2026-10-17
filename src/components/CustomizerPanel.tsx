@@ -11,10 +11,9 @@ import { CircleUserRound, Smile, Rabbit, Spline } from "lucide-react";
 
 const CATEGORIES = ["Body", "Face", "Ears", "Tail"] as const;
 type Category = (typeof CATEGORIES)[number];
-const SUBCATEGORIES: Record<Category, string[]> = {
+const SUBCATEGORIES: Partial<Record<Category, string[]>> = {
   Body: ["Head", "Torso", "Arms", "Legs", "Paws"],
   Face: ["Eyes", "Eyebrows", "Nose", "Mouth", "Blush", "Whiskers"],
-  Ears: ["Style"], Tail: ["Style"],
 };
 const ICONS = { Body: CircleUserRound, Face: Smile, Ears: Rabbit, Tail: Spline };
 const LABELS: Partial<Record<BodyPart | PawRegion, string>> = {
@@ -45,7 +44,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
   const region = regions[regionIndex] ?? regions[0];
   const current = region === "hands" || region === "feet" ? pawYarn(config, region) : region ? partYarn(config, region) : undefined;
   const changeFace = (patch: Partial<CharacterConfig["face"]>) => onChange({ ...config, face: { ...config.face, ...patch } });
-  const pickCategory = (next: Category) => { setCategory(next); setSub(SUBCATEGORIES[next][0] ?? "Style"); setRegionIndex(0); };
+  const pickCategory = (next: Category) => { setCategory(next); setSub(SUBCATEGORIES[next]?.[0] ?? ""); setRegionIndex(0); };
   const paletteVisible = current && (sub !== "Blush" || config.face.cheeks) && (category !== "Ears" || layered.selections.ears) && (category !== "Tail" || layered.selections.tail);
 
   return <div className="customization-workspace">
@@ -53,11 +52,11 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
       {CATEGORIES.map((name) => { const Icon = ICONS[name]; return <Button key={name} variant="ghost" role="tab" aria-selected={category === name}
         onClick={() => pickCategory(name)} className={`category-tab ${category === name ? "category-active" : ""}`}><Icon size={16} /><span>{name}</span></Button>; })}
     </nav>
-    <nav role="tablist" aria-label={`${category} subcategories`} className="subcategory-nav">
-      {SUBCATEGORIES[category].map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={sub === name}
+    {SUBCATEGORIES[category] && <nav role="tablist" aria-label={`${category} subcategories`} className="subcategory-nav">
+      {SUBCATEGORIES[category]!.map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={sub === name}
         onClick={() => { setSub(name); setRegionIndex(0); }} className={`subcategory-tab ${sub === name ? "subcategory-active" : ""}`}>{name}</Button>)}
-    </nav>
-    <div role="tabpanel" aria-label={`${category}: ${sub}`} className="workspace-content">
+    </nav>}
+    <div role="tabpanel" aria-label={sub ? `${category}: ${sub}` : category} className="workspace-content">
       <section className="feature-area">
         {category === "Body" && <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label={`${sub} region`}>
           {regions.map((part, index) => <Button key={part} variant="ghost" role="radio" aria-checked={region === part} onClick={() => setRegionIndex(index)}
