@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CharacterPreview } from "@/components/CharacterPreview";
-import { createLayeredCharacter } from "@/lib/character-layers";
-import { DEFAULT_CONFIG, type CharacterConfig } from "@/lib/character";
+import heroImg from "@/assets/landing/bunny-hero.png";
+import aboutImg from "@/assets/landing/bunny-about.png";
+import turnImg from "@/assets/landing/bunny-turnaround.png";
 
 
 export const Route = createFileRoute("/")({
@@ -17,46 +17,6 @@ export const Route = createFileRoute("/")({
   }),
   component: Landing,
 });
-
-/** The doll shown on the landing page — built once, never saved or edited. */
-function showcaseConfig(): CharacterConfig {
-  const layered = createLayeredCharacter();
-  layered.selections.ears = "ears-bunny";
-  layered.selections.tail = "tail-round";
-  return {
-    ...DEFAULT_CONFIG,
-    colors: {
-      ...DEFAULT_CONFIG.colors,
-      main: "peach",
-      head: "peach",
-      body: "peach",
-      leftArm: "peach",
-      rightArm: "peach",
-      leftLeg: "peach",
-      rightLeg: "peach",
-      leftEar: "ivory",
-      rightEar: "ivory",
-      tail: "ivory",
-      hands: "ivory",
-      feet: "ivory",
-      leftBlush: "blush",
-      rightBlush: "blush",
-    },
-    face: {
-      ...DEFAULT_CONFIG.face,
-      cheeks: true,
-      blushShape: "oval",
-      nose: "cat",
-      mouth: "w",
-      eyeStyle: "open",
-      brow: "soft-arch",
-      whiskers: false,
-    },
-    layered,
-  };
-}
-
-const SHOWCASE = showcaseConfig();
 
 const HOW = [
   { n: 1, title: "Customise", body: "You personalise your character with features, colours, and little details that make it yours." },
@@ -77,7 +37,7 @@ function Landing() {
   return (
     <main className="min-h-screen bg-background">
       <header className="flex items-center justify-between gap-4 border-b border-border px-4 py-4 md:px-8">
-        <span className="font-display text-2xl font-semibold">SimplyStitch</span>
+        <span className="font-rounded text-2xl font-semibold">SimplyStitch</span>
         <nav className="flex items-center gap-2">
           <Link to="/my-patterns" className="btn-ghost hidden sm:inline-flex">My Patterns</Link>
           <Link to="/customize" className="btn-primary">Try Demo</Link>
@@ -87,7 +47,7 @@ function Landing() {
       <section className="landing-sky">
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 md:grid-cols-2 md:gap-12 md:px-8 md:py-20">
           <div className="flex min-w-0 flex-col items-start gap-5 text-primary-foreground">
-            <h1 className="font-display text-4xl leading-tight font-bold uppercase md:text-6xl">
+            <h1 className="font-rounded text-4xl leading-tight font-bold uppercase md:text-6xl">
               Your ideas, made stitch by stitch.
             </h1>
             <p className="max-w-prose md:text-lg">
@@ -103,14 +63,15 @@ function Landing() {
               </a>
             </div>
           </div>
-          <div className="landing-cloud mx-auto aspect-square w-full max-w-[440px] overflow-hidden">
-            <CharacterPreview config={SHOWCASE} />
+          <div className="relative mx-auto w-full max-w-[460px]">
+            <Heart className="absolute inset-0 m-auto h-full w-full" />
+            <img src={heroImg} alt="SimplyStitch bunny waving with a crochet hook" width={1024} height={1024} className="relative w-full" />
           </div>
         </div>
       </section>
 
       <div className="marquee border-y border-border bg-background py-4" aria-hidden>
-        <div className="marquee-track font-display text-lg font-semibold text-primary">
+        <div className="marquee-track font-rounded text-lg font-semibold text-primary">
           {items.map((t, i) => (
             <span key={i}>✦ {t}</span>
           ))}
@@ -118,13 +79,12 @@ function Landing() {
       </div>
 
       <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 md:grid-cols-2 md:gap-12 md:px-8 md:py-20">
-        <div className="landing-sky mx-auto aspect-square w-full max-w-[400px] overflow-hidden rounded-3xl p-6">
-          <div className="landing-cloud h-full w-full overflow-hidden">
-            <CharacterPreview config={SHOWCASE} />
-          </div>
+        <div className="relative mx-auto w-full max-w-[400px]">
+          <Heart className="absolute inset-0 m-auto h-full w-full" tone="soft" />
+          <img src={aboutImg} alt="SimplyStitch bunny hugging a ball of yarn" width={1024} height={1024} loading="lazy" className="relative w-full" />
         </div>
         <div className="flex flex-col gap-4">
-          <h2 className="font-display text-3xl font-bold uppercase text-primary md:text-4xl">About SimplyStitch</h2>
+          <h2 className="font-rounded text-3xl font-bold uppercase text-primary md:text-4xl">About SimplyStitch</h2>
           <p className="text-muted-foreground md:text-lg">
             Amigurumi is made up of simple stitches and familiar shapes. SimplyStitch brings them together to help you
             design your own little characters and turn them into crochet patterns, without having to start from scratch.
@@ -132,14 +92,19 @@ function Landing() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-4 pb-14 md:px-8">
+        <h2 className="font-rounded text-center text-xl font-bold tracking-widest text-primary uppercase">Turnaround</h2>
+        <img src={turnImg} alt="The SimplyStitch bunny from front, side and back" width={1920} height={640} loading="lazy" className="mt-6 w-full border-b-2 border-border pb-2" />
+      </section>
+
       <section id="how" className="bg-secondary px-4 py-14 md:px-8 md:py-20">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-center font-display text-3xl font-bold uppercase text-primary md:text-4xl">How it works</h2>
+          <h2 className="text-center font-rounded text-3xl font-bold uppercase text-primary md:text-4xl">How it works</h2>
           <ol className="mt-8 grid gap-5 sm:grid-cols-3">
             {HOW.map((s) => (
               <li key={s.n} className="flex flex-col gap-3 rounded-3xl border border-border bg-card p-6">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">{s.n}</span>
-                <h3 className="font-display text-xl font-semibold">{s.title}</h3>
+                <h3 className="font-rounded text-xl font-semibold">{s.title}</h3>
                 <p className="text-sm text-muted-foreground">{s.body}</p>
               </li>
             ))}
@@ -149,7 +114,7 @@ function Landing() {
 
       <section className="landing-sky px-4 py-16 text-center text-primary-foreground md:py-24">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-5">
-          <h2 className="font-display text-3xl font-bold md:text-5xl">A few simple stitches. A character all your own.</h2>
+          <h2 className="font-rounded text-3xl font-bold md:text-5xl">A few simple stitches. A character all your own.</h2>
           <p className="md:text-lg">
             You already know the joy of making something by hand. Let SimplyStitch help make designing your next amigurumi
             a little easier.
@@ -164,5 +129,17 @@ function Landing() {
         <p className="text-sm text-muted-foreground">Copyright © 2026 SimplyStitch. All rights reserved.</p>
       </footer>
     </main>
+  );
+}
+
+/** Soft heart shape behind the mascot, like the style reference. */
+function Heart({ className, tone = "white" }: { className?: string; tone?: "white" | "soft" }) {
+  return (
+    <svg viewBox="0 0 100 92" aria-hidden className={className}>
+      <path
+        d="M50 90 C20 70 2 52 2 30 C2 14 14 2 29 2 C39 2 46 8 50 15 C54 8 61 2 71 2 C86 2 98 14 98 30 C98 52 80 70 50 90 Z"
+        fill={tone === "white" ? "var(--background)" : "var(--landing-sky)"}
+      />
+    </svg>
   );
 }
