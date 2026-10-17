@@ -91,7 +91,7 @@ function Landing() {
                   <img src={s.art} alt={`${s.title} illustration`} className="max-h-full w-auto max-w-full object-contain" />
                 </div>
                 <h3 className="font-heavy mt-6 text-xl uppercase text-primary md:text-2xl">
-                  <span className="mr-2">{s.n}</span>
+                  <span className="mr-2">{s.n}.</span>
                   {s.title}
                 </h3>
                 <p className="mt-3 max-w-sm text-base leading-relaxed text-muted-foreground md:text-lg">{s.body}</p>
