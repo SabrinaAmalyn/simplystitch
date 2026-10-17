@@ -384,3 +384,7 @@
   .doc-view3d { display: inline-flex; }
   .doc-progress { padding-right: 110px; }
 }
+@media (max-width: 1023px) {
+  .doc-progress > div:first-child { flex-direction: column; align-items: flex-start; }
+  .doc-progress > div:first-child > span { white-space: nowrap; }
+}
