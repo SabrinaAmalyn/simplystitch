@@ -71,7 +71,7 @@ function PatternPage() {
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)}
         onTextChange={(text) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text, edited: true, saved: false } }))}
 
-        previewAction={<Button onClick={openNaming} aria-label="Save"><Save /> <span className="max-md:hidden">Save</span></Button>}
+        previewAction={<Button onClick={openNaming} aria-label="Save"><Save /> <span>Save</span></Button>}
         previewBack={<Button variant="outline" asChild><Link to="/customize" aria-label="Go Back"><ArrowLeft /> <span className="max-md:hidden">Go Back</span></Link></Button>}
         header={<><div className="review-header"><PatternWorkspaceHeader
           profile
