@@ -1,6 +1,6 @@
 # Tasks
-- [ ] Add smaller oval blush near the eyes, optional whiskers, and closed sleepy eyes in Face; preserve colours and saved drafts.
-- [ ] Verify the new face combinations, removal, and reload in the preview.
+- [x] Add smaller oval blush near the eyes, optional whiskers, and closed sleepy eyes in Face; preserve colours and saved drafts.
+- [x] Verify the new face combinations, removal, and reload in the preview.
 - [x] Update the shared yarn palette and compact swatches, preserving saved choices; verify all regions and dedicated blush colours.
 - [x] Restore independent limb colours with paw markings and verify colour changes in the preview.
 - [x] Add symmetric hand and foot paw colours on existing limb surfaces only.
