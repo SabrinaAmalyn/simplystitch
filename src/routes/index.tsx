@@ -82,10 +82,7 @@ function Workspace() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <div>
-            <h2 className="font-display text-2xl font-semibold">Make it yours</h2>
-            <p className="text-muted-foreground">Base character from your reference</p>
-          </div>
+          <JourneySteps active={0} size="lg" />
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           {selected.length > 0 && (
             <div className="flex flex-col gap-2" aria-label="Selected components">
