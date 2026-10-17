@@ -313,3 +313,4 @@
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 .piece-nav { background: var(--muted); }
 .font-heavy { font-family: "Archivo Black", "Nunito", system-ui, sans-serif; letter-spacing: -0.02em; }
+.font-logo { font-family: "Montserrat", "Nunito", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.01em; }
