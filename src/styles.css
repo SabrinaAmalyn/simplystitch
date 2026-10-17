@@ -417,7 +417,7 @@
 @media (max-width: 1023px) {
   .doc-layout { grid-template-columns: minmax(0, 1fr); padding: 16px; }
   .doc-side { display: none; }
-  .doc-goto { display: inline-flex; position: fixed; z-index: 30; top: calc(12px + env(safe-area-inset-top)); right: calc(16px + env(safe-area-inset-right)); min-height: 44px; }
+  .doc-goto { display: inline-flex; position: fixed; z-index: 30; bottom: calc(16px + env(safe-area-inset-bottom)); right: calc(16px + env(safe-area-inset-right)); min-height: 44px; }
   .doc-hero { height: 250px; }
 }
 @media (max-width: 1023px) {
