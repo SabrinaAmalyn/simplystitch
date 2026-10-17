@@ -33,7 +33,7 @@ function Landing() {
   return (
     <main className="min-h-screen bg-background">
       <header className="flex items-center justify-between gap-4 border-b border-border px-4 py-4 md:px-8">
-        <span className="font-heavy text-2xl uppercase">SimplyStitch</span>
+        <span className="font-logo text-2xl uppercase">SimplyStitch</span>
         <nav className="flex items-center gap-2">
           <Link to="/customize" className="btn-primary">Try Demo</Link>
         </nav>
