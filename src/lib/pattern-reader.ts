@@ -1,14 +1,14 @@
 // Parses pattern text (generated or edited — the text is the source of truth) into
 // a structured, read-only model for the interactive reader. Never alters content.
 
-export type ReaderRow = { key: string; badge: string; text: string; count?: number };
+export type ReaderRow = { key: string; badge: string; text: string; count?: number | undefined };
 export type ReaderItem =
   | { kind: "row"; row: ReaderRow }
-  | { kind: "group"; key: string; badge: string; text: string; count?: number; rows: ReaderRow[] }
+  | { kind: "group"; key: string; badge: string; text: string; count?: number | undefined; rows: ReaderRow[] }
   | { kind: "note"; text: string }
   | { kind: "text"; text: string }
   | { kind: "list"; items: string[] };
-export type ReaderSection = { id: string; title: string; yarn?: string; items: ReaderItem[]; trackable: boolean; parent?: string };
+export type ReaderSection = { id: string; title: string; yarn?: string | undefined; items: ReaderItem[]; trackable: boolean; parent?: string | undefined };
 export type ReaderDoc = { title: string; sections: ReaderSection[] };
 
 const slug = (s: string, i: number) => `sec-${i}-${s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
@@ -51,11 +51,13 @@ export function parsePatternText(src: string): ReaderDoc {
     if (l.startsWith("# ")) { title = l.slice(2).trim(); continue; }
     if (l.startsWith("## ")) {
       const h = l.slice(3).trim();
-      const [name, yarn] = h.split(/\s+—\s+yarn:\s+/);
+      const [name = "", yarn] = h.split(/\s+—\s+yarn:\s+/);
       const meta = /^(materials|abbreviations|measurements|introduction)$/i.test(name.trim());
       const assembly = /^assembly/i.test(name.trim());
-      cur = { id: slug(name, sections.length), title: name.trim(), yarn, items: [], trackable: !meta, parent: meta || assembly ? undefined : "Instructions" };
-      sections.push(cur);
+      const sec: ReaderSection = { id: slug(name, sections.length), title: name.trim(), items: [], trackable: !meta };
+      if (yarn !== undefined) sec.yarn = yarn;
+      if (!meta && !assembly) sec.parent = "Instructions";
+      cur = sec;
       continue;
     }
     const note = l.match(/^Note:\s*(.*)$/i);
