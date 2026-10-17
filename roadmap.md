@@ -56,7 +56,8 @@
 - [x] Marquee: larger fonts
 - [x] Hero: slightly shorter
 - [x] How it works: dot after each number
-- [ ] Move the pattern name to the top-left of the right preview panel on the review page and remove the name from the header.
-- [ ] On phone, put Go Back and Save in their own row above the 3D view on the review page.
-- [ ] Increase the height of the About SimplyStitch section on the landing page.
-- [ ] Make the SimplyStitch logo blue on every page.
+- [x] Move the pattern name to the top-left of the right preview panel on the review page and remove the name from the header.
+- [x] On phone, put Go Back and Save in their own row above the 3D view on the review page.
+- [x] Increase the height of the About SimplyStitch section on the landing page.
+- [x] Make the SimplyStitch logo blue on every page.
+- [x] Standardize buttons and fonts: one pill scale (sm/md/lg) shared by the CSS classes and the button component; hero Try Demo and See how it works now identical size.
