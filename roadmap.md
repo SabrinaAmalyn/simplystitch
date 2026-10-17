@@ -48,3 +48,4 @@
 - [x] Decrease landing page footer height; now a 29px single line, verified on phone and desktop.
 - [x] Switch every page (headings, body, logo) to Poppins; verified only Poppins loads on /, /customize, /my-patterns, /profile, /pattern.
 - [x] Add more space under the "About SimplyStitch" heading; 40px gap verified on phone and desktop.
+- [ ] Make the About SimplyStitch band exactly half the screen height; verify on phone and desktop.
