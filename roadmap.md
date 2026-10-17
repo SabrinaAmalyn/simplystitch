@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Refine pattern workspace presentation without changing instructions; verify desktop/mobile reading, progress, edit, save and download.
 - [x] Interactive pattern reader: collapsible character, Go to drawer, tappable rows, expandable repeated rounds, notes, per-section and overall progress saved per pattern; verified on phone.
 - [x] Rename the second journey step from "Generate & Review" to "Review" on the pattern page and landing page; verified.
 - [x] On Save, show only the latest edited pattern (or the generated one when nothing was edited); verified in preview.
