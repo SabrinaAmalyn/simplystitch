@@ -199,11 +199,10 @@
   .palette-grid { display: grid; grid-template-columns: repeat(auto-fill, 32px); gap: 10px; padding: 4px; }
   .palette-swatch { height: 32px; width: 32px; padding: 0; border: 1px solid var(--border); border-radius: 50%; }
   .region-active { border-color: var(--primary); background: var(--accent); color: var(--accent-foreground); }
-  .layered-area { border-top: 1px solid var(--border); margin-top: 24px; padding-top: 20px; }
   .workspace-actions { padding: 0 24px 24px; }
   @media (max-width: 767px) {
     .creator-layout { grid-template-columns: minmax(0, 1fr); }
-    .preview-panel { position: relative; height: 350px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .preview-panel { position: relative; height: 398px; border-right: 0; border-bottom: 1px solid var(--border); }
     .character-canvas { height: 300px; min-height: 0; }
     .category-tab { height: 46px; gap: 5px; font-size: 12px; }
     .subcategory-nav { padding: 8px 12px; gap: 0; }

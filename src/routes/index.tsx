@@ -65,6 +65,12 @@ function Workspace() {
 
       <div className="creator-layout">
         <section className="preview-panel" aria-label="Character preview">
+          <div className="flex w-full items-center justify-between gap-3 px-4 pt-3 md:hidden">
+            <span className="h-9 w-9 shrink-0" aria-hidden="true" />
+            <Button type="button" size="sm" className="h-auto min-h-9 max-w-[75%] whitespace-normal" onClick={generate} disabled={busy || blockers.length > 0}>
+              {busy ? "Stitching your pattern…" : draft ? "Generate new pattern" : "Generate Pattern"}
+            </Button>
+          </div>
           <div className="character-canvas"><CharacterPreview config={config} /></div>
           <Button variant="ghost" type="button" className="mb-3" onClick={() => setState((s) => ({ ...s, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}>
             <RotateCcw size={14} />Reset
@@ -88,7 +94,7 @@ function Workspace() {
           {error && <div className="alert alert-error">{error}</div>}
 
           <div className="flex flex-wrap items-center gap-3">
-            <Button type="button" className="h-auto whitespace-normal" onClick={generate} disabled={busy || blockers.length > 0}>
+            <Button type="button" className="hidden h-auto whitespace-normal md:inline-flex" onClick={generate} disabled={busy || blockers.length > 0}>
               {busy ? "Stitching your pattern…" : draft ? "Generate new pattern" : "Generate Pattern"}
             </Button>
             {draft && (

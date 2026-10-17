@@ -4,10 +4,10 @@ import { BLUSH_OPTIONS, BROW_OPTIONS, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, 
 import { BLUSH_YARN_GROUPS } from "@/lib/yarn-palette";
 import { YarnSwatches } from "@/components/YarnSwatches";
 import { BlushCards, BrowCards, EyeCards, MouthCards, NoseCards, WhiskerCards } from "@/components/FaceFeatureCards";
-import { LayerFeatureCards, LayerThumb } from "@/components/LayerFeatureCards";
-import { createLayeredCharacter, selectLayer, selectedItems } from "@/lib/character-layers";
+import { LayerFeatureCards } from "@/components/LayerFeatureCards";
+import { createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 import { pawYarn, type PawRegion } from "@/lib/paw-colors";
-import { CircleUserRound, Smile, Rabbit, Spline, X } from "lucide-react";
+import { CircleUserRound, Smile, Rabbit, Spline } from "lucide-react";
 
 const CATEGORIES = ["Body", "Face", "Ears", "Tail"] as const;
 type Category = (typeof CATEGORIES)[number];
@@ -46,7 +46,6 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
   const current = region === "hands" || region === "feet" ? pawYarn(config, region) : region ? partYarn(config, region) : undefined;
   const changeFace = (patch: Partial<CharacterConfig["face"]>) => onChange({ ...config, face: { ...config.face, ...patch } });
   const pickCategory = (next: Category) => { setCategory(next); setSub(SUBCATEGORIES[next][0] ?? "Style"); setRegionIndex(0); };
-  const relevant = selectedItems(layered).filter((item) => item.slot === category.toLowerCase());
   const paletteVisible = current && (sub !== "Blush" || config.face.cheeks) && (category !== "Ears" || layered.selections.ears) && (category !== "Tail" || layered.selections.tail);
 
   return <div className="customization-workspace">
@@ -83,14 +82,6 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
           <Button key={part} variant="outline" size="sm" aria-pressed={region === part} className={region === part ? "region-active" : ""} onClick={() => setRegionIndex(index)}>{LABELS[part]}</Button>)}</div>}
         <YarnSwatches compact label={LABELS[region] ?? region} current={current} groups={sub === "Blush" ? BLUSH_YARN_GROUPS : undefined}
           onSelect={(id) => onChange({ ...config, colors: { ...config.colors, [region]: id } })} />
-      </section>}
-      {relevant.length > 0 && <section className="layered-area" aria-label="Selected components">
-        <h3 className="mb-3 text-sm font-semibold">Layered items</h3>
-        <div className="grid grid-cols-3 gap-2">{relevant.map((item) => <div key={item.id} className="relative flex min-w-0 flex-col items-center gap-2 rounded-md border border-primary bg-primary/5 px-2 py-4">
-          <svg viewBox="0 0 64 64" className="h-12 w-12" aria-hidden="true"><LayerThumb id={item.id} color={partYarn(config, item.slot === "ears" ? "leftEar" : "tail").hex} /></svg><span className="text-xs">{item.label}</span>
-          <Button variant="ghost" size="icon" className="absolute right-0 top-0 h-6 w-6" aria-label={`Remove ${item.label}`}
-            onClick={() => onChange({ ...config, layered: selectLayer(layered, item.slot, null) })}><X size={12} /></Button>
-        </div>)}</div>
       </section>}
     </div>
   </div>;

@@ -11,7 +11,7 @@ export function LayerThumb({ id, color }: { id: string | null; color: string }) 
     {id === "ears-cat" && <><path d="M13 31Q10 9 18 15L29 27Z" /><path d="M35 27L46 15Q54 9 51 31Z" /></>}
     {id === "ears-bear" && <><circle cx="17" cy="24" r="9" /><circle cx="47" cy="24" r="9" /></>}
     {id === "ears-human" && <><circle cx="12" cy="35" r="8" /><circle cx="52" cy="35" r="8" /></>}
-    {id === "ears-dog" && <><ellipse cx="13" cy="36" rx="7" ry="16" /><ellipse cx="51" cy="36" rx="7" ry="16" /></>}
+    {id === "ears-dog" && <><ellipse cx="13" cy="42" rx="7" ry="16" /><ellipse cx="51" cy="42" rx="7" ry="16" /></>}
     <rect x="14" y="23" width="36" height="31" rx="14" />
     <g fill="currentColor"><circle cx="25" cy="37" r="2" /><circle cx="39" cy="37" r="2" /></g>
   </g>;
