@@ -2,6 +2,8 @@ import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment, Lightformer, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { JoinedBody } from "./JoinedBody";
+import { PawVinyl } from "./PawVinyl";
+import { limbSurfaceYarn, pawYarn } from "@/lib/paw-colors";
 import { HEAD, HEAD_ATTACHMENT_OFFSET, createBlushGeometry } from "@/lib/doll-anatomy";
 import { partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 
@@ -66,10 +68,10 @@ function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
   );
 }
 
-function Arm({ side, color }: { side: 1 | -1; color: string }) {
+function Arm({ side, color, pawColor, marked }: { side: 1 | -1; color: string; pawColor: string; marked: boolean }) {
   // Tilted up 20° and set high: the arm's top rests against the head's underside without sinking into it.
   const tilt = 0.35;
-  return <mesh position={[side * 0.58, 0.818, 0.02]} rotation={[0, 0, side * (Math.PI / 2 + tilt)]} castShadow><capsuleGeometry args={[0.19, 0.25, 12, 24]} /><Vinyl color={color} /></mesh>;
+  return <mesh position={[side * 0.58, 0.818, 0.02]} rotation={[0, 0, side * (Math.PI / 2 + tilt)]} castShadow><capsuleGeometry args={[0.19, 0.25, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} /></mesh>;
 }
 
 /** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */
@@ -174,10 +176,10 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
       <Head color={c("head")} />
       <Eyes left={c("leftEye")} right={c("rightEye")} />
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} /><BlushPatch side={-1} color={c("rightBlush")} /></>}
-      <JoinedBody torso={c("body")} leftLeg={c("leftLeg")} rightLeg={c("rightLeg")} />
+      <JoinedBody torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "feet").hex} marked={Boolean(config.colors.feet)} />
       <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />
-      <Arm side={1} color={c("leftArm")} />
-      <Arm side={-1} color={c("rightArm")} />
+      <Arm side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />
+      <Arm side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />
       <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>
         {ears && <Ear type={ears} side={1} color={c("leftEar")} inner={c("leftInnerEar")} />}
         {ears && <Ear type={ears} side={-1} color={c("rightEar")} inner={c("rightInnerEar")} />}

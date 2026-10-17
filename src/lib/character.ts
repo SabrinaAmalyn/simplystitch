@@ -33,7 +33,7 @@ export const DETAIL_DEFAULTS: Partial<Record<string, string>> = { leftInnerEar: 
 export type BodyPart = (typeof BODY_PARTS)[number];
 
 export type CharacterConfig = {
-  colors: { main: string; accent: string; accessory: string; eyes: string } & Partial<Record<BodyPart, string>>;
+  colors: { main: string; accent: string; accessory: string; eyes: string; hands?: string; feet?: string } & Partial<Record<BodyPart, string>>;
   ears: EarStyle;
   face: { expression: Expression; cheeks: boolean };
   body: BodyShape;
