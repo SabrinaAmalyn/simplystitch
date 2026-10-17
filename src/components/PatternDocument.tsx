@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { ChevronDown, Info, Menu } from "lucide-react";
 import { ItemView, groupParts } from "@/components/PatternReader";
+import { CharacterPreview } from "@/components/CharacterPreview";
 import type { CharacterConfig } from "@/lib/character";
 import { parsePatternText, sectionRowKeys, type ReaderSection } from "@/lib/pattern-reader";
 import { resetProgress, toggleRows, useStore } from "@/lib/store";
@@ -13,7 +14,7 @@ const ORDER = [/^introduction|overview/i, /^measurements/i, /^materials/i, /^abb
 const rank = (s: ReaderSection) => (s.parent ? 4 : Math.max(0, ORDER.findIndex((r) => r && r.test(s.title))));
 
 /** Continuous, scrolling pattern document with a table of contents and progress. */
-export function PatternDocument({ text, progressKey, name, header }: Props) {
+export function PatternDocument({ text, config, progressKey, name, header }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);
   const sections = useMemo(() => [...doc.sections].sort((a, b) => rank(a) - rank(b)), [doc]);
   const doneList = useStore((s) => s.progress?.[progressKey]);
@@ -91,6 +92,11 @@ export function PatternDocument({ text, progressKey, name, header }: Props) {
             </div>
             <div className="doc-progress-track"><div className="doc-progress-fill" style={{ width: `${allKeys.length ? (completed / allKeys.length) * 100 : 0}%` }} /></div>
           </div>
+          {config && (
+            <div className="doc-hero" aria-label="Final character">
+              <CharacterPreview config={config} />
+            </div>
+          )}
           {sections.map((s, i) => {
             const keys = sectionRowKeys(s);
             const n = keys.filter((k) => done.has(k)).length;
