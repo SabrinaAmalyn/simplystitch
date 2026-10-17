@@ -363,7 +363,7 @@ export default function Doll3D({ config, ears, focus = null }: { config: Charact
       </Environment>
       {focus ? (
         <>
-          <Bounds key={focus} fit clip margin={1.6}>
+          <Bounds key={focus} fit clip margin={1.2}>
             <Float speed={1.6} rotationIntensity={0.25} floatIntensity={0.4}>
               <Doll config={config} ears={ears} focus={focus} />
             </Float>

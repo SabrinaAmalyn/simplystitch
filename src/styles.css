@@ -227,13 +227,30 @@
   .palette-swatch { height: 32px; width: 32px; padding: 0; border: 1px solid var(--border); border-radius: 50%; }
   .region-active { border-color: var(--primary); background: var(--accent); color: var(--accent-foreground); }
   .workspace-actions { padding: 0 24px 24px; }
+/* Desktop app shell: the page itself never scrolls, so neither column can end
+   early and leave a blank strip under the character or the options. */
+@media (min-width: 768px) {
+  .customize-shell { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
+  .customize-shell > header { flex: 0 0 auto; }
+  .creator-layout { flex: 1 1 auto; min-height: 0; }
+  .preview-panel { position: relative; top: auto; height: 100%; }
+  .options-column { min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+  .options-column .category-nav { position: sticky; top: 0; z-index: 6; background: var(--card); }
+  .options-column .subcategory-nav { position: sticky; top: 54px; z-index: 5; background: var(--card); }
+  .options-column .feature-area { min-height: 0; max-height: none; overflow: visible; }
+  /* Fill the column: the options take the spare height and the swatches sit at the foot. */
+  .options-column .customization-workspace { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+  .options-column .workspace-content { flex: 1 1 auto; display: flex; flex-direction: column; }
+  .options-column .feature-area { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+  .options-column .palette-area { margin-top: auto; }
+}
   @media (max-width: 767px) {
     .creator-layout { grid-template-columns: minmax(0, 1fr); }
     .preview-panel { position: relative; height: auto; justify-content: flex-start; border-right: 0; border-bottom: 1px solid var(--border); }
     .preview-topbar { display: flex; width: 100%; align-items: center; justify-content: flex-end; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--card); }
     .character-canvas .preview-actions { display: none; }
     .preview-generate { display: none; }
-    .character-canvas { height: 300px; min-height: 0; }
+    .character-canvas { flex: 0 0 300px; height: 300px; min-height: 0; }
     .category-tab { height: 46px; gap: 5px; font-size: 12px; }
     .subcategory-nav { padding: 8px 10px; gap: 4px; }
     .subcategory-tab { padding: 0 4px; font-size: 13px; height: 34px; }
@@ -291,6 +308,8 @@
   .pattern-header { flex-wrap: wrap; padding: 12px 16px; gap: 10px; min-height: 0; }
   .pattern-header-center { display: none; }
   .pattern-header-controls { flex-basis: 100%; }
+  /* Small screens: the workspace bar drops the logo and the profile picture. */
+  .pattern-header-logo, .pattern-header-profile { display: none; }
   .pattern-name-field { width: auto; flex: 1; }
   .reader-preview { padding: 0; }
   .reader-preview h2 { font-size: 20px; }
@@ -322,14 +341,16 @@
 .review-body .reader-instructions { padding: 0; background: transparent; }
 @media (max-width: 767px) {
   .review-layout { grid-template-columns: minmax(0, 1fr); min-height: 0; }
-  .review-preview { order: 0; position: relative; height: auto; min-height: 0; border-bottom: 1px solid var(--border); }
+  /* Phone: this bar held only the logo and the profile picture, so it goes away entirely. */
+  .review-header { display: none; }
+  .review-preview { order: 0; position: relative; height: auto; min-height: 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: minmax(0, 1fr); }
   .review-content { border-right: 0; }
-  /* Phone: the name and the buttons get their own rows above the 3D view. */
-  .review-preview-name { order: 0; padding: 12px 12px 0; }
+  /* Phone: the buttons keep their own row; the piece name floats centred inside the 3D view. */
+  .review-preview-name { order: 0; grid-row: 1; padding: 12px 12px 0; }
   .review-name-input { max-width: none; height: 40px; font-size: 0.9375rem; }
-  .review-preview-label { order: 1; padding: 10px 12px 0; }
-  .review-preview-bar { position: static; inset: auto; order: 2; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--card); }
-  .review-canvas { order: 3; flex: 0 0 260px; height: 260px; }
+  .review-preview-bar { position: static; inset: auto; order: 1; grid-row: 2; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--card); }
+  .review-canvas { order: 3; grid-row: 3; grid-column: 1; flex: none; height: 260px; }
+  .review-preview-label { order: 2; grid-row: 3; grid-column: 1; align-self: start; justify-self: center; z-index: 5; pointer-events: none; flex-direction: row; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 14px; border-radius: 9999px; background: color-mix(in oklab, var(--card) 85%, transparent); }
   .review-body { padding: 16px; }
 }
 .pattern-stale-alert { margin: 0; border-radius: 0; border-width: 0 0 1px; }
@@ -356,33 +377,33 @@
 .doc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; padding: 24px; align-items: start; }
 .doc-main { min-width: 0; display: flex; flex-direction: column; gap: 40px; }
 .doc-section { scroll-margin-top: 96px; }
+.doc-section-toggle { display: flex; width: 100%; align-items: center; gap: 10px; border: 0; background: none; padding: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.doc-section-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; border-radius: 8px; }
+.doc-section-caret { flex: 0 0 auto; color: var(--primary); transition: transform .18s ease; }
+.doc-section-closed { transform: rotate(-90deg); }
 .doc-kicker { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--primary); margin-bottom: 4px; }
-.doc-progress { position: sticky; top: 0; z-index: 15; display: flex; flex-direction: column; gap: 8px; padding: 12px 0; background: var(--background); }
+.doc-progress { display: flex; flex-direction: column; gap: 8px; padding: 12px 0; }
+.doc-clear { color: var(--primary); font-weight: 600; }
+.doc-clear:hover { background: transparent; color: var(--primary); }
 .doc-progress-track { height: 6px; border-radius: 9999px; background: var(--muted); overflow: hidden; }
 .doc-progress-fill { height: 100%; background: var(--primary); transition: width .2s; }
 .doc-side { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 16px; max-height: calc(100dvh - 32px); min-width: 0; }
 .doc-card { border: 1px solid var(--border); border-radius: 12px; background: var(--card); overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
-.doc-card-title { padding: 14px 16px; font-weight: 700; background: color-mix(in oklab, var(--primary) 10%, var(--card)); }
-.doc-toc-scroll { overflow-y: auto; max-height: 40vh; padding: 8px; }
+.doc-toc-scroll { overflow-y: auto; max-height: calc(100dvh - 120px); padding: 8px; }
 .doc-toc-list { display: flex; flex-direction: column; gap: 2px; }
 .doc-toc-link { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; padding: 8px 12px; border-radius: 8px; text-align: left; font-weight: 600; font-size: 0.95rem; }
 .doc-toc-link:hover { background: var(--muted); }
-.doc-toc-link:focus-visible, .doc-preview-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
+.doc-toc-link:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
 .doc-toc-nested { padding-left: 28px; font-weight: 500; }
 .doc-toc-active { background: color-mix(in oklab, var(--primary) 14%, transparent); color: var(--primary); }
 .doc-toc-group { padding: 8px 12px 2px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted-foreground); }
-.doc-preview-toggle { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px; font-weight: 600; font-size: 0.9rem; text-align: left; }
-.doc-preview { height: 280px; background: var(--stage); }
 .doc-goto { display: none; }
-.doc-view3d { display: none; }
 .doc-sheet { max-height: 85dvh; display: flex; flex-direction: column; border-radius: 16px 16px 0 0; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
 .doc-sheet-scroll { overflow-y: auto; min-height: 0; }
 @media (max-width: 1023px) {
   .doc-layout { grid-template-columns: minmax(0, 1fr); padding: 16px; }
   .doc-side { display: none; }
   .doc-goto { display: inline-flex; position: fixed; z-index: 30; top: calc(12px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); min-height: 44px; }
-  .doc-view3d { display: inline-flex; }
-  .doc-progress { padding-right: 110px; }
 }
 @media (max-width: 1023px) {
   .doc-progress > div:first-child { flex-direction: column; align-items: flex-start; }

@@ -22,7 +22,7 @@ export function PatternWorkspaceHeader({ title, back, status, actions, nameField
       <div className="pattern-header-brand">
         {back && <Button variant="outline" size="icon" asChild>{back}</Button>}
         <div className="min-w-0">
-          <Link to="/" className="block font-logo text-2xl uppercase leading-tight">SimplyStitch</Link>
+          <Link to="/" className="pattern-header-logo block font-logo text-2xl uppercase leading-tight">SimplyStitch</Link>
           {status && <span className="block truncate text-xs text-muted-foreground" title={title}>{title} · {status}</span>}
         </div>
       </div>
@@ -30,7 +30,7 @@ export function PatternWorkspaceHeader({ title, back, status, actions, nameField
       <div className="pattern-header-controls">
         {nameField && <div className="pattern-name-field min-w-0">{nameField}</div>}
         {actions && <div className="pattern-header-actions">{actions}</div>}
-        {profile && <ProfileMenu />}
+        {profile && <div className="pattern-header-profile"><ProfileMenu /></div>}
       </div>
     </header>
   );
