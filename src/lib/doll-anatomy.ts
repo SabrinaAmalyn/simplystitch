@@ -22,8 +22,10 @@ export function createBlushGeometry(shape: BlushShape = "round") {
   for (let i = 0; i < positions.count; i++) {
     const x = positions.getX(i), y = positions.getY(i), z = positions.getZ(i);
     const theta = Math.acos(Math.max(-1, Math.min(1, y)));
-    const falloff = Math.max(0, 1 - (theta / angle) ** 2);
-    const radius = 1.008 + 0.035 * falloff ** 2;
+    // The round blush protrudes like the eyes; the oval blush stays flat —
+    // a constant-thickness shell hugging the head with no raised centre.
+    const raise = shape === "oval" ? 0 : 0.035 * falloff ** 2;
+    const radius = 1.008 + raise;
     const tx = shape === "oval" ? x * 0.65 : x;
     const tz = shape === "oval" ? z * 0.32 : z;
     const ty = shape === "oval" ? Math.sqrt(Math.max(0, 1 - tx * tx - tz * tz)) : y;
