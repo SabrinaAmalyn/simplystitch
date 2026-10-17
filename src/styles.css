@@ -181,7 +181,9 @@
 
   .creator-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); min-height: calc(100dvh - 82px); }
   .preview-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; position: sticky; top: 0; height: calc(100dvh - 82px); border-right: 1px solid var(--border); background: var(--stage); }
-  .character-canvas { width: 100%; height: min(620px, calc(100dvh - 180px)); min-height: 360px; }
+  .character-canvas { width: 100%; height: min(620px, calc(100dvh - 180px)); min-height: 360px; position: relative; }
+  .preview-actions { position: absolute; top: 0.75rem; right: 0.75rem; display: flex; gap: 0.5rem; z-index: 10; }
+  .preview-actions .btn, .preview-actions button { background: var(--card); }
   .customization-workspace { min-width: 0; }
   .category-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
   .category-tab { border-radius: 0; min-width: 0; height: 54px; gap: 8px; color: var(--muted-foreground); border-bottom: 2px solid transparent; }

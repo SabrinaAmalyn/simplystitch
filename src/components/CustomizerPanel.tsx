@@ -7,15 +7,12 @@ import { BlushCards, BrowCards, EyeCards, MouthCards, NoseCards, WhiskerCards } 
 import { LayerFeatureCards } from "@/components/LayerFeatureCards";
 import { createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 import { pawYarn, type PawRegion } from "@/lib/paw-colors";
-import { CircleUserRound, Smile, Rabbit, Spline } from "lucide-react";
-
 const CATEGORIES = ["Body", "Face", "Ears", "Tail"] as const;
 type Category = (typeof CATEGORIES)[number];
 const SUBCATEGORIES: Partial<Record<Category, string[]>> = {
   Body: ["Head", "Torso", "Arms", "Legs", "Paws"],
   Face: ["Eyes", "Eyebrows", "Nose", "Mouth", "Blush", "Whiskers"],
 };
-const ICONS = { Body: CircleUserRound, Face: Smile, Ears: Rabbit, Tail: Spline };
 const LABELS: Partial<Record<BodyPart | PawRegion, string>> = {
   head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm", leftLeg: "Left leg", rightLeg: "Right leg",
   leftEar: "Left ear", rightEar: "Right ear", leftEye: "Left eye", rightEye: "Right eye", leftBlush: "Left blush", rightBlush: "Right blush",
@@ -49,8 +46,8 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
 
   return <div className="customization-workspace">
     <nav role="tablist" aria-label="Character options" className="category-nav">
-      {CATEGORIES.map((name) => { const Icon = ICONS[name]; return <Button key={name} variant="ghost" role="tab" aria-selected={category === name}
-        onClick={() => pickCategory(name)} className={`category-tab ${category === name ? "category-active" : ""}`}><Icon size={16} /><span>{name}</span></Button>; })}
+      {CATEGORIES.map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={category === name}
+        onClick={() => pickCategory(name)} className={`category-tab ${category === name ? "category-active" : ""}`}>{name}</Button>)}
     </nav>
     {SUBCATEGORIES[category] && <nav role="tablist" aria-label={`${category} subcategories`} className="subcategory-nav">
       {SUBCATEGORIES[category]!.map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={sub === name}
