@@ -15,7 +15,7 @@ const PART_LABEL: Record<BodyPart, string> = {
 const TAB_PARTS: Record<(typeof TABS)[number], BodyPart[]> = {
   Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg"],
   Face: ["leftEye", "rightEye", "leftBlush", "rightBlush"],
-  Ears: ["leftEar", "leftInnerEar", "rightEar", "rightInnerEar"],
+  Ears: ["leftEar", "rightEar"],
   Tail: ["tail"],
 };
 
