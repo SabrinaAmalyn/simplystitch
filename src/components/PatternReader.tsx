@@ -82,7 +82,7 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
             <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${total ? (completed / total) * 100 : 0}%` }} />
           </div>
         </div>
-        <button className="btn-ghost shrink-0" onClick={() => setDrawer(true)} aria-label="Open pattern sections"><Menu size={18} /> Go to</button>
+        <button className="btn-ghost shrink-0" onClick={() => setDrawer(true)} aria-label="Open pattern sections"><Menu size={18} /></button>
       </div>
 
       <article className="panel flex flex-col gap-8">
