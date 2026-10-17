@@ -22,7 +22,7 @@ export type SavedPattern = {
 };
 /** Completed row keys per pattern version; never touches pattern text. */
 export type Progress = Record<string, string[]>;
-type State = { config: CharacterConfig; draft: Draft | null; previous: Draft | null; library: SavedPattern[]; progress?: Progress };
+type State = { config: CharacterConfig; draft: Draft | null; previous: Draft | null; library: SavedPattern[]; progress?: Progress | undefined };
 
 const KEY = "stitchling-state-v1";
 const BASE_KEY = "stitchling-doll-base-v2";
@@ -46,7 +46,11 @@ export function savePatternToLibrary(name: string): string | null {
     initialText: draft.initialText ?? draft.text,
     text: draft.text,
   };
-  setState((s) => ({ ...s, library: [entry, ...s.library], progress: carried ? { ...s.progress, [`saved:${id}`]: carried } : s.progress, draft: s.draft && { ...s.draft, saved: true } }));
+  setState((s) => {
+    const next: State = { ...s, library: [entry, ...s.library], draft: s.draft && { ...s.draft, saved: true } };
+    if (carried) next.progress = { ...s.progress, [`saved:${id}`]: carried };
+    return next;
+  });
   return id;
 }
 

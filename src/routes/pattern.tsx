@@ -66,9 +66,10 @@ function PatternPage() {
   };
 
   const save = () => {
-    savePatternToLibrary(name);
+    const id = savePatternToLibrary(name);
     setName("");
-    navigate({ to: "/my-patterns" });
+    if (id) navigate({ to: "/my-patterns/$patternId", params: { patternId: id } });
+    else navigate({ to: "/my-patterns" });
   };
 
   return (

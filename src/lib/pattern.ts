@@ -249,7 +249,7 @@ export function generatePattern(c: CharacterConfig): Pattern {
 
 export function patternToText(p: Pattern): string {
   const lines: string[] = [`# ${p.title}`, "", "DRAFT — this pattern is auto-generated and may need test-crocheting and refinement.", ""];
-  lines.push("## Materials", ...p.materials.map((m) => `- ${m}`), "");
+  lines.push("## Materials", ...p.materials.map((m, i) => `${i + 1}. ${m}`), "");
   lines.push("## Abbreviations", ...p.abbreviations.map((a) => `- ${a}`), "");
   for (const s of p.sections) {
     lines.push(`## ${s.title}${s.yarn ? ` — yarn: ${s.yarn}` : ""}`);
