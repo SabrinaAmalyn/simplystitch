@@ -49,3 +49,5 @@
 - [x] Switch every page (headings, body, logo) to Poppins; verified only Poppins loads on /, /customize, /my-patterns, /profile, /pattern.
 - [x] Add more space under the "About SimplyStitch" heading; 40px gap verified on phone and desktop.
 - [ ] Make the About SimplyStitch band exactly half the screen height; verify on phone and desktop.
+- [ ] Enlarge the ✿ in the scrolling band until clearly bigger than the words; verify not clipped.
+- [ ] Remove the content under "How it works", leaving the section empty for now; verify.
