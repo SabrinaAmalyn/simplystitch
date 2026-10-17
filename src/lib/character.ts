@@ -16,10 +16,14 @@ export const CROCHET_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", 
 export const DETAIL_DEFAULTS: Partial<Record<string, string>> = { leftInnerEar: "blush", rightInnerEar: "blush", blush: "blush" };
 export type BodyPart = (typeof BODY_PARTS)[number];
 
+/** Embroidered face features, mixed and matched independently. */
+export type NoseStyle = "none" | "teddy" | "cat" | "round";
+export type MouthStyle = "none" | "x" | "w" | "smile" | "cat3";
+
 export type CharacterConfig = {
   colors: { main: string; accent: string; accessory: string; eyes: string; hands?: string; feet?: string } & Partial<Record<BodyPart, string>>;
   ears: EarStyle;
-  face: { expression: Expression; cheeks: boolean };
+  face: { expression: Expression; cheeks: boolean; nose?: NoseStyle; mouth?: MouthStyle };
   body: BodyShape;
   accessories: Accessory[];
   layered?: LayeredCharacter;
@@ -28,7 +32,7 @@ export type CharacterConfig = {
 export const DEFAULT_CONFIG: CharacterConfig = {
   colors: { main: "peach", accent: "cream", accessory: "terracotta", eyes: "charcoal" },
   ears: "none",
-  face: { expression: "sleepy", cheeks: true },
+  face: { expression: "sleepy", cheeks: true, nose: "none", mouth: "none" },
   body: "standard",
   accessories: [],
 };
