@@ -58,3 +58,4 @@
 - [x] How it works: dot after each number
 - [ ] Move the pattern name to the top-left of the right preview panel on the review page and remove the name from the header.
 - [ ] On phone, put Go Back and Save in their own row above the 3D view on the review page.
+- [ ] Increase the height of the About SimplyStitch section on the landing page.
