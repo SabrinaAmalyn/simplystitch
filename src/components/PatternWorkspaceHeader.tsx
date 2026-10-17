@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { ProfileMenu } from "@/components/ProfileMenu";
 
 type Props = {
   title: string;
@@ -7,22 +8,28 @@ type Props = {
   status: string;
   actions: ReactNode;
   nameField?: ReactNode;
+  /** Middle slot, e.g. journey steps. */
+  center?: ReactNode;
+  /** Show the profile icon (omit inside the account layout, which has its own). */
+  profile?: boolean;
 };
 
-export function PatternWorkspaceHeader({ title, back, status, actions, nameField }: Props) {
+/** Full-width top bar matching the customizer header. */
+export function PatternWorkspaceHeader({ title, back, status, actions, nameField, center, profile }: Props) {
   return (
     <header className="pattern-header">
-      <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-3">
+      <div className="pattern-header-brand">
         <Button variant="outline" size="icon" asChild>{back}</Button>
         <div className="min-w-0">
-          <span className="text-sm font-semibold text-primary">Stitchling</span>
-          <h1 className="truncate text-lg font-bold" title={title}>{title}</h1>
+          <span className="block font-display text-2xl font-semibold leading-tight">Stitchling</span>
+          <span className="block truncate text-xs text-muted-foreground" title={title}>{title} · {status}</span>
         </div>
       </div>
-      <div className="pattern-header-controls pattern-header-saved">
-        <span className="pattern-save-status text-sm text-muted-foreground">{status}</span>
+      {center && <div className="pattern-header-center">{center}</div>}
+      <div className="pattern-header-controls">
         {nameField && <div className="pattern-name-field min-w-0">{nameField}</div>}
         <div className="pattern-header-actions">{actions}</div>
+        {profile && <ProfileMenu />}
       </div>
     </header>
   );
