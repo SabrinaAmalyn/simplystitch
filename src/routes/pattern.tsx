@@ -64,10 +64,10 @@ function PatternPage() {
 
         previewAction={<Button onClick={openNaming}><Save /> Save</Button>}
         previewBack={<Button variant="outline" asChild><Link to="/customize"><ArrowLeft /> Go Back</Link></Button>}
-        header={<><PatternWorkspaceHeader
+        header={<><div className="review-header"><PatternWorkspaceHeader
           profile
           title={suggested}
-        />
+        /></div>
         {stale && (
           <div className="alert pattern-stale-alert">
             <p>Your character has changed since this pattern was made. Press <strong>Go Back</strong> at the bottom left to update it.</p>

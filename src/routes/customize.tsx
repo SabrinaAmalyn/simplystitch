@@ -127,8 +127,8 @@ function Workspace() {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
+    <main className="customize-shell min-h-screen bg-background">
+      <header className="hidden md:grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
         <h1 className="min-w-0 font-logo text-2xl uppercase"><Link to="/">SimplyStitch</Link></h1>
         <ProfileMenu />
       </header>
@@ -153,7 +153,7 @@ function Workspace() {
           </div>
         </section>
 
-        <section className="min-w-0">
+        <section className="min-w-0 options-column">
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           <div className="workspace-actions flex flex-col gap-4">
             {error && <div className="alert alert-error">{error}</div>}
