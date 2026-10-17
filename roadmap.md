@@ -1,6 +1,7 @@
 # Tasks
-- [ ] On Save, show only the latest edited pattern (or the generated one when nothing was edited); verified in preview.
-- [ ] Remove the "Back to customizer" item from the signed-in sidebar; verified desktop and mobile.
+- [ ] Rename the second journey step from "Generate & Review" to "Review" on the pattern page and landing page; verified.
+- [x] On Save, show only the latest edited pattern (or the generated one when nothing was edited); verified in preview.
+- [x] Remove the "Back to customizer" item from the signed-in sidebar; verified desktop and mobile.
 - [x] Pin the account sidebar so it cannot scroll, and add a Log out button at its very bottom that returns to the landing page; verified desktop and mobile.
 - [x] Remove the Open pattern link from the editor, replace the earlier-pattern swap notice with a top-left Back on the pattern page, and rewrite the edited-pattern warning so its purpose and safe path are clear; verified in preview.
 - [x] Add a mobile top bar above the character holding the pattern action labelled "Save", and remove the empty strip between the header and that bar; verified on phone widths and hidden on desktop.
