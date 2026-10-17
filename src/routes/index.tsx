@@ -101,10 +101,10 @@ function Workspace() {
 
       <div className="creator-layout">
         <section className="preview-panel" aria-label="Character preview">
-          <div className="flex w-full items-center justify-between gap-3 px-4 pt-3 md:hidden">
-            <span className="h-9 w-9 shrink-0" aria-hidden="true" />
-            <Button type="button" size="sm" className="h-auto min-h-9 max-w-[75%] whitespace-normal" onClick={generate} disabled={busy || blockers.length > 0}>
-              {busy ? "Stitching your pattern…" : draft ? "Generate new pattern" : "Generate Pattern"}
+          <div className="preview-topbar md:hidden">
+            <span className="preview-topbar-spacer" aria-hidden="true" />
+            <Button type="button" size="sm" onClick={generate} disabled={busy || blockers.length > 0}>
+              Save
             </Button>
           </div>
           <div className="character-canvas">
