@@ -42,5 +42,5 @@
 - [x] Pattern reader: collapse/expand whole sections by their title; hamburger opens the section drawer without a Go to label.
 - [x] Reader nav on desktop: sticky right-side section panel without independent scrolling; mobile uses a drawer.
 - [x] Save opens the saved pattern's detail page inside the demo signed-in layout.
-- [ ] Move the Generate button to the bottom-right corner of the character preview side on landscape screens.
-- [ ] Move Randomize and Reset to the top-left corner of the character preview side on landscape screens.
+- [x] Move the Generate button to the bottom-right corner of the character preview side on landscape screens.
+- [x] Move Randomize and Reset to the top-left corner of the character preview side on landscape screens.
