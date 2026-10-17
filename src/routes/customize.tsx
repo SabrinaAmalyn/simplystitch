@@ -58,18 +58,6 @@ function PreviewActions() {
         variant="outline"
         size="sm"
         type="button"
-        aria-label="Randomize character"
-        title="Randomize"
-        className="preview-action border-primary/40 font-semibold text-primary hover:bg-accent hover:text-primary"
-        onClick={() => setState((s) => ({ ...s, config: randomConfig() }))}
-      >
-        <Dices size={14} />
-        <span className="preview-action-label">Randomize</span>
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        type="button"
         aria-label="Reset character"
         title="Reset"
         className="preview-action text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -77,6 +65,18 @@ function PreviewActions() {
       >
         <RotateCcw size={14} />
         <span className="preview-action-label">Reset</span>
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        type="button"
+        aria-label="Randomize character"
+        title="Randomize"
+        className="preview-action border-primary/40 font-semibold text-primary hover:bg-accent hover:text-primary"
+        onClick={() => setState((s) => ({ ...s, config: randomConfig() }))}
+      >
+        <Dices size={14} />
+        <span className="preview-action-label">Randomize</span>
       </Button>
     </div>
   );

@@ -44,3 +44,4 @@
 - [x] Save opens the saved pattern's detail page inside the demo signed-in layout.
 - [x] Move the Generate button to the bottom-right corner of the character preview side on landscape screens.
 - [x] Move Randomize and Reset to the top-left corner of the character preview side on landscape screens.
+- [ ] Place Reset before Randomize in the preview button pair.
