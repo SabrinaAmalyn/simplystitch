@@ -38,6 +38,8 @@ export function PatternReader({ text, config, progressKey, name, header, editing
   const [tab, setTab] = useState<Tab>(parts.length ? "instructions" : "materials");
   const [partId, setPartId] = useState(parts[0]?.id);
   const part = parts.find((p) => p.id === partId) ?? parts[0];
+  const groups = useMemo(() => groupParts(parts), [parts]);
+  const activeGroup = groups.find((g) => g.parts.some((p) => p.id === part?.id)) ?? groups[0];
 
   const allKeys = useMemo(() => doc.sections.flatMap(sectionRowKeys), [doc]);
   const completed = allKeys.filter((k) => done.has(k)).length;
@@ -72,9 +74,16 @@ export function PatternReader({ text, config, progressKey, name, header, editing
               <Button key={id} variant="ghost" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "category-active" : ""}`} onClick={() => pick(id)}>{text}</Button>
             ))}
           </nav>
-          {tab === "instructions" && parts.length > 1 && (
-            <nav className="subcategory-nav" role="tablist" aria-label="Pattern pieces">
-              {parts.map((p) => (
+          {tab === "instructions" && groups.length > 1 && (
+            <nav className="subcategory-nav" role="tablist" aria-label="Pattern groups">
+              {groups.map((g) => (
+                <Button key={g.id} variant="ghost" role="tab" aria-selected={activeGroup?.id === g.id} className={`subcategory-tab ${activeGroup?.id === g.id ? "subcategory-active" : ""}`} onClick={() => setPartId(g.parts[0]?.id)}>{g.label}</Button>
+              ))}
+            </nav>
+          )}
+          {tab === "instructions" && activeGroup && activeGroup.parts.length > 1 && (
+            <nav className="subcategory-nav piece-nav" role="tablist" aria-label="Pattern pieces">
+              {activeGroup.parts.map((p) => (
                 <Button key={p.id} variant="ghost" role="tab" aria-selected={part?.id === p.id} className={`subcategory-tab ${part?.id === p.id ? "subcategory-active" : ""}`} onClick={() => setPartId(p.id)}>{shortTitle(p.title)}</Button>
               ))}
             </nav>
@@ -93,6 +102,25 @@ export function PatternReader({ text, config, progressKey, name, header, editing
       </div>
     </div>
   );
+}
+
+const GROUPS = [
+  { id: "body", label: "Body", test: /head|leg|body|torso|arm|hand/i },
+  { id: "ears", label: "Ears", test: /ear/i },
+  { id: "tail", label: "Tail", test: /tail/i },
+  { id: "face", label: "Face", test: /blush|cheek|face|eye|nose|mouth|whisker|brow/i },
+];
+
+/** Groups pieces like the customizer categories; unmatched pieces get an "Other" group. */
+export function groupParts<T extends { title: string }>(parts: T[]) {
+  const out: { id: string; label: string; parts: T[] }[] = [];
+  for (const p of parts) {
+    const g = GROUPS.find((x) => !/ear/i.test(p.title) || x.id === "ears" ? x.test.test(p.title) && (x.id !== "body" || !/ear|tail/i.test(p.title)) : false) ?? { id: "other", label: "Other" };
+    let bucket = out.find((b) => b.id === g.id);
+    if (!bucket) out.push((bucket = { id: g.id, label: g.label, parts: [] }));
+    bucket.parts.push(p);
+  }
+  return out;
 }
 
 const shortTitle = (t: string) => t.replace(/\s*\(.*?\)\s*/g, " ").replace(/\s*[—–-].*$/, "").trim() || t;
