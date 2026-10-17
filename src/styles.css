@@ -184,6 +184,8 @@
   .character-canvas { width: 100%; height: min(620px, calc(100dvh - 180px)); min-height: 360px; position: relative; }
   .preview-actions { position: absolute; top: 0.75rem; right: 0.75rem; display: flex; gap: 0.5rem; z-index: 10; }
   .preview-actions .btn, .preview-actions button { background: var(--card); }
+  .preview-topbar { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--card); }
+  .preview-topbar-spacer { display: block; width: 36px; height: 36px; flex-shrink: 0; }
   .customization-workspace { min-width: 0; }
   .category-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
   .category-tab { border-radius: 0; min-width: 0; height: 54px; gap: 8px; color: var(--muted-foreground); border-bottom: 2px solid transparent; }
