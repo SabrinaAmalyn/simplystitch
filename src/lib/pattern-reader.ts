@@ -35,9 +35,11 @@ export function parsePatternText(src: string): ReaderDoc {
   const lines = src.split("\n");
   let title = "Pattern";
   const sections: ReaderSection[] = [];
-  let cur: ReaderSection = { id: "sec-intro", title: "Introduction", items: [], trackable: false };
-  sections.push(cur);
+  // No Introduction section: lines before the first "## " heading (title line,
+  // draft banner, etc.) are skipped, not collected into a leading section.
+  let cur: ReaderSection | null = null;
   const push = (item: ReaderItem) => {
+    if (!cur) return;
     const last = cur.items[cur.items.length - 1];
     if (item.kind === "list" && last?.kind === "list") last.items.push(...item.items);
     else cur.items.push(item);
@@ -62,7 +64,7 @@ export function parsePatternText(src: string): ReaderDoc {
     const bullet = l.match(/^[-*]\s+(.*)$/);
     if (bullet) { push({ kind: "list", items: [bullet[1]] }); continue; }
     const r = l.match(ROUND);
-    if (r && cur.trackable) {
+    if (r && cur?.trackable) {
       const label = r[1].trim();
       const { text, count } = splitCount(r[2]);
       const nums = expandRange(label);
