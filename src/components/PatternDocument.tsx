@@ -1,5 +1,3 @@
-// ============= Full file contents =============
-
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { ChevronDown, Info, Menu } from "lucide-react";
 import { ItemView, groupParts } from "@/components/PatternReader";
@@ -103,9 +101,9 @@ export function PatternDocument({ text, progressKey, name, header }: Props) {
                 {firstPart && <p className="doc-kicker">Instructions</p>}
                 <h2 id={`${s.id}-h`} className="text-2xl font-bold md:text-3xl">
                   <button type="button" className="doc-section-toggle" aria-expanded={open} aria-controls={`${s.id}-body`} onClick={() => toggleSection(s.id)}>
-                    <ChevronDown size={22} className={`doc-section-caret ${open ? "" : "doc-section-closed"}`} aria-hidden />
                     <span className="flex-1 text-left">{s.title}</span>
                     {keys.length > 0 && <span className="shrink-0 text-sm font-medium text-muted-foreground">{n}/{keys.length}</span>}
+                    <ChevronDown size={20} className={`doc-section-caret ${open ? "" : "doc-section-closed"}`} aria-hidden />
                   </button>
                 </h2>
                 {open && (
