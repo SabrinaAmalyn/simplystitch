@@ -1,4 +1,5 @@
 # Tasks
+- [x] Refine pattern workspace presentation without changing instructions; verified desktop/mobile reading, progress persistence, repeated rounds, edit, save and download at 360, 390, 502, 1024 and 1280 widths.
 - [x] Interactive pattern reader: collapsible character, Go to drawer, tappable rows, expandable repeated rounds, notes, per-section and overall progress saved per pattern; verified on phone.
 - [x] Rename the second journey step from "Generate & Review" to "Review" on the pattern page and landing page; verified.
 - [x] On Save, show only the latest edited pattern (or the generated one when nothing was edited); verified in preview.
@@ -38,6 +39,6 @@
 - [x] Double bunny ear radius and verify from front/side.
 - [x] Replace the panel heading with the 1 Customize / 2 Generate / 3 Edit / 4 Export steps.
 - [x] Hide the subcategory row when a category has none (Ears, Tail) and drop the "Style" placeholder; verified desktop and mobile.
-- [ ] Pattern reader: collapse/expand whole sections by their title (e.g. "Head"); remove the "Go to" label, keep the hamburger icon opening the section drawer
-- [ ] Reader nav on landscape/desktop: show section list as a fixed right-side panel inside the main content area (logged-in layout), not scrollable itself while the pattern scrolls; hamburger stays for mobile
-- [ ] Save on the pattern page should land on the saved pattern's detail page inside the logged-in layout (not the library list)
+- [x] Pattern reader: collapse/expand whole sections by their title; hamburger opens the section drawer without a Go to label.
+- [x] Reader nav on desktop: sticky right-side section panel without independent scrolling; mobile uses a drawer.
+- [x] Save opens the saved pattern's detail page inside the demo signed-in layout.

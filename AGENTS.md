@@ -25,3 +25,4 @@
 - Keep category/subcategory navigation and active colour-region targeting local to the customization workspace; reuse shared feature cards and a single shared palette without changing persisted character data, so layout changes cannot overwrite saved choices.
 - Map optional feature thumbnail selections to existing visibility fields in the workspace; presentation-only changes must retain saved shapes and yarns without a configuration migration.
 - The landing page owns "/" and the character editor owns "/customize"; account pages keep their own routes. In-app links to the editor must target "/customize", so marketing copy and the working tool never compete for the same address.
+- Pattern reader presentation is shared by draft and saved views through a reusable workspace header and reader-scoped styles; keep parsing, generated text and progress storage independent so visual changes cannot alter crochet content.

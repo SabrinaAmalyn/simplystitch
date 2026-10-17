@@ -1,13 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
-import { Check, ChevronDown, ChevronUp, Info, Menu, X } from "lucide-react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { Check, ChevronDown, ChevronUp, Info, Menu } from "lucide-react";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import type { CharacterConfig } from "@/lib/character";
 import { parsePatternText, sectionRowKeys, type ReaderItem, type ReaderRow, type ReaderSection } from "@/lib/pattern-reader";
 import { resetProgress, toggleRows, useStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
-type Props = { text: string; config: CharacterConfig; progressKey: string; name?: string | undefined };
+type Props = { text: string; config: CharacterConfig; progressKey: string; name?: string | undefined; toolbar?: (openSections: () => void) => ReactNode; editing?: ReactNode; onNavigateSection?: () => void };
 
-export function PatternReader({ text, config, progressKey, name }: Props) {
+export function PatternReader({ text, config, progressKey, name, toolbar, editing, onNavigateSection }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);
   const doneList = useStore((s) => s.progress?.[progressKey]);
   const done = useMemo(() => new Set(doneList ?? []), [doneList]);
@@ -31,9 +33,10 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
     );
     els.forEach((e) => io.observe(e));
     return () => io.disconnect();
-  }, [doc]);
+  }, [doc, editing]);
 
   const go = (id: string) => {
+    onNavigateSection?.();
     setDrawer(false);
     setActive(id);
     setCollapsed((prev) => {
@@ -58,58 +61,59 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
   const assembly = doc.sections.filter((s) => /^assembly/i.test(s.title));
 
   return (
-    <div className="flex flex-col gap-4">
-      <section className="panel">
-        <div className="flex items-center justify-between gap-3">
+    <div className="pattern-workspace">
+      {toolbar?.(() => setDrawer(true))}
+      {editing || <>
+      <section className="reader-preview">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
           <div className="min-w-0">
-            <h2 className="truncate font-display text-xl font-semibold">{name || doc.title}</h2>
+            <h2 className="truncate text-2xl font-bold">{name || doc.title}</h2>
             {name && <p className="truncate text-sm text-muted-foreground">{doc.title}</p>}
           </div>
-          <button className="btn-ghost shrink-0" onClick={() => setShowPreview((v) => !v)} aria-expanded={showPreview}>
+          <Button variant="ghost" className="shrink-0" onClick={() => setShowPreview((v) => !v)} aria-expanded={showPreview}>
             {showPreview ? <ChevronUp size={16} /> : <ChevronDown size={16} />} {showPreview ? "Hide character" : "Show character"}
-          </button>
+          </Button>
         </div>
-        {showPreview && <div className="mt-3 h-64 w-full md:h-80"><CharacterPreview config={config} /></div>}
+        {showPreview && <div className="reader-character"><CharacterPreview config={config} /></div>}
       </section>
 
       <div className="reader-bar">
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between text-sm">
             <span className="font-semibold">Project progress</span>
-            <span className="text-muted-foreground">{completed}/{total} rows</span>
+            <span className="text-muted-foreground">{completed}/{total} completed</span>
           </div>
-          <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={completed}>
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label="Project progress" aria-valuemin={0} aria-valuemax={total} aria-valuenow={completed}>
             <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${total ? (completed / total) * 100 : 0}%` }} />
           </div>
         </div>
-        <button className="btn-ghost shrink-0 lg:hidden" onClick={() => setDrawer(true)} aria-label="Open pattern sections"><Menu size={18} /></button>
+        {!toolbar && <Button variant="ghost" size="icon" onClick={() => setDrawer(true)} aria-label="Open pattern sections"><Menu size={18} /></Button>}
       </div>
 
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
-        <article className="panel flex min-w-0 flex-1 flex-col gap-8">
+      <div className="reader-columns">
+        <article className="reader-instructions">
           {doc.sections.map((s) => (
             <SectionView key={s.id} s={s} done={done} toggle={toggle} collapsed={collapsed.has(s.id)} onToggleCollapse={() => toggleCollapse(s.id)} />
           ))}
           {completed > 0 && (
-            <button className="btn-ghost self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</button>
+            <Button variant="ghost" className="self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</Button>
           )}
         </article>
-        <nav className="hidden w-60 shrink-0 lg:sticky lg:top-20 lg:block" aria-label="Pattern sections">
+        <nav className="reader-navigation" aria-label="Pattern sections">
+          <h2 className="mb-3 px-3 text-lg font-bold">Pattern sections</h2>
           <NavList meta={meta} parts={parts} assembly={assembly} active={active} go={go} done={done} />
         </nav>
       </div>
 
-      {drawer && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-foreground/30" onClick={() => setDrawer(false)}>
-          <nav className="flex h-full w-[min(22rem,90vw)] flex-col overflow-y-auto border-l border-border bg-card p-4" onClick={(e) => e.stopPropagation()} aria-label="Pattern sections">
-            <div className="mb-3 flex items-center justify-between gap-2 border-b border-border pb-3">
-              <h3 className="font-display text-lg font-semibold">{name || doc.title}</h3>
-              <button className="btn-ghost" onClick={() => setDrawer(false)} aria-label="Close"><X size={18} /></button>
-            </div>
+      </>}
+      <Sheet open={drawer} onOpenChange={setDrawer}>
+        <SheetContent className="w-[min(22rem,90vw)] overflow-y-auto bg-card" aria-describedby={undefined}>
+          <SheetHeader><SheetTitle className="font-sans">Pattern sections</SheetTitle></SheetHeader>
+          <nav className="mt-5" aria-label="Pattern sections">
             <NavList meta={meta} parts={parts} assembly={assembly} active={active} go={go} done={done} />
           </nav>
-        </div>
-      )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
@@ -119,24 +123,24 @@ function NavList({ meta, parts, assembly, active, go, done }: { meta: ReaderSect
     <div className="flex flex-col">
       {meta.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
       {parts.length > 0 && <p className="mt-2 px-3 py-2 text-sm font-semibold">Instructions</p>}
-      {parts.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} indent />)}
+      {parts.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
       {assembly.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
     </div>
   );
 }
 
-function NavItem({ s, active, onGo, done, indent }: { s: ReaderSection; active: boolean; onGo: (id: string) => void; done: Set<string>; indent?: boolean }) {
+function NavItem({ s, active, onGo, done }: { s: ReaderSection; active: boolean; onGo: (id: string) => void; done: Set<string> }) {
   const keys = sectionRowKeys(s);
   const n = keys.filter((k) => done.has(k)).length;
   return (
-    <button
+    <Button variant="ghost"
       onClick={() => onGo(s.id)}
       aria-current={active ? "true" : undefined}
-      className={`flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-left text-sm ${indent ? "pl-7" : ""} ${active ? "bg-primary/15 font-semibold text-foreground" : "hover:bg-muted"}`}
+      className={`reader-nav-item ${active ? "bg-accent font-semibold text-accent-foreground" : ""}`}
     >
-      <span>{s.title}</span>
-      {keys.length > 0 && <span className="text-xs text-muted-foreground">{n}/{keys.length}</span>}
-    </button>
+      <span className="min-w-0 whitespace-normal">{s.title}</span>
+      {keys.length > 0 && <span className="shrink-0 text-sm text-muted-foreground">{n}/{keys.length}</span>}
+    </Button>
   );
 }
 
@@ -145,15 +149,15 @@ function SectionView({ s, done, toggle, collapsed, onToggleCollapse }: { s: Read
   const n = keys.filter((k) => done.has(k)).length;
   const finished = keys.length > 0 && n === keys.length;
   return (
-    <section id={s.id} className="scroll-mt-24">
-      <button className="flex w-full items-start justify-between gap-2 rounded-lg text-left" onClick={onToggleCollapse} aria-expanded={!collapsed}>
+    <section id={s.id} className="reader-section scroll-mt-24">
+      <Button variant="ghost" className="reader-section-heading" onClick={onToggleCollapse} aria-expanded={!collapsed}>
         <span className="min-w-0">
-          <span className={`font-display text-2xl font-semibold ${finished ? "text-muted-foreground line-through" : ""}`}>{s.title}</span>
+          <span className={`text-xl font-bold ${finished ? "text-muted-foreground line-through" : ""}`}>{s.title}</span>
           {s.yarn && <span className="mt-0.5 block text-sm text-muted-foreground">Yarn: {s.yarn}</span>}
-          {keys.length > 0 && <span className="mt-1 block text-sm font-medium text-primary">{s.title.replace(/\s*\(.*\)$/, "")} · {n}/{keys.length} {/^assembly/i.test(s.title) ? "steps" : "rounds"} completed</span>}
+          {keys.length > 0 && <span className="mt-1 block text-sm font-medium text-muted-foreground">{n}/{keys.length} {/^assembly/i.test(s.title) ? "steps" : "rounds"} completed</span>}
         </span>
         <ChevronDown size={20} className={`mt-1.5 shrink-0 text-muted-foreground transition-transform ${collapsed ? "" : "rotate-180"}`} aria-hidden />
-      </button>
+      </Button>
       {!collapsed && (
         <div className="mt-3 flex flex-col">
           {s.items.map((item, i) => <ItemView key={i} item={item} done={done} toggle={toggle} />)}
@@ -175,8 +179,8 @@ function ItemView({ item, done, toggle }: { item: ReaderItem; done: Set<string>;
   if (item.kind === "text") return <p className="py-1 leading-relaxed">{item.text}</p>;
   if (item.kind === "list")
     return (
-      <ul className="flex flex-col">
-        {item.items.map((t, i) => <li key={i} className="border-b border-border/60 py-2 leading-relaxed last:border-0">{t}</li>)}
+      <ul className="flex flex-col gap-1">
+        {item.items.map((t, i) => <li key={i} className="py-1.5 leading-relaxed">{t}</li>)}
       </ul>
     );
   if (item.kind === "row") return <RowView row={item.row} done={done.has(item.row.key)} onToggle={(v) => toggle([item.row.key], v)} />;
@@ -185,27 +189,27 @@ function ItemView({ item, done, toggle }: { item: ReaderItem; done: Set<string>;
   const n = keys.filter((k) => done.has(k)).length;
   const all = n === keys.length;
   return (
-    <div className={open ? "rounded-xl bg-primary/5" : ""}>
+    <div className={open ? "rounded-lg bg-primary/5" : ""}>
       <div className={`reader-row ${all ? "reader-row-done" : ""}`}>
-        <button className="reader-badge flex items-center gap-1" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-label={`${open ? "Hide" : "Show"} rounds ${item.badge}`}>
+        <Button variant="ghost" className="reader-badge flex items-center gap-1" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-label={`${open ? "Hide" : "Show"} rounds ${item.badge}`}>
           {item.badge}
           <ChevronDown size={14} className={`transition-transform ${open ? "rotate-180" : ""}`} />
-        </button>
-        <button className="flex min-w-0 flex-1 items-center gap-2 text-left" onClick={() => toggle(keys, !all)}>
+        </Button>
+        <Button variant="ghost" className="reader-group-toggle" aria-pressed={all} onClick={() => toggle(keys, !all)}>
           <span className="reader-text flex-1">{item.text}{item.count !== undefined && <span className="reader-count"> ({item.count})</span>}</span>
           <span className="shrink-0 text-xs text-muted-foreground">{n}/{keys.length}</span>
-        </button>
+        </Button>
       </div>
-      {open && <div className="pl-6">{item.rows.map((r) => <RowView key={r.key} row={r} done={done.has(r.key)} onToggle={(v) => toggle([r.key], v)} />)}</div>}
+      {open && <div className="reader-subrounds">{item.rows.map((r) => <RowView key={r.key} row={r} done={done.has(r.key)} onToggle={(v) => toggle([r.key], v)} />)}</div>}
     </div>
   );
 }
 
 function RowView({ row, done, onToggle }: { row: ReaderRow; done: boolean; onToggle: (v: boolean) => void }) {
   return (
-    <button className={`reader-row w-full text-left ${done ? "reader-row-done" : ""}`} onClick={() => onToggle(!done)} aria-pressed={done}>
+    <Button variant="ghost" className={`reader-row w-full text-left ${done ? "reader-row-done" : ""}`} onClick={() => onToggle(!done)} aria-pressed={done}>
       <span className="reader-badge">{done ? <Check size={14} /> : row.badge}</span>
       <span className="reader-text flex-1">{row.text}{row.count !== undefined && <span className="reader-count"> ({row.count})</span>}</span>
-    </button>
+    </Button>
   );
 }
