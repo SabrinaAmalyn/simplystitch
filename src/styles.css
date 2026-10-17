@@ -206,7 +206,7 @@
   .workspace-actions { padding: 0 24px 24px; }
   @media (max-width: 767px) {
     .creator-layout { grid-template-columns: minmax(0, 1fr); }
-    .preview-panel { position: relative; height: 398px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .preview-panel { position: relative; height: auto; justify-content: flex-start; border-right: 0; border-bottom: 1px solid var(--border); }
     .preview-topbar { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--card); }
     .character-canvas { height: 300px; min-height: 0; }
     .category-tab { height: 46px; gap: 5px; font-size: 12px; }
