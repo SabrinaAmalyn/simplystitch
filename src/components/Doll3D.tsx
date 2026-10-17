@@ -85,25 +85,26 @@ function catEarGeometry() {
 }
 const CAT_EAR = catEarGeometry();
 
-/** Deform a sphere along a curve: rounded closed ends, no separate tip seam. */
+/** A downward teardrop swept from a closed sphere, with a narrow buried root. */
 function longTailGeometry() {
   const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0.48, -0.22),
-    new THREE.Vector3(0.08, 0.4, -0.6),
-    new THREE.Vector3(0.42, 0.48, -0.87),
-    new THREE.Vector3(0.68, 0.78, -0.82),
-    new THREE.Vector3(0.72, 1.02, -0.72),
+    new THREE.Vector3(0, 0.7, -0.23),
+    new THREE.Vector3(0, 0.59, -0.43),
+    new THREE.Vector3(0, 0.4, -0.61),
+    new THREE.Vector3(0, 0.2, -0.65),
+    new THREE.Vector3(0, 0.035, -0.61),
   ]);
   const geometry = new THREE.SphereGeometry(1, 32, 64);
   const positions = geometry.attributes["position"] as THREE.BufferAttribute;
-  const reference = new THREE.Vector3(0, 1, 0);
+  const reference = new THREE.Vector3(1, 0, 0);
   for (let i = 0; i < positions.count; i++) {
     const t = (positions.getY(i) + 1) / 2;
     const center = curve.getPoint(t);
     const tangent = curve.getTangent(t).normalize();
     const right = new THREE.Vector3().crossVectors(reference, tangent).normalize();
     const up = new THREE.Vector3().crossVectors(tangent, right).normalize();
-    const radius = 0.13 * (1 - 0.25 * t);
+    // The sphere closes both ends smoothly; fullness peaks below the midpoint.
+    const radius = 0.07 + 0.19 * Math.exp(-Math.pow((t - 0.64) / 0.27, 2));
     center.addScaledVector(right, positions.getX(i) * radius);
     center.addScaledVector(up, positions.getZ(i) * radius);
     positions.setXYZ(i, center.x, center.y, center.z);
