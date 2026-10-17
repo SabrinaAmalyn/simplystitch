@@ -5,7 +5,7 @@ import type { CharacterConfig } from "@/lib/character";
 import { parsePatternText, sectionRowKeys, type ReaderItem, type ReaderRow, type ReaderSection } from "@/lib/pattern-reader";
 import { resetProgress, toggleRows, useStore } from "@/lib/store";
 
-type Props = { text: string; config: CharacterConfig; progressKey: string; name?: string };
+type Props = { text: string; config: CharacterConfig; progressKey: string; name?: string | undefined };
 
 export function PatternReader({ text, config, progressKey, name }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);

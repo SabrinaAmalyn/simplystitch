@@ -24,7 +24,7 @@ describe("pattern reader parser", () => {
     const head = parsePatternText(TEXT).sections.find((s) => s.title.startsWith("Head"))!;
     const group = head.items.find((i) => i.kind === "group");
     expect(group && group.kind === "group" && group.rows.map((r) => r.badge)).toEqual(["10", "11", "12", "13", "14", "15", "16", "17", "18"]);
-    expect(group && group.kind === "group" && group.rows[0].count).toBe(54);
+    expect(group && group.kind === "group" && group.rows[0]?.count).toBe(54);
     expect(sectionRowKeys(head)).toHaveLength(10);
   });
 
