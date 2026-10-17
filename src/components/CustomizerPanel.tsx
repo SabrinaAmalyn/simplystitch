@@ -49,10 +49,10 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
       {CATEGORIES.map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={category === name}
         onClick={() => pickCategory(name)} className={`category-tab ${category === name ? "category-active" : ""}`}>{name}</Button>)}
     </nav>
-    {SUBCATEGORIES[category] && <nav role="tablist" aria-label={`${category} subcategories`} className="subcategory-nav">
+    {SUBCATEGORIES[category] ? <nav role="tablist" aria-label={`${category} subcategories`} className="subcategory-nav">
       {SUBCATEGORIES[category]!.map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={sub === name}
         onClick={() => { setSub(name); setRegionIndex(0); }} className={`subcategory-tab ${sub === name ? "subcategory-active" : ""}`}>{name}</Button>)}
-    </nav>}
+    </nav> : <div className="subcategory-nav subcategory-empty" aria-hidden="true" />}
     <div role="tabpanel" aria-label={sub ? `${category}: ${sub}` : category} className="workspace-content">
       <section className="feature-area">
         {category === "Body" && <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label={`${sub} region`}>
