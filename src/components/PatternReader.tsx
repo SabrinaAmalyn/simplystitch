@@ -127,18 +127,25 @@ function NavItem({ s, active, onGo, done, indent }: { s: ReaderSection; active: 
   );
 }
 
-function SectionView({ s, done, toggle }: { s: ReaderSection; done: Set<string>; toggle: (k: string[], v: boolean) => void }) {
+function SectionView({ s, done, toggle, collapsed, onToggleCollapse }: { s: ReaderSection; done: Set<string>; toggle: (k: string[], v: boolean) => void; collapsed: boolean; onToggleCollapse: () => void }) {
   const keys = sectionRowKeys(s);
   const n = keys.filter((k) => done.has(k)).length;
   const finished = keys.length > 0 && n === keys.length;
   return (
     <section id={s.id} className="scroll-mt-24">
-      <h3 className={`font-display text-2xl font-semibold ${finished ? "text-muted-foreground line-through" : ""}`}>{s.title}</h3>
-      {s.yarn && <p className="mt-0.5 text-sm text-muted-foreground">Yarn: {s.yarn}</p>}
-      {keys.length > 0 && <p className="mt-1 text-sm font-medium text-primary">{s.title.replace(/\s*\(.*\)$/, "")} · {n}/{keys.length} {/^assembly/i.test(s.title) ? "steps" : "rounds"} completed</p>}
-      <div className="mt-3 flex flex-col">
-        {s.items.map((item, i) => <ItemView key={i} item={item} done={done} toggle={toggle} />)}
-      </div>
+      <button className="flex w-full items-start justify-between gap-2 rounded-lg text-left" onClick={onToggleCollapse} aria-expanded={!collapsed}>
+        <span className="min-w-0">
+          <span className={`font-display text-2xl font-semibold ${finished ? "text-muted-foreground line-through" : ""}`}>{s.title}</span>
+          {s.yarn && <span className="mt-0.5 block text-sm text-muted-foreground">Yarn: {s.yarn}</span>}
+          {keys.length > 0 && <span className="mt-1 block text-sm font-medium text-primary">{s.title.replace(/\s*\(.*\)$/, "")} · {n}/{keys.length} {/^assembly/i.test(s.title) ? "steps" : "rounds"} completed</span>}
+        </span>
+        <ChevronDown size={20} className={`mt-1.5 shrink-0 text-muted-foreground transition-transform ${collapsed ? "" : "rotate-180"}`} aria-hidden />
+      </button>
+      {!collapsed && (
+        <div className="mt-3 flex flex-col">
+          {s.items.map((item, i) => <ItemView key={i} item={item} done={done} toggle={toggle} />)}
+        </div>
+      )}
     </section>
   );
 }
