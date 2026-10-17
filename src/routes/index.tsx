@@ -44,7 +44,7 @@ function Landing() {
       </header>
 
       <section className="landing-sky flex min-h-[72vh] items-center px-4 py-16 md:px-8">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-14">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 text-primary-foreground md:grid-cols-[1.05fr_0.95fr] md:gap-14">
           <div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
             <h1 className="font-heavy text-4xl leading-[1.02] uppercase md:text-6xl">
               Your ideas, made stitch by stitch.
