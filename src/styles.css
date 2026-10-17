@@ -279,6 +279,14 @@
 .pattern-header-controls { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex: 1 1 0; min-width: 0; }
 .pattern-name-field { width: 190px; }
 .pattern-header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.pattern-header-title { min-width: 0; font-size: 18px; font-weight: 600; line-height: 1.3; }
+/* Breadcrumb trail in the account top bar: links then the current page. */
+.account-crumb { display: flex; align-items: center; min-width: 0; font-size: 14px; font-weight: 600; }
+.account-crumb-item { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.account-crumb-sep { flex-shrink: 0; color: var(--muted-foreground); }
+.account-crumb-link { color: var(--muted-foreground); }
+.account-crumb-link:hover { color: var(--primary); }
+.account-crumb-current { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .reader-preview { padding: 0 8px; }
 .reader-character { width: 100%; height: 340px; max-width: 560px; margin: 0 auto; }
 .reader-bar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 0.75rem; padding: 14px 18px; border-radius: 8px; background: var(--card); }
@@ -308,6 +316,8 @@
   .pattern-header { flex-wrap: wrap; padding: 12px 16px; gap: 10px; min-height: 0; }
   .pattern-header-center { display: none; }
   .pattern-header-controls { flex-basis: auto; }
+  .pattern-header-title { font-size: 16px; }
+  .account-crumb { font-size: 13px; }
   /* Small screens: the workspace bar drops the logo and the profile picture. */
   .pattern-header-logo, .pattern-header-profile { display: none; }
   .pattern-name-field { width: auto; flex: 1; }

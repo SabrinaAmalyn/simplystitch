@@ -1,6 +1,6 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Download, MoreVertical, Palette, Pencil } from "lucide-react";
+import { Download, MoreVertical, Palette, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -50,8 +50,7 @@ export function SavedPatternDetail({ p }: { p: SavedPattern }) {
   return (
     <div className="saved-pattern-workspace">
       <PatternDocument text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}
-        header={<PatternWorkspaceHeader title={p.name} logo={false}
-          back={<Link to="/my-patterns" aria-label="All patterns" title="All patterns"><ArrowLeft /></Link>}
+        header={<PatternWorkspaceHeader title={p.name} logo={false} heading={p.name}
           actions={
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
