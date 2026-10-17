@@ -115,7 +115,8 @@ const GROUPS = [
 export function groupParts<T extends { title: string }>(parts: T[]) {
   const out: { id: string; label: string; parts: T[] }[] = [];
   for (const p of parts) {
-    const g = GROUPS.find((x) => !/ear/i.test(p.title) || x.id === "ears" ? x.test.test(p.title) && (x.id !== "body" || !/ear|tail/i.test(p.title)) : false) ?? { id: "other", label: "Other" };
+    const t = p.title;
+    const g = /ear/i.test(t) ? GROUPS[1] : /tail/i.test(t) ? GROUPS[2] : GROUPS.find((x) => x.test.test(t)) ?? { id: "other", label: "Other" };
     let bucket = out.find((b) => b.id === g.id);
     if (!bucket) out.push((bucket = { id: g.id, label: g.label, parts: [] }));
     bucket.parts.push(p);
