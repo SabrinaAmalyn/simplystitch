@@ -26,14 +26,15 @@ export function focusForSection(title: string | undefined): PartFocus {
   return null;
 }
 
-export function PatternReader({ text, config, progressKey, name, header, editing, onEditChange, previewAction }: Props) {
+export function PatternReader({ text, config, progressKey, name, header, onTextChange, previewAction }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);
   const doneList = useStore((s) => s.progress?.[progressKey]);
   const done = useMemo(() => new Set(doneList ?? []), [doneList]);
   const meta = doc.sections.filter((s) => !s.parent && !/^assembly/i.test(s.title));
   const parts = doc.sections.filter((s) => s.parent);
   const assembly = doc.sections.filter((s) => /^assembly/i.test(s.title));
-  const [tab, setTab] = useState<Tab>(parts.length ? "instructions" : "materials");
+  const [tab, setTab] = useState<"materials" | "instructions" | "assembly">(parts.length ? "instructions" : "materials");
+  const [editId, setEditId] = useState<string | null>(null);
   const [partId, setPartId] = useState(parts[0]?.id);
   const part = parts.find((p) => p.id === partId) ?? parts[0];
   const groups = useMemo(() => groupParts(parts), [parts]);
@@ -43,12 +44,11 @@ export function PatternReader({ text, config, progressKey, name, header, editing
   const completed = allKeys.filter((k) => done.has(k)).length;
   const toggle = (keys: string[], value: boolean) => toggleRows(progressKey, keys, value);
 
-  const pick = (t: Tab) => { setTab(t); onEditChange?.(t === "edit"); };
-  const tabs: [Tab, string, boolean][] = [
+  const pick = (t: "materials" | "instructions" | "assembly") => { setTab(t); setEditId(null); };
+  const tabs: ["materials" | "instructions" | "assembly", string, boolean][] = [
     ["materials", "Materials", meta.length > 0],
     ["instructions", "Instructions", parts.length > 0],
     ["assembly", "Assembly", assembly.length > 0],
-    ["edit", "Edit", Boolean(editing)],
   ];
   const shown = tab === "materials" ? meta : tab === "assembly" ? assembly : tab === "instructions" && part ? [part] : [];
   const focus = tab === "instructions" ? focusForSection(part?.title) : null;
