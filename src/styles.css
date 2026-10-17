@@ -195,7 +195,6 @@
   .subcategory-nav { display: flex; min-width: 0; overflow-x: auto; border-bottom: 1px solid var(--border); padding: 8px 20px; gap: 8px; }
   .subcategory-tab { flex: 1 1 0; min-width: max-content; justify-content: center; border-radius: 6px; padding: 0 12px; font-size: 14px; height: 36px; color: var(--muted-foreground); }
   .subcategory-active { background: var(--accent); color: var(--accent-foreground); }
-  .subcategory-empty::after { content: ""; display: block; height: 36px; }
   .workspace-content { padding: 24px; }
   .feature-area { min-height: 240px; max-height: 360px; overflow-y: auto; }
   .feature-card { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; height: 112px; min-width: 0; width: 100%; padding: 10px 4px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); white-space: normal; }
@@ -216,7 +215,6 @@
     .category-tab { height: 46px; gap: 5px; font-size: 12px; }
     .subcategory-nav { padding: 8px 10px; gap: 4px; }
     .subcategory-tab { padding: 0 4px; font-size: 13px; height: 34px; }
-    .subcategory-empty::after { height: 34px; }
     .workspace-content { padding: 16px; }
     .feature-area { min-height: 128px; max-height: 350px; }
     .feature-card { height: 96px; gap: 8px; }
