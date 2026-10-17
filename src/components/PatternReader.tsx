@@ -13,6 +13,7 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
   const done = useMemo(() => new Set(doneList ?? []), [doneList]);
   const [showPreview, setShowPreview] = useState(true);
   const [drawer, setDrawer] = useState(false);
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [active, setActive] = useState(doc.sections[0]?.id);
 
   const allKeys = useMemo(() => doc.sections.flatMap(sectionRowKeys), [doc]);
