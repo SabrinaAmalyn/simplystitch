@@ -30,6 +30,7 @@ describe("pattern reader parser", () => {
 
   it("keeps notes, yarn and assembly steps", () => {
     const doc = parsePatternText(TEXT);
+    expect(doc.sections.some((s) => s.title === "Introduction")).toBe(false);
     const head = doc.sections.find((s) => s.title.startsWith("Head"))!;
     expect(head.yarn).toBe("Cream");
     expect(head.items.some((i) => i.kind === "note" && i.text === "Stuff firmly.")).toBe(true);
