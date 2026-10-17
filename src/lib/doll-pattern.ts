@@ -62,16 +62,37 @@ export const BLUSH_RULES = {
   },
 } as const;
 
-function pair(title: string, left: string, right: string, base: Omit<Section, "title" | "yarn">): Section[] {
-  if (left === right) return [{ ...base, title: `${title} (make 2)`, yarn: left }];
+function pair(title: string, left: string, right: string, base: (yarn: string) => Omit<Section, "title" | "yarn">): Section[] {
+  if (left === right) return [{ ...base(left), title: `${title} (make 2)`, yarn: left }];
   return [
-    { ...base, title: `Left ${title.toLowerCase().replace(/s$/, "")} (make 1)`, yarn: left },
-    { ...base, title: `Right ${title.toLowerCase().replace(/s$/, "")} (make 1)`, yarn: right },
+    { ...base(left), title: `Left ${title.toLowerCase().replace(/s$/, "")} (make 1)`, yarn: left },
+    { ...base(right), title: `Right ${title.toLowerCase().replace(/s$/, "")} (make 1)`, yarn: right },
   ];
 }
 
-const withPaw = (rounds: Round[], paw: string | null, limb: string): Round[] =>
-  paw ? [R("R1–R2", `work in ${paw} (paw colour)`), ...rounds.slice(0, 2), R("R3", `switch to ${limb}`), ...rounds.slice(2)] : rounds;
+// Paw colours: hands are worked in the paw colour for R1–R3, feet for R1–R4,
+// then each piece switches to its own arm/leg yarn.
+const armRounds = (paw: string | null, limb: string): Round[] =>
+  paw
+    ? [
+        R("R1", `6 sc in MR — work in ${paw} (paw colour)`, 6),
+        R("R2", `(2 sc, inc) × 2 — in ${paw}`, 8),
+        R("R3", `sc around — in ${paw}`, 8),
+        R("R4", `switch to ${limb}, sc around`, 8),
+        R("R5–R6", "sc around for 2 rounds", 8),
+      ]
+    : ARM_ROUNDS;
+
+const legRounds = (paw: string | null, limb: string): Round[] =>
+  paw
+    ? [
+        R("R1", `6 sc in MR — work in ${paw} (paw colour)`, 6),
+        R("R2", `inc × 6 — in ${paw}`, 12),
+        R("R3–R4", `sc around for 2 rounds — in ${paw}`, 12),
+        R("R5", `switch to ${limb}, sc around`, 12),
+        R("R6–R7", "sc around for 2 rounds", 12),
+      ]
+    : LEG_ROUNDS;
 
 export function generateDollPattern(c: CharacterConfig): Pattern {
   const sel = c.layered!.selections;
