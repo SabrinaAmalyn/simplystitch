@@ -56,3 +56,4 @@
 - [x] Marquee: larger fonts
 - [x] Hero: slightly shorter
 - [x] How it works: dot after each number
+- [ ] Move the pattern name to the top-left of the right preview panel on the review page and remove the name from the header.
