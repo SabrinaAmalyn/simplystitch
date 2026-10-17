@@ -1,5 +1,5 @@
 # Tasks
-- [ ] Hide Layered items, place mobile Generate above the character at right with room for future back navigation, lower Dog thumbnail and verify category-only removal.
+- [x] Hide Layered items, place mobile Generate above the character at right with room for future back navigation, lower Dog thumbnail and verify category-only removal.
 - [x] Remove Save Character and lower journey steps; replace blush/whisker switches with None thumbnail selections and verify persistence.
 - [x] Match the flat desktop/mobile wireframe with contextual navigation, feature thumbnails, one palette and relevant layered items.
 - [x] Verify colour targeting, feature selection, removal, saved-state retention and desktop/mobile layout.
