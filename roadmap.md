@@ -1,4 +1,6 @@
 # Tasks
+- [x] Refresh the customizer with a larger preview, illustrated ear choices, icon categories and grouped colour controls.
+- [x] Prioritize Save Character and separate existing pattern tools; verify interactions on desktop and narrow screens.
 - [x] Restore independent limb colours with paw markings and verify colour changes in the preview.
 - [x] Add symmetric hand and foot paw colours on existing limb surfaces only.
 - [x] Verify bounded markings, unchanged geometry, colour saving, and all viewing angles.
