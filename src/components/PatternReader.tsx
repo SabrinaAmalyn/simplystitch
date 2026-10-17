@@ -136,19 +136,42 @@ export function groupParts<T extends { title: string }>(parts: T[]) {
 
 const shortTitle = (t: string) => t.replace(/\s*\(.*?\)\s*/g, " ").replace(/\s*[—–-].*$/, "").trim() || t;
 
-function SectionView({ s, done, toggle }: { s: ReaderSection; done: Set<string>; toggle: (k: string[], v: boolean) => void }) {
+type SectionEditProps = {
+  s: ReaderSection; done: Set<string>; toggle: (k: string[], v: boolean) => void;
+  editing: boolean; onStart: () => void; onDone: () => void; onChange: (body: string) => void;
+};
+
+function SectionView({ s, done, toggle, editing, onStart, onDone, onChange }: SectionEditProps) {
+  const [draft, setDraft] = useState(() => sectionBodySource(s));
   return (
     <section id={s.id} className="reader-section">
-      <h2 className="text-xl font-bold">{s.title}</h2>
-      <div className="mt-3 flex flex-col">
-        {s.yarn && (
-          <div className="reader-note">
-            <Info size={16} className="mt-0.5 shrink-0 text-primary" aria-hidden />
-            <p><span className="font-semibold">Yarn:</span> {s.yarn}</p>
-          </div>
-        )}
-        {s.items.map((item, i) => <ItemView key={i} item={item} done={done} toggle={toggle} />)}
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-xl font-bold">{s.title}</h2>
+        <Button variant="ghost" size="icon" className="reader-edit-btn shrink-0" aria-label={editing ? `Done editing ${s.title}` : `Edit ${s.title}`} aria-pressed={editing} title={editing ? "Done editing" : "Edit this section"} onClick={editing ? onDone : onStart}>
+          <Pencil size={16} />
+        </Button>
       </div>
+      {editing ? (
+        <div className="mt-3 flex flex-col gap-2">
+          <textarea
+            aria-label={`Edit ${s.title}`}
+            className="min-h-[30vh] w-full resize-y rounded-lg border border-border bg-background p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
+            value={draft}
+            onChange={(e) => { setDraft(e.target.value); onChange(e.target.value); }}
+          />
+          <Button variant="outline" className="self-start" onClick={onDone}>Done</Button>
+        </div>
+      ) : (
+        <div className="mt-3 flex flex-col">
+          {s.yarn && (
+            <div className="reader-note">
+              <Info size={16} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+              <p><span className="font-semibold">Yarn:</span> {s.yarn}</p>
+            </div>
+          )}
+          {s.items.map((item, i) => <ItemView key={i} item={item} done={done} toggle={toggle} />)}
+        </div>
+      )}
     </section>
   );
 }
