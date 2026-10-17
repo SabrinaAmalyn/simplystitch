@@ -107,13 +107,13 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
   const legL = y("leftLeg"), legR = y("rightLeg");
   const sections: Section[] = [
     { title: "Head (make 1)", yarn: y("head"), rounds: HEAD_ROUNDS, note: "Stuff the head firmly with fiberfill before fastening off. Fasten off without leaving a long tail." },
-    ...pair("Legs", legL, legR, { rounds: withPaw(LEG_ROUNDS, feet, "leg yarn"), note: "After completing the first leg, fasten off. Keep the second leg on the hook to join." }),
+    ...pair("Legs", legL, legR, (yarn) => ({ rounds: legRounds(feet, yarn), note: "After completing the first leg, fasten off. Keep the second leg on the hook to join." })),
     { title: "Body (continues from the legs)", yarn: y("body"), rounds: BODY_ROUNDS, note: "Stuff the legs and body firmly as you crochet. Fasten off, leaving a long yarn tail for sewing the body onto the head." },
-    ...pair("Arms", y("leftArm"), y("rightArm"), { rounds: withPaw(ARM_ROUNDS, hands, "arm yarn"), note: "Lightly stuff. Fasten off, leaving a long yarn tail for sewing." }),
+    ...pair("Arms", y("leftArm"), y("rightArm"), (yarn) => ({ rounds: armRounds(hands, yarn), note: "Lightly stuff. Fasten off, leaving a long yarn tail for sewing." })),
   ];
-  if (ear) sections.push(...pair(ear.name, y("leftEar"), y("rightEar"), { rounds: ear.rounds, note: ear.finish }));
+  if (ear) sections.push(...pair(ear.name, y("leftEar"), y("rightEar"), () => ({ rounds: ear.rounds, note: ear.finish })));
   if (tail) sections.push({ title: `${tail.name} (make 1)`, yarn: y("tail"), rounds: tail.rounds, note: tail.finish });
-  if (blush) sections.push(...pair(blush.name, y("leftBlush"), y("rightBlush"), { rounds: [...blush.rounds], note: "Fasten off, leaving a long yarn tail to sew the blush onto the face." }));
+  if (blush) sections.push(...pair(blush.name, y("leftBlush"), y("rightBlush"), () => ({ rounds: [...blush.rounds], note: "Fasten off, leaving a long yarn tail to sew the blush onto the face." })));
 
   const eyes = `${y("leftEye")}${y("leftEye") === y("rightEye") ? "" : ` / ${y("rightEye")}`}`;
   const brow = face.brow ?? "none";
