@@ -174,6 +174,8 @@ export function hydrateStore() {
   } catch {
     /* ignore corrupted storage */
   }
+  state = { ...state, hydrated: true };
+  listeners.forEach((l) => l());
 }
 
 export function useStore<T>(sel: (s: State) => T): T {

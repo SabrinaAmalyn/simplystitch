@@ -61,7 +61,7 @@ function PreviewActions() {
         aria-label="Reset character"
         title="Reset"
         className="preview-action text-muted-foreground hover:bg-muted hover:text-foreground"
-        onClick={() => setState((s) => ({ ...s, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}
+        onClick={() => setState((s) => ({ ...s, editingPatternId: null, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}
       >
         <RotateCcw size={14} />
         <span className="preview-action-label">Reset</span>
