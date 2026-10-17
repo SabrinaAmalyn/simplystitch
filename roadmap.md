@@ -46,5 +46,5 @@
 - [x] Move Randomize and Reset to the top-left corner of the character preview side on landscape screens.
 - [x] Place Reset before Randomize in the preview button pair.
 - Decrease landing page footer height
-- [ ] Switch every page (headings, body, logo) to Poppins; verify no Montserrat/Nunito remains.
-- [ ] Add more space under the "About SimplyStitch" heading; verify on phone and desktop.
+- [x] Switch every page (headings, body, logo) to Poppins; verified only Poppins loads on /, /customize, /my-patterns, /profile, /pattern.
+- [x] Add more space under the "About SimplyStitch" heading; 40px gap verified on phone and desktop.
