@@ -69,3 +69,5 @@
 - [x] Saved pattern page: drop the 3D view, show the pattern first, right side is table of contents only (no name above it); replace the name input, Customize and Download buttons with a three-dot menu shown as tabs.
 - [x] Logged-in sidebar: remove the logo and the label under it.
 - [x] Saved pattern page: make every section name collapsible, and remove the sticky behaviour of the progress bar plus the hover effect on the Clear button; verified phone and desktop.
+- [x] Saved pattern page: remove the SimplyStitch wordmark next to the Go Back button; verified phone and desktop.
+- [ ] Fix the alignment problem shown in the user's screenshot of the page they are viewing; verify phone and desktop.
