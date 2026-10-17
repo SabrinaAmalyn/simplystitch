@@ -40,8 +40,8 @@ function Landing() {
         </nav>
       </header>
 
-      <section className="landing-sky">
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-5 px-4 py-14 text-center text-primary-foreground md:px-8 md:py-20">
+      <section className="landing-sky flex min-h-[82vh] items-center px-4 py-16 md:px-8">
+        <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 text-center text-primary-foreground">
           <h1 className="font-heavy text-4xl leading-[1.02] uppercase md:text-6xl">
             Your ideas, made stitch by stitch.
           </h1>
