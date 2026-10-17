@@ -44,7 +44,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
   const region = regions[regionIndex] ?? regions[0];
   const current = region === "hands" || region === "feet" ? pawYarn(config, region) : region ? partYarn(config, region) : undefined;
   const changeFace = (patch: Partial<CharacterConfig["face"]>) => onChange({ ...config, face: { ...config.face, ...patch } });
-  const pickCategory = (next: Category) => { setCategory(next); setSub(SUBCATEGORIES[next][0] ?? "Style"); setRegionIndex(0); };
+  const pickCategory = (next: Category) => { setCategory(next); setSub(SUBCATEGORIES[next]?.[0] ?? ""); setRegionIndex(0); };
   const paletteVisible = current && (sub !== "Blush" || config.face.cheeks) && (category !== "Ears" || layered.selections.ears) && (category !== "Tail" || layered.selections.tail);
 
   return <div className="customization-workspace">
