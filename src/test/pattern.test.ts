@@ -20,7 +20,7 @@ describe("pattern generation", () => {
 
   it("colors map to yarn names", () => {
     const t = patternToText(generatePattern({ ...DEFAULT_CONFIG, colors: { ...DEFAULT_CONFIG.colors, main: "teal" } }));
-    expect(t).toContain("Deep Teal");
+    expect(t).toContain("Dusty Teal");
   });
 
   it("base doll has no ears", () => {
@@ -53,9 +53,9 @@ describe("pattern generation", () => {
     const config = { ...DEFAULT_CONFIG, ears: "long" as const, colors: { ...DEFAULT_CONFIG.colors, [part]: "teal" } };
     const p = generatePattern(config);
     const titles = { head: "Head", body: "Body (standard, ~12 cm)", leftArm: "Left arm (make 1)", rightArm: "Right arm (make 1)", leftLeg: "Left leg (make 1)", rightLeg: "Right leg (make 1)", leftEar: "Left ear (make 1)", rightEar: "Right ear (make 1)" };
-    expect(p.sections.find((s) => s.title === titles[part])?.yarn).toBe("Deep Teal");
+    expect(p.sections.find((s) => s.title === titles[part])?.yarn).toBe("Dusty Teal");
     expect(partYarn(config, part).id).toBe("teal");
-    expect(p.materials.some((m) => m.startsWith("Deep Teal ("))).toBe(true);
+    expect(p.materials.some((m) => m.startsWith("Dusty Teal ("))).toBe(true);
     expect(configKey(config)).not.toBe(configKey(DEFAULT_CONFIG));
   });
 
@@ -71,7 +71,7 @@ describe("pattern generation", () => {
   it.each(["round", "long", "pointy"] as const)("separates differently colored %s ears without changing their rounds", (ears) => {
     const p = generatePattern({ ...DEFAULT_CONFIG, ears, colors: { ...DEFAULT_CONFIG.colors, leftEar: "teal", rightEar: "sky" } });
     const pair = p.sections.filter((s) => /^(Left|Right) ear/.test(s.title));
-    expect(pair.map((s) => s.yarn)).toEqual([ears === "round" ? "Deep Teal / Cream" : "Deep Teal", ears === "round" ? "Sky Blue / Cream" : "Sky Blue"]);
+    expect(pair.map((s) => s.yarn)).toEqual([ears === "round" ? "Dusty Teal / Warm White" : "Dusty Teal", ears === "round" ? "Powder Blue / Warm White" : "Powder Blue"]);
     expect(pair[0]?.rounds).toEqual(pair[1]?.rounds);
   });
 });

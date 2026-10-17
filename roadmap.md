@@ -1,4 +1,5 @@
 # Tasks
+- [x] Update the shared yarn palette and compact swatches, preserving saved choices; verify all regions and dedicated blush colours.
 - [x] Restore independent limb colours with paw markings and verify colour changes in the preview.
 - [x] Add symmetric hand and foot paw colours on existing limb surfaces only.
 - [x] Verify bounded markings, unchanged geometry, colour saving, and all viewing angles.
