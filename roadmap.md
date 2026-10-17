@@ -1,5 +1,5 @@
 # Tasks
-- [x] Add a mobile top bar above the character holding the pattern action labelled "Save"; verified on phone widths and hidden on desktop.
+- [x] Add a mobile top bar above the character holding the pattern action labelled "Save", and remove the empty strip between the header and that bar; verified on phone widths and hidden on desktop.
 - [x] Hide Layered items, place mobile Generate above the character at right with room for future back navigation, lower Dog thumbnail and verify category-only removal.
 - [x] Remove Save Character and lower journey steps; replace blush/whisker switches with None thumbnail selections and verify persistence.
 - [x] Match the flat desktop/mobile wireframe with contextual navigation, feature thumbnails, one palette and relevant layered items.
