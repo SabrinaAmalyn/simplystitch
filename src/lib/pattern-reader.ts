@@ -100,7 +100,7 @@ export function sectionSlices(src: string): SectionSlice[] {
   const lines = src.split("\n");
   const slices: SectionSlice[] = [];
   for (let i = 0; i < lines.length; i++) {
-    if (!lines[i].startsWith("## ")) continue;
+    if (!lines[i]?.startsWith("## ")) continue;
     const prev = slices[slices.length - 1];
     if (prev) prev.end = i;
     slices.push({ headingIndex: slices.length, bodyStart: i + 1, end: lines.length });
