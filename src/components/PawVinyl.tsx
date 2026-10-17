@@ -33,7 +33,7 @@ export function PawVinyl({ color, pawColor, region, enabled, vertexColors = fals
         diffuseColor.rgb = mix(diffuseColor.rgb, pawTint, pawMask * pawEnabled);
       `);
   }, [uniforms]);
-  return <meshPhysicalMaterial color={color} vertexColors={vertexColors} onBeforeCompile={patch}
+  return <meshPhysicalMaterial {...(color === undefined ? {} : { color })} vertexColors={vertexColors} onBeforeCompile={patch}
     customProgramCacheKey={() => "paw-surface-v1"}
     roughness={0.55} sheen={1} sheenRoughness={0.45} sheenColor="#ffe4d2" clearcoat={0.15} clearcoatRoughness={0.6} />;
 }

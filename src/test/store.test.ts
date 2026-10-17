@@ -6,6 +6,21 @@ beforeEach(() => {
   localStorage.clear();
 });
 
+it("keeps shared paw yarns and individual limb choices without changing saved drafts", async () => {
+  const draft = { text: "My edited paw instructions", configKey: "previous-key", edited: true, generatedAt: 100 };
+  localStorage.setItem("stitchling-doll-base-v2", "true");
+  localStorage.setItem("stitchling-state-v1", JSON.stringify({ config: { ...DEFAULT_CONFIG, colors: { ...DEFAULT_CONFIG.colors, hands: "teal", feet: "blush", leftArm: "sky", rightLeg: "cocoa" } }, draft, previous: draft }));
+  const { hydrateStore } = await import("@/lib/store");
+  hydrateStore();
+  const saved = JSON.parse(localStorage.getItem("stitchling-state-v1") ?? "{}");
+  expect(saved.config.colors.hands).toBe("teal");
+  expect(saved.config.colors.feet).toBe("blush");
+  expect(saved.config.colors.leftArm).toBe("sky");
+  expect(saved.config.colors.rightLeg).toBe("cocoa");
+  expect(saved.draft).toEqual(draft);
+  expect(saved.previous).toEqual(draft);
+});
+
 it("migrates legacy colors without overwriting edited or recoverable drafts", async () => {
   const draft = { text: "My edited instructions", configKey: "old-key", edited: true, generatedAt: 100 };
   const previous = { ...draft, text: "Earlier edited instructions", generatedAt: 90 };
