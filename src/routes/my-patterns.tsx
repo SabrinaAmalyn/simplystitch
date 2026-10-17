@@ -7,8 +7,8 @@ import { useStore } from "@/lib/store";
 function useOpenPattern() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const library = useStore((s) => s.library);
-  const match = /^\/my-patterns\/([^/]+)\/?$/.exec(pathname);
-  return match ? library.find((p) => p.id === decodeURIComponent(match[1])) : undefined;
+  const id = /^\/my-patterns\/([^/]+)\/?$/.exec(pathname)?.[1];
+  return id ? library.find((p) => p.id === decodeURIComponent(id)) : undefined;
 }
 
 export const Route = createFileRoute("/my-patterns")({
