@@ -66,7 +66,7 @@ function Landing() {
         <div className="marquee-track font-heavy text-lg uppercase text-primary md:text-2xl">
           {items.map((t, i) => (
             <span key={i} className="flex items-center gap-10 pr-10">
-              <span aria-hidden="true" className="text-7xl leading-none md:text-8xl">✿</span>
+              <span aria-hidden="true" className="text-6xl leading-none md:text-7xl">✿</span>
               <span>{t}</span>
             </span>
           ))}
