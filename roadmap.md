@@ -71,4 +71,4 @@
 - [x] Saved pattern page: make every section name collapsible, and remove the sticky behaviour of the progress bar plus the hover effect on the Clear button; verified phone and desktop.
 - [x] Saved pattern page: remove the SimplyStitch wordmark next to the Go Back button; verified phone and desktop.
 - [x] Fix the alignment problem shown in the user's screenshot of the page they are viewing; verified phone and desktop.
-- [ ] Saved pattern page: show the finished 3D character above the first written section; verify phone and desktop.
+- [x] Saved pattern page: show the finished 3D character above the first written section; verified phone and desktop.
