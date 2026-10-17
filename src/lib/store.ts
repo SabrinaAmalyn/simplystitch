@@ -12,6 +12,8 @@ export type Draft = {
   saved?: boolean;
   generatedAt: number;
 };
+/** An earlier snapshot of a saved pattern, kept when it is updated. */
+export type PatternRevision = { savedAt: number; name: string; config: CharacterConfig; text: string };
 export type SavedPattern = {
   id: string;
   name: string;
@@ -19,10 +21,20 @@ export type SavedPattern = {
   config: CharacterConfig;
   initialText: string;
   text: string;
+  history?: PatternRevision[];
 };
 /** Completed row keys per pattern version; never touches pattern text. */
 export type Progress = Record<string, string[]>;
-type State = { config: CharacterConfig; draft: Draft | null; previous: Draft | null; library: SavedPattern[]; progress?: Progress | undefined };
+type State = {
+  config: CharacterConfig;
+  draft: Draft | null;
+  previous: Draft | null;
+  library: SavedPattern[];
+  progress?: Progress | undefined;
+  /** Saved pattern the customizer was opened from, so Save can update it. */
+  editingPatternId?: string | null;
+  hydrated?: boolean;
+};
 
 const KEY = "stitchling-state-v1";
 const BASE_KEY = "stitchling-doll-base-v2";
@@ -47,9 +59,37 @@ export function savePatternToLibrary(name: string): string | null {
     text: draft.text,
   };
   setState((s) => {
-    const next: State = { ...s, library: [entry, ...s.library], draft: s.draft && { ...s.draft, saved: true } };
+    const next: State = { ...s, library: [entry, ...s.library], draft: s.draft && { ...s.draft, saved: true }, editingPatternId: id };
     if (carried) next.progress = { ...s.progress, [`saved:${id}`]: carried };
     return next;
+  });
+  return id;
+}
+
+/** Replaces a saved pattern with the current character + draft, archiving the old version. */
+export function updatePatternInLibrary(id: string, name?: string): string | null {
+  const { draft, config } = state;
+  const old = state.library.find((p) => p.id === id);
+  if (!draft || !old) return null;
+  const revision: PatternRevision = { savedAt: old.savedAt, name: old.name, config: old.config, text: old.text };
+  const updated: SavedPattern = {
+    ...old,
+    name: name?.trim() || old.name,
+    savedAt: Date.now(),
+    config,
+    initialText: draft.initialText ?? draft.text,
+    text: draft.text,
+    history: [revision, ...(old.history ?? [])],
+  };
+  setState((s) => {
+    const progress = { ...s.progress };
+    if (old.text !== draft.text) delete progress[`saved:${id}`];
+    return {
+      ...s,
+      progress,
+      library: [updated, ...s.library.filter((p) => p.id !== id)],
+      draft: s.draft && { ...s.draft, saved: true },
+    };
   });
   return id;
 }
@@ -61,13 +101,18 @@ export function renamePattern(id: string, name: string) {
 }
 
 export function deletePattern(id: string) {
-  setState((s) => ({ ...s, library: s.library.filter((p) => p.id !== id), progress: Object.fromEntries(Object.entries(s.progress ?? {}).filter(([k]) => k !== `saved:${id}`)) }));
+  setState((s) => ({ ...s, editingPatternId: s.editingPatternId === id ? null : s.editingPatternId, library: s.library.filter((p) => p.id !== id), progress: Object.fromEntries(Object.entries(s.progress ?? {}).filter(([k]) => k !== `saved:${id}`)) }));
 }
 
 export function loadPatternIntoCustomizer(id: string) {
   const p = state.library.find((x) => x.id === id);
   if (!p) return;
-  setState((s) => ({ ...s, config: p.config }));
+  setState((s) => ({ ...s, config: p.config, editingPatternId: id }));
+}
+
+/** Starting fresh (reset) detaches the customizer from any saved pattern. */
+export function stopEditingPattern() {
+  setState((s) => ({ ...s, editingPatternId: null }));
 }
 /** Stable key for one pattern version: saved id (text immutable) or a hash of draft text. */
 export function progressKey(text: string, savedId?: string) {
