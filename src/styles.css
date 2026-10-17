@@ -182,13 +182,12 @@
   .creator-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); min-height: calc(100dvh - 82px); }
   .preview-panel { display: flex; flex-direction: column; align-items: stretch; min-width: 0; position: sticky; top: 0; height: calc(100dvh - 82px); border-right: 1px solid var(--border); background: var(--stage); }
   .character-canvas { width: 100%; flex: 1; min-height: 0; position: relative; }
-  .preview-actions { position: absolute; top: 16px; right: 16px; display: flex; align-items: center; gap: 12px; z-index: 10; }
+  .preview-actions { position: absolute; top: 12px; right: 12px; display: flex; align-items: center; gap: 8px; z-index: 10; }
   .preview-actions .btn, .preview-actions button { background: var(--card); }
-  .preview-action { height: 40px; padding: 0 14px; font-size: 12px; border-radius: 9999px; box-shadow: 0 1px 2px oklch(0.4 0.06 45 / 0.08); }
+  .preview-action { height: 32px; padding: 0 10px; font-size: 12px; box-shadow: 0 1px 2px oklch(0.4 0.06 45 / 0.08); }
   .preview-topbar { display: none; }
   .preview-topbar .preview-actions { position: static; }
-  .preview-topbar-spacer { display: block; width: 40px; height: 40px; flex-shrink: 0; margin-right: auto; }
-  .header-save { display: none; }
+  .preview-topbar-spacer { display: block; width: 36px; height: 36px; flex-shrink: 0; margin-right: auto; }
   .customization-workspace { min-width: 0; }
   .category-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
   .category-tab { border-radius: 0; min-width: 0; height: 54px; gap: 8px; color: var(--muted-foreground); border-bottom: 2px solid transparent; }
@@ -211,8 +210,7 @@
   @media (max-width: 767px) {
     .creator-layout { grid-template-columns: minmax(0, 1fr); }
     .preview-panel { position: relative; height: auto; justify-content: flex-start; border-right: 0; border-bottom: 1px solid var(--border); }
-    .header-save { display: inline-flex; }
-    .preview-topbar { display: flex; width: 100%; align-items: center; justify-content: flex-end; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--card); }
+    .preview-topbar { display: flex; width: 100%; align-items: center; justify-content: flex-end; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--card); }
     .character-canvas .preview-actions { display: none; }
     .character-canvas { height: 300px; min-height: 0; }
     .category-tab { height: 46px; gap: 5px; font-size: 12px; }
