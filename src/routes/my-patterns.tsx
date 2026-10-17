@@ -42,7 +42,7 @@ function MyPatternsPage() {
       ) : library.length === 0 ? (
         <section className="panel text-center">
           <p className="text-muted-foreground">No saved patterns yet. Customize a character, generate its pattern, then press Save.</p>
-          <Link to="/" className="btn-primary mt-4 inline-flex">Start customizing</Link>
+          <Link to="/customize" className="btn-primary mt-4 inline-flex">Start customizing</Link>
         </section>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -82,7 +82,7 @@ function PatternCard({ p, onOpen }: { p: SavedPattern; onOpen: () => void }) {
       <p className="px-2 text-xs text-muted-foreground">Saved {new Date(p.savedAt).toLocaleString()}</p>
       <div className="flex flex-wrap gap-2">
         <button className="btn-primary" onClick={onOpen}>View</button>
-        <button className="btn-ghost" onClick={() => { loadPatternIntoCustomizer(p.id); navigate({ to: "/" }); }}>Customize</button>
+        <button className="btn-ghost" onClick={() => { loadPatternIntoCustomizer(p.id); navigate({ to: "/customize" }); }}>Customize</button>
         <button className="btn-ghost" onClick={() => download(p)}>Download</button>
         <button className="btn-ghost" onClick={() => confirm(`Delete "${p.name}"?`) && deletePattern(p.id)}>Delete</button>
       </div>

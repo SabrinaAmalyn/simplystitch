@@ -60,7 +60,7 @@ function PatternPage() {
       <main className="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center gap-4 px-4 text-center">
         <h1 className="font-display text-3xl font-semibold">No pattern yet</h1>
         <p className="text-muted-foreground">Customize your character first, then press Generate Pattern.</p>
-        <Link to="/" className="btn-primary">Go to customizer</Link>
+        <Link to="/customize" className="btn-primary">Go to customizer</Link>
       </main>
     );
   }
@@ -145,7 +145,7 @@ function PatternPage() {
       {stale && (
         <div className="alert flex flex-wrap items-center justify-between gap-3">
           <span>Your character changed since this pattern was made.</span>
-          <Link to="/" className="btn-ghost">Back to regenerate</Link>
+          <Link to="/customize" className="btn-ghost">Back to regenerate</Link>
         </div>
       )}
       {previous && (
@@ -163,7 +163,7 @@ function PatternPage() {
           <button className={mode === "edit" ? "tab tab-on" : "tab"} onClick={() => setMode("edit")}>Edit</button>
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-2">
-          <Link to="/" className="btn-ghost">Back to character</Link>
+          <Link to="/customize" className="btn-ghost">Back to character</Link>
           <input
             aria-label="Pattern name"
             className="h-9 w-44 rounded-lg border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
