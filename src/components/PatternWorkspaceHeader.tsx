@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ProfileMenu } from "@/components/ProfileMenu";
 
@@ -21,7 +22,7 @@ export function PatternWorkspaceHeader({ title, back, status, actions, nameField
       <div className="pattern-header-brand">
         <Button variant="outline" size="icon" asChild>{back}</Button>
         <div className="min-w-0">
-          <span className="block font-logo text-2xl leading-tight">SimplyStitch</span>
+          <Link to="/" className="block font-logo text-2xl leading-tight">SimplyStitch</Link>
           <span className="block truncate text-xs text-muted-foreground" title={title}>{title} · {status}</span>
         </div>
       </div>
