@@ -6,8 +6,8 @@ describe("limb lengths", () => {
   it("defaults saved characters without limbs to 100%", () => {
     expect(limbLengths(DEFAULT_CONFIG)).toEqual({ arms: 1, legs: 1 });
   });
-  it("clamps slider values to 70%–140%", () => {
-    expect(limbLengths({ ...DEFAULT_CONFIG, limbs: { arms: 3, legs: 0.1 } })).toEqual({ arms: 1.4, legs: 0.7 });
+  it("clamps slider values to 100%–170%", () => {
+    expect(limbLengths({ ...DEFAULT_CONFIG, limbs: { arms: 3, legs: 0.1 } })).toEqual({ arms: 1.7, legs: 1 });
   });
   it("keeps feet on the ground when legs lengthen", () => {
     const base = legShape(1).shape.leftLeg, long = legShape(1.4).shape.leftLeg;
