@@ -94,7 +94,7 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
             <button className="btn-ghost self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</button>
           )}
         </article>
-        <nav className="hidden w-60 shrink-0 lg:sticky lg:top-6 lg:block" aria-label="Pattern sections">
+        <nav className="hidden w-60 shrink-0 lg:sticky lg:top-20 lg:block" aria-label="Pattern sections">
           <NavList meta={meta} parts={parts} assembly={assembly} active={active} go={go} done={done} />
         </nav>
       </div>
