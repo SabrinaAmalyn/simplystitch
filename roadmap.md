@@ -72,3 +72,8 @@
 - [x] Saved pattern page: remove the SimplyStitch wordmark next to the Go Back button; verified phone and desktop.
 - [x] Fix the alignment problem shown in the user's screenshot of the page they are viewing; verified phone and desktop.
 - [x] Saved pattern page: show the finished 3D character above the first written section; verified phone and desktop.
+- [ ] Saved pattern: drop the back button, show the pattern name in its place, add a breadcrumb (profile icon bar) at the far left
+- [ ] Customizer: eyebrows subsection is hidden/unreachable — fix
+- [ ] Saved pattern: breadcrumb missing / back button still shown in the user preview — confirm build is clean and the change is live
+- [x] Mobile saved pattern: "Go to" button moved to the bottom corner; the character view is now a contents link
+- [ ] Add the character 3D view as a link in the contents nav

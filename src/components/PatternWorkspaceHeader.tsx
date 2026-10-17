@@ -6,6 +6,8 @@ import { ProfileMenu } from "@/components/ProfileMenu";
 type Props = {
   title: string;
   back?: ReactNode;
+  /** Left-slot page name, e.g. the saved pattern's own name. */
+  heading?: ReactNode;
   status?: string;
   actions?: ReactNode;
   nameField?: ReactNode;
@@ -18,11 +20,12 @@ type Props = {
 };
 
 /** Full-width top bar matching the customizer header. */
-export function PatternWorkspaceHeader({ title, back, status, actions, nameField, center, profile, logo = true }: Props) {
+export function PatternWorkspaceHeader({ title, back, heading, status, actions, nameField, center, profile, logo = true }: Props) {
   return (
     <header className="pattern-header">
       <div className="pattern-header-brand">
         {back && <Button variant="outline" size="icon" asChild>{back}</Button>}
+        {heading && <h1 className="pattern-header-title truncate" title={title}>{heading}</h1>}
         {(logo || status) && (
           <div className="min-w-0">
             {logo && <Link to="/" className="pattern-header-logo block font-logo text-2xl uppercase leading-tight">SimplyStitch</Link>}
