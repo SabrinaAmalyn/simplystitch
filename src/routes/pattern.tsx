@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { JourneySteps } from "@/components/JourneySteps";
+import { CharacterPreview } from "@/components/CharacterPreview";
 import { configKey } from "@/lib/character";
 import { setState, useStore } from "@/lib/store";
 
@@ -82,6 +83,53 @@ function PatternPage() {
     setToast("Download started");
   };
 
+  const initialText = draft.initialText ?? draft.text;
+  const save = () => {
+    setState((s) => ({ ...s, draft: s.draft && { ...s.draft, saved: true } }));
+    setMode("read");
+    window.scrollTo({ top: 0 });
+  };
+
+  if (draft.saved) {
+    return (
+      <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-6 md:px-8">
+        <header className="flex flex-wrap items-center justify-between gap-4">
+          <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
+          <JourneySteps active={3} />
+        </header>
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="font-display text-2xl font-semibold">Saved</h1>
+          <div className="ml-auto flex flex-wrap gap-2">
+            <button className="btn-ghost" onClick={() => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, saved: false } }))}>Back to edit</button>
+            <button className="btn-ghost" onClick={copy}>Copy</button>
+            <button className="btn-primary" onClick={download}>Download .txt</button>
+          </div>
+        </div>
+        <section className="panel">
+          <h2 className="mb-2 font-display text-xl font-semibold">Your character</h2>
+          <div className="h-[360px] w-full md:h-[440px]">
+            <CharacterPreview config={config} />
+          </div>
+        </section>
+        <div className="grid gap-6 md:grid-cols-2">
+          <section className="panel min-w-0">
+            <h2 className="mb-2 font-display text-xl font-semibold">Initial pattern</h2>
+            <Rendered text={initialText} />
+          </section>
+          <section className="panel min-w-0">
+            <h2 className="mb-2 font-display text-xl font-semibold">Edited version</h2>
+            {draft.edited && draft.text !== initialText ? (
+              <Rendered text={draft.text} />
+            ) : (
+              <p className="text-sm text-muted-foreground">No edits were made — the edited version matches the initial pattern.</p>
+            )}
+          </section>
+        </div>
+        {toast && <div role="status" className="toast">{toast}</div>}
+      </main>
+    );
+  }
+
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-6 md:px-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
@@ -111,8 +159,7 @@ function PatternPage() {
         </div>
         <div className="ml-auto flex flex-wrap gap-2">
           <Link to="/" className="btn-ghost">Back to character</Link>
-          <button className="btn-ghost" onClick={copy}>Copy</button>
-          <button className="btn-primary" onClick={download}>Download .txt</button>
+          <button className="btn-primary" onClick={save}>Save</button>
         </div>
       </div>
 
@@ -124,7 +171,7 @@ function PatternPage() {
             aria-label="Edit pattern"
             className="min-h-[70vh] w-full resize-y rounded-xl bg-muted/50 p-4 font-mono text-sm leading-relaxed outline-none focus:ring-2 focus:ring-ring"
             value={draft.text}
-            onChange={(e) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, text: e.target.value, edited: true } }))}
+            onChange={(e) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text: e.target.value, edited: true, saved: false } }))}
           />
         )}
       </section>
