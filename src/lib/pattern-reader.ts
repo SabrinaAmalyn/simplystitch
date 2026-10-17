@@ -61,14 +61,14 @@ export function parsePatternText(src: string): ReaderDoc {
       continue;
     }
     const note = l.match(/^Note:\s*(.*)$/i);
-    if (note) { push({ kind: "note", text: note[1] }); continue; }
+    if (note) { push({ kind: "note", text: note[1] ?? "" }); continue; }
     if (/^DRAFT/.test(l)) { push({ kind: "note", text: l }); continue; }
     const bullet = l.match(/^[-*]\s+(.*)$/);
-    if (bullet) { push({ kind: "list", items: [bullet[1]] }); continue; }
+    if (bullet) { push({ kind: "list", items: [bullet[1] ?? ""] }); continue; }
     const r = l.match(ROUND);
     if (r && cur?.trackable) {
-      const label = r[1].trim();
-      const { text, count } = splitCount(r[2]);
+      const label = (r[1] ?? "").trim();
+      const { text, count } = splitCount(r[2] ?? "");
       const nums = expandRange(label);
       const base = `${cur!.id}:${label}`;
       if (nums) {
@@ -78,8 +78,8 @@ export function parsePatternText(src: string): ReaderDoc {
     }
     const step = l.match(/^(\d+)\.\s+(.*)$/);
     if (step) {
-      if (cur?.trackable) push({ kind: "row", row: { key: `${cur.id}:step${step[1]}`, badge: step[1], text: step[2] } });
-      else push({ kind: "list", items: [`${step[1]}. ${step[2]}`] });
+      if (cur?.trackable) push({ kind: "row", row: { key: `${cur.id}:step${step[1]}`, badge: step[1] ?? "", text: step[2] ?? "" } });
+      else push({ kind: "list", items: [`${step[1] ?? ""}. ${step[2] ?? ""}`] });
       continue;
     }
     push({ kind: "text", text: l });
