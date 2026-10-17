@@ -27,7 +27,6 @@ export function LayerFeatureCards({ slot, config, value, onSelect }: {
       aria-label={`${slot === "ears" ? "Ears" : "Tail"}: ${item.label}`} onClick={() => onSelect(item.id)}
       className={`feature-card ${value === item.id ? "choice-on" : ""}`}>
       <svg viewBox="0 0 64 64" aria-hidden="true"><LayerThumb id={item.id} color={color} /></svg>
-      <span>{item.label}</span>
     </Button>)}
   </div>;
 }

@@ -93,7 +93,7 @@ const NOSE_Y = -0.13;
 const MOUTH_Y = -0.27;
 
 function Nose({ style }: { style: NoseStyle }) {
-  if (style === "teddy") return <><Stitch points={[[-0.08, NOSE_Y], [0.08, NOSE_Y]]} radius={0.026} /><Stitch points={[[0, NOSE_Y], [0, NOSE_Y - 0.13]]} radius={0.022} /></>;
+  if (style === "teddy") return <><Stitch points={[[-0.08, NOSE_Y], [0.08, NOSE_Y]]} radius={0.026} /><Stitch points={[[0, NOSE_Y], [0, NOSE_Y - 0.05]]} radius={0.022} /></>;
   if (style === "cat") {
     // Softly rounded triangle: curved sides and a rounded tip, no sharp corners.
     const tri = new THREE.Shape();
@@ -109,7 +109,8 @@ function Nose({ style }: { style: NoseStyle }) {
 
 function Mouth({ style }: { style: MouthStyle }) {
   const y = MOUTH_Y;
-  if (style === "x") return <><Stitch points={[[-0.065, y + 0.06], [0.065, y - 0.06]]} /><Stitch points={[[0.065, y + 0.06], [-0.065, y - 0.06]]} /></>;
+  // The X sits a little lower so it never touches the teddy nose stem above it.
+  if (style === "x") return <><Stitch points={[[-0.065, y + 0.03], [0.065, y - 0.09]]} /><Stitch points={[[0.065, y + 0.03], [-0.065, y - 0.09]]} /></>;
   if (style === "w") return <Stitch points={[[-0.14, y + 0.05], [-0.1, y - 0.01], [-0.065, y - 0.045], [-0.03, y - 0.005], [0, y + 0.03], [0.03, y - 0.005], [0.065, y - 0.045], [0.1, y - 0.01], [0.14, y + 0.05]]} />;
   // Same gentle arc as a sleepy eye: drop 0.051 over half-width 0.09.
   if (style === "smile") return <Stitch points={[[-0.09, y + 0.015], [-0.045, y - 0.024], [0, y - 0.036], [0.045, y - 0.024], [0.09, y + 0.015]]} />;

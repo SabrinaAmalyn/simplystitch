@@ -61,7 +61,6 @@ type CardProps<T extends string> = {
 function FeatureCards<T extends string>({ label, options, value, onSelect, Thumb }: CardProps<T>) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm font-semibold">{label}</span>
       <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label={label}>
         {options.map((o) => (
           <Button
@@ -76,7 +75,6 @@ function FeatureCards<T extends string>({ label, options, value, onSelect, Thumb
             className={`feature-card ${value === o.value ? "choice-on" : ""}`}
           >
             <svg viewBox="0 0 32 32" aria-hidden="true"><Thumb style={o.value} /></svg>
-            <span>{o.label}</span>
           </Button>
         ))}
       </div>
