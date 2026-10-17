@@ -304,6 +304,7 @@
 .review-preview-label { display: flex; flex-direction: column; min-width: 0; padding: 14px 16px 0; }
 .review-canvas { flex: 1; min-height: 0; }
 .review-preview-action { position: absolute; right: 16px; bottom: 16px; z-index: 10; }
+.review-preview-back { position: absolute; left: 16px; bottom: 16px; z-index: 10; }
 .review-body { padding: 20px; }
 .review-body .reader-instructions { padding: 0; background: transparent; }
 @media (max-width: 767px) {
@@ -311,6 +312,7 @@
   .review-preview { order: 0; position: relative; height: 300px; min-height: 0; border-bottom: 1px solid var(--border); }
   .review-content { border-right: 0; }
   .review-preview-action { right: 12px; bottom: 12px; }
+  .review-preview-back { left: 12px; bottom: 12px; }
   .review-body { padding: 16px; }
 }
 .pattern-stale-alert { margin: 0; border-radius: 0; border-width: 0 0 1px; }
