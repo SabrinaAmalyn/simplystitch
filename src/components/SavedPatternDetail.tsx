@@ -1,10 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft, Download, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { PatternReader } from "@/components/PatternReader";
-import { progressKey, renamePattern, type SavedPattern } from "@/lib/store";
+import { loadPatternIntoCustomizer, progressKey, renamePattern, type SavedPattern } from "@/lib/store";
 
 export function downloadPattern(p: SavedPattern) {
   const blob = new Blob([p.text], { type: "text/plain" });
@@ -32,6 +32,7 @@ function NameField({ p }: { p: SavedPattern }) {
 
 /** One saved pattern: name, 3D preview and its interactive pattern. */
 export function SavedPatternDetail({ p }: { p: SavedPattern }) {
+  const navigate = useNavigate();
   return (
     <div className="saved-pattern-workspace">
       <PatternReader text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}

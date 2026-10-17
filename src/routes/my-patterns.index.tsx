@@ -40,7 +40,7 @@ function MyPatternsPage() {
           <Link to="/customize" className="btn-primary mt-4 inline-flex">Start customizing</Link>
         </section>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {library.map((p) => (
             <PatternCard key={p.id} p={p} />
           ))}
