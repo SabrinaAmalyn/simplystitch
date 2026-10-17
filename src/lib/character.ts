@@ -44,6 +44,21 @@ export const EAR_OPTIONS: { value: EarStyle; label: string; hint: string }[] = [
   { value: "pointy", label: "Pointy", hint: "Kitty-style" },
 ];
 
+export const NOSE_OPTIONS: { value: NoseStyle; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "teddy", label: "Teddy Bear" },
+  { value: "cat", label: "Cat" },
+  { value: "round", label: "Round" },
+];
+
+export const MOUTH_OPTIONS: { value: MouthStyle; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "x", label: "Miffy X" },
+  { value: "w", label: "Cat W" },
+  { value: "smile", label: "Happy" },
+  { value: "cat3", label: "Cat :3" },
+];
+
 export const EXPRESSION_OPTIONS: { value: Expression; label: string }[] = [
   { value: "happy", label: "Happy" },
   { value: "sleepy", label: "Sleepy" },
