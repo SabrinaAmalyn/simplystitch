@@ -3,6 +3,7 @@ import { beforeEach, expect, it, vi } from "vitest";
 beforeEach(() => {
   vi.resetModules();
   localStorage.clear();
+  localStorage.setItem("simplystitch-sample-v1", "true");
 });
 
 async function setup() {
