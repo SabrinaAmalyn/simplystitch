@@ -83,6 +83,31 @@ function catEarGeometry() {
 }
 const CAT_EAR = catEarGeometry();
 
+/** Floppy dog ear: flat straight top, straight sides easing into a smooth rounded U bottom. */
+function dogEarGeometry() {
+  const w = 0.3; // half-width
+  const top = 0.55; // flat top edge
+  const k = -0.1; // where the rounded bottom begins
+  const s = new THREE.Shape();
+  s.moveTo(-w, top);
+  s.lineTo(w, top);
+  s.lineTo(w, k);
+  s.absarc(0, k, w, 0, Math.PI, true); // rounded U bottom
+  s.lineTo(-w, top);
+  const g = new THREE.ExtrudeGeometry(s, {
+    depth: 0.18,
+    bevelEnabled: true,
+    bevelThickness: 0.07,
+    bevelSize: 0.06,
+    bevelSegments: 6,
+    curveSegments: 32,
+  });
+  g.center();
+  g.computeVertexNormals();
+  return g;
+}
+const DOG_EAR = dogEarGeometry();
+
 // Doll faces +z; the doll's left side is +x (named from the doll's perspective).
 function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: string; inner: string }) {
   switch (type) {
