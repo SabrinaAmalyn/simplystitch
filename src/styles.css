@@ -179,7 +179,6 @@
   .toast { @apply fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow-lg; }
 }
 
-@layer components {
   .creator-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); min-height: calc(100dvh - 82px); }
   .preview-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; position: sticky; top: 0; height: calc(100dvh - 82px); border-right: 1px solid var(--border); background: var(--stage); }
   .character-canvas { width: 100%; height: min(620px, calc(100dvh - 180px)); min-height: 360px; }
@@ -216,4 +215,3 @@
     .feature-card span { font-size: 11px; }
     .workspace-actions { padding: 0 16px 20px; }
   }
-}
