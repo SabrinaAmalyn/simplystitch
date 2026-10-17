@@ -31,7 +31,7 @@ export function AccountLayout({ children }: { children: ReactNode }) {
             </Link>
           ))}
         </nav>
-        <Link to="/" className="mt-auto flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted">
+        <Link to="/customize" className="mt-auto flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted">
           <ArrowLeft size={16} /> Back to customizer
         </Link>
       </aside>

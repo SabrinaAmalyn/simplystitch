@@ -1,186 +1,127 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { CharacterPreview } from "@/components/CharacterPreview";
-import { CustomizerPanel } from "@/components/CustomizerPanel";
-import { BLUSH_OPTIONS, BROW_OPTIONS, configKey, DEFAULT_CONFIG, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, type CharacterConfig } from "@/lib/character";
-import { generatePattern, patternToText } from "@/lib/pattern";
-import { setState, useStore } from "@/lib/store";
-import { Button } from "@/components/ui/button";
-import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers";
-import { YARNS } from "@/lib/yarn-palette";
-import { Dices, RotateCcw } from "lucide-react";
-import { ProfileMenu } from "@/components/ProfileMenu";
+import { createLayeredCharacter } from "@/lib/character-layers";
+import { DEFAULT_CONFIG, type CharacterConfig } from "@/lib/character";
+import { JourneySteps } from "@/components/JourneySteps";
 
-const pick = <T,>(list: readonly T[]): T => list[Math.floor(Math.random() * list.length)]!;
-const EAR_IDS = ["ears-human", "ears-dog", "ears-cat", "ears-bear", "ears-bunny"] as const;
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Stitchling — Design a crochet character, get the pattern" },
+      { name: "description", content: "Build an amigurumi character from ears, tail, face details and yarn colours, then generate a written crochet pattern draft you can edit and download." },
+      { property: "og:title", content: "Stitchling — Design a crochet character, get the pattern" },
+      { property: "og:description", content: "Customize your doll, then generate a matching crochet draft with rounds, stitch counts and assembly notes." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Landing,
+});
 
-function randomConfig(): CharacterConfig {
-  const yarn = () => pick(YARNS).id;
-  const body = yarn();
-  const ears = pick([...EAR_IDS, null] as const);
-  const tail = pick(["tail-round", "tail-long", null] as const);
+/** The doll shown on the landing page — built once, never saved or edited. */
+function showcaseConfig(): CharacterConfig {
   const layered = createLayeredCharacter();
-  layered.selections.ears = ears;
-  layered.selections.tail = tail;
-  const blushYarn = pick(["blush", "baby-pink", "peach"] as const);
-  const paw = yarn();
+  layered.selections.ears = "ears-bunny";
+  layered.selections.tail = "tail-round";
   return {
     ...DEFAULT_CONFIG,
     colors: {
       ...DEFAULT_CONFIG.colors,
-      main: body, head: body, body, leftArm: body, rightArm: body, leftLeg: body, rightLeg: body,
-      leftEar: yarn(), rightEar: yarn(), tail: yarn(), hands: paw, feet: paw,
-      leftEye: "charcoal", rightEye: "charcoal", brows: "charcoal", leftBlush: blushYarn, rightBlush: blushYarn,
+      main: "peach",
+      head: "peach",
+      body: "peach",
+      leftArm: "peach",
+      rightArm: "peach",
+      leftLeg: "peach",
+      rightLeg: "peach",
+      leftEar: "ivory",
+      rightEar: "ivory",
+      tail: "ivory",
+      hands: "ivory",
+      feet: "ivory",
+      leftBlush: "blush",
+      rightBlush: "blush",
     },
     face: {
       ...DEFAULT_CONFIG.face,
-      cheeks: Math.random() < 0.7,
-      blushShape: pick(BLUSH_OPTIONS).value,
-      eyeStyle: pick(EYE_OPTIONS).value,
-      brow: pick(BROW_OPTIONS).value,
-      nose: pick(NOSE_OPTIONS).value,
-      mouth: pick(MOUTH_OPTIONS).value,
+      cheeks: true,
+      blushShape: "oval",
+      nose: "cat",
+      mouth: "w",
+      eyeStyle: "open",
+      brow: "soft-arch",
       whiskers: false,
     },
     layered,
   };
 }
 
-/**
- * Randomize / Reset pair. Rendered once inside the preview canvas (desktop) and
- * once inside the mobile preview top bar; CSS decides which one is visible so
- * the buttons always sit in the preview's upper-right corner.
- */
-function PreviewActions() {
-  return (
-    <div className="preview-actions">
-      <Button
-        variant="outline"
-        size="sm"
-        type="button"
-        aria-label="Randomize character"
-        title="Randomize"
-        className="preview-action border-primary/40 font-semibold text-primary hover:bg-accent hover:text-primary"
-        onClick={() => setState((s) => ({ ...s, config: randomConfig() }))}
-      >
-        <Dices size={14} />
-        <span className="preview-action-label">Randomize</span>
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        type="button"
-        aria-label="Reset character"
-        title="Reset"
-        className="preview-action text-muted-foreground hover:bg-muted hover:text-foreground"
-        onClick={() => setState((s) => ({ ...s, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}
-      >
-        <RotateCcw size={14} />
-        <span className="preview-action-label">Reset</span>
-      </Button>
-    </div>
-  );
-}
+const SHOWCASE = showcaseConfig();
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Stitchling — Design your crochet character" },
-      { name: "description", content: "Customize the original Stitchling lined doll with layered artwork and save structured character selections." },
-      { property: "og:title", content: "Stitchling — Design your crochet character" },
-      { property: "og:description", content: "Customize the original lined doll with ears, hair, facial details, outfits and accessory layers." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Workspace,
-});
+const HOW = [
+  { n: 1, title: "Customize", body: "Choose ears, tail, embroidered face details and a yarn colour for every part." },
+  { n: 2, title: "Generate", body: "Get a written draft: rounds, stitch counts and colour switches for your doll." },
+  { n: 3, title: "Edit", body: "Reword anything in the draft. The original stays beside it for comparison." },
+  { n: 4, title: "Save", body: "Name it, keep it in My Patterns, then copy or download the text." },
+];
 
-function Workspace() {
-  const config = useStore((s) => s.config);
-  const draft = useStore((s) => s.draft);
-  const navigate = useNavigate();
-  const [confirming, setConfirming] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const stale = draft && draft.configKey !== configKey(config);
-  const layered = config.layered ?? createLayeredCharacter();
-  const blockers = patternBlockers(layered);
-
-  const generate = () => {
-    if (blockers.length) return;
-    if (draft?.edited && stale && !confirming) return setConfirming(true);
-    setConfirming(false);
-    setBusy(true);
-    setError(null);
-    setTimeout(() => {
-      try {
-        const text = patternToText(generatePattern(config));
-        setState((s) => ({
-          ...s,
-          previous: s.draft?.edited ? s.draft : s.previous,
-          draft: { text, initialText: text, configKey: configKey(config), edited: false, saved: false, generatedAt: Date.now() },
-        }));
-        navigate({ to: "/pattern" });
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "Something went wrong generating the pattern.");
-        setBusy(false);
-      }
-    }, 600);
-  };
-
+function Landing() {
   return (
     <main className="min-h-screen bg-background">
-      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
-        <h1 className="min-w-0 font-display text-2xl font-semibold">Stitchling</h1>
-        <ProfileMenu />
+      <header className="flex items-center justify-between gap-4 border-b border-border px-4 py-5 md:px-8">
+        <span className="font-display text-2xl font-semibold">Stitchling</span>
+        <nav className="flex items-center gap-2">
+          <Link to="/my-patterns" className="btn-ghost hidden sm:inline-flex">My Patterns</Link>
+          <Link to="/customize" className="btn-primary">Try Demo</Link>
+        </nav>
       </header>
 
-      <div className="creator-layout">
-        <section className="preview-panel" aria-label="Character preview">
-          <div className="preview-topbar">
-            <span className="preview-topbar-spacer" aria-hidden="true" />
-            <PreviewActions />
-            <Button type="button" size="sm" onClick={generate} disabled={busy || blockers.length > 0}>
-              Generate
-            </Button>
-          </div>
-          <div className="character-canvas">
-            <CharacterPreview config={config} />
-            <PreviewActions />
-          </div>
-        </section>
-
-        <section className="min-w-0">
-          <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
-          <div className="workspace-actions flex flex-col gap-4">
-          
-          {confirming && (
-            <div className="alert">
-              <p className="font-semibold">You've edited your current pattern.</p>
-              <p className="text-sm">Generating a new one replaces it. Your edited version stays available to restore on the pattern page.</p>
-              <div className="mt-3 flex gap-2">
-                <Button onClick={generate}>Generate anyway</Button>
-                <Button variant="outline" onClick={() => setConfirming(false)}>Cancel</Button>
-              </div>
-            </div>
-          )}
-          {error && <div className="alert alert-error">{error}</div>}
-
+      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,400px)] md:gap-12 md:px-8 md:py-16">
+        <div className="flex min-w-0 flex-col items-start gap-5">
+          <p className="text-xs font-semibold tracking-wide text-primary uppercase">Amigurumi character studio</p>
+          <h1 className="font-display text-4xl leading-tight font-semibold md:text-5xl">
+            Make a character.
+            <br />
+            Get the pattern.
+          </h1>
+          <p className="max-w-prose text-muted-foreground md:text-lg">
+            Pick ears, a tail, embroidered face details and a yarn colour for every part. Stitchling writes a crochet
+            draft that matches the doll on your screen — rounds, stitch counts, colour switches and assembly notes.
+          </p>
           <div className="flex flex-wrap items-center gap-3">
-            <Button type="button" className="hidden h-auto whitespace-normal md:inline-flex" onClick={generate} disabled={busy || blockers.length > 0}>
-              {busy ? "Stitching your pattern…" : draft ? "Generate new pattern" : "Generate Pattern"}
-            </Button>
-            {draft && (
-              <Link to="/pattern" className="btn-ghost">
-                {stale ? "Open previous pattern (outdated)" : "Open pattern"}
-              </Link>
-            )}
+            <Link to="/customize" className="btn-primary btn-lg">Try Demo</Link>
+            <a href="#how" className="btn-ghost">See how it works</a>
           </div>
+          <p className="text-sm text-muted-foreground">No sign-up needed. Your character stays in this browser.</p>
+        </div>
+
+        <div className="stage overflow-hidden rounded-lg border border-border">
+          <div className="h-[320px] w-full md:h-[440px]">
+            <CharacterPreview config={SHOWCASE} />
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <section id="how" className="mx-auto max-w-6xl px-4 pb-14 md:px-8">
+        <h2 className="font-display text-2xl font-semibold">How it works</h2>
+        <ol className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {HOW.map((s) => (
+            <li key={s.n} className="panel flex flex-col gap-2">
+              <span className="step-dot step-dot-on">{s.n}</span>
+              <h3 className="font-display text-lg font-semibold">{s.title}</h3>
+              <p className="text-sm text-muted-foreground">{s.body}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="mt-6 flex justify-center">
+          <JourneySteps active={0} size="lg" />
+        </div>
+      </section>
+
+      <footer className="border-t border-border px-4 py-8 text-center">
+        <p className="text-sm text-muted-foreground">Generated drafts are a starting point — edit them, then save what you like.</p>
+        <Link to="/customize" className="btn-ghost mt-4 inline-flex">Open the character editor</Link>
+      </footer>
     </main>
   );
 }

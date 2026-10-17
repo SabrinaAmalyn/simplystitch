@@ -7,10 +7,17 @@ import { routeTree } from "@/routeTree.gen";
 // Match routes without running loaders or rendering: loaders may need a server or
 // network the test run lacks, and jsdom never loads the stylesheets React waits on.
 describe("App routing", () => {
-  it("matches a page for / instead of falling back to not found", () => {
-    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+  const router = () => createRouter({ routeTree, context: { queryClient: new QueryClient() } });
 
-    const matches = router.matchRoutes("/");
+  it("matches a page for / instead of falling back to not found", () => {
+    const matches = router().matchRoutes("/");
+
+    expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
+  });
+
+  // The landing page's Try Demo button points here, so the editor must exist at this path.
+  it("matches a page for /customize where the character editor lives", () => {
+    const matches = router().matchRoutes("/customize");
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
