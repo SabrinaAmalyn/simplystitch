@@ -19,22 +19,12 @@ export const Route = createFileRoute("/profile")({
 
 // Demo account content — sample data shown in the signed-in preview only.
 const PROFILE = {
-  name: "Sabrina Rizal",
-  handle: "@sabrina",
-  initials: "SR",
+  name: "Jane Doe",
+  handle: "@janedoe",
+  initials: "JD",
   bio: "Weekend amigurumi maker. Currently working through a very long list of foxes.",
   plan: "Maker Pro",
-  email: "sabrina.rizal@example.com",
-  location: "Kuala Lumpur, Malaysia",
-  joined: "March 2026",
 };
-
-const DETAILS = [
-  { label: "Email", value: PROFILE.email },
-  { label: "Location", value: PROFILE.location },
-  { label: "Member since", value: PROFILE.joined },
-  { label: "Plan", value: PROFILE.plan },
-];
 
 const PREFERENCES = [
   { label: "Written terms", value: "US" },
@@ -90,17 +80,7 @@ function ProfilePage() {
         </div>
 
         <div className="grid min-w-0 gap-6 md:grid-cols-2">
-          <section className="panel">
-            <h2 className="mb-4 font-display text-xl font-semibold">Account details</h2>
-            <dl className="flex flex-col gap-3">
-              {DETAILS.map((d) => (
-                <div key={d.label} className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-3 last:border-0 last:pb-0">
-                  <dt className="text-sm text-muted-foreground">{d.label}</dt>
-                  <dd className="text-sm font-semibold">{d.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
+
 
           <section className="panel">
             <h2 className="mb-4 font-display text-xl font-semibold">Stitching preferences</h2>
