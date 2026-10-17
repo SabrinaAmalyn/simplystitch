@@ -2,11 +2,11 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Save } from "lucide-react";
 import { configKey } from "@/lib/character";
-import { defaultPatternName, progressKey, savePatternToLibrary, setState, useStore } from "@/lib/store";
+import { defaultPatternName, progressKey, savePatternToLibrary, setState, updatePatternInLibrary, useStore } from "@/lib/store";
 import { PatternReader } from "@/components/PatternReader";
 import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/pattern")({
@@ -27,6 +27,8 @@ function PatternPage() {
   const draft = useStore((s) => s.draft);
   const config = useStore((s) => s.config);
   const library = useStore((s) => s.library);
+  const editingId = useStore((s) => s.editingPatternId);
+  const editing = editingId ? library.find((p) => p.id === editingId) : undefined;
   const [naming, setNaming] = useState(false);
   const [name, setName] = useState("");
   const navigate = useNavigate();
@@ -45,12 +47,19 @@ function PatternPage() {
   const suggested = defaultPatternName(library);
 
   const openNaming = () => {
-    setName("");
+    setName(editing ? editing.name : "");
     setNaming(true);
   };
 
+  const confirmUpdate = () => {
+    if (!editing) return;
+    const id = updatePatternInLibrary(editing.id, name);
+    setNaming(false);
+    if (id) navigate({ to: "/my-patterns/$patternId", params: { patternId: id } });
+  };
+
   const confirmSave = () => {
-    const id = savePatternToLibrary(name);
+    const id = savePatternToLibrary(editing && name.trim() === editing.name ? `${editing.name} (copy)` : name);
     setNaming(false);
     setName("");
     if (id) navigate({ to: "/my-patterns/$patternId", params: { patternId: id } });
@@ -81,12 +90,18 @@ function PatternPage() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              confirmSave();
+              if (editing) confirmUpdate();
+              else confirmSave();
             }}
             className="flex flex-col gap-4"
           >
             <DialogHeader>
-              <DialogTitle>Name your pattern</DialogTitle>
+              <DialogTitle>{editing ? "Save changes" : "Name your pattern"}</DialogTitle>
+              {editing && (
+                <DialogDescription>
+                  You customized “{editing.name}”. Update it (the previous version is kept in its history) or save a separate copy.
+                </DialogDescription>
+              )}
             </DialogHeader>
             <Input
               aria-label="Pattern name"
@@ -98,7 +113,14 @@ function PatternPage() {
             />
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setNaming(false)}>Cancel</Button>
-              <Button type="submit">Save</Button>
+              {editing ? (
+                <>
+                  <Button type="button" variant="outline" onClick={confirmSave}>Save as new copy</Button>
+                  <Button type="submit">Update pattern</Button>
+                </>
+              ) : (
+                <Button type="submit">Save</Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>
