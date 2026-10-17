@@ -20,7 +20,9 @@ export type SavedPattern = {
   initialText: string;
   text: string;
 };
-type State = { config: CharacterConfig; draft: Draft | null; previous: Draft | null; library: SavedPattern[] };
+/** Completed row keys per pattern version; never touches pattern text. */
+export type Progress = Record<string, string[]>;
+type State = { config: CharacterConfig; draft: Draft | null; previous: Draft | null; library: SavedPattern[]; progress?: Progress };
 
 const KEY = "stitchling-state-v1";
 const BASE_KEY = "stitchling-doll-base-v2";
@@ -35,6 +37,7 @@ export function savePatternToLibrary(name: string): string | null {
   const { draft, config } = state;
   if (!draft) return null;
   const id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+  const carried = state.progress?.[progressKey(draft.text)];
   const entry: SavedPattern = {
     id,
     name: name.trim() || defaultPatternName(state.library),
@@ -43,7 +46,7 @@ export function savePatternToLibrary(name: string): string | null {
     initialText: draft.initialText ?? draft.text,
     text: draft.text,
   };
-  setState((s) => ({ ...s, library: [entry, ...s.library], draft: s.draft && { ...s.draft, saved: true } }));
+  setState((s) => ({ ...s, library: [entry, ...s.library], progress: carried ? { ...s.progress, [`saved:${id}`]: carried } : s.progress, draft: s.draft && { ...s.draft, saved: true } }));
   return id;
 }
 
@@ -54,7 +57,7 @@ export function renamePattern(id: string, name: string) {
 }
 
 export function deletePattern(id: string) {
-  setState((s) => ({ ...s, library: s.library.filter((p) => p.id !== id) }));
+  setState((s) => ({ ...s, library: s.library.filter((p) => p.id !== id), progress: Object.fromEntries(Object.entries(s.progress ?? {}).filter(([k]) => k !== `saved:${id}`)) }));
 }
 
 export function loadPatternIntoCustomizer(id: string) {
@@ -62,6 +65,29 @@ export function loadPatternIntoCustomizer(id: string) {
   if (!p) return;
   setState((s) => ({ ...s, config: p.config }));
 }
+/** Stable key for one pattern version: saved id (text immutable) or a hash of draft text. */
+export function progressKey(text: string, savedId?: string) {
+  let h = 5381;
+  for (let i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) | 0;
+  return savedId ? `saved:${savedId}` : `draft:${(h >>> 0).toString(36)}`;
+}
+
+export function toggleRows(key: string, rows: string[], done: boolean) {
+  setState((s) => {
+    const cur = new Set(s.progress?.[key] ?? []);
+    rows.forEach((r) => (done ? cur.add(r) : cur.delete(r)));
+    return { ...s, progress: { ...s.progress, [key]: Array.from(cur) } };
+  });
+}
+
+export function resetProgress(key: string) {
+  setState((s) => {
+    const next = { ...s.progress };
+    delete next[key];
+    return { ...s, progress: next };
+  });
+}
+
 let state: State = initial;
 const listeners = new Set<() => void>();
 

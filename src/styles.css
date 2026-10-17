@@ -228,3 +228,15 @@
     .preview-action-label { display: none; }
     .preview-action { padding: 0 8px; }
   }
+
+/* Interactive pattern reader */
+.reader-bar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 0.875rem; background: var(--card); }
+.reader-row { display: flex; align-items: center; gap: 0.75rem; min-height: 3rem; padding: 0.5rem 0.5rem; border-bottom: 1px solid color-mix(in oklab, var(--border) 70%, transparent); border-radius: 0.5rem; transition: background-color .15s; }
+.reader-row:hover { background: color-mix(in oklab, var(--muted) 60%, transparent); }
+.reader-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 2.25rem; height: 2rem; padding: 0 0.5rem; border-radius: 0.5rem; background: var(--muted); font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+.reader-text { font-size: 1rem; line-height: 1.5; }
+.reader-count { font-weight: 600; }
+.reader-row-done { background: color-mix(in oklab, var(--primary) 8%, transparent); }
+.reader-row-done .reader-text { color: var(--muted-foreground); text-decoration: line-through; text-decoration-color: color-mix(in oklab, var(--muted-foreground) 60%, transparent); }
+.reader-row-done .reader-badge { background: var(--primary); color: var(--primary-foreground); }
+.reader-note { display: flex; gap: 0.6rem; margin: 0.5rem 0; padding: 0.75rem 0.9rem; border-radius: 0.75rem; background: color-mix(in oklab, var(--primary) 10%, var(--card)); font-size: 0.925rem; line-height: 1.5; }
