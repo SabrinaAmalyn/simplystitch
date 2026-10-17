@@ -325,7 +325,7 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
 
 export default function Doll3D({ config, ears }: { config: CharacterConfig; ears: EarType }) {
   return (
-    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.9, 7], fov: 40 }} gl={{ toneMappingExposure: 1.05 }}>
+    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.9, 5.5], fov: 40 }} gl={{ toneMappingExposure: 1.05 }}>
       <hemisphereLight args={["#fff6ec", "#ffd9c4", 1.1]} />
       {/* Warm key */}
       <directionalLight position={[3, 5, 4]} intensity={1.6} color="#fff0e0" castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />

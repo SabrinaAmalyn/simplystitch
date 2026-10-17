@@ -5,79 +5,93 @@ import { BLUSH_OPTIONS, BROW_OPTIONS, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, 
 import { BLUSH_YARN_GROUPS } from "@/lib/yarn-palette";
 import { YarnSwatches } from "@/components/YarnSwatches";
 import { BlushCards, BrowCards, EyeCards, MouthCards, NoseCards } from "@/components/FaceFeatureCards";
-import { CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer } from "@/lib/character-layers";
-import { PAW_REGIONS, pawYarn, type PawRegion } from "@/lib/paw-colors";
+import { LayerFeatureCards, LayerThumb } from "@/components/LayerFeatureCards";
+import { createLayeredCharacter, selectLayer, selectedItems } from "@/lib/character-layers";
+import { pawYarn, type PawRegion } from "@/lib/paw-colors";
+import { CircleUserRound, Smile, Rabbit, Spline, X } from "lucide-react";
 
-const TABS = ["Body", "Face", "Ears", "Tail"] as const;
-const PART_LABEL: Record<BodyPart, string> = {
-  head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm",
-  leftLeg: "Left leg", rightLeg: "Right leg", leftEar: "Left ear", rightEar: "Right ear",
-  leftInnerEar: "Left inner ear", rightInnerEar: "Right inner ear", blush: "Blush cheeks", tail: "Tail",
-  leftBlush: "Left blush", rightBlush: "Right blush", leftEye: "Left eye", rightEye: "Right eye", brows: "Eyebrows",
+const CATEGORIES = ["Body", "Face", "Ears", "Tail"] as const;
+type Category = (typeof CATEGORIES)[number];
+const SUBCATEGORIES: Record<Category, string[]> = {
+  Body: ["Head", "Torso", "Arms", "Legs", "Paws"],
+  Face: ["Eyes", "Eyebrows", "Nose", "Mouth", "Blush", "Whiskers"],
+  Ears: ["Style"], Tail: ["Style"],
 };
-const TAB_PARTS: Record<(typeof TABS)[number], BodyPart[]> = {
-  Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg"],
-  Face: ["leftEye", "rightEye", "leftBlush", "rightBlush", "brows"],
-  Ears: ["leftEar", "rightEar"],
-  Tail: ["tail"],
+const ICONS = { Body: CircleUserRound, Face: Smile, Ears: Rabbit, Tail: Spline };
+const LABELS: Partial<Record<BodyPart | PawRegion, string>> = {
+  head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm", leftLeg: "Left leg", rightLeg: "Right leg",
+  leftEar: "Left ear", rightEar: "Right ear", leftEye: "Left eye", rightEye: "Right eye", leftBlush: "Left blush", rightBlush: "Right blush",
+  brows: "Eyebrows", hands: "Hands / paws", feet: "Feet / paws", tail: "Tail",
+};
+const REGIONS: Record<string, (BodyPart | PawRegion)[]> = {
+  Head: ["head"], Torso: ["body"], Arms: ["leftArm", "rightArm"], Legs: ["leftLeg", "rightLeg"], Paws: ["hands", "feet"],
+  Eyes: ["leftEye", "rightEye"], Eyebrows: ["brows"], Blush: ["leftBlush", "rightBlush"],
 };
 
-function ColorRow({ part, config, onChange }: { part: BodyPart; config: CharacterConfig; onChange: (c: CharacterConfig) => void }) {
-  const current = partYarn(config, part);
-  return <YarnSwatches label={PART_LABEL[part]} current={current} defaultOpen={part === "head"}
-    groups={part === "leftBlush" || part === "rightBlush" ? BLUSH_YARN_GROUPS : undefined}
-    onSelect={(id) => onChange({ ...config, colors: { ...config.colors, [part]: id } })} />;
+function RegionThumb({ region }: { region: string }) {
+  return <svg viewBox="0 0 64 64" aria-hidden="true" className="text-primary">
+    {region === "head" ? <rect x="12" y="10" width="40" height="42" rx="18" fill="currentColor" />
+      : region === "body" ? <path d="M20 12Q32 5 44 12L47 39Q47 53 32 53Q17 53 17 39Z" fill="currentColor" />
+      : region === "hands" || region === "feet" ? <><rect x="23" y="9" width="18" height="46" rx="9" fill="currentColor" opacity=".25" /><path d="M23 38H41V46a9 9 0 01-18 0Z" fill="currentColor" /></>
+      : <rect x="23" y="9" width="18" height="46" rx="9" fill="currentColor" transform={region.includes("Arm") ? "rotate(65 32 32)" : undefined} />}
+  </svg>;
 }
 
 export function CustomizerPanel({ config, onChange }: { config: CharacterConfig; onChange: (c: CharacterConfig) => void }) {
-  const [tab, setTab] = useState<(typeof TABS)[number]>("Body");
+  const [category, setCategory] = useState<Category>("Body");
+  const [sub, setSub] = useState("Head");
+  const [regionIndex, setRegionIndex] = useState(0);
   const layered = config.layered ?? createLayeredCharacter();
-  const pickEars = (id: string | null) => onChange({ ...config, layered: selectLayer(layered, "ears", id) });
-  const earItems = CUSTOMIZATION_ITEMS.filter((i) => i.slot === "ears");
-  const tailItems = CUSTOMIZATION_ITEMS.filter((i) => i.slot === "tail");
-  return (
-    <div className="panel flex flex-col gap-5">
-      <div role="tablist" aria-label="Character options" className="flex flex-wrap gap-1 rounded-full bg-muted p-1">
-        {TABS.map((t) => (
-          <Button key={t} variant="ghost" role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={tab === t ? "tab tab-on" : "tab"}>{t}</Button>
-        ))}
-      </div>
-      <div role="tabpanel" aria-label={tab} className="flex flex-col gap-4">
-        {tab === "Face" && <div className="flex items-center justify-between gap-3"><span className="text-sm font-semibold">Show blush</span><Switch aria-label="Show blush" checked={config.face.cheeks} onCheckedChange={(cheeks) => onChange({ ...config, face: { ...config.face, cheeks } })} /></div>}
-        {tab === "Face" && (
-          <>
-            {config.face.cheeks && <BlushCards options={BLUSH_OPTIONS} value={config.face.blushShape ?? "round"} onSelect={(blushShape) => onChange({ ...config, face: { ...config.face, blushShape } })} />}
-            <EyeCards options={EYE_OPTIONS} value={config.face.eyeStyle ?? "open"} onSelect={(eyeStyle) => onChange({ ...config, face: { ...config.face, eyeStyle } })} />
-            <BrowCards options={BROW_OPTIONS} value={config.face.brow ?? "none"} onSelect={(brow) => onChange({ ...config, face: { ...config.face, brow } })} />
-            <div className="flex items-center justify-between gap-3"><span className="text-sm font-semibold">Whiskers</span><Switch aria-label="Whiskers" checked={config.face.whiskers ?? false} onCheckedChange={(whiskers) => onChange({ ...config, face: { ...config.face, whiskers } })} /></div>
-            <NoseCards options={NOSE_OPTIONS} value={config.face.nose ?? "none"} onSelect={(nose) => onChange({ ...config, face: { ...config.face, nose } })} />
-            <MouthCards options={MOUTH_OPTIONS} value={config.face.mouth ?? "none"} onSelect={(mouth) => onChange({ ...config, face: { ...config.face, mouth } })} />
-          </>
-        )}
-        {tab === "Ears" && (
-          <div className="grid grid-cols-3 gap-2">
-            <Button variant="ghost" aria-pressed={layered.selections.ears === null} onClick={() => pickEars(null)} className={layered.selections.ears === null ? "choice choice-on" : "choice"}>None</Button>
-            {earItems.map((item) => (
-              <Button key={item.id} variant="ghost" aria-pressed={layered.selections.ears === item.id} onClick={() => pickEars(item.id)} className={layered.selections.ears === item.id ? "choice choice-on" : "choice"}>{item.label}</Button>
-            ))}
-          </div>
-        )}
-        {tab === "Tail" && (
-          <div className="grid grid-cols-3 gap-2">
-            <Button variant="ghost" aria-pressed={!layered.selections.tail} onClick={() => onChange({ ...config, layered: selectLayer(layered, "tail", null) })} className={!layered.selections.tail ? "choice choice-on" : "choice"}>None</Button>
-            {tailItems.map((item) => (
-              <Button key={item.id} variant="ghost" aria-pressed={layered.selections.tail === item.id} onClick={() => onChange({ ...config, layered: selectLayer(layered, "tail", item.id) })} className={layered.selections.tail === item.id ? "choice choice-on" : "choice"}>{item.label}</Button>
-            ))}
-          </div>
-        )}
-        {(tab === "Body" || tab === "Face" || (tab === "Ears" && layered.selections.ears) || (tab === "Tail" && layered.selections.tail)) && TAB_PARTS[tab].filter((p) => config.face.cheeks || (p !== "leftBlush" && p !== "rightBlush")).map((p) => <ColorRow key={p} part={p} config={config} onChange={onChange} />)}
-        {tab === "Body" && PAW_REGIONS.map((region: PawRegion) => {
-          const label = region === "hands" ? "Hands / paws" : "Feet / paws";
-          const current = pawYarn(config, region);
-          return <YarnSwatches key={region} label={label} current={current}
-            onSelect={(id) => onChange({ ...config, colors: { ...config.colors, [region]: id } })} />;
-        })}
-      </div>
+  const regions = category === "Ears" ? ["leftEar", "rightEar"] as BodyPart[] : category === "Tail" ? ["tail"] as BodyPart[] : REGIONS[sub] ?? [];
+  const region = regions[regionIndex] ?? regions[0];
+  const current = region === "hands" || region === "feet" ? pawYarn(config, region) : region ? partYarn(config, region) : undefined;
+  const changeFace = (patch: Partial<CharacterConfig["face"]>) => onChange({ ...config, face: { ...config.face, ...patch } });
+  const pickCategory = (next: Category) => { setCategory(next); setSub(SUBCATEGORIES[next][0] ?? "Style"); setRegionIndex(0); };
+  const relevant = selectedItems(layered).filter((item) => item.slot === category.toLowerCase());
+  const paletteVisible = current && (sub !== "Blush" || config.face.cheeks) && (category !== "Ears" || layered.selections.ears) && (category !== "Tail" || layered.selections.tail);
+
+  return <div className="customization-workspace">
+    <nav role="tablist" aria-label="Character options" className="category-nav">
+      {CATEGORIES.map((name) => { const Icon = ICONS[name]; return <Button key={name} variant="ghost" role="tab" aria-selected={category === name}
+        onClick={() => pickCategory(name)} className={`category-tab ${category === name ? "category-active" : ""}`}><Icon size={16} /><span>{name}</span></Button>; })}
+    </nav>
+    <nav role="tablist" aria-label={`${category} subcategories`} className="subcategory-nav">
+      {SUBCATEGORIES[category].map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={sub === name}
+        onClick={() => { setSub(name); setRegionIndex(0); }} className={`subcategory-tab ${sub === name ? "subcategory-active" : ""}`}>{name}</Button>)}
+    </nav>
+    <div role="tabpanel" aria-label={`${category}: ${sub}`} className="workspace-content">
+      <section className="feature-area">
+        {category === "Body" && <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label={`${sub} region`}>
+          {regions.map((part, index) => <Button key={part} variant="ghost" role="radio" aria-checked={region === part} onClick={() => setRegionIndex(index)}
+            className={`feature-card ${region === part ? "choice-on" : ""}`}><RegionThumb region={part} /><span>{LABELS[part]}</span></Button>)}
+        </div>}
+        {category === "Face" && <>
+          {sub === "Eyes" && <EyeCards options={EYE_OPTIONS} value={config.face.eyeStyle ?? "open"} onSelect={(eyeStyle) => changeFace({ eyeStyle })} />}
+          {sub === "Eyebrows" && <BrowCards options={BROW_OPTIONS} value={config.face.brow ?? "none"} onSelect={(brow) => changeFace({ brow })} />}
+          {sub === "Nose" && <NoseCards options={NOSE_OPTIONS} value={config.face.nose ?? "none"} onSelect={(nose) => changeFace({ nose })} />}
+          {sub === "Mouth" && <MouthCards options={MOUTH_OPTIONS} value={config.face.mouth ?? "none"} onSelect={(mouth) => changeFace({ mouth })} />}
+          {sub === "Blush" && <><div className="mb-4 flex items-center justify-between gap-3 text-sm font-semibold"><span>Show blush</span><Switch aria-label="Show blush" checked={config.face.cheeks} onCheckedChange={(cheeks) => changeFace({ cheeks })} /></div>
+            {config.face.cheeks && <BlushCards options={BLUSH_OPTIONS} value={config.face.blushShape ?? "round"} onSelect={(blushShape) => changeFace({ blushShape })} />}</>}
+          {sub === "Whiskers" && <div className="flex items-center justify-between gap-3 text-sm font-semibold"><span>Whiskers</span><Switch aria-label="Whiskers" checked={config.face.whiskers ?? false} onCheckedChange={(whiskers) => changeFace({ whiskers })} /></div>}
+        </>}
+        {(category === "Ears" || category === "Tail") && <LayerFeatureCards slot={category === "Ears" ? "ears" : "tail"} config={config}
+          value={category === "Ears" ? layered.selections.ears : layered.selections.tail}
+          onSelect={(id) => onChange({ ...config, layered: selectLayer(layered, category === "Ears" ? "ears" : "tail", id) })} />}
+      </section>
+      {paletteVisible && region && <section className="palette-area">
+        {category !== "Body" && regions.length > 1 && <div className="mb-4 flex gap-2" role="group" aria-label="Colour region">{regions.map((part, index) =>
+          <Button key={part} variant="outline" size="sm" aria-pressed={region === part} className={region === part ? "region-active" : ""} onClick={() => setRegionIndex(index)}>{LABELS[part]}</Button>)}</div>}
+        <YarnSwatches compact label={LABELS[region] ?? region} current={current} groups={sub === "Blush" ? BLUSH_YARN_GROUPS : undefined}
+          onSelect={(id) => onChange({ ...config, colors: { ...config.colors, [region]: id } })} />
+      </section>}
+      {relevant.length > 0 && <section className="layered-area" aria-label="Selected components">
+        <h3 className="mb-3 text-sm font-semibold">Layered items</h3>
+        <div className="grid grid-cols-3 gap-2">{relevant.map((item) => <div key={item.id} className="relative flex min-w-0 flex-col items-center gap-2 rounded-md border border-primary bg-primary/5 px-2 py-4">
+          <svg viewBox="0 0 64 64" className="h-12 w-12" aria-hidden="true"><LayerThumb id={item.id} color={partYarn(config, item.slot === "ears" ? "leftEar" : "tail").hex} /></svg><span className="text-xs">{item.label}</span>
+          <Button variant="ghost" size="icon" className="absolute right-0 top-0 h-6 w-6" aria-label={`Remove ${item.label}`}
+            onClick={() => onChange({ ...config, layered: selectLayer(layered, item.slot, null) })}><X size={12} /></Button>
+        </div>)}</div>
+      </section>}
     </div>
-  );
+  </div>;
 }

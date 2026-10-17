@@ -67,10 +67,10 @@ function FeatureCards<T extends string>({ label, options, value, onSelect, Thumb
             aria-label={`${label}: ${o.label}`}
             title={o.label}
             onClick={() => onSelect(o.value)}
-            className={`choice h-auto whitespace-normal flex flex-col items-center gap-1 px-1 py-2 [&_svg]:size-8 ${value === o.value ? "choice-on" : ""}`}
+            className={`feature-card ${value === o.value ? "choice-on" : ""}`}
           >
-            <svg viewBox="0 0 32 32" className="h-8 w-8" aria-hidden="true"><Thumb style={o.value} /></svg>
-            <span className="text-[10px] leading-tight">{o.label}</span>
+            <svg viewBox="0 0 32 32" aria-hidden="true"><Thumb style={o.value} /></svg>
+            <span>{o.label}</span>
           </Button>
         ))}
       </div>

@@ -1,4 +1,6 @@
 # Tasks
+- [x] Match the flat desktop/mobile wireframe with contextual navigation, feature thumbnails, one palette and relevant layered items.
+- [x] Verify colour targeting, feature selection, removal, saved-state retention and desktop/mobile layout.
 - [x] Add smaller oval blush near the eyes, optional whiskers, and closed sleepy eyes in Face; preserve colours and saved drafts.
 - [x] Verify the new face combinations, removal, and reload in the preview.
 - [x] Update the shared yarn palette and compact swatches, preserving saved choices; verify all regions and dedicated blush colours.

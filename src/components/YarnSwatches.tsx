@@ -2,13 +2,26 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { YARN_GROUPS, type Yarn, type YarnGroup } from "@/lib/yarn-palette";
 
-export function YarnSwatches({ label, current, onSelect, groups = YARN_GROUPS, defaultOpen = false }: {
+export function YarnSwatches({ label, current, onSelect, groups = YARN_GROUPS, defaultOpen = false, compact = false }: {
   label: string;
   current: Yarn;
   onSelect: (id: string) => void;
   groups?: YarnGroup[] | undefined;
   defaultOpen?: boolean;
+  compact?: boolean;
 }) {
+  if (compact) return <section aria-label={`${label} yarn colours`} className="flex min-w-0 flex-col gap-3">
+    <div className="flex items-center justify-between gap-2 text-sm"><h3 className="font-semibold">Yarn colour</h3><span className="truncate text-muted-foreground">{current.name}</span></div>
+    <TooltipProvider delayDuration={200}>
+      <div className="palette-grid">
+        {groups.flatMap((group) => group.yarns).map((yarn) => <Tooltip key={yarn.id}>
+          <TooltipTrigger asChild><Button variant="ghost" type="button" aria-label={`${label}: ${yarn.name}`} aria-pressed={current.id === yarn.id}
+            onClick={() => onSelect(yarn.id)} className={`palette-swatch ${current.id === yarn.id ? "swatch-on" : ""}`} style={{ backgroundColor: yarn.hex }} /></TooltipTrigger>
+          <TooltipContent>{yarn.name}</TooltipContent>
+        </Tooltip>)}
+      </div>
+    </TooltipProvider>
+  </section>;
   return <details open={defaultOpen || undefined} className="min-w-0 border-b border-border pb-2">
     <summary className="cursor-pointer text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
       {label} <span className="font-normal text-muted-foreground">· {current.name}</span>
