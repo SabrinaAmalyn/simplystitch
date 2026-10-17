@@ -25,7 +25,7 @@ export type Expression = "happy" | "sleepy" | "surprised";
 export type BodyShape = "chubby" | "standard" | "tall";
 export type Accessory = "scarf" | "bow" | "beanie";
 
-export const BODY_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar", "leftInnerEar", "rightInnerEar", "blush", "tail"] as const;
+export const BODY_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar", "leftInnerEar", "rightInnerEar", "blush", "tail", "leftBlush", "rightBlush", "leftEye", "rightEye"] as const;
 /** Parts that have crochet pattern rules; inner ears, blush and tails are preview-only details. */
 export const CROCHET_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar"] as const;
 /** Detail parts default to their own yarn instead of the main yarn. */
@@ -74,12 +74,19 @@ export const ACCESSORY_OPTIONS: { value: Accessory; label: string }[] = [
   { value: "beanie", label: "Beanie" },
 ];
 
-export const partYarn = (c: CharacterConfig, part: BodyPart) => yarnById(c.colors[part] ?? DETAIL_DEFAULTS[part] ?? c.colors.main);
+function partColor(c: CharacterConfig, part: BodyPart): string {
+  const legacy = part === "leftBlush" || part === "rightBlush"
+    ? c.colors.blush ?? "blush"
+    : part === "leftEye" || part === "rightEye" ? c.colors.eyes : undefined;
+  return c.colors[part] ?? legacy ?? DETAIL_DEFAULTS[part] ?? c.colors.main;
+}
+
+export const partYarn = (c: CharacterConfig, part: BodyPart) => yarnById(partColor(c, part));
 
 /** Backfill saved colors without touching pattern drafts or existing part choices. */
 export function migratePartColors(c: CharacterConfig): CharacterConfig {
   const colors = { ...DEFAULT_CONFIG.colors, ...c.colors };
-  for (const part of BODY_PARTS) colors[part] = colors[part] ?? DETAIL_DEFAULTS[part] ?? colors.main;
+  for (const part of BODY_PARTS) colors[part] = partColor({ ...c, colors }, part);
   return { ...c, colors };
 }
 

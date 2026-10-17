@@ -3,7 +3,7 @@ import { ContactShadows, Environment, Lightformer, OrbitControls } from "@react-
 import * as THREE from "three";
 import { JoinedBody } from "./JoinedBody";
 import { HEAD, HEAD_ATTACHMENT_OFFSET, createBlushGeometry } from "@/lib/doll-anatomy";
-import { partYarn, yarnById, type BodyPart, type CharacterConfig } from "@/lib/character";
+import { partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 
 // Dev tooling injects `data-tsd-source` onto JSX. R3F reads hyphenated props as
 // nested paths (data.tsd.source) and throws. Declaring it as a flat, harmless
@@ -45,11 +45,11 @@ function Head({ color }: { color: string }) {
   return <mesh position={[0, HEAD.y, 0]} scale={HEAD.scale} castShadow><sphereGeometry args={[1, 64, 48]} /><Vinyl color={color} /></mesh>;
 }
 
-function Eyes({ color }: { color: string }) {
+function Eyes({ left, right }: { left: string; right: string }) {
   return (
     <>
       {[-1, 1].map((s) => (
-        <mesh key={s} position={[s * 0.34, HEAD.y, 0.9]} rotation={[0, s * 0.36, 0]} scale={[0.06, 0.09, 0.03]}><sphereGeometry args={[1, 20, 14]} /><meshPhysicalMaterial color={color} roughness={0.3} clearcoat={1} /></mesh>
+        <mesh key={s} position={[s * 0.34, HEAD.y, 0.9]} rotation={[0, s * 0.36, 0]} scale={[0.06, 0.09, 0.03]}><sphereGeometry args={[1, 20, 14]} /><meshPhysicalMaterial color={s === 1 ? left : right} roughness={0.3} clearcoat={1} /></mesh>
       ))}
     </>
   );
@@ -172,8 +172,8 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
   return (
     <group position={[0, -1.1, 0]}>
       <Head color={c("head")} />
-      <Eyes color={yarnById(config.colors.eyes).hex} />
-      {config.face.cheeks && <><BlushPatch side={1} color={c("blush")} /><BlushPatch side={-1} color={c("blush")} /></>}
+      <Eyes left={c("leftEye")} right={c("rightEye")} />
+      {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} /><BlushPatch side={-1} color={c("rightBlush")} /></>}
       <JoinedBody torso={c("body")} leftLeg={c("leftLeg")} rightLeg={c("rightLeg")} />
       <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />
       <Arm side={1} color={c("leftArm")} />

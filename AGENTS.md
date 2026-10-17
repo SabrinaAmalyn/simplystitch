@@ -14,7 +14,7 @@
 - Resolve individual part yarns through the shared character helper with legacy main-yarn fallback; backfill missing saved part colors without modifying draft records, and name sides from the doll's perspective so preview and assembly agree.
 - The 3D lower body renders a smooth union of independently parameterized torso and leg volumes with continuous normals and per-part vertex colors; one surface prevents attachment seams while retaining modular shape and yarn inputs.
 - Derive head attachment from the joined torso bounds and shift ears with the head; a shared anatomy module prevents gaps after torso edits and owns the raised cheek geometry.
-- Keep blush visibility in face.cheeks and its yarn in colors.blush, including face settings in layered config keys; hiding cheeks must retain their chosen yarn and distinguish saved configurations.
+- Keep blush visibility in face.cheeks and independent face yarns in colors.leftBlush/rightBlush/leftEye/rightEye with legacy blush/eyes fallbacks in the shared part helper; migration preserves drafts and hiding cheeks retains both yarns so saved configurations remain recoverable.
 - Keep ear registry IDs stable when changing display names so saved selections remain compatible.
 - The canonical layered renderer uses the original image pointer through a separate display mask and a shared fixed canvas; registry entries define slot, ordered PNG/SVG asset pieces, component IDs and rule references, so adding artwork never requires editing the renderer.
 - Layered configuration is versioned separately from legacy crochet configuration; migrate missing layer selections to empty slots without changing drafts, and block pattern generation until the base and selected components have explicit supported rules.
