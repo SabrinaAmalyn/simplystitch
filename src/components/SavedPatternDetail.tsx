@@ -38,7 +38,10 @@ export function SavedPatternDetail({ p }: { p: SavedPattern }) {
         header={<PatternWorkspaceHeader title={p.name}
           back={<Link to="/my-patterns" aria-label="All patterns" title="All patterns"><ArrowLeft /></Link>}
           status="Saved to My Patterns" nameField={<NameField p={p} />}
-          actions={<Button variant="outline" onClick={() => downloadPattern(p)}><Download /> Download .txt</Button>}
+          actions={<>
+            <Button variant="outline" onClick={() => { loadPatternIntoCustomizer(p.id); navigate({ to: "/customize" }); }}><Palette /> Customize</Button>
+            <Button variant="outline" onClick={() => downloadPattern(p)}><Download /> Download .txt</Button>
+          </>}
         />}
       />
     </div>
