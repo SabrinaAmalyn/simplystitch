@@ -4,7 +4,7 @@ export type BodyVolume = {
   radii: readonly [number, number, number];
 };
 export const JOINED_BODY = {
-  torso: { center: [0, 0.64, 0], radii: [0.49, 0.45, 0.44] },
+  torso: { center: [0, 0.6, 0], radii: [0.49, 0.42, 0.36] },
   leftLeg: { center: [0.22, 0.25, 0], radii: [0.205, 0.27, 0.255] },
   rightLeg: { center: [-0.22, 0.25, 0], radii: [0.205, 0.27, 0.255] },
 } satisfies Record<string, BodyVolume>;

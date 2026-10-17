@@ -67,7 +67,7 @@ function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
 
 function Arm({ side, color }: { side: 1 | -1; color: string }) {
   // Upper end tucks into the torso shoulder; thicker and slightly longer.
-  return <mesh position={[side * 0.44, 0.8, 0.02]} rotation={[0, 0, side * 0.45]} castShadow><capsuleGeometry args={[0.17, 0.3, 8, 20]} /><Vinyl color={color} /></mesh>;
+  return <mesh position={[side * 0.44, 0.78, 0.02]} rotation={[0, 0, side * 0.45]} castShadow><capsuleGeometry args={[0.17, 0.3, 8, 20]} /><Vinyl color={color} /></mesh>;
 }
 
 /** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */
