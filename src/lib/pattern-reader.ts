@@ -58,6 +58,7 @@ export function parsePatternText(src: string): ReaderDoc {
       if (yarn !== undefined) sec.yarn = yarn;
       if (!meta && !assembly) sec.parent = "Instructions";
       cur = sec;
+      sections.push(cur);
       continue;
     }
     const note = l.match(/^Note:\s*(.*)$/i);

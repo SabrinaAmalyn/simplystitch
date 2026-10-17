@@ -46,7 +46,11 @@ export function savePatternToLibrary(name: string): string | null {
     initialText: draft.initialText ?? draft.text,
     text: draft.text,
   };
-  setState((s) => ({ ...s, library: [entry, ...s.library], progress: carried ? { ...s.progress, [`saved:${id}`]: carried } : s.progress, draft: s.draft && { ...s.draft, saved: true } }));
+  setState((s) => {
+    const next: State = { ...s, library: [entry, ...s.library], draft: s.draft && { ...s.draft, saved: true } };
+    if (carried) next.progress = { ...s.progress, [`saved:${id}`]: carried };
+    return next;
+  });
   return id;
 }
 
