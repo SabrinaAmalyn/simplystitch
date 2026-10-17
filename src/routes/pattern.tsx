@@ -76,6 +76,8 @@ function PatternPage() {
   return (
     <main className="pattern-page">
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined}
+        onTextChange={(text) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text, edited: true, saved: false } }))}
+
         
         previewAction={<Button onClick={save}><Save /> Save</Button>}
         header={<><PatternWorkspaceHeader
