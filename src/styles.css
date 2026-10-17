@@ -197,7 +197,7 @@
 .studio-badge > span { width: 6px; height: 6px; border-radius: 50%; background: var(--secondary-foreground); }
 .creator-stage { height: 650px; overflow: hidden; border-radius: 32px; }
 .preview-reset { position: absolute; top: 18px; right: 18px; border-radius: 999px; background: var(--card); color: var(--foreground); height: 38px; box-shadow: var(--studio-shadow); }
-.preview-hints { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; gap: 18px; padding: 10px 16px; border-radius: 999px; background: var(--card); color: var(--muted-foreground); pointer-events: none; }
+.preview-hints { position: absolute; bottom: 18px; left: 18px; display: flex; gap: 18px; padding: 10px 16px; border-radius: 999px; background: var(--card); color: var(--muted-foreground); pointer-events: none; }
 .creator-save { padding-top: 20px; }
 .save-character { height: 50px; padding: 0 26px; border-radius: 999px; font-weight: 700; box-shadow: var(--shadow-soft); }
 .creator-controls { overflow: hidden; border: 1px solid var(--border); border-radius: 26px; background: var(--card); box-shadow: var(--studio-shadow); }
@@ -234,7 +234,7 @@
 .ear-check { position: absolute; top: 7px; right: 7px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); }
 .ear-check svg { width: 14px; height: 14px; }
 .pattern-tools { color: var(--muted-foreground); }
-@media (min-width: 1100px) { .category-content { padding: 28px 30px; } .yarn-swatch { width: 34px; height: 34px; } }
+@media (min-width: 1100px) { .category-content { padding: 28px 30px; } .color-row > div:last-child { gap: 6px; } }
 @media (max-width: 1023px) {
   .creator-layout { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .preview-column { position: static; }
@@ -243,7 +243,7 @@
 }
 @media (max-width: 600px) {
   .creator-header { margin-bottom: 22px; padding-bottom: 16px; }
-  .creator-stage { height: 450px; border-radius: 26px; }
+  .creator-stage { height: 390px; border-radius: 26px; }
   .preview-column h2 { font-size: 26px; }
   .studio-badge { font-size: 10px; }
   .creator-save { gap: 10px; padding-top: 14px; }
@@ -254,5 +254,6 @@
   .category-tabs { padding: 8px; gap: 4px; }
   .category-tab { height: 70px; padding: 10px 4px; }
   .yarn-swatch { width: 34px; height: 34px; }
+  .color-row > div:last-child { display: grid; grid-template-columns: repeat(6, 34px); gap: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { .yarn-swatch { transition: none; } .yarn-swatch:hover { transform: none; } }
