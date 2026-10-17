@@ -83,31 +83,6 @@ function catEarGeometry() {
 }
 const CAT_EAR = catEarGeometry();
 
-/** Floppy dog ear: flat straight top, straight sides easing into a smooth rounded U bottom. */
-function dogEarGeometry() {
-  const w = 0.3; // half-width
-  const top = 0.55; // flat top edge
-  const k = -0.1; // where the rounded bottom begins
-  const s = new THREE.Shape();
-  s.moveTo(-w, top);
-  s.lineTo(w, top);
-  s.lineTo(w, k);
-  s.absarc(0, k, w, 0, Math.PI, true); // rounded U bottom
-  s.lineTo(-w, top);
-  const g = new THREE.ExtrudeGeometry(s, {
-    depth: 0.18,
-    bevelEnabled: true,
-    bevelThickness: 0.07,
-    bevelSize: 0.06,
-    bevelSegments: 6,
-    curveSegments: 32,
-  });
-  g.center();
-  g.computeVertexNormals();
-  return g;
-}
-const DOG_EAR = dogEarGeometry();
-
 // Doll faces +z; the doll's left side is +x (named from the doll's perspective).
 function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: string; inner: string }) {
   switch (type) {
@@ -142,13 +117,12 @@ function Ear({ type, side, color, inner }: { type: Ears; side: 1 | -1; color: st
         </mesh>
       );
     case "dog":
-      // Solid floppy ear with a flat straight top and a rounded U bottom; no inner insert.
+      // Solid floppy ear, no inner insert.
       return (
-        <group position={[side * 0.98, 2.02, 0.04]} rotation={[0, side * 0.22, -side * 0.14]}>
-          <mesh geometry={DOG_EAR} rotation={[0, Math.PI / 2, 0]} scale={[1.1, 1.1, 1]} castShadow>
-            <Vinyl color={color} />
-          </mesh>
-        </group>
+        <mesh position={[side * 1.08, 1.78, 0.1]} rotation={[0, side * 0.3, side * 0.3]} scale={[0.25, 0.84, 0.36]} castShadow>
+          <sphereGeometry args={[1, 32, 20]} />
+          <Vinyl color={color} />
+        </mesh>
       );
   }
 }
