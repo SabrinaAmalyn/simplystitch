@@ -82,17 +82,22 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
             <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${total ? (completed / total) * 100 : 0}%` }} />
           </div>
         </div>
-        <button className="btn-ghost shrink-0" onClick={() => setDrawer(true)} aria-label="Open pattern sections"><Menu size={18} /></button>
+        <button className="btn-ghost shrink-0 lg:hidden" onClick={() => setDrawer(true)} aria-label="Open pattern sections"><Menu size={18} /></button>
       </div>
 
-      <article className="panel flex flex-col gap-8">
-        {doc.sections.map((s) => (
-          <SectionView key={s.id} s={s} done={done} toggle={toggle} collapsed={collapsed.has(s.id)} onToggleCollapse={() => toggleCollapse(s.id)} />
-        ))}
-        {completed > 0 && (
-          <button className="btn-ghost self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</button>
-        )}
-      </article>
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
+        <article className="panel flex min-w-0 flex-1 flex-col gap-8">
+          {doc.sections.map((s) => (
+            <SectionView key={s.id} s={s} done={done} toggle={toggle} collapsed={collapsed.has(s.id)} onToggleCollapse={() => toggleCollapse(s.id)} />
+          ))}
+          {completed > 0 && (
+            <button className="btn-ghost self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</button>
+          )}
+        </article>
+        <nav className="hidden w-60 shrink-0 lg:sticky lg:top-6 lg:block" aria-label="Pattern sections">
+          <NavList meta={meta} parts={parts} assembly={assembly} active={active} go={go} done={done} />
+        </nav>
+      </div>
 
       {drawer && (
         <div className="fixed inset-0 z-50 flex justify-end bg-foreground/30" onClick={() => setDrawer(false)}>
@@ -101,13 +106,21 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
               <h3 className="font-display text-lg font-semibold">{name || doc.title}</h3>
               <button className="btn-ghost" onClick={() => setDrawer(false)} aria-label="Close"><X size={18} /></button>
             </div>
-            {meta.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
-            {parts.length > 0 && <p className="mt-2 px-3 py-2 text-sm font-semibold">Instructions</p>}
-            {parts.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} indent />)}
-            {assembly.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
+            <NavList meta={meta} parts={parts} assembly={assembly} active={active} go={go} done={done} />
           </nav>
         </div>
       )}
+    </div>
+  );
+}
+
+function NavList({ meta, parts, assembly, active, go, done }: { meta: ReaderSection[]; parts: ReaderSection[]; assembly: ReaderSection[]; active?: string; go: (id: string) => void; done: Set<string> }) {
+  return (
+    <div className="flex flex-col">
+      {meta.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
+      {parts.length > 0 && <p className="mt-2 px-3 py-2 text-sm font-semibold">Instructions</p>}
+      {parts.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} indent />)}
+      {assembly.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
     </div>
   );
 }
