@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { createLayeredCharacter } from "@/lib/character-layers";
 import { DEFAULT_CONFIG, type CharacterConfig } from "@/lib/character";
-import { JourneySteps } from "@/components/JourneySteps";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
