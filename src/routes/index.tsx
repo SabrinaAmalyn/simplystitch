@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { CustomizeArt, GenerateArt, ReviewArt } from "@/components/HowIllustrations";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -15,9 +16,9 @@ export const Route = createFileRoute("/")({
 });
 
 const HOW = [
-  { n: 1, title: "Customise", body: "You personalise your character with features, colours, and little details that make it yours." },
-  { n: 2, title: "Generate", body: "We turn your design into a step-by-step crochet pattern with stitch counts and assembly instructions." },
-  { n: 3, title: "Review", body: "You review your pattern, track your progress, make edits, and save when you're ready." },
+  { n: 1, Art: CustomizeArt, tags: ["Features", "Colours", "Details"], title: "Customise", body: "You personalise your character with features, colours, and little details that make it yours." },
+  { n: 2, Art: GenerateArt, tags: ["Rounds", "Stitch counts", "Assembly"], title: "Generate", body: "We turn your design into a step-by-step crochet pattern with stitch counts and assembly instructions." },
+  { n: 3, Art: ReviewArt, tags: ["Track", "Edit", "Save"], title: "Review", body: "You review your pattern, track your progress, make edits, and save when you're ready." },
 ];
 
 const TICKER = [
@@ -78,15 +79,16 @@ function Landing() {
         </p>
       </section>
 
-      <section id="how" className="bg-secondary px-4 py-12 md:px-8 md:py-16">
+      <section id="how" className="landing-grid px-4 py-12 md:px-8 md:py-16">
         <div className="mx-auto max-w-6xl">
           <h2 className="font-heavy text-center text-2xl uppercase text-primary md:text-4xl">How it works</h2>
-          <ol className="mt-8 grid gap-5 sm:grid-cols-3">
-            {HOW.map((s) => (
-              <li key={s.n} className="flex flex-col gap-3 rounded-3xl border border-border bg-card p-6">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">{s.n}</span>
-                <h3 className="font-heavy text-lg uppercase">{s.title}</h3>
-                <p className="text-sm text-muted-foreground">{s.body}</p>
+          <ol className="mt-10 grid gap-10 sm:grid-cols-3">
+            {HOW.map(({ n, Art, title, body, tags }) => (
+              <li key={n} className="flex flex-col items-center text-center">
+                <div className="w-48 md:w-56"><Art /></div>
+                <h3 className="font-heavy mt-4 text-xl uppercase text-primary">{n}. {title}</h3>
+                <p className="mt-1 text-xs font-semibold text-primary/80">{tags.join(" ✦ ")}</p>
+                <p className="mt-2 max-w-xs text-sm text-muted-foreground">{body}</p>
               </li>
             ))}
           </ol>
