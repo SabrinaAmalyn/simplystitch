@@ -224,6 +224,32 @@ function Tail({ selection, color }: { selection?: string | null; color: string }
   return null;
 }
 
+/**
+ * Bunny ear: a capsule with its lower rounded end cut off flat. The flat cut
+ * is placed well inside the head, so only straight sides and a rounded top
+ * ever show.
+ */
+function bunnyEarGeometry(straight: number, radius: number) {
+  const profile = [
+    new THREE.Vector2(0, 0),
+    new THREE.Vector2(radius, 0),
+    new THREE.Vector2(radius, straight),
+  ];
+  const steps = 16;
+  for (let i = 1; i <= steps; i++) {
+    const a = (i / steps) * (Math.PI / 2);
+    profile.push(
+      new THREE.Vector2(Math.cos(a) * radius, straight + Math.sin(a) * radius),
+    );
+  }
+  return new THREE.LatheGeometry(profile, 48);
+}
+
+// The cut base sits below the head's surface across its whole footprint, and
+// the rounded top stays exactly where the full capsule's top was.
+const BUNNY_EAR_BOTTOM_Y = 2.3;
+const BUNNY_EAR = bunnyEarGeometry(4.075 - BUNNY_EAR_BOTTOM_Y - 0.4, 0.4);
+
 // Doll faces +z; the doll's left side is +x (named from the doll's perspective).
 function Ear({ type, side, color }: { type: Ears; side: 1 | -1; color: string }) {
   switch (type) {
