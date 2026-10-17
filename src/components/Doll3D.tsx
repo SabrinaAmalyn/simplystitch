@@ -273,11 +273,14 @@ function Ear({ type, side, color }: { type: Ears; side: 1 | -1; color: string })
         </group>
       );
     case "bunny":
-      // Genuine 3D capsules: perfectly vertical with straight, parallel
-      // sides, touching near the centre. No inner colour, no outward tilt.
+      // Perfectly vertical straight-sided capsule whose cut-off base hides
+      // inside the head. No inner colour, no outward tilt.
       return (
-        <mesh position={[side * 0.38, 3.3, -0.05]} castShadow>
-          <capsuleGeometry args={[0.4, 0.75, 12, 24]} />
+        <mesh
+          geometry={BUNNY_EAR}
+          position={[side * 0.38, BUNNY_EAR_BOTTOM_Y, -0.05]}
+          castShadow
+        >
           <Vinyl color={color} />
         </mesh>
       );
