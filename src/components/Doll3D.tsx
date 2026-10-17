@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment, Lightformer, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -110,7 +111,8 @@ function Mouth({ style }: { style: MouthStyle }) {
   const y = MOUTH_Y;
   if (style === "x") return <><Stitch points={[[-0.065, y + 0.06], [0.065, y - 0.06]]} /><Stitch points={[[0.065, y + 0.06], [-0.065, y - 0.06]]} /></>;
   if (style === "w") return <Stitch points={[[-0.14, y + 0.05], [-0.1, y - 0.01], [-0.065, y - 0.045], [-0.03, y - 0.005], [0, y + 0.03], [0.03, y - 0.005], [0.065, y - 0.045], [0.1, y - 0.01], [0.14, y + 0.05]]} />;
-  if (style === "smile") return <Stitch points={[[-0.11, y + 0.03], [-0.055, y - 0.035], [0, y - 0.05], [0.055, y - 0.035], [0.11, y + 0.03]]} />;
+  // Same gentle arc as a sleepy eye: drop 0.051 over half-width 0.09.
+  if (style === "smile") return <Stitch points={[[-0.09, y + 0.015], [-0.045, y - 0.024], [0, y - 0.036], [0.045, y - 0.024], [0.09, y + 0.015]]} />;
   return null;
 }
 
@@ -123,9 +125,19 @@ function Whiskers() {
 
 function BlushPatch({ side, color, shape }: { side: 1 | -1; color: string; shape: BlushShape }) {
   const [x, y, z] = BLUSH_POSITION[shape];
+  const d = new THREE.Vector3(side * x, y, z).normalize();
+  // Oval blush: align its long axis with the head's horizontal tangent so it
+  // reads as straight from the front, not slanted downwards.
+  const quat = useMemo(() => {
+    if (shape !== "oval") return capRotation(side * x, y, z);
+    const tangent = new THREE.Vector3(d.z, 0, -d.x).normalize();
+    const normal = new THREE.Vector3().crossVectors(tangent, d).normalize();
+    const m = new THREE.Matrix4().makeBasis(tangent, d, normal);
+    return new THREE.Quaternion().setFromRotationMatrix(m);
+  }, [side, shape, x, y, z]);
   return (
     <group position={[0, HEAD.y, 0]} scale={HEAD.scale}>
-      <group quaternion={capRotation(side * x, y, z)}>
+      <group quaternion={quat}>
         <mesh geometry={shape === "oval" ? OVAL_BLUSH_GEOMETRY : BLUSH_GEOMETRY}><meshPhysicalMaterial color={color} roughness={0.9} /></mesh>
       </group>
     </group>
