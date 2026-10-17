@@ -59,7 +59,7 @@ function PatternPage() {
     return (
       <main className="mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center gap-4 px-4 text-center">
         <h1 className="font-display text-3xl font-semibold">No pattern yet</h1>
-        <p className="text-muted-foreground">Customize your character first, then press Generate Pattern.</p>
+        <p className="text-muted-foreground">Customize your character first, then press Generate.</p>
         <Link to="/customize" className="btn-primary">Go to customizer</Link>
       </main>
     );
