@@ -11,6 +11,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 type Props = { text: string; config?: CharacterConfig; progressKey: string; name: string; header?: ReactNode };
 
 const ORDER = [/^introduction|overview/i, /^measurements/i, /^materials/i, /^abbreviations/i, null, /^assembly|finishing/i, /notes/i];
+/** The finished-character panel doubles as the first stop in the contents list. */
+const CHARACTER_ID = "doc-character";
 const rank = (s: ReaderSection) => (s.parent ? 4 : Math.max(0, ORDER.findIndex((r) => r && r.test(s.title))));
 
 /** Continuous, scrolling pattern document with a table of contents and progress. */
@@ -38,13 +40,14 @@ export function PatternDocument({ text, config, progressKey, name, header }: Pro
 
   useEffect(() => {
     const els = sections.map((s) => document.getElementById(s.id)).filter(Boolean) as HTMLElement[];
+    const hero = config ? document.getElementById(CHARACTER_ID) : null;
     const io = new IntersectionObserver((entries) => {
       const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
       if (vis[0]) setActive(vis[0].target.id);
     }, { rootMargin: "-90px 0px -60% 0px" });
-    els.forEach((el) => io.observe(el));
+    [...(hero ? [hero] : []), ...els].forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [sections]);
+  }, [sections, config]);
 
   const go = (id: string) => {
     setNavOpen(false);
@@ -64,6 +67,11 @@ export function PatternDocument({ text, config, progressKey, name, header }: Pro
 
   const toc = (
     <nav aria-label="Pattern sections" className="doc-toc-list">
+      {config && (
+        <button type="button" className={`doc-toc-link ${active === CHARACTER_ID ? "doc-toc-active" : ""}`} onClick={() => go(CHARACTER_ID)}>
+          Character
+        </button>
+      )}
       {top.filter((s) => rank(s) < 4).map((s) => <TocLink key={s.id} s={s} active={active === s.id} onGo={go} />)}
       {parts.length > 0 && (
         <>
@@ -93,7 +101,7 @@ export function PatternDocument({ text, config, progressKey, name, header }: Pro
             <div className="doc-progress-track"><div className="doc-progress-fill" style={{ width: `${allKeys.length ? (completed / allKeys.length) * 100 : 0}%` }} /></div>
           </div>
           {config && (
-            <div className="doc-hero" aria-label="Final character">
+            <div className="doc-hero" id={CHARACTER_ID} aria-label="Final character">
               <CharacterPreview config={config} />
             </div>
           )}
