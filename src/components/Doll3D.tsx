@@ -6,7 +6,7 @@ import { JoinedBody } from "./JoinedBody";
 import { PawVinyl } from "./PawVinyl";
 import { limbSurfaceYarn, pawYarn } from "@/lib/paw-colors";
 import { HEAD, HEAD_ATTACHMENT_OFFSET, BLUSH_POSITION, createBlushGeometry } from "@/lib/doll-anatomy";
-import { partYarn, yarnById, type BlushShape, type EyeStyle, type BodyPart, type CharacterConfig, type MouthStyle, type NoseStyle } from "@/lib/character";
+import { partYarn, yarnById, type BlushShape, type BrowStyle, type EyeStyle, type BodyPart, type CharacterConfig, type MouthStyle, type NoseStyle } from "@/lib/character";
 
 // Dev tooling injects `data-tsd-source` onto JSX. R3F reads hyphenated props as
 // nested paths (data.tsd.source) and throws. Declaring it as a flat, harmless
@@ -114,6 +114,29 @@ function Mouth({ style }: { style: MouthStyle }) {
   // Same gentle arc as a sleepy eye: drop 0.051 over half-width 0.09.
   if (style === "smile") return <Stitch points={[[-0.09, y + 0.015], [-0.045, y - 0.024], [0, y - 0.036], [0.045, y - 0.024], [0.09, y + 0.015]]} />;
   return null;
+}
+
+const BROW_Y = 0.3;
+
+/** Embroidered eyebrows above the eyes; soft rounded stitches, mix-and-match with other face features. */
+function Eyebrows({ style, color }: { style: BrowStyle; color: string }) {
+  if (style === "none") return null;
+  if (style === "dots") return <>{[-1, 1].map((s) => (
+    <mesh key={s} position={onFace(s * 0.34, BROW_Y)} scale={[0.045, 0.045, 0.02]}><sphereGeometry args={[1, 16, 12]} /><meshStandardMaterial color={color} roughness={0.8} /></mesh>
+  ))}</>;
+  const arc = (s: number, y: number, lift: number, half = 0.09): [number, number][] =>
+    [[s * 0.34 - half, y], [s * 0.34, y + lift], [s * 0.34 + half, y]];
+  if (style === "straight") return <>{[-1, 1].map((s) => <Stitch key={s} color={color} points={arc(s, BROW_Y, 0)} />)}</>;
+  if (style === "soft-arch") return <>{[-1, 1].map((s) => <Stitch key={s} color={color} points={arc(s, BROW_Y, 0.035)} />)}</>;
+  if (style === "high-arch") return <>{[-1, 1].map((s) => <Stitch key={s} color={color} points={arc(s, BROW_Y - 0.01, 0.075)} />)}</>;
+  if (style === "thick") return <>{[-1, 1].map((s) => <Stitch key={s} color={color} radius={0.032} points={arc(s, BROW_Y, 0.03, 0.1)} />)}</>;
+  // Angry: inner ends dip toward the nose; worried: inner ends rise.
+  if (style === "angry") return <>{[-1, 1].map((s) => <Stitch key={s} color={color} points={[[s * 0.45, BROW_Y + 0.045], [s * 0.34, BROW_Y + 0.01], [s * 0.24, BROW_Y - 0.05]]} />)}</>;
+  if (style === "worried") return <>{[-1, 1].map((s) => <Stitch key={s} color={color} points={[[s * 0.45, BROW_Y - 0.04], [s * 0.34, BROW_Y + 0.01], [s * 0.24, BROW_Y + 0.055]]} />)}</>;
+  // Asymmetrical: doll's left brow raised and arched, right brow straight.
+  return <>{[-1, 1].map((s) => s === 1
+    ? <Stitch key={s} color={color} points={arc(s, BROW_Y + 0.07, 0.05)} />
+    : <Stitch key={s} color={color} points={arc(s, BROW_Y, 0)} />)}</>;
 }
 
 /** Raised circular blush with a rim that stays on the head surface. */
@@ -226,8 +249,8 @@ function Ear({ type, side, color }: { type: Ears; side: 1 | -1; color: string })
     case "bunny":
       // Genuine 3D capsules, upright, touching near the centre. No inner colour.
       return (
-        <mesh position={[side * 0.2, 3.3, -0.05]} rotation={[0, 0, -side * 0.08]} castShadow>
-          <capsuleGeometry args={[0.2, 0.75, 12, 24]} />
+        <mesh position={[side * 0.38, 3.3, -0.05]} rotation={[0, 0, -side * 0.08]} castShadow>
+          <capsuleGeometry args={[0.4, 0.75, 12, 24]} />
           <Vinyl color={color} />
         </mesh>
       );
@@ -248,6 +271,7 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
     <group position={[0, -1.1, 0]}>
       <Head color={c("head")} />
       <Eyes left={c("leftEye")} right={c("rightEye")} style={config.face.eyeStyle ?? "open"} />
+      <Eyebrows style={config.face.brow ?? "none"} color={c("brows")} />
       <Nose style={config.face.nose ?? "none"} />
       <Mouth style={config.face.mouth ?? "none"} />
       {config.face.whiskers && <Whiskers />}

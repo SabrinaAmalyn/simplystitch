@@ -9,7 +9,7 @@ export type Expression = "happy" | "sleepy" | "surprised";
 export type BodyShape = "chubby" | "standard" | "tall";
 export type Accessory = "scarf" | "bow" | "beanie";
 
-export const BODY_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar", "leftInnerEar", "rightInnerEar", "blush", "tail", "leftBlush", "rightBlush", "leftEye", "rightEye"] as const;
+export const BODY_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar", "leftInnerEar", "rightInnerEar", "blush", "tail", "leftBlush", "rightBlush", "leftEye", "rightEye", "brows"] as const;
 /** Parts that have crochet pattern rules; inner ears, blush and tails are preview-only details. */
 export const CROCHET_PARTS = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg", "leftEar", "rightEar"] as const;
 /** Detail parts default to their own yarn instead of the main yarn. */
@@ -21,6 +21,7 @@ export type NoseStyle = "none" | "teddy" | "cat" | "round";
 export type MouthStyle = "none" | "x" | "w" | "smile";
 export type BlushShape = "round" | "oval";
 export type EyeStyle = "open" | "sleepy";
+export type BrowStyle = "none" | "straight" | "soft-arch" | "high-arch" | "angry" | "worried" | "thick" | "dots" | "asymmetrical";
 
 export const BLUSH_OPTIONS: { value: BlushShape; label: string }[] = [
   { value: "round", label: "Round" },
@@ -30,11 +31,22 @@ export const EYE_OPTIONS: { value: EyeStyle; label: string }[] = [
   { value: "open", label: "Open" },
   { value: "sleepy", label: "Sleepy" },
 ];
+export const BROW_OPTIONS: { value: BrowStyle; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "straight", label: "Straight" },
+  { value: "soft-arch", label: "Soft Arch" },
+  { value: "high-arch", label: "High Arch" },
+  { value: "angry", label: "Angry" },
+  { value: "worried", label: "Worried" },
+  { value: "thick", label: "Thick Rounded" },
+  { value: "dots", label: "Tiny Dots" },
+  { value: "asymmetrical", label: "Asymmetrical" },
+];
 
 export type CharacterConfig = {
   colors: { main: string; accent: string; accessory: string; eyes: string; hands?: string; feet?: string } & Partial<Record<BodyPart, string>>;
   ears: EarStyle;
-  face: { expression: Expression; cheeks: boolean; nose?: NoseStyle; mouth?: MouthStyle; blushShape?: BlushShape; eyeStyle?: EyeStyle; whiskers?: boolean };
+  face: { expression: Expression; cheeks: boolean; nose?: NoseStyle; mouth?: MouthStyle; blushShape?: BlushShape; eyeStyle?: EyeStyle; whiskers?: boolean; brow?: BrowStyle };
   body: BodyShape;
   accessories: Accessory[];
   layered?: LayeredCharacter;
@@ -43,7 +55,7 @@ export type CharacterConfig = {
 export const DEFAULT_CONFIG: CharacterConfig = {
   colors: { main: "peach", accent: "cream", accessory: "terracotta", eyes: "charcoal" },
   ears: "none",
-  face: { expression: "sleepy", cheeks: true, nose: "none", mouth: "none", blushShape: "round", eyeStyle: "open", whiskers: false },
+  face: { expression: "sleepy", cheeks: true, nose: "none", mouth: "none", blushShape: "round", eyeStyle: "open", whiskers: false, brow: "none" },
   body: "standard",
   accessories: [],
 };
@@ -90,7 +102,7 @@ export const ACCESSORY_OPTIONS: { value: Accessory; label: string }[] = [
 function partColor(c: CharacterConfig, part: BodyPart): string {
   const legacy = part === "leftBlush" || part === "rightBlush"
     ? c.colors.blush ?? "blush"
-    : part === "leftEye" || part === "rightEye" ? c.colors.eyes : undefined;
+    : part === "leftEye" || part === "rightEye" || part === "brows" ? c.colors.eyes : undefined;
   return c.colors[part] ?? legacy ?? DETAIL_DEFAULTS[part] ?? c.colors.main;
 }
 
