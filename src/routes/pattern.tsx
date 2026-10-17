@@ -1,8 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { JourneySteps } from "@/components/JourneySteps";
-import { CharacterPreview } from "@/components/CharacterPreview";
 import { configKey } from "@/lib/character";
 import { defaultPatternName, savePatternToLibrary, setState, useStore } from "@/lib/store";
 
@@ -48,6 +47,7 @@ function PatternPage() {
   const [mode, setMode] = useState<"read" | "edit">("read");
   const [toast, setToast] = useState<string | null>(null);
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!toast) return;
@@ -85,58 +85,11 @@ function PatternPage() {
     setToast("Download started");
   };
 
-  const initialText = draft.initialText ?? draft.text;
   const save = () => {
     savePatternToLibrary(name);
     setName("");
-    setMode("read");
-    setToast("Saved to My Patterns");
-    window.scrollTo({ top: 0 });
+    navigate({ to: "/my-patterns" });
   };
-
-  if (draft.saved) {
-    return (
-      <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-6 md:px-8">
-        <header className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-3">
-            <Link to="/customize" className="btn-ghost" aria-label="Back to character editor"><ArrowLeft size={16} /> Back</Link>
-            <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
-          </div>
-          <JourneySteps active={3} />
-        </header>
-        <div className="flex flex-wrap items-center gap-2">
-          <h1 className="font-display text-2xl font-semibold">Saved</h1>
-          <div className="ml-auto flex flex-wrap gap-2">
-            <Link to="/my-patterns" className="btn-ghost">My Patterns</Link>
-            <button className="btn-ghost" onClick={() => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, saved: false } }))}>Back to edit</button>
-            <button className="btn-ghost" onClick={copy}>Copy</button>
-            <button className="btn-primary" onClick={download}>Download .txt</button>
-          </div>
-        </div>
-        <section className="panel">
-          <h2 className="mb-2 font-display text-xl font-semibold">Your character</h2>
-          <div className="h-[360px] w-full md:h-[440px]">
-            <CharacterPreview config={config} />
-          </div>
-        </section>
-        <div className="grid gap-6 md:grid-cols-2">
-          <section className="panel min-w-0">
-            <h2 className="mb-2 font-display text-xl font-semibold">Initial pattern</h2>
-            <Rendered text={initialText} />
-          </section>
-          <section className="panel min-w-0">
-            <h2 className="mb-2 font-display text-xl font-semibold">Edited version</h2>
-            {draft.edited && draft.text !== initialText ? (
-              <Rendered text={draft.text} />
-            ) : (
-              <p className="text-sm text-muted-foreground">No edits were made — the edited version matches the initial pattern.</p>
-            )}
-          </section>
-        </div>
-        {toast && <div role="status" className="toast">{toast}</div>}
-      </main>
-    );
-  }
 
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-6 md:px-8">
@@ -145,7 +98,7 @@ function PatternPage() {
           <Link to="/customize" className="btn-ghost" aria-label="Back to character editor"><ArrowLeft size={16} /> Back</Link>
           <Link to="/" className="font-display text-3xl font-semibold">Stitchling</Link>
         </div>
-        <JourneySteps active={mode === "edit" || draft.edited ? 2 : 1} />
+        <JourneySteps active={1} />
       </header>
 
       {stale && (
@@ -168,6 +121,8 @@ function PatternPage() {
             maxLength={60}
             onChange={(e) => setName(e.target.value)}
           />
+          <button className="btn-ghost" onClick={copy}>Copy</button>
+          <button className="btn-ghost" onClick={download}>Download .txt</button>
           <button className="btn-primary" onClick={save}>Save</button>
         </div>
       </div>
