@@ -1,8 +1,8 @@
 import type { CharacterConfig } from "./character";
 import { JOINED_BODY } from "./joined-body";
 
-/** Length multipliers; 1 is the reference anatomy and the shortest option. */
-export const LIMB_RANGE = { min: 1, max: 1.4, step: 0.05 } as const;
+/** Length multipliers; 1 is the reference anatomy. */
+export const LIMB_RANGE = { min: 0.7, max: 1.4, step: 0.05 } as const;
 export const ARM_BASE_LENGTH = 0.25;
 const ARM_TILT = 0.35;
 
