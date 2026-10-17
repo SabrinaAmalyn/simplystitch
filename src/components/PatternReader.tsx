@@ -88,21 +88,22 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
           )}
           <div className="review-body">
             <article className="reader-instructions">
-              {shown.map((s) => (
-                <SectionView
-                  key={s.id + (editId === s.id ? ":edit" : "")}
-                  s={s}
-                  done={done}
-                  toggle={toggle}
-                  editing={editId === s.id}
-                  onStart={() => setEditId(s.id)}
-                  onDone={() => setEditId(null)}
-                  onChange={(body) => {
-                    const idx = Number(s.id.match(/^sec-(\d+)-/)?.[1]);
-                    if (Number.isFinite(idx)) onTextChange?.(withSectionBody(text, idx, body));
-                  }}
-                />
-              ))}
+              {shown.map((s) => {
+                const idx = Number(s.id.match(/^sec-(\d+)-/)?.[1]);
+                return (
+                  <SectionView
+                    key={s.id + (editId === s.id ? ":edit" : "")}
+                    s={s}
+                    done={done}
+                    toggle={toggle}
+                    editing={editId === s.id}
+                    initialBody={Number.isFinite(idx) ? sectionBody(text, idx) : ""}
+                    onStart={() => setEditId(s.id)}
+                    onDone={() => setEditId(null)}
+                    onChange={(body) => { if (Number.isFinite(idx)) onTextChange?.(withSectionBody(text, idx, body)); }}
+                  />
+                );
+              })}
               {completed > 0 && (
                 <Button variant="ghost" className="self-start text-sm" onClick={() => confirm("Clear all row progress for this pattern?") && resetProgress(progressKey)}>Clear progress</Button>
               )}
