@@ -172,6 +172,7 @@
   .swatch { @apply h-9 w-9 rounded-full border-2 border-border transition hover:scale-110; }
   .swatch-on { @apply scale-110 ring-2 ring-primary ring-offset-2 ring-offset-card; }
   .step-dot { @apply grid h-6 w-6 place-items-center rounded-full bg-muted text-xs font-bold text-muted-foreground; }
+  .step-dot-lg { @apply h-7 w-7 text-sm; }
   .step-dot-on { @apply bg-primary text-primary-foreground; }
   .alert { @apply rounded-2xl border border-secondary bg-secondary/50 p-4 text-secondary-foreground; }
   .alert-error { @apply border-destructive/40 bg-destructive/10 text-destructive; }

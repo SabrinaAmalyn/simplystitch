@@ -70,7 +70,6 @@ function Workspace() {
     <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-6 md:px-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-display text-3xl font-semibold">Stitchling</h1>
-        <JourneySteps active={0} />
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
@@ -82,10 +81,7 @@ function Workspace() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <div>
-            <h2 className="font-display text-2xl font-semibold">Make it yours</h2>
-            <p className="text-muted-foreground">Base character from your reference</p>
-          </div>
+          <JourneySteps active={0} size="lg" />
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           {selected.length > 0 && (
             <div className="flex flex-col gap-2" aria-label="Selected components">

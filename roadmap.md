@@ -25,3 +25,4 @@
 - [x] Shorten the torso and lower the blush further, checked from front and side.- [x] Straighten small oval blush (no downward slant)
 - [x] Add Eyebrows section: 8 styles + None, thumbnails, eye-colour default, persistence verified.
 - [x] Double bunny ear radius and verify from front/side.
+- [x] Replace the panel heading with the 1 Customize / 2 Generate / 3 Edit / 4 Export steps.
