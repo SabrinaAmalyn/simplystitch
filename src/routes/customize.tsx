@@ -60,8 +60,8 @@ function PreviewActions() {
         type="button"
         aria-label="Reset character"
         title="Reset"
-        className="preview-action text-muted-foreground hover:bg-muted hover:text-foreground"
-        onClick={() => setState((s) => ({ ...s, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}
+        className="preview-action preview-reset text-muted-foreground hover:bg-muted hover:text-foreground"
+        onClick={() => setState((s) => ({ ...s, editingPatternId: null, config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() } }))}
       >
         <RotateCcw size={14} />
         <span className="preview-action-label">Reset</span>
@@ -72,7 +72,7 @@ function PreviewActions() {
         type="button"
         aria-label="Randomize character"
         title="Randomize"
-        className="preview-action border-primary/40 font-semibold text-primary hover:bg-accent hover:text-primary"
+        className="preview-action preview-randomize border-primary/40 font-semibold text-primary hover:bg-accent hover:text-primary"
         onClick={() => setState((s) => ({ ...s, config: randomConfig() }))}
       >
         <Dices size={14} />

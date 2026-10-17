@@ -19,6 +19,8 @@ export const Route = createFileRoute("/my-patterns/$patternId")({
 function SavedPatternPage() {
   const { patternId } = Route.useParams();
   const p = useStore((s) => s.library.find((x) => x.id === patternId));
+  const hydrated = useStore((s) => s.hydrated);
+  if (!hydrated) return null;
   if (!p) return <Navigate to="/my-patterns" replace />;
   return <SavedPatternDetail p={p} />;
 }
