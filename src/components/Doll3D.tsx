@@ -18,14 +18,14 @@ if (!Object.prototype.hasOwnProperty.call(Object.prototype, "data-tsd-source")) 
 export type EarType = "human" | "dog" | "cat" | "bear" | "bunny" | null;
 
 /** Soft vinyl-toy material with a velvety sheen glow at the edges. */
-function Vinyl({ color }: { color: string }) {
+function Vinyl({ color, sheenColor = "#ffe4d2" }: { color: string; sheenColor?: string }) {
   return (
     <meshPhysicalMaterial
       color={color}
       roughness={0.55}
       sheen={1}
       sheenRoughness={0.45}
-      sheenColor="#ffe4d2"
+      sheenColor={sheenColor}
       clearcoat={0.15}
       clearcoatRoughness={0.6}
     />
@@ -188,31 +188,35 @@ function catEarGeometry() {
 }
 const CAT_EAR = catEarGeometry();
 
-/** One elongated teardrop, rooted low between the legs and hanging down behind the feet. */
+/** One continuous cat tail: rooted inside the lower back, even thickness, curving up and to the side. */
 function longTailGeometry() {
   const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0.37, -0.22),
-    new THREE.Vector3(0, 0.31, -0.4),
-    new THREE.Vector3(0, 0.22, -0.53),
-    new THREE.Vector3(0, 0.12, -0.61),
-    new THREE.Vector3(0, 0.01, -0.65),
+    new THREE.Vector3(0, 0.5, -0.12),
+    new THREE.Vector3(0, 0.44, -0.36),
+    new THREE.Vector3(0.04, 0.42, -0.58),
+    new THREE.Vector3(0.14, 0.52, -0.74),
+    new THREE.Vector3(0.22, 0.74, -0.8),
+    new THREE.Vector3(0.22, 0.96, -0.72),
   ]);
-  const geometry = new THREE.SphereGeometry(1, 48, 96);
+  const R = 0.085;
+  const geometry = new THREE.SphereGeometry(1, 32, 128);
   const positions = geometry.attributes["position"] as THREE.BufferAttribute;
   const reference = new THREE.Vector3(1, 0, 0);
   for (let i = 0; i < positions.count; i++) {
-    const t = (positions.getY(i) + 1) / 2;
+    const t = 1 - (positions.getY(i) + 1) / 2;
     const center = curve.getPoint(t);
     const tangent = curve.getTangent(t).normalize();
     const right = new THREE.Vector3().crossVectors(reference, tangent).normalize();
-    // Preserve the sphere's winding so the outer surface, not its inside, renders.
     const up = new THREE.Vector3().crossVectors(right, tangent).normalize();
-    // A steadily widening envelope times the sphere's round cross-section
-    // produces one plump lower-middle peak, without a Gaussian neck or lobes.
-    // The closed sphere supplies a smooth rounded tip rather than a cone cap.
-    const radius = 0.09 + 0.17 * t;
-    center.addScaledVector(right, positions.getX(i) * radius);
-    center.addScaledVector(up, positions.getZ(i) * radius);
+    const phi = Math.atan2(positions.getZ(i), positions.getX(i));
+    // Constant radius, a gentle taper near the end, and rounded caps at both ends
+    // (the base cap is buried inside the torso so the tail emerges seamlessly).
+    const taper = 1 - 0.22 * THREE.MathUtils.smoothstep(t, 0.72, 0.94);
+    const cap = (e: number) => Math.sqrt(Math.max(0, 1 - (1 - e) ** 2));
+    const ends = Math.min(t < 0.06 ? cap(t / 0.06) : 1, t > 0.94 ? cap((1 - t) / 0.06) : 1);
+    const r = R * taper * ends;
+    center.addScaledVector(right, Math.cos(phi) * r);
+    center.addScaledVector(up, Math.sin(phi) * r);
     positions.setXYZ(i, center.x, center.y, center.z);
   }
   geometry.computeVertexNormals();
@@ -222,7 +226,7 @@ const LONG_TAIL = longTailGeometry();
 
 function Tail({ selection, color }: { selection?: string | null; color: string }) {
   if (selection === "tail-round") return <mesh position={[0, 0.38, -0.42]} castShadow><sphereGeometry args={[0.23, 40, 28]} /><Vinyl color={color} /></mesh>;
-  if (selection === "tail-long") return <mesh geometry={LONG_TAIL} castShadow><Vinyl color={color} /></mesh>;
+  if (selection === "tail-long") return <mesh geometry={LONG_TAIL} castShadow><Vinyl color={color} sheenColor={color} /></mesh>;
   return null;
 }
 
