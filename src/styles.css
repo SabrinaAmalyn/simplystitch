@@ -214,8 +214,8 @@
     .character-canvas .preview-actions { display: none; }
     .character-canvas { height: 300px; min-height: 0; }
     .category-tab { height: 46px; gap: 5px; font-size: 12px; }
-    .subcategory-nav { padding: 8px 12px; gap: 6px; }
-    .subcategory-tab { padding: 0 8px; font-size: 13px; height: 34px; }
+    .subcategory-nav { padding: 8px 10px; gap: 4px; }
+    .subcategory-tab { padding: 0 4px; font-size: 13px; height: 34px; }
     .subcategory-empty::after { height: 34px; }
     .workspace-content { padding: 16px; }
     .feature-area { min-height: 128px; max-height: 350px; }
