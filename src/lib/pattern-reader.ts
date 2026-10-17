@@ -92,3 +92,42 @@ export function parsePatternText(src: string): ReaderDoc {
 export function sectionRowKeys(s: ReaderSection): string[] {
   return s.items.flatMap((i) => (i.kind === "row" ? [i.row.key] : i.kind === "group" ? i.rows.map((r) => r.key) : []));
 }
+
+export type SectionSlice = { headingIndex: number; bodyStart: number; end: number };
+
+/** Slices of raw text owned by each "## " section, in heading order (body excludes the heading line). */
+export function sectionSlices(src: string): SectionSlice[] {
+  const lines = src.split("\n");
+  const slices: SectionSlice[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (!lines[i].startsWith("## ")) continue;
+    const prev = slices[slices.length - 1];
+    if (prev) prev.end = i;
+    slices.push({ headingIndex: slices.length, bodyStart: i + 1, end: lines.length });
+  }
+  return slices;
+}
+
+const trimBlank = (lines: string[]) => {
+  let a = 0, b = lines.length;
+  while (a < b && !lines[a]?.trim()) a++;
+  while (b > a && !lines[b - 1]?.trim()) b--;
+  return lines.slice(a, b);
+};
+
+/** The editable body lines of one section (heading order index), blank edges removed. */
+export function sectionBody(src: string, headingIndex: number): string {
+  const s = sectionSlices(src)[headingIndex];
+  if (!s) return "";
+  return trimBlank(src.split("\n").slice(s.bodyStart, s.end)).join("\n");
+}
+
+/** Replaces one section's body, keeping the heading and every other section byte-identical. */
+export function withSectionBody(src: string, headingIndex: number, body: string): string {
+  const s = sectionSlices(src)[headingIndex];
+  if (!s) return src;
+  const lines = src.split("\n");
+  const next = [...lines.slice(0, s.bodyStart), ...trimBlank(body.split("\n")), ""];
+  const tail = trimBlank(lines.slice(s.end));
+  return [...next, ...tail].join("\n");
+}
