@@ -36,8 +36,21 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
   const go = (id: string) => {
     setDrawer(false);
     setActive(id);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setCollapsed((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+    setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
   };
+  const toggleCollapse = (id: string) =>
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   const toggle = (keys: string[], value: boolean) => toggleRows(progressKey, keys, value);
 
   const meta = doc.sections.filter((s) => !s.parent && !/^assembly/i.test(s.title));
