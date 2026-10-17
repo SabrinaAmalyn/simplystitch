@@ -1,4 +1,5 @@
 # Tasks
+- [x] Interactive pattern reader: collapsible character, Go to drawer, tappable rows, expandable repeated rounds, notes, per-section and overall progress saved per pattern; verified on phone.
 - [x] Rename the second journey step from "Generate & Review" to "Review" on the pattern page and landing page; verified.
 - [x] On Save, show only the latest edited pattern (or the generated one when nothing was edited); verified in preview.
 - [x] Remove the "Back to customizer" item from the signed-in sidebar; verified desktop and mobile.
