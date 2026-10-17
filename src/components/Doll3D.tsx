@@ -85,14 +85,14 @@ function catEarGeometry() {
 }
 const CAT_EAR = catEarGeometry();
 
-/** One elongated teardrop, rooted centrally in the butt and hanging down behind the feet. */
+/** One elongated teardrop, rooted low between the legs and hanging down behind the feet. */
 function longTailGeometry() {
   const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0.53, -0.23),
-    new THREE.Vector3(0, 0.46, -0.4),
-    new THREE.Vector3(0, 0.32, -0.58),
-    new THREE.Vector3(0, 0.15, -0.7),
-    new THREE.Vector3(0, 0.005, -0.74),
+    new THREE.Vector3(0, 0.37, -0.22),
+    new THREE.Vector3(0, 0.31, -0.4),
+    new THREE.Vector3(0, 0.22, -0.53),
+    new THREE.Vector3(0, 0.12, -0.61),
+    new THREE.Vector3(0, 0.01, -0.65),
   ]);
   const geometry = new THREE.SphereGeometry(1, 48, 96);
   const positions = geometry.attributes["position"] as THREE.BufferAttribute;
