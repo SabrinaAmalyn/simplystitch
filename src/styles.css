@@ -309,18 +309,27 @@
 .review-layout { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); background: var(--background); min-height: calc(100dvh - 82px); }
 .review-content { order: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
 .review-preview { order: 2; position: sticky; top: 0; height: calc(100dvh - 82px); min-height: 420px; background: var(--stage); align-self: start; display: flex; flex-direction: column; }
+.review-preview-name { padding: 14px 16px 0; }
+.review-name-input { width: 100%; max-width: 260px; height: 44px; padding: 0 16px; border: 1px solid var(--border); border-radius: 9999px; background: var(--card); color: var(--foreground); font: inherit; font-size: 1rem; font-weight: 600; outline: none; }
+.review-name-input::placeholder { color: var(--muted-foreground); font-weight: 400; }
+.review-name-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 25%, transparent); }
 .review-preview-label { display: flex; flex-direction: column; min-width: 0; padding: 14px 16px 0; }
 .review-canvas { flex: 1; min-height: 0; }
-.review-preview-action { position: absolute; right: 16px; bottom: 16px; z-index: 10; }
-.review-preview-back { position: absolute; left: 16px; bottom: 16px; z-index: 10; }
+/* Desktop: the button pair floats in the preview's bottom corners. */
+.review-preview-bar { position: absolute; inset: 0; z-index: 10; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 16px; pointer-events: none; }
+.review-preview-bar > * { pointer-events: auto; }
 .review-body { padding: 20px; }
 .review-body .reader-instructions { padding: 0; background: transparent; }
 @media (max-width: 767px) {
   .review-layout { grid-template-columns: minmax(0, 1fr); min-height: 0; }
-  .review-preview { order: 0; position: relative; height: 300px; min-height: 0; border-bottom: 1px solid var(--border); }
+  .review-preview { order: 0; position: relative; height: auto; min-height: 0; border-bottom: 1px solid var(--border); }
   .review-content { border-right: 0; }
-  .review-preview-action { right: 12px; bottom: 12px; }
-  .review-preview-back { left: 12px; bottom: 12px; }
+  /* Phone: the name and the buttons get their own rows above the 3D view. */
+  .review-preview-name { order: 0; padding: 12px 12px 0; }
+  .review-name-input { max-width: none; height: 40px; font-size: 0.9375rem; }
+  .review-preview-label { order: 1; padding: 10px 12px 0; }
+  .review-preview-bar { position: static; inset: auto; order: 2; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--card); }
+  .review-canvas { order: 3; height: 260px; }
   .review-body { padding: 16px; }
 }
 .pattern-stale-alert { margin: 0; border-radius: 0; border-width: 0 0 1px; }
