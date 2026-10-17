@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import customiseArt from "@/assets/how-customise.png.asset.json";
 import generateArt from "@/assets/how-generate.png.asset.json";
 import reviewArt from "@/assets/how-review.png.asset.json";
+import heroBadge from "@/assets/hero-badge.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -43,17 +44,26 @@ function Landing() {
       </header>
 
       <section className="landing-sky flex min-h-[72vh] items-center px-4 py-16 md:px-8">
-        <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 text-center text-primary-foreground">
-          <h1 className="font-heavy text-4xl leading-[1.02] uppercase md:text-6xl">
-            Your ideas, made stitch by stitch.
-          </h1>
-          <p className="max-w-prose text-base md:text-lg">
-            Design your own amigurumi character and get a crochet pattern that matches it — rounds, stitch counts and
-            colour changes included.
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <Link to="/customize" className="btn-light btn-lg">Try Demo</Link>
-            <a href="#how" className="btn-outline-light btn-lg">See how it works</a>
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 text-primary-foreground md:grid-cols-[1.05fr_0.95fr] md:gap-14">
+          <div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
+            <h1 className="font-heavy text-4xl leading-[1.02] uppercase md:text-6xl">
+              Your ideas, made stitch by stitch.
+            </h1>
+            <p className="max-w-prose text-base md:text-lg">
+              Design your own amigurumi character and get a crochet pattern that matches it — rounds, stitch counts and
+              colour changes included.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start">
+              <Link to="/customize" className="btn-light btn-lg">Try Demo</Link>
+              <a href="#how" className="btn-outline-light btn-lg">See how it works</a>
+            </div>
+          </div>
+          <div className="flex items-center justify-center">
+            <img
+              src={heroBadge.url}
+              alt="A puppy character picking clothes out of a little wardrobe"
+              className="h-auto w-full max-w-[280px] sm:max-w-[340px] md:max-w-[400px] lg:max-w-[450px]"
+            />
           </div>
         </div>
       </section>

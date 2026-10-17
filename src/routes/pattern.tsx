@@ -6,6 +6,8 @@ import { defaultPatternName, progressKey, savePatternToLibrary, setState, useSto
 import { PatternReader } from "@/components/PatternReader";
 import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/pattern")({
   head: () => ({
@@ -25,6 +27,7 @@ function PatternPage() {
   const draft = useStore((s) => s.draft);
   const config = useStore((s) => s.config);
   const library = useStore((s) => s.library);
+  const [naming, setNaming] = useState(false);
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
@@ -39,9 +42,16 @@ function PatternPage() {
   }
 
   const stale = draft.configKey !== configKey(config);
+  const suggested = defaultPatternName(library);
 
-  const save = () => {
+  const openNaming = () => {
+    setName("");
+    setNaming(true);
+  };
+
+  const confirmSave = () => {
     const id = savePatternToLibrary(name);
+    setNaming(false);
     setName("");
     if (id) navigate({ to: "/my-patterns/$patternId", params: { patternId: id } });
     else navigate({ to: "/my-patterns" });
@@ -52,12 +62,11 @@ function PatternPage() {
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)}
         onTextChange={(text) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text, edited: true, saved: false } }))}
 
-        previewAction={<Button onClick={save}><Save /> Save</Button>}
+        previewAction={<Button onClick={openNaming}><Save /> Save</Button>}
         previewBack={<Button variant="outline" asChild><Link to="/customize"><ArrowLeft /> Go Back</Link></Button>}
-        previewName={<input aria-label="Pattern name" className="review-name-input" placeholder={defaultPatternName(library)} value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />}
         header={<><PatternWorkspaceHeader
           profile
-          title={name.trim() || defaultPatternName(library)}
+          title={suggested}
         />
         {stale && (
           <div className="alert pattern-stale-alert">
@@ -66,6 +75,34 @@ function PatternPage() {
         )}</>}
       />
       {draft.edited && <p className="text-sm text-muted-foreground">Edits are saved automatically on this device.</p>}
+
+      <Dialog open={naming} onOpenChange={setNaming}>
+        <DialogContent>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              confirmSave();
+            }}
+            className="flex flex-col gap-4"
+          >
+            <DialogHeader>
+              <DialogTitle>Name your pattern</DialogTitle>
+            </DialogHeader>
+            <Input
+              aria-label="Pattern name"
+              placeholder={suggested}
+              value={name}
+              maxLength={60}
+              autoFocus
+              onChange={(e) => setName(e.target.value)}
+            />
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setNaming(false)}>Cancel</Button>
+              <Button type="submit">Save</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
