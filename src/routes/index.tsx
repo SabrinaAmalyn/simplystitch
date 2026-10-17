@@ -119,7 +119,7 @@ function Workspace() {
         setState((s) => ({
           ...s,
           previous: s.draft?.edited ? s.draft : s.previous,
-          draft: { text, configKey: configKey(config), edited: false, generatedAt: Date.now() },
+          draft: { text, initialText: text, configKey: configKey(config), edited: false, saved: false, generatedAt: Date.now() },
         }));
         navigate({ to: "/pattern" });
       } catch (e) {
@@ -141,7 +141,7 @@ function Workspace() {
             <span className="preview-topbar-spacer" aria-hidden="true" />
             <PreviewActions />
             <Button type="button" size="sm" onClick={generate} disabled={busy || blockers.length > 0}>
-              Save
+              Generate
             </Button>
           </div>
           <div className="character-canvas">
