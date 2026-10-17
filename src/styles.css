@@ -185,6 +185,7 @@
   .preview-actions { position: absolute; top: 12px; right: 12px; display: flex; align-items: center; gap: 8px; z-index: 10; }
   .preview-actions .btn, .preview-actions button { background: var(--card); }
   .preview-action { height: 32px; padding: 0 10px; font-size: 12px; box-shadow: 0 1px 2px oklch(0.4 0.06 45 / 0.08); }
+  .preview-generate { position: absolute; bottom: 16px; left: 16px; z-index: 10; }
   .preview-topbar { display: none; }
   .preview-topbar .preview-actions { position: static; }
   .preview-topbar-spacer { display: block; width: 36px; height: 36px; flex-shrink: 0; margin-right: auto; }
@@ -211,6 +212,7 @@
     .preview-panel { position: relative; height: auto; justify-content: flex-start; border-right: 0; border-bottom: 1px solid var(--border); }
     .preview-topbar { display: flex; width: 100%; align-items: center; justify-content: flex-end; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--card); }
     .character-canvas .preview-actions { display: none; }
+    .preview-generate { display: none; }
     .character-canvas { height: 300px; min-height: 0; }
     .category-tab { height: 46px; gap: 5px; font-size: 12px; }
     .subcategory-nav { padding: 8px 10px; gap: 4px; }

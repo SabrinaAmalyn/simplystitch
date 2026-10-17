@@ -145,20 +145,18 @@ function Workspace() {
           <div className="character-canvas">
             <CharacterPreview config={config} />
             <PreviewActions />
+            <div className="preview-generate">
+              <Button type="button" onClick={generate} disabled={busy || blockers.length > 0}>
+                {busy ? "Stitching your pattern…" : "Generate"}
+              </Button>
+            </div>
           </div>
         </section>
 
         <section className="min-w-0">
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           <div className="workspace-actions flex flex-col gap-4">
-          
-          {error && <div className="alert alert-error">{error}</div>}
-
-          <div className="flex flex-wrap items-center gap-3">
-            <Button type="button" className="hidden h-auto whitespace-normal md:inline-flex" onClick={generate} disabled={busy || blockers.length > 0}>
-              {busy ? "Stitching your pattern…" : "Generate"}
-            </Button>
-          </div>
+            {error && <div className="alert alert-error">{error}</div>}
           </div>
         </section>
       </div>
