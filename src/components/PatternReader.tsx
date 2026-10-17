@@ -77,18 +77,11 @@ export function PatternReader({ text, config, progressKey, name, toolbar, editin
         {showPreview && <div className="reader-character"><CharacterPreview config={config} /></div>}
       </section>
 
-      <div className="reader-bar">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center justify-between text-sm">
-            <span className="font-semibold">Project progress</span>
-            <span className="text-muted-foreground">{completed}/{total} completed</span>
-          </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label="Project progress" aria-valuemin={0} aria-valuemax={total} aria-valuenow={completed}>
-            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${total ? (completed / total) * 100 : 0}%` }} />
-          </div>
+      {!toolbar && (
+        <div className="flex justify-end">
+          <Button variant="ghost" size="icon" onClick={() => setDrawer(true)} aria-label="Open pattern sections"><Menu size={18} /></Button>
         </div>
-        {!toolbar && <Button variant="ghost" size="icon" onClick={() => setDrawer(true)} aria-label="Open pattern sections"><Menu size={18} /></Button>}
-      </div>
+      )}
 
       <div className="reader-columns">
         <article className="reader-instructions">
@@ -153,13 +146,17 @@ function SectionView({ s, done, toggle, collapsed, onToggleCollapse }: { s: Read
       <Button variant="ghost" className="reader-section-heading" onClick={onToggleCollapse} aria-expanded={!collapsed}>
         <span className="min-w-0">
           <span className={`text-xl font-bold ${finished ? "text-muted-foreground line-through" : ""}`}>{s.title}</span>
-          {s.yarn && <span className="mt-0.5 block text-sm text-muted-foreground">Yarn: {s.yarn}</span>}
-          {keys.length > 0 && <span className="mt-1 block text-sm font-medium text-muted-foreground">{n}/{keys.length} {/^assembly/i.test(s.title) ? "steps" : "rounds"} completed</span>}
         </span>
         <ChevronDown size={20} className={`mt-1.5 shrink-0 text-muted-foreground transition-transform ${collapsed ? "" : "rotate-180"}`} aria-hidden />
       </Button>
       {!collapsed && (
         <div className="mt-3 flex flex-col">
+          {s.yarn && (
+            <div className="reader-note">
+              <Info size={16} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+              <p><span className="font-semibold">Yarn:</span> {s.yarn}</p>
+            </div>
+          )}
           {s.items.map((item, i) => <ItemView key={i} item={item} done={done} toggle={toggle} />)}
         </div>
       )}
