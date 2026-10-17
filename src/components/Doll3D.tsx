@@ -107,7 +107,7 @@ function longTailGeometry() {
     // A steadily widening envelope times the sphere's round cross-section
     // produces one plump lower-middle peak, without a Gaussian neck or lobes.
     // The closed sphere supplies a smooth rounded tip rather than a cone cap.
-    const radius = 0.095 + 0.16 * t;
+    const radius = 0.09 + 0.17 * t;
     center.addScaledVector(right, positions.getX(i) * radius);
     center.addScaledVector(up, positions.getZ(i) * radius);
     positions.setXYZ(i, center.x, center.y, center.z);
@@ -118,7 +118,7 @@ function longTailGeometry() {
 const LONG_TAIL = longTailGeometry();
 
 function Tail({ selection, color }: { selection?: string | null; color: string }) {
-  if (selection === "tail-round") return <mesh position={[0, 0.48, -0.4]} castShadow><sphereGeometry args={[0.23, 40, 28]} /><Vinyl color={color} /></mesh>;
+  if (selection === "tail-round") return <mesh position={[0, 0.38, -0.42]} castShadow><sphereGeometry args={[0.23, 40, 28]} /><Vinyl color={color} /></mesh>;
   if (selection === "tail-long") return <mesh geometry={LONG_TAIL} castShadow><Vinyl color={color} /></mesh>;
   return null;
 }
