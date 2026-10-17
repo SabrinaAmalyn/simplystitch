@@ -123,7 +123,7 @@ function Workspace() {
         <section className="min-w-0">
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           <div className="workspace-actions flex flex-col gap-4">
-          {blockers.length > 0 && <p className="text-xs text-muted-foreground">Pattern rules pending</p>}
+          
           {confirming && (
             <div className="alert">
               <p className="font-semibold">You've edited your current pattern.</p>
