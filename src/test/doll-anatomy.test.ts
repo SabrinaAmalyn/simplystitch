@@ -1,0 +1,27 @@
+import { expect, it } from "vitest";
+import { HEAD, createBlushGeometry } from "@/lib/doll-anatomy";
+import { JOINED_BODY, joinedBodyDistance } from "@/lib/joined-body";
+
+it("keeps the head inside the torso shoulder rather than leaving a gap", () => {
+  const bottom = HEAD.y - HEAD.scale[1];
+  expect(JOINED_BODY.torso.center[1] + JOINED_BODY.torso.radii[1] - bottom).toBeCloseTo(0.14);
+  expect(joinedBodyDistance(0, bottom, 0)).toBeLessThan(0);
+  for (const x of [-0.15, 0, 0.15]) {
+    const headBottom = HEAD.y - HEAD.scale[1] * Math.sqrt(1 - (x / HEAD.scale[0]) ** 2);
+    expect(joinedBodyDistance(x, headBottom, 0)).toBeLessThan(0);
+  }
+});
+
+it("raises the blush centre while keeping every edge outside the head", () => {
+  const geometry = createBlushGeometry();
+  const positions = geometry.getAttribute("position");
+  let minimum = Infinity, maximum = 0;
+  for (let i = 0; i < positions.count; i++) {
+    const radius = Math.hypot(positions.getX(i), positions.getY(i), positions.getZ(i));
+    minimum = Math.min(minimum, radius);
+    maximum = Math.max(maximum, radius);
+  }
+  expect(minimum).toBeCloseTo(1.008, 5);
+  expect(maximum).toBeCloseTo(1.043, 5);
+  geometry.dispose();
+});
