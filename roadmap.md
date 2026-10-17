@@ -68,4 +68,4 @@
 - [x] Remove the empty gap under the 3D view and the right side when the customise page scrolls; verified phone and desktop.
 - [x] Saved pattern page: drop the 3D view, show the pattern first, right side is table of contents only (no name above it); replace the name input, Customize and Download buttons with a three-dot menu shown as tabs.
 - [x] Logged-in sidebar: remove the logo and the label under it.
-- [ ] Saved pattern page: make every section name collapsible, and remove the sticky behaviour of the progress bar plus the hover effect on the Clear button; verify phone and desktop.
+- [x] Saved pattern page: make every section name collapsible, and remove the sticky behaviour of the progress bar plus the hover effect on the Clear button; verified phone and desktop.
