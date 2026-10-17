@@ -1,7 +1,7 @@
 # Tasks
-- [ ] Close the head–body gap without lengthening the compact torso.
-- [ ] Raise the blush and support colour selection and removal with saved-state preservation.
-- [ ] Verify front, side, back, colour changes, removal, and reload.
+- [x] Close the head–body gap without lengthening the compact torso.
+- [x] Raise the blush and support colour selection and removal with saved-state preservation.
+- [x] Verify front, side, back, colour changes, removal, and reload.
 - [x] Lower blush and rename Human to Monkey without losing saved selections.
 - [x] Join modular legs and torso into a seamless surface, retaining independent colors.
 - [x] Verify geometry and front, side and back views.
