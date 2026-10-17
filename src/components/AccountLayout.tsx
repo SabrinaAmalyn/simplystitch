@@ -16,9 +16,7 @@ export function AccountLayout({ children }: { children: ReactNode }) {
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col overflow-hidden border-r border-border bg-card px-4 py-6 transition-transform md:sticky md:top-0 md:bottom-auto md:h-screen md:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <Link to="/" className="px-2 font-logo text-2xl uppercase">SimplyStitch</Link>
-        <p className="mt-8 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Menu</p>
-        <nav className="mt-2 flex flex-col gap-1">
+        <nav className="mt-6 flex flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
