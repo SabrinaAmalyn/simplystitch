@@ -250,7 +250,11 @@
     .creator-layout { grid-template-columns: minmax(0, 1fr); }
     .preview-panel { position: relative; height: auto; justify-content: flex-start; border-right: 0; border-bottom: 1px solid var(--border); }
     .preview-topbar { display: flex; width: 100%; align-items: center; justify-content: flex-end; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--card); }
-    .character-canvas .preview-actions { display: none; }
+    /* Phones: Reset stays in the top bar, Randomize floats at the character's bottom-right. */
+    .preview-topbar .preview-randomize, .character-canvas .preview-reset { display: none; }
+    .character-canvas .preview-actions { top: auto; left: auto; bottom: 12px; right: 12px; }
+    /* One phone button size and font for visual consistency. */
+    .preview-topbar button, .preview-action { height: 36px; padding: 0 12px; font-size: 13px; }
     .preview-generate { display: none; }
     .character-canvas { flex: 0 0 300px; height: 300px; min-height: 0; }
     .category-tab { height: 46px; gap: 5px; font-size: 12px; }
