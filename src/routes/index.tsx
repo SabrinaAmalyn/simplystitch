@@ -71,9 +71,9 @@ function Landing() {
         </div>
       </div>
 
-      <section className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
+      <section className="mx-auto flex min-h-[42vh] max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
         <h2 className="font-heavy text-2xl uppercase text-primary md:text-4xl">About SimplyStitch</h2>
-        <p className="mt-4 text-base text-muted-foreground md:text-lg">
+        <p className="mt-10 text-base text-muted-foreground md:text-lg">
           Amigurumi is made up of simple stitches and familiar shapes. SimplyStitch brings them together to help you
           design your own little characters and turn them into crochet patterns, without having to start from scratch.
         </p>
@@ -109,8 +109,8 @@ function Landing() {
         </div>
       </section>
 
-      <footer className="border-t border-border px-4 py-3 text-center">
-        <p className="text-sm text-muted-foreground">Copyright © 2026 SimplyStitch. All rights reserved.</p>
+      <footer className="border-t border-border px-4 py-1.5 text-center">
+        <p className="text-xs text-muted-foreground">Copyright © 2026 SimplyStitch. All rights reserved.</p>
       </footer>
     </main>
   );
