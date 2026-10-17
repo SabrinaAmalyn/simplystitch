@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { MarchingCubes } from "three/addons/objects/MarchingCubes.js";
 import { bodyColorWeights, joinedBodyDistance } from "@/lib/joined-body";
+import { PawVinyl } from "./PawVinyl";
 
 /** Polygonize one smooth union, rather than overlapping separately shaded capsules. */
 function buildJoinedGeometry() {
@@ -37,7 +38,7 @@ function buildJoinedGeometry() {
   return geometry;
 }
 
-export function JoinedBody({ torso, leftLeg, rightLeg }: { torso: string; leftLeg: string; rightLeg: string }) {
+export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked }: { torso: string; leftLeg: string; rightLeg: string; pawColor: string; marked: boolean }) {
   const geometry = useMemo(buildJoinedGeometry, []);
   useEffect(() => () => geometry.dispose(), [geometry]);
   useEffect(() => {
@@ -58,7 +59,7 @@ export function JoinedBody({ torso, leftLeg, rightLeg }: { torso: string; leftLe
   }, [geometry, torso, leftLeg, rightLeg]);
   return (
     <mesh geometry={geometry} castShadow>
-      <meshPhysicalMaterial vertexColors roughness={0.55} sheen={1} sheenRoughness={0.45} sheenColor="#ffe4d2" clearcoat={0.15} clearcoatRoughness={0.6} />
+      <PawVinyl vertexColors pawColor={pawColor} region="feet" enabled={marked} />
     </mesh>
   );
 }

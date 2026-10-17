@@ -1,4 +1,6 @@
 # Tasks
+- [x] Add symmetric hand and foot paw colours on existing limb surfaces only.
+- [x] Verify bounded markings, unchanged geometry, colour saving, and all viewing angles.
 - [x] Add independent cheek and eye colours in Face, preserving saved colours and drafts.
 - [x] Verify face colour selection, removal, and reload.
 - [x] Add optional round and long tails with matching colour controls and saved selections.
