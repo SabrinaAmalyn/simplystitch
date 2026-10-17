@@ -88,11 +88,11 @@ const CAT_EAR = catEarGeometry();
 /** A downward teardrop swept from a closed sphere, with a narrow buried root. */
 function longTailGeometry() {
   const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0, 0.7, -0.23),
-    new THREE.Vector3(0, 0.59, -0.43),
-    new THREE.Vector3(0, 0.4, -0.61),
-    new THREE.Vector3(0, 0.2, -0.65),
-    new THREE.Vector3(0, 0.035, -0.61),
+    new THREE.Vector3(0, 0.49, -0.22),
+    new THREE.Vector3(0, 0.4, -0.4),
+    new THREE.Vector3(0, 0.27, -0.56),
+    new THREE.Vector3(0, 0.14, -0.6),
+    new THREE.Vector3(0, 0.035, -0.56),
   ]);
   const geometry = new THREE.SphereGeometry(1, 32, 64);
   const positions = geometry.attributes["position"] as THREE.BufferAttribute;
