@@ -78,7 +78,7 @@ function PatternPage() {
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)} name={name.trim() || undefined}
         onTextChange={(text) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text, edited: true, saved: false } }))}
 
-        
+
         previewAction={<Button onClick={save}><Save /> Save</Button>}
         header={<><PatternWorkspaceHeader
           profile
@@ -97,14 +97,6 @@ function PatternPage() {
             <p>Your character has changed since this pattern was made. Press <strong>Back</strong> at the top left to update it.</p>
           </div>
         )}</>}
-        editing={<section className="reader-editor">
-          <textarea
-            aria-label="Edit pattern"
-            className="min-h-[60vh] w-full resize-y rounded-lg border border-border bg-background p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
-            value={draft.text}
-            onChange={(e) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text: e.target.value, edited: true, saved: false } }))}
-          />
-        </section>}
       />
       {draft.edited && <p className="text-sm text-muted-foreground">Edits are saved automatically on this device.</p>}
       {toast && <div role="status" className="toast">{toast}</div>}
