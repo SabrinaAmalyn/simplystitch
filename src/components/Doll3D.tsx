@@ -4,8 +4,8 @@ import * as THREE from "three";
 import { JoinedBody } from "./JoinedBody";
 import { PawVinyl } from "./PawVinyl";
 import { limbSurfaceYarn, pawYarn } from "@/lib/paw-colors";
-import { HEAD, HEAD_ATTACHMENT_OFFSET, createBlushGeometry } from "@/lib/doll-anatomy";
-import { partYarn, type BodyPart, type CharacterConfig, type MouthStyle, type NoseStyle } from "@/lib/character";
+import { HEAD, HEAD_ATTACHMENT_OFFSET, BLUSH_POSITION, createBlushGeometry } from "@/lib/doll-anatomy";
+import { partYarn, yarnById, type BlushShape, type EyeStyle, type BodyPart, type CharacterConfig, type MouthStyle, type NoseStyle } from "@/lib/character";
 
 // Dev tooling injects `data-tsd-source` onto JSX. R3F reads hyphenated props as
 // nested paths (data.tsd.source) and throws. Declaring it as a flat, harmless
@@ -36,6 +36,7 @@ type Ears = Exclude<EarType, null>;
 // Shared base anatomy. Each part is an independent component positioned
 // against these constants so parts stay seamlessly attached.
 const BLUSH_GEOMETRY = createBlushGeometry();
+const OVAL_BLUSH_GEOMETRY = createBlushGeometry("oval");
 
 /** Point on the head's unit sphere (before scaling) as a quaternion turning +y toward it. */
 function capRotation(x: number, y: number, z: number) {
@@ -47,7 +48,11 @@ function Head({ color }: { color: string }) {
   return <mesh position={[0, HEAD.y, 0]} scale={HEAD.scale} castShadow><sphereGeometry args={[1, 64, 48]} /><Vinyl color={color} /></mesh>;
 }
 
-function Eyes({ left, right }: { left: string; right: string }) {
+function Eyes({ left, right, style }: { left: string; right: string; style: EyeStyle }) {
+  if (style === "sleepy") return <>{[-1, 1].map((side) => (
+    <Stitch key={side} color={side === 1 ? left : right} radius={0.019}
+      points={[[side * 0.34 - 0.09, 0.015], [side * 0.34 - 0.045, -0.024], [side * 0.34, -0.036], [side * 0.34 + 0.045, -0.024], [side * 0.34 + 0.09, 0.015]]} />
+  ))}</>;
   return (
     <>
       {[-1, 1].map((s) => (
@@ -57,7 +62,7 @@ function Eyes({ left, right }: { left: string; right: string }) {
   );
 }
 
-const STITCH = "#4B3028"; // Dark Cocoa embroidery thread
+const STITCH = yarnById("charcoal").hex;
 
 /** Project a face-space point (x right, y up from the eye line) onto the head front. */
 function onFace(x: number, y: number, lift = 0.012) {
@@ -68,13 +73,16 @@ function onFace(x: number, y: number, lift = 0.012) {
 }
 
 /** One embroidered stitch line following the head surface. */
-function Stitch({ points, radius = 0.02 }: { points: [number, number][]; radius?: number }) {
+function Stitch({ points, radius = 0.02, color = STITCH }: { points: [number, number][]; radius?: number; color?: string }) {
+  const first = points[0];
+  const last = points[points.length - 1];
+  if (!first || !last || points.length < 2) return null;
   const curve = new THREE.CatmullRomCurve3(points.map(([x, y]) => onFace(x, y)));
   return (
     <>
-      <mesh><tubeGeometry args={[curve, 24, radius, 8, false]} /><meshStandardMaterial color={STITCH} roughness={0.8} /></mesh>
-      {[points[0]!, points[points.length - 1]!].map(([x, y], i) => (
-        <mesh key={i} position={onFace(x, y)}><sphereGeometry args={[radius, 8, 6]} /><meshStandardMaterial color={STITCH} roughness={0.8} /></mesh>
+      <mesh><tubeGeometry args={[curve, 24, radius, 8, false]} /><meshStandardMaterial color={color} roughness={0.8} /></mesh>
+      {[first, last].map(([x, y], i) => (
+        <mesh key={i} position={onFace(x, y)}><sphereGeometry args={[radius, 8, 6]} /><meshStandardMaterial color={color} roughness={0.8} /></mesh>
       ))}
     </>
   );
@@ -107,11 +115,18 @@ function Mouth({ style }: { style: MouthStyle }) {
 }
 
 /** Raised circular blush with a rim that stays on the head surface. */
-function BlushPatch({ side, color }: { side: 1 | -1; color: string }) {
+function Whiskers() {
+  return <>{[-1, 1].flatMap((side) => [-0.04, -0.14, -0.24].map((y, i) => (
+    <Stitch key={`${side}-${i}`} radius={0.013} points={[[side * 0.69, y], [side * 0.77, y + (1 - i) * 0.014], [side * 0.85, y + (1 - i) * 0.028]]} />
+  )))}</>;
+}
+
+function BlushPatch({ side, color, shape }: { side: 1 | -1; color: string; shape: BlushShape }) {
+  const [x, y, z] = BLUSH_POSITION[shape];
   return (
     <group position={[0, HEAD.y, 0]} scale={HEAD.scale}>
-      <group quaternion={capRotation(side * 0.62, -0.54, 0.72)}>
-        <mesh geometry={BLUSH_GEOMETRY}><meshPhysicalMaterial color={color} roughness={0.9} /></mesh>
+      <group quaternion={capRotation(side * x, y, z)}>
+        <mesh geometry={shape === "oval" ? OVAL_BLUSH_GEOMETRY : BLUSH_GEOMETRY}><meshPhysicalMaterial color={color} roughness={0.9} /></mesh>
       </group>
     </group>
   );
@@ -220,10 +235,11 @@ function Doll({ config, ears }: { config: CharacterConfig; ears: EarType }) {
   return (
     <group position={[0, -1.1, 0]}>
       <Head color={c("head")} />
-      <Eyes left={c("leftEye")} right={c("rightEye")} />
+      <Eyes left={c("leftEye")} right={c("rightEye")} style={config.face.eyeStyle ?? "open"} />
       <Nose style={config.face.nose ?? "none"} />
       <Mouth style={config.face.mouth ?? "none"} />
-      {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} /><BlushPatch side={-1} color={c("rightBlush")} /></>}
+      {config.face.whiskers && <Whiskers />}
+      {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
       <JoinedBody torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "feet").hex} marked={Boolean(config.colors.feet)} />
       <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />
       <Arm side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />

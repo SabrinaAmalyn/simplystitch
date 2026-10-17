@@ -1,5 +1,11 @@
 import * as THREE from "three";
 import { JOINED_BODY } from "./joined-body";
+import type { BlushShape } from "./character";
+
+export const BLUSH_POSITION = {
+  round: [0.62, -0.54, 0.72],
+  oval: [0.51, -0.23, 0.86],
+} as const;
 
 export const HEAD = {
   // Tuck the head into the shoulder volume, not just tangent to its top.
@@ -9,7 +15,7 @@ export const HEAD = {
 export const HEAD_ATTACHMENT_OFFSET = HEAD.y - 1.95;
 
 /** A circular cap with a raised centre and a softly tapering, surface-hugging rim. */
-export function createBlushGeometry() {
+export function createBlushGeometry(shape: BlushShape = "round") {
   const angle = 0.3;
   const geometry = new THREE.SphereGeometry(1, 48, 16, 0, Math.PI * 2, 0, angle);
   const positions = geometry.getAttribute("position");
@@ -18,7 +24,10 @@ export function createBlushGeometry() {
     const theta = Math.acos(Math.max(-1, Math.min(1, y)));
     const falloff = Math.max(0, 1 - (theta / angle) ** 2);
     const radius = 1.008 + 0.035 * falloff ** 2;
-    positions.setXYZ(i, x * radius, y * radius, z * radius);
+    const tx = shape === "oval" ? x * 0.65 : x;
+    const tz = shape === "oval" ? z * 0.32 : z;
+    const ty = shape === "oval" ? Math.sqrt(Math.max(0, 1 - tx * tx - tz * tz)) : y;
+    positions.setXYZ(i, tx * radius, ty * radius, tz * radius);
   }
   geometry.computeVertexNormals();
   return geometry;

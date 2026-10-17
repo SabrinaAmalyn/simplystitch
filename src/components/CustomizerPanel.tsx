@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { MOUTH_OPTIONS, NOSE_OPTIONS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
+import { BLUSH_OPTIONS, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { BLUSH_YARN_GROUPS } from "@/lib/yarn-palette";
 import { YarnSwatches } from "@/components/YarnSwatches";
-import { MouthCards, NoseCards } from "@/components/FaceFeatureCards";
+import { BlushCards, EyeCards, MouthCards, NoseCards } from "@/components/FaceFeatureCards";
 import { CUSTOMIZATION_ITEMS, createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 import { PAW_REGIONS, pawYarn, type PawRegion } from "@/lib/paw-colors";
 
@@ -46,6 +46,9 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
         {tab === "Face" && <div className="flex items-center justify-between gap-3"><span className="text-sm font-semibold">Show blush</span><Switch aria-label="Show blush" checked={config.face.cheeks} onCheckedChange={(cheeks) => onChange({ ...config, face: { ...config.face, cheeks } })} /></div>}
         {tab === "Face" && (
           <>
+            {config.face.cheeks && <BlushCards options={BLUSH_OPTIONS} value={config.face.blushShape ?? "round"} onSelect={(blushShape) => onChange({ ...config, face: { ...config.face, blushShape } })} />}
+            <EyeCards options={EYE_OPTIONS} value={config.face.eyeStyle ?? "open"} onSelect={(eyeStyle) => onChange({ ...config, face: { ...config.face, eyeStyle } })} />
+            <div className="flex items-center justify-between gap-3"><span className="text-sm font-semibold">Whiskers</span><Switch aria-label="Whiskers" checked={config.face.whiskers ?? false} onCheckedChange={(whiskers) => onChange({ ...config, face: { ...config.face, whiskers } })} /></div>
             <NoseCards options={NOSE_OPTIONS} value={config.face.nose ?? "none"} onSelect={(nose) => onChange({ ...config, face: { ...config.face, nose } })} />
             <MouthCards options={MOUTH_OPTIONS} value={config.face.mouth ?? "none"} onSelect={(mouth) => onChange({ ...config, face: { ...config.face, mouth } })} />
           </>
