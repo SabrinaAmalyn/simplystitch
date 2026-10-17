@@ -91,7 +91,6 @@ function PatternCard({ p, onOpen }: { p: SavedPattern; onOpen: () => void }) {
 }
 
 function PatternDetail({ p, onBack }: { p: SavedPattern; onBack: () => void }) {
-  const edited = p.text !== p.initialText;
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center gap-2">
@@ -102,16 +101,10 @@ function PatternDetail({ p, onBack }: { p: SavedPattern; onBack: () => void }) {
       <section className="panel">
         <div className="h-[360px] w-full md:h-[440px]"><CharacterPreview config={p.config} /></div>
       </section>
-      <div className="grid gap-6 md:grid-cols-2">
-        <section className="panel min-w-0">
-          <h2 className="mb-2 font-display text-xl font-semibold">Initial pattern</h2>
-          <pre className="whitespace-pre-wrap text-sm">{p.initialText}</pre>
-        </section>
-        <section className="panel min-w-0">
-          <h2 className="mb-2 font-display text-xl font-semibold">Edited version</h2>
-          {edited ? <pre className="whitespace-pre-wrap text-sm">{p.text}</pre> : <p className="text-sm text-muted-foreground">No edits were made.</p>}
-        </section>
-      </div>
+      <section className="panel min-w-0">
+        <h2 className="mb-2 font-display text-xl font-semibold">Pattern</h2>
+        <pre className="whitespace-pre-wrap text-sm">{p.text}</pre>
+      </section>
     </div>
   );
 }
