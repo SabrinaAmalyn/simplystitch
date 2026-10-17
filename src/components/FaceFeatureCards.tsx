@@ -1,7 +1,20 @@
 // Thumbnail cards for embroidered face features (noses and mouths).
-import type { MouthStyle, NoseStyle } from "@/lib/character";
+import { yarnById, type BlushShape, type EyeStyle, type MouthStyle, type NoseStyle } from "@/lib/character";
+import { Button } from "@/components/ui/button";
 
-const STROKE = "#4B3028";
+const STROKE = yarnById("charcoal").hex;
+
+function EyeThumb({ style }: { style: EyeStyle }) {
+  return style === "sleepy"
+    ? <g fill="none" stroke={STROKE} strokeWidth="2" strokeLinecap="round"><path d="M 5 14 Q 10 21 15 14" /><path d="M 19 14 Q 24 21 29 14" /></g>
+    : <g fill={STROKE}><circle cx="10" cy="16" r="3" /><circle cx="24" cy="16" r="3" /></g>;
+}
+
+function BlushThumb({ style }: { style: BlushShape }) {
+  return style === "oval"
+    ? <ellipse cx="16" cy="16" rx="7" ry="3" fill={yarnById("blush").hex} />
+    : <circle cx="16" cy="16" r="8" fill={yarnById("blush").hex} />;
+}
 
 function NoseThumb({ style }: { style: NoseStyle }) {
   if (style === "none") return <line x1="10" y1="18" x2="22" y2="18" stroke={STROKE} strokeWidth="2" strokeLinecap="round" opacity="0.25" />;
@@ -32,7 +45,8 @@ function FeatureCards<T extends string>({ label, options, value, onSelect, Thumb
       <span className="text-sm font-semibold">{label}</span>
       <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label={label}>
         {options.map((o) => (
-          <button
+          <Button
+            variant="ghost"
             key={o.value}
             type="button"
             role="radio"
@@ -40,11 +54,11 @@ function FeatureCards<T extends string>({ label, options, value, onSelect, Thumb
             aria-label={`${label}: ${o.label}`}
             title={o.label}
             onClick={() => onSelect(o.value)}
-            className={`choice flex flex-col items-center gap-1 px-1 py-2 ${value === o.value ? "choice-on" : ""}`}
+            className={`choice h-auto whitespace-normal flex flex-col items-center gap-1 px-1 py-2 [&_svg]:size-8 ${value === o.value ? "choice-on" : ""}`}
           >
             <svg viewBox="0 0 32 32" className="h-8 w-8" aria-hidden="true"><Thumb style={o.value} /></svg>
             <span className="text-[10px] leading-tight">{o.label}</span>
-          </button>
+          </Button>
         ))}
       </div>
     </div>
@@ -53,3 +67,5 @@ function FeatureCards<T extends string>({ label, options, value, onSelect, Thumb
 
 export const NoseCards = (p: Omit<CardProps<NoseStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Nose" Thumb={NoseThumb} />;
 export const MouthCards = (p: Omit<CardProps<MouthStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Mouth" Thumb={MouthThumb} />;
+export const EyeCards = (p: Omit<CardProps<EyeStyle>, "label" | "Thumb">) => <FeatureCards {...p} label="Eyes" Thumb={EyeThumb} />;
+export const BlushCards = (p: Omit<CardProps<BlushShape>, "label" | "Thumb">) => <FeatureCards {...p} label="Blush shape" Thumb={BlushThumb} />;

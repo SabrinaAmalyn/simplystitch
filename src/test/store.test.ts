@@ -6,6 +6,35 @@ beforeEach(() => {
   localStorage.clear();
 });
 
+it("reopens oval blush, sleepy eyes and whiskers without changing colours or drafts", async () => {
+  const draft = { text: "Keep my face instructions", configKey: "old-face", edited: true, generatedAt: 100 };
+  const face = { ...DEFAULT_CONFIG.face, blushShape: "oval", eyeStyle: "sleepy", whiskers: true };
+  localStorage.setItem("stitchling-doll-base-v2", "true");
+  localStorage.setItem("stitchling-state-v1", JSON.stringify({ config: { ...DEFAULT_CONFIG, face, colors: { ...DEFAULT_CONFIG.colors, leftEye: "teal", rightBlush: "baby-pink" } }, draft, previous: draft }));
+  const { hydrateStore } = await import("@/lib/store");
+  hydrateStore();
+  const saved = JSON.parse(localStorage.getItem("stitchling-state-v1") ?? "{}");
+  expect(saved.config.face).toEqual(face);
+  expect(saved.config.colors.leftEye).toBe("teal");
+  expect(saved.config.colors.rightBlush).toBe("baby-pink");
+  expect(saved.draft).toEqual(draft);
+  expect(saved.previous).toEqual(draft);
+});
+
+it("fills missing new face selections without changing legacy faces or drafts", async () => {
+  const draft = { text: "Original draft", configKey: "legacy", edited: true, generatedAt: 100 };
+  localStorage.setItem("stitchling-doll-base-v2", "true");
+  localStorage.setItem("stitchling-state-v1", JSON.stringify({ config: { ...DEFAULT_CONFIG, face: { expression: "sleepy", cheeks: false } }, draft, previous: null }));
+  const { hydrateStore } = await import("@/lib/store");
+  hydrateStore();
+  const saved = JSON.parse(localStorage.getItem("stitchling-state-v1") ?? "{}");
+  expect(saved.config.face.eyeStyle).toBe("open");
+  expect(saved.config.face.blushShape).toBe("round");
+  expect(saved.config.face.whiskers).toBe(false);
+  expect(saved.config.face.cheeks).toBe(false);
+  expect(saved.draft).toEqual(draft);
+});
+
 it("keeps shared paw yarns and individual limb choices without changing saved drafts", async () => {
   const draft = { text: "My edited paw instructions", configKey: "previous-key", edited: true, generatedAt: 100 };
   localStorage.setItem("stitchling-doll-base-v2", "true");
