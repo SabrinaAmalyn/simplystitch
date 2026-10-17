@@ -64,14 +64,14 @@ function Landing() {
         <div className="marquee-track font-heavy text-sm uppercase text-primary">
           {items.map((t, i) => (
             <span key={i} className="flex items-center gap-10 pr-10">
-              <span aria-hidden="true" className="text-3xl leading-none md:text-4xl">✿</span>
+              <span aria-hidden="true" className="text-5xl leading-none md:text-6xl">✿</span>
               <span>{t}</span>
             </span>
           ))}
         </div>
       </div>
 
-      <section className="mx-auto flex min-h-[42vh] max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
+      <section className="mx-auto flex min-h-[50vh] max-w-3xl flex-col items-center justify-center px-4 py-12 text-center md:px-8">
         <h2 className="font-heavy text-2xl uppercase text-primary md:text-4xl">About SimplyStitch</h2>
         <p className="mt-10 text-base text-muted-foreground md:text-lg">
           Amigurumi is made up of simple stitches and familiar shapes. SimplyStitch brings them together to help you
