@@ -1,6 +1,25 @@
 import { expect, it } from "vitest";
-import { HEAD, createBlushGeometry } from "@/lib/doll-anatomy";
+import { BLUSH_POSITION, HEAD, createBlushGeometry } from "@/lib/doll-anatomy";
 import { JOINED_BODY, joinedBodyDistance } from "@/lib/joined-body";
+
+it("makes oval blush smaller and wider than tall, nearer the eye line", () => {
+  const round = createBlushGeometry();
+  const oval = createBlushGeometry("oval");
+  round.computeBoundingBox();
+  oval.computeBoundingBox();
+  const rb = round.boundingBox;
+  const ob = oval.boundingBox;
+  if (!rb || !ob) throw new Error("Missing blush bounds");
+  expect(ob.max.x - ob.min.x).toBeLessThan(rb.max.x - rb.min.x);
+  expect(ob.max.z - ob.min.z).toBeLessThan((ob.max.x - ob.min.x) * 0.6);
+  expect(Math.abs(BLUSH_POSITION.oval[1])).toBeLessThan(Math.abs(BLUSH_POSITION.round[1]));
+  const positions = oval.getAttribute("position");
+  for (let i = 0; i < positions.count; i++) {
+    expect(Math.hypot(positions.getX(i), positions.getY(i), positions.getZ(i))).toBeGreaterThan(1);
+  }
+  round.dispose();
+  oval.dispose();
+});
 
 it("keeps the head inside the torso shoulder rather than leaving a gap", () => {
   const bottom = HEAD.y - HEAD.scale[1];
