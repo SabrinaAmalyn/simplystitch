@@ -241,8 +241,8 @@
   /* Fill the column: the options take the spare height and the swatches sit at the foot. */
   .options-column .customization-workspace { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
   .options-column .workspace-content { flex: 1 1 auto; display: flex; flex-direction: column; }
-  .options-column .feature-area { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
-  .options-column .palette-area { margin-top: auto; }
+  .options-column .feature-area { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: flex-start; }
+  .options-column .palette-area { margin-top: 20px; }
 }
   @media (max-width: 767px) {
     .creator-layout { grid-template-columns: minmax(0, 1fr); }
