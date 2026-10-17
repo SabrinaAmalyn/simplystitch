@@ -24,6 +24,20 @@ describe("base doll pattern", () => {
     const text = patternToText(generatePattern(make(null, null)));
     expect(text).toContain("R3–R6: sc around for 4 rounds (8)");
   });
+  it("hands are the paw colour for R1–R3, then switch to the arm yarn", () => {
+    const text = patternToText(generatePattern({ ...make(null, null), colors: { ...DEFAULT_CONFIG.colors, hands: "caramel" } }));
+    expect(text).toContain("R1: 6 sc in MR — work in Caramel (paw colour) (6)");
+    expect(text).toContain("R3: sc around — in Caramel (8)");
+    expect(text).toContain("R4: switch to Peach, sc around (8)");
+    expect(text).not.toContain("R3–R6: sc around for 4 rounds");
+  });
+  it("feet are the paw colour for R1–R4, then switch to the leg yarn", () => {
+    const text = patternToText(generatePattern({ ...make(null, null), colors: { ...DEFAULT_CONFIG.colors, feet: "caramel" } }));
+    expect(text).toContain("R1: 6 sc in MR — work in Caramel (paw colour) (6)");
+    expect(text).toContain("R3–R4: sc around for 2 rounds — in Caramel (12)");
+    expect(text).toContain("R5: switch to Peach, sc around (12)");
+    expect(text).not.toContain("R3–R7: sc around for 5 rounds");
+  });
   it("cat ears reach 21 and sit between R1 and R9", () => {
     const text = patternToText(generatePattern(make("ears-cat", null)));
     expect(text).toContain("R7: sc around (21)");
