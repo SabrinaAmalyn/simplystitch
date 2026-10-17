@@ -42,7 +42,7 @@ function Landing() {
         </nav>
       </header>
 
-      <section className="landing-sky flex min-h-[82vh] items-center px-4 py-16 md:px-8">
+      <section className="landing-sky flex min-h-[72vh] items-center px-4 py-16 md:px-8">
         <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 text-center text-primary-foreground">
           <h1 className="font-heavy text-4xl leading-[1.02] uppercase md:text-6xl">
             Your ideas, made stitch by stitch.
@@ -63,10 +63,10 @@ function Landing() {
       </section>
 
       <div className="marquee border-y border-border bg-background py-4" aria-hidden>
-        <div className="marquee-track font-heavy text-sm uppercase text-primary">
+        <div className="marquee-track font-heavy text-lg uppercase text-primary md:text-2xl">
           {items.map((t, i) => (
             <span key={i} className="flex items-center gap-10 pr-10">
-              <span aria-hidden="true" className="text-5xl leading-none md:text-6xl">✿</span>
+              <span aria-hidden="true" className="text-7xl leading-none md:text-8xl">✿</span>
               <span>{t}</span>
             </span>
           ))}
@@ -87,7 +87,7 @@ function Landing() {
           <ol className="mt-12 grid gap-14 md:mt-16 md:grid-cols-3 md:gap-8">
             {HOW.map((s) => (
               <li key={s.n} className="flex flex-col items-center text-center">
-                <div className="flex h-72 w-full items-center justify-center md:h-96">
+                <div className="flex h-80 w-full items-center justify-center md:h-96">
                   <img src={s.art} alt={`${s.title} illustration`} className="max-h-full w-auto max-w-full object-contain" />
                 </div>
                 <h3 className="font-heavy mt-6 text-xl uppercase text-primary md:text-2xl">
