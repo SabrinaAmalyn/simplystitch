@@ -350,3 +350,41 @@
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 32px 32px;
 }
+
+/* Continuous pattern document (saved patterns) */
+.reader-row-current { box-shadow: inset 3px 0 0 var(--primary); background: color-mix(in oklab, var(--primary) 6%, transparent); }
+.doc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; padding: 24px; align-items: start; }
+.doc-main { min-width: 0; display: flex; flex-direction: column; gap: 40px; }
+.doc-section { scroll-margin-top: 96px; }
+.doc-kicker { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--primary); margin-bottom: 4px; }
+.doc-progress { position: sticky; top: 0; z-index: 15; display: flex; flex-direction: column; gap: 8px; padding: 12px 0; background: var(--background); }
+.doc-progress-track { height: 6px; border-radius: 9999px; background: var(--muted); overflow: hidden; }
+.doc-progress-fill { height: 100%; background: var(--primary); transition: width .2s; }
+.doc-side { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 16px; max-height: calc(100dvh - 32px); min-width: 0; }
+.doc-card { border: 1px solid var(--border); border-radius: 12px; background: var(--card); overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+.doc-card-title { padding: 14px 16px; font-weight: 700; background: color-mix(in oklab, var(--primary) 10%, var(--card)); }
+.doc-toc-scroll { overflow-y: auto; max-height: 40vh; padding: 8px; }
+.doc-toc-list { display: flex; flex-direction: column; gap: 2px; }
+.doc-toc-link { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; padding: 8px 12px; border-radius: 8px; text-align: left; font-weight: 600; font-size: 0.95rem; }
+.doc-toc-link:hover { background: var(--muted); }
+.doc-toc-link:focus-visible, .doc-preview-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
+.doc-toc-nested { padding-left: 28px; font-weight: 500; }
+.doc-toc-active { background: color-mix(in oklab, var(--primary) 14%, transparent); color: var(--primary); }
+.doc-toc-group { padding: 8px 12px 2px 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted-foreground); }
+.doc-preview-toggle { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px; font-weight: 600; font-size: 0.9rem; text-align: left; }
+.doc-preview { height: 280px; background: var(--stage); }
+.doc-goto { display: none; }
+.doc-view3d { display: none; }
+.doc-sheet { max-height: 85dvh; display: flex; flex-direction: column; border-radius: 16px 16px 0 0; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+.doc-sheet-scroll { overflow-y: auto; min-height: 0; }
+@media (max-width: 1023px) {
+  .doc-layout { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .doc-side { display: none; }
+  .doc-goto { display: inline-flex; position: fixed; z-index: 30; top: calc(12px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); min-height: 44px; }
+  .doc-view3d { display: inline-flex; }
+  .doc-progress { padding-right: 110px; }
+}
+@media (max-width: 1023px) {
+  .doc-progress > div:first-child { flex-direction: column; align-items: flex-start; }
+  .doc-progress > div:first-child > span { white-space: nowrap; }
+}
