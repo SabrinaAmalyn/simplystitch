@@ -10,7 +10,7 @@ import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers"
 import { YARNS } from "@/lib/yarn-palette";
 import { Dices, RotateCcw } from "lucide-react";
 
-const pick = <T,>(list: readonly T[]): T => list[Math.floor(Math.random() * list.length)];
+const pick = <T,>(list: readonly T[]): T => list[Math.floor(Math.random() * list.length)]!;
 const EAR_IDS = ["ears-human", "ears-dog", "ears-cat", "ears-bear", "ears-bunny"] as const;
 
 function randomConfig(): CharacterConfig {
