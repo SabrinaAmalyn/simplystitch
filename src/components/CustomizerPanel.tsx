@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { BLUSH_OPTIONS, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
+import { BLUSH_OPTIONS, BROW_OPTIONS, EYE_OPTIONS, MOUTH_OPTIONS, NOSE_OPTIONS, partYarn, type BodyPart, type CharacterConfig } from "@/lib/character";
 import { BLUSH_YARN_GROUPS } from "@/lib/yarn-palette";
 import { YarnSwatches } from "@/components/YarnSwatches";
 import { BlushCards, BrowCards, EyeCards, MouthCards, NoseCards } from "@/components/FaceFeatureCards";
@@ -13,7 +13,7 @@ const PART_LABEL: Record<BodyPart, string> = {
   head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm",
   leftLeg: "Left leg", rightLeg: "Right leg", leftEar: "Left ear", rightEar: "Right ear",
   leftInnerEar: "Left inner ear", rightInnerEar: "Right inner ear", blush: "Blush cheeks", tail: "Tail",
-  leftBlush: "Left blush", rightBlush: "Right blush", leftEye: "Left eye", rightEye: "Right eye",
+  leftBlush: "Left blush", rightBlush: "Right blush", leftEye: "Left eye", rightEye: "Right eye", brows: "Eyebrows",
 };
 const TAB_PARTS: Record<(typeof TABS)[number], BodyPart[]> = {
   Body: ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg"],
