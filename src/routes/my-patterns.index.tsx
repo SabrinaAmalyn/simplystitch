@@ -7,10 +7,10 @@ import { deletePattern, loadPatternIntoCustomizer, renamePattern, useStore, type
 export const Route = createFileRoute("/my-patterns/")({
   head: () => ({
     meta: [
-      { title: "My Patterns — Stitchling" },
+      { title: "My Patterns — SimplyStitch" },
       { name: "description", content: "Browse, rename and download your saved amigurumi characters and crochet patterns." },
-      { property: "og:title", content: "My Patterns — Stitchling" },
-      { property: "og:description", content: "Your saved Stitchling characters and their crochet patterns." },
+      { property: "og:title", content: "My Patterns — SimplyStitch" },
+      { property: "og:description", content: "Your saved SimplyStitch characters and their crochet patterns." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

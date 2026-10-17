@@ -85,9 +85,9 @@ function PreviewActions() {
 export const Route = createFileRoute("/customize")({
   head: () => ({
     meta: [
-      { title: "Customize your character — Stitchling" },
+      { title: "Customize your character — SimplyStitch" },
       { name: "description", content: "Pick ears, tail, face details and yarn colours, then generate a matching amigurumi crochet pattern draft." },
-      { property: "og:title", content: "Customize your character — Stitchling" },
+      { property: "og:title", content: "Customize your character — SimplyStitch" },
       { property: "og:description", content: "Choose ears, tail, facial details and yarn colours for your doll, then generate its pattern." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -129,7 +129,7 @@ function Workspace() {
   return (
     <main className="min-h-screen bg-background">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-4 md:px-6">
-        <h1 className="min-w-0 font-display text-2xl font-semibold">Stitchling</h1>
+        <h1 className="min-w-0 font-display text-2xl font-semibold">SimplyStitch</h1>
         <ProfileMenu />
       </header>
 

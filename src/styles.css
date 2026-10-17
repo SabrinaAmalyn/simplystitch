@@ -65,26 +65,27 @@
 
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.97 0.018 80);
-  --foreground: oklch(0.28 0.04 45);
-  --card: oklch(0.99 0.01 85);
-  --card-foreground: oklch(0.28 0.04 45);
-  --popover: oklch(0.99 0.01 85);
-  --popover-foreground: oklch(0.28 0.04 45);
-  --primary: oklch(0.64 0.135 32);
-  --primary-foreground: oklch(0.99 0.01 85);
-  --secondary: oklch(0.88 0.05 130);
-  --secondary-foreground: oklch(0.3 0.05 140);
-  --muted: oklch(0.93 0.022 75);
-  --muted-foreground: oklch(0.5 0.04 50);
-  --accent: oklch(0.94 0.035 35);
-  --accent-foreground: oklch(0.4 0.095 32);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.25 0.03 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.25 0.03 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.25 0.03 250);
+  --primary: oklch(0.62 0.15 245);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.03 240);
+  --secondary-foreground: oklch(0.35 0.08 250);
+  --muted: oklch(0.965 0.006 250);
+  --muted-foreground: oklch(0.5 0.02 250);
+  --accent: oklch(0.95 0.035 240);
+  --accent-foreground: oklch(0.4 0.12 250);
   --destructive: oklch(0.577 0.2 27);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.87 0.03 70);
-  --input: oklch(0.87 0.03 70);
-  --ring: oklch(0.64 0.135 32);
-  --stage: oklch(0.96 0.018 80);
+  --border: oklch(0.91 0.01 250);
+  --input: oklch(0.91 0.01 250);
+  --ring: oklch(0.62 0.15 245);
+  --stage: oklch(1 0 0);
+  --landing-sky: oklch(0.78 0.11 235);
   --shadow-soft: 0 10px 30px -12px oklch(0.4 0.06 45 / 0.25);
   --doll-outline: oklch(0.35 0.035 45 / 0.65);
   --doll-shadow: oklch(0.35 0.035 45 / 0.12);
@@ -302,3 +303,11 @@
   .review-body { padding: 16px; }
 }
 .pattern-stale-alert { margin: 0; border-radius: 0; border-width: 0 0 1px; }
+
+/* Landing page */
+.landing-sky { background: var(--landing-sky); }
+.landing-cloud { background: var(--background); border-radius: 46% 54% 50% 50% / 55% 50% 50% 45%; }
+.marquee { overflow: hidden; white-space: nowrap; }
+.marquee-track { display: inline-flex; gap: 2.5rem; animation: marquee 28s linear infinite; padding-right: 2.5rem; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }

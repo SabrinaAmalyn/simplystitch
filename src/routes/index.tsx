@@ -7,9 +7,9 @@ import { JourneySteps } from "@/components/JourneySteps";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Stitchling — Design a crochet character, get the pattern" },
+      { title: "SimplyStitch — Design a crochet character, get the pattern" },
       { name: "description", content: "Build an amigurumi character from ears, tail, face details and yarn colours, then generate a written crochet pattern draft you can edit and download." },
-      { property: "og:title", content: "Stitchling — Design a crochet character, get the pattern" },
+      { property: "og:title", content: "SimplyStitch — Design a crochet character, get the pattern" },
       { property: "og:description", content: "Customize your doll, then generate a matching crochet draft with rounds, stitch counts and assembly notes." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -68,7 +68,7 @@ function Landing() {
   return (
     <main className="min-h-screen bg-background">
       <header className="flex items-center justify-between gap-4 border-b border-border px-4 py-5 md:px-8">
-        <span className="font-display text-2xl font-semibold">Stitchling</span>
+        <span className="font-display text-2xl font-semibold">SimplyStitch</span>
         <nav className="flex items-center gap-2">
           <Link to="/my-patterns" className="btn-ghost hidden sm:inline-flex">My Patterns</Link>
           <Link to="/customize" className="btn-primary">Try Demo</Link>
@@ -84,7 +84,7 @@ function Landing() {
             Get the pattern.
           </h1>
           <p className="max-w-prose text-muted-foreground md:text-lg">
-            Pick ears, a tail, embroidered face details and a yarn colour for every part. Stitchling writes a crochet
+            Pick ears, a tail, embroidered face details and a yarn colour for every part. SimplyStitch writes a crochet
             draft that matches the doll on your screen — rounds, stitch counts, colour switches and assembly notes.
           </p>
           <div className="flex flex-wrap items-center gap-3">

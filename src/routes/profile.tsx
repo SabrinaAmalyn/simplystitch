@@ -6,10 +6,10 @@ import { yarnById } from "@/lib/yarn-palette";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile — Stitchling" },
-      { name: "description", content: "Your Stitchling account: saved characters, favourite yarns, stitching preferences and recent activity." },
-      { property: "og:title", content: "My Profile — Stitchling" },
-      { property: "og:description", content: "Your Stitchling profile: favourite yarns, stitching preferences and recent activity." },
+      { title: "My Profile — SimplyStitch" },
+      { name: "description", content: "Your SimplyStitch account: saved characters, favourite yarns, stitching preferences and recent activity." },
+      { property: "og:title", content: "My Profile — SimplyStitch" },
+      { property: "og:description", content: "Your SimplyStitch profile: favourite yarns, stitching preferences and recent activity." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

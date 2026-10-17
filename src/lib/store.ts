@@ -29,7 +29,7 @@ const BASE_KEY = "stitchling-doll-base-v2";
 const initial: State = { config: { ...DEFAULT_CONFIG, layered: createLayeredCharacter() }, draft: null, previous: null, library: [] };
 
 export function defaultPatternName(library: SavedPattern[]) {
-  return `Stitchling #${library.length + 1}`;
+  return `SimplyStitch #${library.length + 1}`;
 }
 
 /** Adds the current character + draft to the library and returns the new id. */

@@ -139,7 +139,7 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
 
   const yarns = new Set<string>(sections.flatMap((s) => s.yarn!.split(PAW_LABEL)).concat(hands ?? [], feet ?? []));
   return {
-    title: `Stitchling ${ear ? ear.name.replace(" ears", "") : "Doll"}`,
+    title: `SimplyStitch ${ear ? ear.name.replace(" ears", "") : "Doll"}`,
     materials: [
       `DK / light worsted yarn in ${Array.from(yarns).join(", ")}`,
       `${eyes} for the eyes${brow !== "none" ? ` and ${y("brows")} for embroidery` : ""}`,
