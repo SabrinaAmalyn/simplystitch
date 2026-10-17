@@ -114,7 +114,7 @@ export function PatternReader({ text, config, progressKey, name }: Props) {
   );
 }
 
-function NavList({ meta, parts, assembly, active, go, done }: { meta: ReaderSection[]; parts: ReaderSection[]; assembly: ReaderSection[]; active?: string; go: (id: string) => void; done: Set<string> }) {
+function NavList({ meta, parts, assembly, active, go, done }: { meta: ReaderSection[]; parts: ReaderSection[]; assembly: ReaderSection[]; active?: string | undefined; go: (id: string) => void; done: Set<string> }) {
   return (
     <div className="flex flex-col">
       {meta.map((s) => <NavItem key={s.id} s={s} active={active === s.id} onGo={go} done={done} />)}
