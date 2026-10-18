@@ -8,10 +8,14 @@ import { setState, useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers";
 import { YARNS } from "@/lib/yarn-palette";
-import { Dices, RotateCcw } from "lucide-react";
+import { ArrowLeft, Dices, RotateCcw } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 
-const pick = <T,>(list: readonly T[]): T => list[Math.floor(Math.random() * list.length)]!;
+const pick = <T,>(list: readonly T[]): T => {
+  const value = list[Math.floor(Math.random() * list.length)];
+  if (value === undefined) throw new Error("No random choices available.");
+  return value;
+};
 const EAR_IDS = ["ears-human", "ears-dog", "ears-cat", "ears-bear", "ears-bunny"] as const;
 
 function randomConfig(): CharacterConfig {
@@ -46,11 +50,7 @@ function randomConfig(): CharacterConfig {
   };
 }
 
-/**
- * Randomize / Reset pair. Rendered once inside the preview canvas (desktop) and
- * once inside the mobile preview top bar; CSS decides which one is visible so
- * the buttons always sit in the preview's upper-right corner.
- */
+/** Desktop top-left pair; mobile controls sit in the viewer's bottom corners. */
 function PreviewActions() {
   return (
     <div className="preview-actions">
@@ -134,7 +134,9 @@ function Workspace() {
       <div className="creator-layout">
         <section className="preview-panel" aria-label="Character preview">
           <div className="preview-topbar">
-            <PreviewActions />
+            <Button variant="outline" size="sm" asChild className="preview-back">
+              <Link to="/" aria-label="Go Back" title="Go Back"><ArrowLeft size={14} /></Link>
+            </Button>
             <span className="preview-topbar-spacer" aria-hidden="true" />
             <Button type="button" size="sm" onClick={generate} disabled={busy || blockers.length > 0}>
               Generate
