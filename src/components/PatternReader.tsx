@@ -39,7 +39,6 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
   const parts = doc.sections.filter((s) => s.parent);
   const assembly = doc.sections.filter((s) => /^assembly/i.test(s.title));
   const [tab, setTab] = useState<"materials" | "instructions" | "assembly">(parts.length ? "instructions" : "materials");
-  const [guideOpen, setGuideOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [partId, setPartId] = useState(parts[0]?.id);
   const part = parts.find((p) => p.id === partId) ?? parts[0];
@@ -79,9 +78,6 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
           )}
         </section>
         <section className="review-content">
-          <Button variant="outline" size="icon" className="review-guide-btn" aria-label="Stitch guide" title="What the abbreviations mean" onClick={() => setGuideOpen(true)}>
-            <CircleHelp size={18} />
-          </Button>
           <nav className="category-nav review-category-nav" role="tablist" aria-label="Pattern categories" style={{ gridTemplateColumns: `repeat(${tabs.filter(([, , on]) => on).length}, minmax(0, 1fr))` }}>
             {tabs.filter(([, , on]) => on).map(([id, text]) => (
               <Button key={id} variant="ghost" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "category-active" : ""}`} onClick={() => pick(id)}>{text}</Button>
@@ -124,60 +120,6 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
               )}
             </article>
           </div>
-          <Dialog open={guideOpen} onOpenChange={setGuideOpen}>
-            <DialogContent className="max-h-[85vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>How to read your pattern</DialogTitle>
-                <DialogDescription>Every abbreviation used in this pattern, in plain words.</DialogDescription>
-              </DialogHeader>
-              <dl className="flex flex-col gap-3 text-sm">
-                <div>
-                  <dt className="font-semibold">R1, R2, …</dt>
-                  <dd className="text-muted-foreground">Round numbers. Tap a round to tick it off — your progress is saved on this device.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">MR — magic ring</dt>
-                  <dd className="text-muted-foreground">Crochet into an adjustable loop, then pull it tight so there is no hole at the start.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">sc — single crochet</dt>
-                  <dd className="text-muted-foreground">The basic stitch used throughout.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">inc — increase</dt>
-                  <dd className="text-muted-foreground">Work two single crochets into the same stitch.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">dec — decrease</dt>
-                  <dd className="text-muted-foreground">Single crochet two stitches together, turning two stitches into one.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">ch — chain</dt>
-                  <dd className="text-muted-foreground">Yarn over and pull through to make a chain stitch.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">st / sts — stitch / stitches</dt>
-                  <dd className="text-muted-foreground">A single loop of your crocheted fabric.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">(inc, 2 sc) × 6 (18)</dt>
-                  <dd className="text-muted-foreground">Repeat everything in brackets 6 times. The last number in bold is the stitch count you should have when the round ends — count to check.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">(6)</dt>
-                  <dd className="text-muted-foreground">The stitch count to check at the end of that round.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">Stuff</dt>
-                  <dd className="text-muted-foreground">Fill the piece with fiberfill — the assembly notes say how firmly.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">Fasten off</dt>
-                  <dd className="text-muted-foreground">Cut the yarn and pull the tail through the last loop to secure it.</dd>
-                </div>
-              </dl>
-            </DialogContent>
-          </Dialog>
         </section>
       </div>
     </div>
@@ -213,6 +155,7 @@ type SectionEditProps = {
 
 function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, onChange }: SectionEditProps) {
   const [draft, setDraft] = useState(initialBody);
+  const [guideOpen, setGuideOpen] = useState(false);
   return (
     <section id={s.id} className="reader-section">
       <div className="flex items-center justify-between gap-2">
@@ -223,6 +166,12 @@ function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, o
       </div>
       {editing ? (
         <div className="mt-3 flex flex-col gap-2">
+          <div className="review-guide-row">
+            <Button variant="ghost" size="sm" className="review-guide-btn" aria-label="Pattern writing guide" title="How to write rounds so they stay tickable" onClick={() => setGuideOpen(true)}>
+              <CircleHelp size={16} />
+              Writing guide
+            </Button>
+          </div>
           <textarea
             aria-label={`Edit ${s.title}`}
             className="min-h-[30vh] w-full resize-y rounded-lg border border-border bg-background p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
@@ -230,6 +179,36 @@ function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, o
             onChange={(e) => { setDraft(e.target.value); onChange(e.target.value); }}
           />
           <Button variant="outline" className="self-start" onClick={onDone}>Done</Button>
+          <Dialog open={guideOpen} onOpenChange={setGuideOpen}>
+            <DialogContent className="max-h-[85vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>How to write your pattern</DialogTitle>
+                <DialogDescription>Follow this format while editing so your rounds stay tickable and the stitch counts keep working.</DialogDescription>
+              </DialogHeader>
+              <dl className="flex flex-col gap-3 text-sm">
+                <div>
+                  <dt className="font-semibold">R4: 2 sc, inc (24)</dt>
+                  <dd className="text-muted-foreground">One round per line. Start with the round number, a colon, then the stitches. End with the total stitch count in brackets — that's what makes the round tickable.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold">R5: (2 sc, inc) × 6 (24)</dt>
+                  <dd className="text-muted-foreground">Put a repeated sequence in brackets with × and how many times. The count in brackets at the end is what you should have when the round finishes.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold">R6–R8: sc around (24)</dt>
+                  <dd className="text-muted-foreground">Use a dash to group identical rounds into one line — they become a collapsible group with a tick for each round.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold">MR, sc, inc, dec, ch, st</dt>
+                  <dd className="text-muted-foreground">Magic ring, single crochet, increase (2 sc in one stitch), decrease (2 stitches together), chain, stitch.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold">Lines without R numbers</dt>
+                  <dd className="text-muted-foreground">Anything else — like "Stuff firmly" or "Fasten off" — shows as a plain note under the rounds.</dd>
+                </div>
+              </dl>
+            </DialogContent>
+          </Dialog>
         </div>
       ) : (
         <div className="mt-3 flex flex-col">
