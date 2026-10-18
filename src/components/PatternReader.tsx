@@ -40,6 +40,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
   const assembly = doc.sections.filter((s) => /^assembly/i.test(s.title));
   const [tab, setTab] = useState<"materials" | "instructions" | "assembly">(parts.length ? "instructions" : "materials");
   const [editId, setEditId] = useState<string | null>(null);
+  const [guideOpen, setGuideOpen] = useState(false);
   const [partId, setPartId] = useState(parts[0]?.id);
   const part = parts.find((p) => p.id === partId) ?? parts[0];
   const groups = useMemo(() => groupParts(parts), [parts]);
@@ -78,10 +79,13 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
           )}
         </section>
         <section className="review-content">
-          <nav className="category-nav review-category-nav" role="tablist" aria-label="Pattern categories" style={{ gridTemplateColumns: `repeat(${tabs.filter(([, , on]) => on).length}, minmax(0, 1fr))` }}>
+          <nav className="category-nav review-category-nav" role="tablist" aria-label="Pattern categories" style={{ gridTemplateColumns: `repeat(${tabs.filter(([, , on]) => on).length}, minmax(0, 1fr)) auto` }}>
             {tabs.filter(([, , on]) => on).map(([id, text]) => (
               <Button key={id} variant="ghost" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "category-active" : ""}`} onClick={() => pick(id)}>{text}</Button>
             ))}
+            <Button variant="ghost" size="icon" className="review-guide-btn" aria-label="Pattern writing guide" title="How to write rounds when editing" onClick={() => setGuideOpen(true)}>
+              <CircleHelp size={16} />
+            </Button>
           </nav>
           {tab === "instructions" && groups.length > 1 && (
             <nav className="subcategory-nav" role="tablist" aria-label="Pattern groups">
