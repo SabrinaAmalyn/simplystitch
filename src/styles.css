@@ -359,7 +359,7 @@
   .pattern-workspace > .pattern-header { flex: 0 0 auto; }
   .review-layout { flex: 1 1 auto; min-height: 0; grid-template-rows: minmax(0, 1fr); }
   .review-content { min-height: 0; overflow: hidden; }
-  .review-content > nav, .review-content > .review-guide-row { flex: 0 0 auto; }
+  .review-content > nav { flex: 0 0 auto; }
   .review-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-bottom: 40px; }
   .review-preview { position: relative; top: auto; height: 100%; min-height: 0; align-self: stretch; }
 }
