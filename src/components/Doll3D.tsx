@@ -178,9 +178,11 @@ function Arm({ side, color, pawColor, marked, lengthScale = 1, down = false, tor
   const extension = 0.63 * (lengthScale - 1);
   if (down) {
     // Preview-only pose: same shoulder joint as the raised pose, mirrored to angle downward.
-    const drop = 0.9;
+    // The shoulder sits just inside the torso surface and the hang is near-vertical,
+    // so the arm's full length grazes the body with no visible gap.
+    const drop = 1.05;
     const h = 0.125 + extension / 2;
-    const shoulder = [0.4625, 0.775];
+    const shoulder = [0.44, 0.775];
     return <mesh position={[side * (shoulder[0]! + Math.cos(drop) * h), shoulder[1]! - Math.sin(drop) * h, 0.02]} rotation={[0, 0, side * (Math.PI / 2 - drop)]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
   }
   // Tilted up 20° and set high: the arm's top rests against the head's underside without sinking into it.
