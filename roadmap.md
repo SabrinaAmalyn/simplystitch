@@ -92,3 +92,4 @@
 - [x] Fix pattern page: section + subsection tabs stay pinned, only content scrolls (landscape)
 - [x] Move stitch-guide "?" button out of the tab overlay into its own small row
 - [x] Stitch guide is for edit mode: explain the pattern-writing format, show it while editing a section
+- [ ] Writing guide: small tab right of category tabs on desktop; floating icon bottom-right of 3D viewer on mobile
