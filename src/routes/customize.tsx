@@ -28,6 +28,8 @@ function randomConfig(): CharacterConfig {
   layered.selections.tail = tail;
   const blushYarn = pick(["blush", "baby-pink", "peach"] as const);
   const paw = yarn();
+  // Lengths follow the sliders' 10% steps so Randomize never produces a value the UI can't show.
+  const lengths = { arms: pickLength(), legs: pickLength(), torso: pickLength() };
   return {
     ...DEFAULT_CONFIG,
     colors: {
