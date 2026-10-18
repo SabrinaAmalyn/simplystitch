@@ -159,7 +159,6 @@ type SectionEditProps = {
 
 function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, onChange }: SectionEditProps) {
   const [draft, setDraft] = useState(initialBody);
-  const [guideOpen, setGuideOpen] = useState(false);
   return (
     <section id={s.id} className="reader-section">
       <div className="flex items-center justify-between gap-2">
@@ -170,12 +169,6 @@ function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, o
       </div>
       {editing ? (
         <div className="mt-3 flex flex-col gap-2">
-          <div className="review-guide-row">
-            <Button variant="ghost" size="sm" className="review-guide-btn" aria-label="Pattern writing guide" title="How to write rounds so they stay tickable" onClick={() => setGuideOpen(true)}>
-              <CircleHelp size={16} />
-              Writing guide
-            </Button>
-          </div>
           <textarea
             aria-label={`Edit ${s.title}`}
             className="min-h-[30vh] w-full resize-y rounded-lg border border-border bg-background p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
