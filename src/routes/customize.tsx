@@ -50,6 +50,7 @@ function randomConfig(): CharacterConfig {
       mouth: pick(MOUTH_OPTIONS).value,
       whiskers: false,
     },
+    lengths,
     layered,
   };
 }
