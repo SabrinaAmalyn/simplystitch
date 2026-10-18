@@ -179,12 +179,12 @@ function Arm({ side, color, pawColor, marked, lengthScale = 1, down = false, tor
   if (down) {
     // Preview-only pose: hanging from under the head, its inner side sunk into the torso at chest height
     // so the arm touches the head and body seamlessly for any torso height.
-    const a = 0.12;
+    const a = 0.04;
     const h = 0.125 + extension / 2;
     const { torso } = joinedBodyShape(1, torsoScale);
     const chestY = 0.78;
     const t = Math.min(1, Math.abs(chestY - torso.center[1]) / torso.radii[1]);
-    const shoulderX = torso.radii[0] * Math.sqrt(1 - t * t) + 0.12;
+    const shoulderX = torso.radii[0] * Math.sqrt(1 - t * t) + 0.09;
     const topY = 0.98;
     return <mesh position={[side * (shoulderX - Math.sin(a) * (topY - chestY) + Math.sin(a) * h), topY - Math.cos(a) * h, 0.02]} rotation={[0, 0, side * a]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
   }
