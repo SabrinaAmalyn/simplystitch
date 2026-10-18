@@ -71,7 +71,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
             {name && <span className="truncate text-xs text-muted-foreground">{name}</span>}
           </div>
           <div className="review-canvas"><CharacterPreview config={config} focus={focus} /></div>
-          <Button variant="outline" size="icon" className="review-guide-fab" aria-label="Pattern writing guide" title="How to write rounds when editing" onClick={() => setGuideOpen(true)}>
+          <Button variant="outline" size="icon" className="review-guide-fab" aria-label="Pattern syntax guide" title="Pattern syntax guide" onClick={() => setGuideOpen(true)}>
             <CircleHelp size={18} />
           </Button>
           {(previewBack || previewAction) && (
@@ -86,7 +86,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
             {tabs.filter(([, , on]) => on).map(([id, text]) => (
               <Button key={id} variant="ghost" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "category-active" : ""}`} onClick={() => pick(id)}>{text}</Button>
             ))}
-            <Button variant="ghost" size="icon" className="review-guide-btn" aria-label="Pattern writing guide" title="How to write rounds when editing" onClick={() => setGuideOpen(true)}>
+            <Button variant="ghost" size="icon" className="review-guide-btn" aria-label="Pattern syntax guide" title="Pattern syntax guide" onClick={() => setGuideOpen(true)}>
               <CircleHelp size={16} />
             </Button>
           </nav>
@@ -130,30 +130,26 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
           <Dialog open={guideOpen} onOpenChange={setGuideOpen}>
             <DialogContent className="max-h-[85vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>How to write your pattern</DialogTitle>
-                <DialogDescription>Follow this format when you edit a section so your rounds stay tickable and the stitch counts keep working.</DialogDescription>
+                <DialogTitle>Pattern syntax guide</DialogTitle>
+                <DialogDescription>Each line type below formats differently in the reader. Type one item per line when you edit a section.</DialogDescription>
               </DialogHeader>
               <dl className="flex flex-col gap-3 text-sm">
-                <div>
-                  <dt className="font-semibold">R4: 2 sc, inc (24)</dt>
-                  <dd className="text-muted-foreground">One round per line. Start with the round number, a colon, then the stitches. End with the total stitch count in brackets — that's what makes the round tickable.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">R5: (2 sc, inc) × 6 (24)</dt>
-                  <dd className="text-muted-foreground">Put a repeated sequence in brackets with × and how many times. The count in brackets at the end is what you should have when the round finishes.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">R6–R8: sc around (24)</dt>
-                  <dd className="text-muted-foreground">Use a dash to group identical rounds into one line — they become a collapsible group with a tick for each round.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">MR, sc, inc, dec, ch, st</dt>
-                  <dd className="text-muted-foreground">Magic ring, single crochet, increase (2 sc in one stitch), decrease (2 stitches together), chain, stitch.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">Lines without R numbers</dt>
-                  <dd className="text-muted-foreground">Anything else — like "Stuff firmly" or "Fasten off" — shows as a plain note under the rounds.</dd>
-                </div>
+                {[
+                  ["R4: 2 sc, inc (24)", "A round. Write R, the round number, a colon and a space, then the stitches. End with the stitch count in brackets. The reader adds a tick box for each round."],
+                  ["R5: (2 sc, inc) × 6 (24)", "A repeat. Put the repeated stitches in brackets, then × and the number of repeats. The last bracket is still the stitch count."],
+                  ["R6–R8: sc around (24)", "A group of identical rounds. Join the first and last round with a dash. They fold into one line with a tick box for each round."],
+                  ["Join: sl st to first sc", "A joining step. Start with Join: and it's tickable like a round."],
+                  ["Note: Stuff firmly before closing.", "A note. Start the line with Note: and it shows as a highlighted tip with an info icon. Good for yarn changes, stuffing and placement."],
+                  ["- 4 mm hook", "A bullet point. Start with - or * then a space. Lines next to each other join into one list."],
+                  ["1. Sew the head to the body.", "A numbered step. Write a number, a full stop, then a space. In instruction and assembly sections each step gets a tick box."],
+                  ["Fasten off, leaving a long tail.", "Plain text. Any other line shows as an ordinary sentence."],
+                  ["MR · sc · inc · dec · ch · sl st · st/sts", "Magic ring · single crochet · increase (2 sc in one stitch) · decrease (2 stitches together) · chain · slip stitch · stitch/stitches."],
+                ].map(([code, desc]) => (
+                  <div key={code}>
+                    <dt><code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[13px] font-semibold">{code}</code></dt>
+                    <dd className="mt-1 text-muted-foreground">{desc}</dd>
+                  </div>
+                ))}
               </dl>
             </DialogContent>
           </Dialog>
