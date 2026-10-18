@@ -345,9 +345,10 @@
 /* Review page: customizer-style split — pattern tabs left, floating piece preview right. */
 .review-layout { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); background: var(--background); min-height: calc(100dvh - 82px); }
 .review-content { order: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); position: relative; }
-.review-guide-row { display: flex; justify-content: flex-start; }
-.review-guide-btn { height: 30px; gap: 6px; padding: 0 10px; font-size: 12px; color: var(--muted-foreground); }
+.review-guide-btn { align-self: center; justify-self: end; height: 30px; width: 30px; margin-right: 6px; color: var(--muted-foreground); }
 .review-guide-btn:hover { color: var(--foreground); }
+/* Mobile-only floating guide over the 3D viewer's bottom-right corner. */
+.review-guide-fab { display: none; }
 .review-preview { order: 2; position: sticky; top: 0; height: calc(100dvh - 82px); min-height: 420px; background: var(--stage); align-self: start; display: flex; flex-direction: column; }
 /* Desktop app shell: like the customizer, the page itself never scrolls. The
    nav tabs stay pinned and only the text under them scrolls inside its own
@@ -360,7 +361,7 @@
   .pattern-workspace > .pattern-header { flex: 0 0 auto; }
   .review-layout { flex: 1 1 auto; min-height: 0; grid-template-rows: minmax(0, 1fr); }
   .review-content { min-height: 0; overflow: hidden; }
-  .review-content > nav, .review-content > .review-guide-row { flex: 0 0 auto; }
+  .review-content > nav { flex: 0 0 auto; }
   .review-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-bottom: 40px; }
   .review-preview { position: relative; top: auto; height: 100%; min-height: 0; align-self: stretch; }
 }
@@ -390,6 +391,8 @@
   .review-canvas { order: 3; grid-row: 3; grid-column: 1; flex: none; height: 260px; }
   .review-preview-label { order: 2; grid-row: 3; grid-column: 1; align-self: start; justify-self: center; z-index: 5; pointer-events: none; flex-direction: row; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 14px; border-radius: 9999px; background: color-mix(in oklab, var(--card) 85%, transparent); }
   .review-body { padding: 16px; }
+  .review-guide-btn { display: none; }
+  .review-guide-fab { display: grid; place-items: center; position: absolute; right: 12px; bottom: 12px; z-index: 10; height: 36px; width: 36px; border-radius: 9999px; background: var(--card); box-shadow: 0 1px 4px rgb(0 0 0 / 0.15); }
 }
 .pattern-stale-alert { margin: 0; border-radius: 0; border-width: 0 0 1px; }
 
