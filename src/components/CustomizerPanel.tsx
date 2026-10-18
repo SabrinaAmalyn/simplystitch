@@ -7,6 +7,8 @@ import { BrowCards, CheekCards, EyeCards, MouthCards, NoseCards } from "@/compon
 import { LayerFeatureCards } from "@/components/LayerFeatureCards";
 import { createLayeredCharacter, selectLayer } from "@/lib/character-layers";
 import { pawYarn, type PawRegion } from "@/lib/paw-colors";
+import { Slider } from "@/components/ui/slider";
+import { limbLengths, LIMB_LENGTH_MIN, LIMB_LENGTH_MAX } from "@/lib/limb-lengths";
 const CATEGORIES = ["Body", "Face", "Ears", "Tail"] as const;
 type Category = (typeof CATEGORIES)[number];
 const SUBCATEGORIES: Partial<Record<Category, string[]>> = {
@@ -37,6 +39,8 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
   const [sub, setSub] = useState("Head");
   const [regionIndex, setRegionIndex] = useState(0);
   const layered = config.layered ?? createLayeredCharacter();
+  const lengths = limbLengths(config);
+  const lengthGroup = category === "Body" && sub === "Arms" ? "arms" : category === "Body" && sub === "Legs" ? "legs" : null;
   const regions = category === "Ears" ? ["leftEar", "rightEar"] as BodyPart[] : category === "Tail" ? ["tail"] as BodyPart[] : REGIONS[sub] ?? [];
   const region = regions[regionIndex] ?? regions[0];
   const current = region === "hands" || region === "feet" ? pawYarn(config, region) : region ? partYarn(config, region) : undefined;
@@ -50,7 +54,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
         onClick={() => pickCategory(name)} className={`category-tab ${category === name ? "category-active" : ""}`}>{name}</Button>)}
     </nav>
     {SUBCATEGORIES[category] ? <nav role="tablist" aria-label={`${category} subcategories`} className="subcategory-nav">
-      {SUBCATEGORIES[category]!.map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={sub === name}
+      {SUBCATEGORIES[category]?.map((name) => <Button key={name} variant="ghost" role="tab" aria-selected={sub === name}
         onClick={() => { setSub(name); setRegionIndex(0); }} className={`subcategory-tab ${sub === name ? "subcategory-active" : ""}`}>{name}</Button>)}
     </nav> : null}
     <div role="tabpanel" aria-label={sub ? `${category}: ${sub}` : category} className="workspace-content">
@@ -72,6 +76,18 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
           value={category === "Ears" ? layered.selections.ears : layered.selections.tail}
           onSelect={(id) => onChange({ ...config, layered: selectLayer(layered, category === "Ears" ? "ears" : "tail", id) })} />}
       </section>
+      {lengthGroup && <div className="mt-5 mb-3 space-y-3">
+        <div className="flex items-center justify-between gap-3 text-sm font-medium">
+          <label id={`${lengthGroup}-length-label`}>{lengthGroup === "arms" ? "Arm length" : "Leg length"}</label>
+          <span className="tabular-nums text-muted-foreground">{lengths[lengthGroup]}%</span>
+        </div>
+        <Slider aria-labelledby={`${lengthGroup}-length-label`} min={LIMB_LENGTH_MIN} max={LIMB_LENGTH_MAX} step={10}
+          value={[lengths[lengthGroup]]} onValueChange={([value]) => {
+            if (value === undefined) return;
+            onChange({ ...config, lengths: { ...lengths, [lengthGroup]: value } });
+          }} className="h-8" />
+        <div className="flex justify-between text-xs text-muted-foreground"><span>100%</span><span>170%</span></div>
+      </div>}
       {paletteVisible && region && <section className="palette-area">
         {category !== "Body" && regions.length > 1 && <div className="mb-4 flex gap-2" role="group" aria-label="Colour region">{regions.map((part, index) =>
           <Button key={part} variant="outline" size="sm" aria-pressed={region === part} className={region === part ? "region-active" : ""} onClick={() => setRegionIndex(index)}>{LABELS[part]}</Button>)}</div>}

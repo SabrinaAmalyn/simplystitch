@@ -2,6 +2,7 @@
 import { normalizeLayers, type LayeredCharacter } from "./character-layers";
 
 import { yarnById } from "./yarn-palette";
+import { limbLengths, type LimbLengths } from "./limb-lengths";
 export { YARNS, yarnById, type Yarn } from "./yarn-palette";
 
 export type EarStyle = "none" | "round" | "long" | "pointy";
@@ -49,6 +50,7 @@ export type CharacterConfig = {
   face: { expression: Expression; cheeks: boolean; nose?: NoseStyle; mouth?: MouthStyle; blushShape?: BlushShape; eyeStyle?: EyeStyle; whiskers?: boolean; brow?: BrowStyle };
   body: BodyShape;
   accessories: Accessory[];
+  lengths?: Partial<LimbLengths>;
   layered?: LayeredCharacter;
 };
 
@@ -112,9 +114,9 @@ export const partYarn = (c: CharacterConfig, part: BodyPart) => yarnById(partCol
 export function migratePartColors(c: CharacterConfig): CharacterConfig {
   const colors = { ...DEFAULT_CONFIG.colors, ...c.colors };
   for (const part of BODY_PARTS) colors[part] = partColor({ ...c, colors }, part);
-  return { ...c, colors };
+  return { ...c, colors, ...(c.lengths ? { lengths: limbLengths(c) } : {}) };
 }
 
 export const configKey = (c: CharacterConfig) => c.layered
-  ? JSON.stringify({ base: "reference-v2", anatomy: "joined-body-v2", colorSchema: 2, colors: c.colors, face: c.face, layered: normalizeLayers(c.layered) })
-  : JSON.stringify({ base: "doll-v2", anatomy: "joined-body-v2", colorSchema: 2, ...c });
+  ? JSON.stringify({ base: "reference-v2", anatomy: "joined-body-v2", limbSchema: 1, lengths: limbLengths(c), colorSchema: 2, colors: c.colors, face: c.face, layered: normalizeLayers(c.layered) })
+  : JSON.stringify({ base: "doll-v2", anatomy: "joined-body-v2", limbSchema: 1, colorSchema: 2, ...c, lengths: limbLengths(c) });
