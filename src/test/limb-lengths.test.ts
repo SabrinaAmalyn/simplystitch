@@ -13,7 +13,7 @@ it("defaults old characters to 100% and clamps lengths to 100%–170%", () => {
   expect(normalizeLimbLength(70)).toBe(100);
   expect(normalizeLimbLength(200)).toBe(170);
   expect(normalizeLimbLength(NaN)).toBe(100);
-  expect(migratePartColors(config(70, 200)).lengths).toEqual({ arms: 100, legs: 170 });
+  expect(migratePartColors(config(70, 200)).lengths).toEqual({ arms: 100, legs: 170, torso: 100 });
 });
 
 it("170% arms add four straight rounds at 8 stitches without changing legs", () => {
