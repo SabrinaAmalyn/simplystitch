@@ -177,16 +177,11 @@ function BlushPatch({ side, color, shape }: { side: 1 | -1; color: string; shape
 function Arm({ side, color, pawColor, marked, lengthScale = 1, down = false, torsoScale = 1 }: { side: 1 | -1; color: string; pawColor: string; marked: boolean; lengthScale?: number; down?: boolean; torsoScale?: number }) {
   const extension = 0.63 * (lengthScale - 1);
   if (down) {
-    // Preview-only pose: hanging from under the head, its inner side sunk into the torso at chest height
-    // so the arm touches the head and body seamlessly for any torso height.
-    const a = 0.04;
+    // Preview-only pose: same shoulder joint as the raised pose, mirrored to angle downward.
+    const drop = 0.9;
     const h = 0.125 + extension / 2;
-    const { torso } = joinedBodyShape(1, torsoScale);
-    const chestY = 0.78;
-    const t = Math.min(1, Math.abs(chestY - torso.center[1]) / torso.radii[1]);
-    const shoulderX = torso.radii[0] * Math.sqrt(1 - t * t) + 0.09;
-    const topY = 0.98;
-    return <mesh position={[side * (shoulderX - Math.sin(a) * (topY - chestY) + Math.sin(a) * h), topY - Math.cos(a) * h, 0.02]} rotation={[0, 0, side * a]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
+    const shoulder = [0.4625, 0.775];
+    return <mesh position={[side * (shoulder[0]! + Math.cos(drop) * h), shoulder[1]! - Math.sin(drop) * h, 0.02]} rotation={[0, 0, side * (Math.PI / 2 - drop)]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
   }
   // Tilted up 20° and set high: the arm's top rests against the head's underside without sinking into it.
   const tilt = 0.35;
