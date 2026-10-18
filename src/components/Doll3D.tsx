@@ -178,9 +178,9 @@ function Arm({ side, color, pawColor, marked, lengthScale = 1, down = false }: {
   const extension = 0.63 * (lengthScale - 1);
   if (down) {
     // Preview-only pose: hanging from the shoulder, angled slightly away from the torso.
-    const a = 0.32;
+    const a = 0.3;
     const h = 0.125 + extension / 2;
-    return <mesh position={[side * (0.56 + Math.sin(a) * h), 0.84 - Math.cos(a) * h, 0.02]} rotation={[0, 0, side * a]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
+    return <mesh position={[side * (0.5 + Math.sin(a) * h), 0.92 - Math.cos(a) * h, 0.02]} rotation={[0, 0, side * a]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
   }
   // Tilted up 20° and set high: the arm's top rests against the head's underside without sinking into it.
   const tilt = 0.35;
