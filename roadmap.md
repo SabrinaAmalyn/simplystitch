@@ -91,3 +91,4 @@
 - [x] Pattern page: add a Stitch guide button explaining the pattern's abbreviations
 - [ ] Fix pattern page: section + subsection tabs stay pinned, only content scrolls (landscape)
 - [ ] Move stitch-guide "?" button out of the tab overlay into its own small row
+- [ ] Stitch guide is for edit mode: explain the pattern-writing format, show it while editing a section
