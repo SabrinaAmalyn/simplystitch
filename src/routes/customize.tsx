@@ -16,6 +16,8 @@ const pick = <T,>(list: readonly T[]): T => {
   if (value === undefined) throw new Error("No random choices available.");
   return value;
 };
+/** Sliders move in 10% steps from 100% to 170%. */
+const pickLength = () => 100 + 10 * Math.floor(Math.random() * 8);
 const EAR_IDS = ["ears-human", "ears-dog", "ears-cat", "ears-bear", "ears-bunny"] as const;
 
 function randomConfig(): CharacterConfig {
@@ -28,6 +30,8 @@ function randomConfig(): CharacterConfig {
   layered.selections.tail = tail;
   const blushYarn = pick(["blush", "baby-pink", "peach"] as const);
   const paw = yarn();
+  // Lengths follow the sliders' 10% steps so Randomize never produces a value the UI can't show.
+  const lengths = { arms: pickLength(), legs: pickLength(), torso: pickLength() };
   return {
     ...DEFAULT_CONFIG,
     colors: {
@@ -46,6 +50,7 @@ function randomConfig(): CharacterConfig {
       mouth: pick(MOUTH_OPTIONS).value,
       whiskers: false,
     },
+    lengths,
     layered,
   };
 }

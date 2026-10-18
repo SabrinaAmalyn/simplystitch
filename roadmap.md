@@ -85,3 +85,5 @@
 - [x] Recolour the supplied character artwork to the app blue, remove its background, and use it as the browser tab icon
 - [x] Paws: independent left/right hand and foot colours (4 buttons)
 - [x] Torso height slider with matching body rounds
+- [x] Push the lowered arms closer to the body so no gap shows at default and 170% proportions
+- [x] Randomize also randomizes arm, leg and torso lengths (10% slider steps, 100–170%)
