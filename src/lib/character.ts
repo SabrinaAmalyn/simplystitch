@@ -45,7 +45,7 @@ export const BROW_OPTIONS: { value: BrowStyle; label: string }[] = [
 ];
 
 export type CharacterConfig = {
-  colors: { main: string; accent: string; accessory: string; eyes: string; hands?: string; feet?: string } & Partial<Record<BodyPart, string>>;
+  colors: { main: string; accent: string; accessory: string; eyes: string; hands?: string; feet?: string; leftHand?: string; rightHand?: string; leftFoot?: string; rightFoot?: string } & Partial<Record<BodyPart, string>>;
   ears: EarStyle;
   face: { expression: Expression; cheeks: boolean; nose?: NoseStyle; mouth?: MouthStyle; blushShape?: BlushShape; eyeStyle?: EyeStyle; whiskers?: boolean; brow?: BrowStyle };
   body: BodyShape;
