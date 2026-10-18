@@ -155,6 +155,7 @@ type SectionEditProps = {
 
 function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, onChange }: SectionEditProps) {
   const [draft, setDraft] = useState(initialBody);
+  const [guideOpen, setGuideOpen] = useState(false);
   return (
     <section id={s.id} className="reader-section">
       <div className="flex items-center justify-between gap-2">
@@ -165,6 +166,12 @@ function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, o
       </div>
       {editing ? (
         <div className="mt-3 flex flex-col gap-2">
+          <div className="review-guide-row">
+            <Button variant="ghost" size="sm" className="review-guide-btn" aria-label="Pattern writing guide" title="How to write rounds so they stay tickable" onClick={() => setGuideOpen(true)}>
+              <CircleHelp size={16} />
+              Writing guide
+            </Button>
+          </div>
           <textarea
             aria-label={`Edit ${s.title}`}
             className="min-h-[30vh] w-full resize-y rounded-lg border border-border bg-background p-4 font-sans text-base leading-relaxed outline-none focus:ring-2 focus:ring-ring"
@@ -172,6 +179,36 @@ function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, o
             onChange={(e) => { setDraft(e.target.value); onChange(e.target.value); }}
           />
           <Button variant="outline" className="self-start" onClick={onDone}>Done</Button>
+          <Dialog open={guideOpen} onOpenChange={setGuideOpen}>
+            <DialogContent className="max-h-[85vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>How to write your pattern</DialogTitle>
+                <DialogDescription>Follow this format while editing so your rounds stay tickable and the stitch counts keep working.</DialogDescription>
+              </DialogHeader>
+              <dl className="flex flex-col gap-3 text-sm">
+                <div>
+                  <dt className="font-semibold">R4: 2 sc, inc (24)</dt>
+                  <dd className="text-muted-foreground">One round per line. Start with the round number, a colon, then the stitches. End with the total stitch count in brackets — that's what makes the round tickable.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold">R5: (2 sc, inc) × 6 (24)</dt>
+                  <dd className="text-muted-foreground">Put a repeated sequence in brackets with × and how many times. The count in brackets at the end is what you should have when the round finishes.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold">R6–R8: sc around (24)</dt>
+                  <dd className="text-muted-foreground">Use a dash to group identical rounds into one line — they become a collapsible group with a tick for each round.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold">MR, sc, inc, dec, ch, st</dt>
+                  <dd className="text-muted-foreground">Magic ring, single crochet, increase (2 sc in one stitch), decrease (2 stitches together), chain, stitch.</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold">Lines without R numbers</dt>
+                  <dd className="text-muted-foreground">Anything else — like "Stuff firmly" or "Fasten off" — shows as a plain note under the rounds.</dd>
+                </div>
+              </dl>
+            </DialogContent>
+          </Dialog>
         </div>
       ) : (
         <div className="mt-3 flex flex-col">
