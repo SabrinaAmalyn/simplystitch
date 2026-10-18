@@ -117,6 +117,11 @@ export function migratePartColors(c: CharacterConfig): CharacterConfig {
   return { ...c, colors, ...(c.lengths ? { lengths: limbLengths(c) } : {}) };
 }
 
+/** Default torso height is omitted so keys saved before the torso slider still match. */
+const keyLengths = (c: CharacterConfig) => {
+  const { torso, ...limbs } = limbLengths(c);
+  return torso === 100 ? limbs : { ...limbs, torso };
+};
 export const configKey = (c: CharacterConfig) => c.layered
-  ? JSON.stringify({ base: "reference-v2", anatomy: "joined-body-v2", limbSchema: 1, lengths: limbLengths(c), colorSchema: 2, colors: c.colors, face: c.face, layered: normalizeLayers(c.layered) })
-  : JSON.stringify({ base: "doll-v2", anatomy: "joined-body-v2", limbSchema: 1, colorSchema: 2, ...c, lengths: limbLengths(c) });
+  ? JSON.stringify({ base: "reference-v2", anatomy: "joined-body-v2", limbSchema: 1, lengths: keyLengths(c), colorSchema: 2, colors: c.colors, face: c.face, layered: normalizeLayers(c.layered) })
+  : JSON.stringify({ base: "doll-v2", anatomy: "joined-body-v2", limbSchema: 1, colorSchema: 2, ...c, lengths: keyLengths(c) });

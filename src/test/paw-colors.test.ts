@@ -46,3 +46,17 @@ it("preserves both paw selections through migration and distinguishes configurat
   expect(configKey(c)).not.toBe(configKey({ ...c, colors: { ...c.colors, hands: "teal" } }));
   expect(configKey(c)).not.toBe(configKey({ ...c, colors: { ...c.colors, feet: "cream" } }));
 });
+it("colours each hand and foot paw independently, falling back to the shared paw colour", async () => {
+  const { generateDollPattern } = await import("@/lib/doll-pattern");
+  const { pawMarked } = await import("@/lib/paw-colors");
+  const c = { ...DEFAULT_CONFIG, colors: { ...DEFAULT_CONFIG.colors, hands: "teal", leftHand: "sky", rightFoot: "cocoa" } };
+  expect(pawYarn(c, "leftHand").id).toBe("sky");
+  expect(pawYarn(c, "rightHand").id).toBe("teal");
+  expect(pawYarn(c, "rightFoot").id).toBe("cocoa");
+  expect(pawMarked(c, "leftFoot")).toBe(false);
+  const titles = generateDollPattern(c).sections.map((s) => s.title);
+  expect(titles).toContain("Left arm (make 1)");
+  expect(titles).toContain("Right arm (make 1)");
+  expect(titles).toContain("Left leg (make 1)");
+  expect(titles).toContain("Right leg (make 1)");
+});

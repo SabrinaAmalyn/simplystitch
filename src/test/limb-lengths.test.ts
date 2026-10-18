@@ -62,3 +62,11 @@ it("also scales legacy patterns without changing stitch counts", () => {
   expect(legacy.sections.find((s) => s.title.startsWith("Arms"))?.rounds.at(-1)).toMatchObject({ label: "R3–19", count: 12 });
   expect(legacy.sections.find((s) => s.title.startsWith("Legs"))?.rounds.at(-1)).toMatchObject({ label: "R4–19", count: 18 });
 });
+it("torso height at 170% adds 4 body rounds and keeps default keys unchanged", async () => {
+  const { generateDollPattern } = await import("@/lib/doll-pattern");
+  const { DEFAULT_CONFIG: D, configKey: key } = await import("@/lib/character");
+  const body = generateDollPattern({ ...D, lengths: { torso: 170 } }).sections.find((s) => s.title.startsWith("Body"))!;
+  expect(body.rounds[1]!.label).toBe("R8–R16");
+  expect(body.rounds.at(-1)!.label).toBe("R19");
+  expect(key({ ...D, lengths: { torso: 100 } })).toBe(key(D));
+});
