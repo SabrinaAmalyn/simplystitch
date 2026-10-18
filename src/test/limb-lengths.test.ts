@@ -9,11 +9,11 @@ const config = (arms = 100, legs = 100) => ({ ...DEFAULT_CONFIG, layered: create
 const sections = (arms: number, legs: number) => generatePattern(config(arms, legs)).sections;
 
 it("defaults old characters to 100% and clamps lengths to 100%–170%", () => {
-  expect(limbLengths(DEFAULT_CONFIG)).toEqual({ arms: 100, legs: 100 });
+  expect(limbLengths(DEFAULT_CONFIG)).toEqual({ arms: 100, legs: 100, torso: 100 });
   expect(normalizeLimbLength(70)).toBe(100);
   expect(normalizeLimbLength(200)).toBe(170);
   expect(normalizeLimbLength(NaN)).toBe(100);
-  expect(migratePartColors(config(70, 200)).lengths).toEqual({ arms: 100, legs: 170 });
+  expect(migratePartColors(config(70, 200)).lengths).toEqual({ arms: 100, legs: 170, torso: 100 });
 });
 
 it("170% arms add four straight rounds at 8 stitches without changing legs", () => {
@@ -61,4 +61,12 @@ it("also scales legacy patterns without changing stitch counts", () => {
   const legacy = generatePattern({ ...DEFAULT_CONFIG, lengths: { arms: 170, legs: 170 } });
   expect(legacy.sections.find((s) => s.title.startsWith("Arms"))?.rounds.at(-1)).toMatchObject({ label: "R3–19", count: 12 });
   expect(legacy.sections.find((s) => s.title.startsWith("Legs"))?.rounds.at(-1)).toMatchObject({ label: "R4–19", count: 18 });
+});
+it("torso height at 170% adds 4 body rounds and keeps default keys unchanged", async () => {
+  const { generateDollPattern } = await import("@/lib/doll-pattern");
+  const { DEFAULT_CONFIG: D, configKey: key } = await import("@/lib/character");
+  const body = generateDollPattern({ ...D, lengths: { torso: 170 } }).sections.find((s) => s.title.startsWith("Body"))!;
+  expect(body.rounds[1]!.label).toBe("R8–R16");
+  expect(body.rounds.at(-1)!.label).toBe("R19");
+  expect(key({ ...D, lengths: { torso: 100 } })).toBe(key(D));
 });

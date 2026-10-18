@@ -1,9 +1,9 @@
 /** Shared length limits and whole-round scaling for preview and crochet rules. */
 export const LIMB_LENGTH_MIN = 100;
 export const LIMB_LENGTH_MAX = 170;
-export type LimbLengths = { arms: number; legs: number };
+export type LimbLengths = { arms: number; legs: number; torso: number };
 export type LimbGroup = keyof LimbLengths;
-export const BASE_LIMB_ROUNDS: LimbLengths = { arms: 6, legs: 7 };
+export const BASE_LIMB_ROUNDS: LimbLengths = { arms: 6, legs: 7, torso: 5 };
 
 export function normalizeLimbLength(value?: number): number {
   return typeof value === "number" && Number.isFinite(value)
@@ -12,7 +12,7 @@ export function normalizeLimbLength(value?: number): number {
 }
 
 export function limbLengths(config: { lengths?: Partial<LimbLengths> }): LimbLengths {
-  return { arms: normalizeLimbLength(config.lengths?.arms), legs: normalizeLimbLength(config.lengths?.legs) };
+  return { arms: normalizeLimbLength(config.lengths?.arms), legs: normalizeLimbLength(config.lengths?.legs), torso: normalizeLimbLength(config.lengths?.torso) };
 }
 
 export function scaledLimbRounds(baseRounds: number, percent: number): number {
