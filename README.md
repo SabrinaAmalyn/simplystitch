@@ -60,7 +60,7 @@ git clone <this-repository-url>
 cd <repository-name>
 npm i
 npm run dev        # http://localhost:8080
-npm test           # 116 tests
+npm test           # 117 tests
 ```
 
 ## Built with
