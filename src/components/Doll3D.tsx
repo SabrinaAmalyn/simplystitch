@@ -316,6 +316,7 @@ function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: E
   const c = (p: BodyPart) => partYarn(config, p).hex;
   const arms = limbScale(config, "arms");
   const legs = limbScale(config, "legs");
+  const torsoH = limbScale(config, "torso");
   if (focus === "head") return (
     <group>
       <Head color={c("head")} />
@@ -327,7 +328,7 @@ function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: E
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
     </group>
   );
-  if (focus === "body") return <JoinedBody lengthScale={legs} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />;
+  if (focus === "body") return <JoinedBody lengthScale={legs} torsoScale={torsoH} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />;
   if (focus === "arm") return <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />;
   if (focus === "tail") return <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />;
   if (focus === "ears") return <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>{ears && <><Ear type={ears} side={1} color={c("leftEar")} /><Ear type={ears} side={-1} color={c("rightEar")} /></>}</group>;
@@ -340,8 +341,8 @@ function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: E
       <Mouth style={config.face.mouth ?? "none"} />
       {config.face.whiskers && <Whiskers overBlush={config.face.cheeks} />}
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
-      <JoinedBody lengthScale={legs} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />
-      <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />
+      <JoinedBody lengthScale={legs} torsoScale={torsoH} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />
+      <group position={[0, -torsoDrop(torsoH) / 2, 0]}><Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} /></group>
       <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />
       <Arm lengthScale={arms} side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "rightHand").hex} marked={pawMarked(config, "rightHand")} />
       <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>
@@ -353,7 +354,7 @@ function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: E
 }
 
 export default function Doll3D({ config, ears, focus = null }: { config: CharacterConfig; ears: EarType; focus?: PartFocus }) {
-  const footY = -1.11 + joinedBodyShape(limbScale(config, "legs")).leg.bottom - JOINED_BODY.leg.bottom;
+  const footY = -1.11 + joinedBodyShape(limbScale(config, "legs"), limbScale(config, "torso")).leg.bottom - JOINED_BODY.leg.bottom;
   return (
     <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.9, 5.5], fov: 40 }} gl={{ toneMappingExposure: 1.05 }}>
       <hemisphereLight args={["#fff6ec", "#ffd9c4", 1.1]} />

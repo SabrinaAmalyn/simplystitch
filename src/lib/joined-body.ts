@@ -17,9 +17,19 @@ export const JOINED_BODY = {
   leg: { halfSpacing: 0.22, bottom: -0.02, top: 0.5, radius: 0.21 },
 } satisfies { torso: BodyVolume; leg: LegCapsule };
 
-export function joinedBodyShape(scale = 1) {
+/** Torso height grows downward from a fixed neck, so the legs drop by the same amount. */
+export function torsoDrop(torsoScale = 1) {
+  return 2 * JOINED_BODY.torso.radii[1] * (torsoScale - 1);
+}
+export function joinedBodyShape(scale = 1, torsoScale = 1) {
   const extension = (JOINED_BODY.leg.top - JOINED_BODY.leg.bottom) * (scale - 1);
-  return { torso: JOINED_BODY.torso, leg: { ...JOINED_BODY.leg, bottom: JOINED_BODY.leg.bottom - extension } };
+  const drop = torsoDrop(torsoScale);
+  const [cx, cy, cz] = JOINED_BODY.torso.center;
+  const [rx, ry, rz] = JOINED_BODY.torso.radii;
+  return {
+    torso: { center: [cx, cy - drop / 2, cz] as const, radii: [rx, ry * torsoScale, rz] as const },
+    leg: { ...JOINED_BODY.leg, top: JOINED_BODY.leg.top - drop, bottom: JOINED_BODY.leg.bottom - extension - drop },
+  };
 }
 
 function volumeDistance(x: number, y: number, z: number, volume: BodyVolume) {
@@ -36,13 +46,13 @@ function smoothUnion(a: number, b: number, blend: number) {
   const h = Math.max(blend - Math.abs(a - b), 0) / blend;
   return Math.min(a, b) - h * h * blend * 0.25;
 }
-export function joinedBodyDistance(x: number, y: number, z: number, shape = JOINED_BODY) {
+export function joinedBodyDistance(x: number, y: number, z: number, shape: { torso: BodyVolume; leg: LegCapsule } = JOINED_BODY) {
   const legs = smoothUnion(legDistance(x, y, z, shape.leg), legDistance(x, y, z, shape.leg), 0.06);
   return smoothUnion(volumeDistance(x, y, z, shape.torso), legs, 0.16);
 }
 /** Same continuous surface, smoothly interpolated yarn regions at the leg join. */
-export function bodyColorWeights(x: number, y: number) {
-  const t = Math.max(0, Math.min(1, (y - 0.28) / 0.22));
+export function bodyColorWeights(x: number, y: number, drop = 0) {
+  const t = Math.max(0, Math.min(1, (y + drop - 0.28) / 0.22));
   const torso = t * t * (3 - 2 * t);
   const left = Math.max(0, Math.min(1, (x + 0.04) / 0.08));
   return { torso, leftLeg: (1 - torso) * left, rightLeg: (1 - torso) * (1 - left) };

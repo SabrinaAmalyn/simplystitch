@@ -1,15 +1,15 @@
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { MarchingCubes } from "three/addons/objects/MarchingCubes.js";
-import { bodyColorWeights, joinedBodyDistance, joinedBodyShape, JOINED_BODY } from "@/lib/joined-body";
+import { bodyColorWeights, joinedBodyDistance, joinedBodyShape, JOINED_BODY, torsoDrop } from "@/lib/joined-body";
 import { PAW_BOUNDARY } from "@/lib/paw-colors";
 import { PawVinyl } from "./PawVinyl";
 
 /** Polygonize one smooth union, rather than overlapping separately shaded capsules. */
-function buildJoinedGeometry(scale: number) {
+function buildJoinedGeometry(scale: number, torsoScale: number) {
   const resolution = 64;
   const extent = 0.8;
-  const shape = joinedBodyShape(scale);
+  const shape = joinedBodyShape(scale, torsoScale);
   const extension = JOINED_BODY.leg.bottom - shape.leg.bottom;
   const extentY = extent + extension / 2;
   const centerY = 0.6 - extension / 2;
@@ -43,8 +43,8 @@ function buildJoinedGeometry(scale: number) {
   return geometry;
 }
 
-export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked, rightPawColor = pawColor, rightMarked = marked, lengthScale = 1 }: { torso: string; leftLeg: string; rightLeg: string; pawColor: string; marked: boolean; rightPawColor?: string; rightMarked?: boolean; lengthScale?: number }) {
-  const geometry = useMemo(() => buildJoinedGeometry(lengthScale), [lengthScale]);
+export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked, rightPawColor = pawColor, rightMarked = marked, lengthScale = 1, torsoScale = 1 }: { torso: string; leftLeg: string; rightLeg: string; pawColor: string; marked: boolean; rightPawColor?: string; rightMarked?: boolean; lengthScale?: number; torsoScale?: number }) {
+  const geometry = useMemo(() => buildJoinedGeometry(lengthScale, torsoScale), [lengthScale, torsoScale]);
   useEffect(() => () => geometry.dispose(), [geometry]);
   useEffect(() => {
     const colors = { torso: new THREE.Color(torso), leftLeg: new THREE.Color(leftLeg), rightLeg: new THREE.Color(rightLeg) };
@@ -52,7 +52,7 @@ export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked, rightPa
     const values = new Float32Array(position.count * 3);
     const color = new THREE.Color();
     for (let i = 0; i < position.count; i++) {
-      const weights = bodyColorWeights(position.getX(i), position.getY(i));
+      const weights = bodyColorWeights(position.getX(i), position.getY(i), torsoDrop(torsoScale));
       color.setRGB(
         colors.torso.r * weights.torso + colors.leftLeg.r * weights.leftLeg + colors.rightLeg.r * weights.rightLeg,
         colors.torso.g * weights.torso + colors.leftLeg.g * weights.leftLeg + colors.rightLeg.g * weights.rightLeg,
@@ -61,11 +61,11 @@ export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked, rightPa
       color.toArray(values, i * 3);
     }
     geometry.setAttribute("color", new THREE.BufferAttribute(values, 3));
-  }, [geometry, torso, leftLeg, rightLeg]);
+  }, [geometry, torso, leftLeg, rightLeg, torsoScale]);
   return (
     <mesh geometry={geometry} castShadow>
       <PawVinyl vertexColors pawColor={pawColor} region="feet" enabled={marked} rightPawColor={rightPawColor} rightEnabled={rightMarked}
-        boundary={PAW_BOUNDARY.feet + joinedBodyShape(lengthScale).leg.bottom - JOINED_BODY.leg.bottom} />
+        boundary={PAW_BOUNDARY.feet + joinedBodyShape(lengthScale, torsoScale).leg.bottom - JOINED_BODY.leg.bottom} />
     </mesh>
   );
 }

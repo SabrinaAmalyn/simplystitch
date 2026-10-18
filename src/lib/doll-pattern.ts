@@ -105,7 +105,13 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
   const armEnd = scaledLimbRounds(BASE_LIMB_ROUNDS.arms, lengths.arms);
   const legEnd = scaledLimbRounds(BASE_LIMB_ROUNDS.legs, lengths.legs);
   const offset = legEnd - BASE_LIMB_ROUNDS.legs;
-  const bodyRounds = BODY_ROUNDS.map((round) => ({ ...round, label: round.label.replace(/R(\d+)/g, (_, n: string) => `R${Number(n) + offset}`) }));
+  const torsoRounds = scaledLimbRounds(BASE_LIMB_ROUNDS.torso, lengths.torso);
+  const shift = (round: Round, by: number) => ({ ...round, label: round.label.replace(/R(\d+)/g, (_, n: string) => `R${Number(n) + by}`) });
+  const bodyRounds = [
+    BODY_ROUNDS[0]!,
+    R(`R${8 + offset}–R${7 + offset + torsoRounds}`, `sc around for ${torsoRounds} rounds`, 24),
+    ...BODY_ROUNDS.slice(2).map((round) => shift(round, offset + torsoRounds - BASE_LIMB_ROUNDS.torso)),
+  ];
   const face = c.face;
   const y = (p: Parameters<typeof partYarn>[1]) => partYarn(c, p).name;
   const paw = (side: PawSide) => (pawMarked(c, side) ? pawYarn(c, side).name : null);
@@ -146,7 +152,7 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
     ...(tail ? ["Sew the tail low on the back, centred just above and between the legs."] : []),
   ];
 
-  const yarns = new Set<string>(sections.flatMap((s) => s.yarn?.split(PAW_LABEL) ?? []).concat(hands ?? [], feet ?? []));
+  const yarns = new Set<string>(sections.flatMap((s) => s.yarn?.split(PAW_LABEL) ?? []).concat([...hands, ...feet].filter((n): n is string => Boolean(n))));
   return {
     title: `SimplyStitch ${ear ? ear.name.replace(" ears", "") : "Doll"}`,
     materials: [
