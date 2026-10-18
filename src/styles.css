@@ -381,7 +381,6 @@
   .review-header { display: none; }
   .review-preview { order: 0; position: relative; height: auto; min-height: 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: minmax(0, 1fr); }
   .review-content { border-right: 0; }
-  .review-guide-btn { top: 5px; }
   /* Phone: the buttons keep their own row; the piece name floats centred inside the 3D view. */
   .review-preview-name { order: 0; grid-row: 1; padding: 12px 12px 0; }
   .review-name-input { max-width: none; height: 40px; font-size: 0.9375rem; }
