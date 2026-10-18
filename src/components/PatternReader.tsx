@@ -79,9 +79,12 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
           )}
         </section>
         <section className="review-content">
-          <Button variant="outline" size="icon" className="review-guide-btn" aria-label="Stitch guide" title="What the abbreviations mean" onClick={() => setGuideOpen(true)}>
-            <CircleHelp size={18} />
-          </Button>
+          <div className="review-guide-row">
+            <Button variant="ghost" size="sm" className="review-guide-btn" aria-label="Stitch guide" title="What the abbreviations mean" onClick={() => setGuideOpen(true)}>
+              <CircleHelp size={16} />
+              Stitch guide
+            </Button>
+          </div>
           <nav className="category-nav review-category-nav" role="tablist" aria-label="Pattern categories" style={{ gridTemplateColumns: `repeat(${tabs.filter(([, , on]) => on).length}, minmax(0, 1fr))` }}>
             {tabs.filter(([, , on]) => on).map(([id, text]) => (
               <Button key={id} variant="ghost" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "category-active" : ""}`} onClick={() => pick(id)}>{text}</Button>
