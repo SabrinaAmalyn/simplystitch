@@ -43,7 +43,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
   const lengthGroup = category === "Body" && sub === "Arms" ? "arms" : category === "Body" && sub === "Legs" ? "legs" : category === "Body" && sub === "Torso" ? "torso" : null;
   const regions = category === "Ears" ? ["leftEar", "rightEar"] as BodyPart[] : category === "Tail" ? ["tail"] as BodyPart[] : REGIONS[sub] ?? [];
   const region = regions[regionIndex] ?? regions[0];
-  const current = region && region in PAW_SIDE_REGION ? pawYarn(config, region as PawSide) : region ? partYarn(config, region) : undefined;
+  const current = region && region in PAW_SIDE_REGION ? pawYarn(config, region as PawSide) : region ? partYarn(config, region as BodyPart) : undefined;
   const changeFace = (patch: Partial<CharacterConfig["face"]>) => onChange({ ...config, face: { ...config.face, ...patch } });
   const pickCategory = (next: Category) => { setCategory(next); setSub(SUBCATEGORIES[next]?.[0] ?? ""); setRegionIndex(0); };
   const paletteVisible = current && (sub !== "Cheeks" || config.face.cheeks) && (category !== "Ears" || layered.selections.ears) && (category !== "Tail" || layered.selections.tail);
