@@ -345,7 +345,9 @@
 /* Review page: customizer-style split — pattern tabs left, floating piece preview right. */
 .review-layout { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); background: var(--background); min-height: calc(100dvh - 82px); }
 .review-content { order: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); position: relative; }
-.review-guide-btn { position: absolute; top: 9px; right: 8px; z-index: 5; height: 36px; width: 36px; background: var(--card); }
+.review-guide-row { display: flex; justify-content: flex-end; padding: 6px 8px 0; }
+.review-guide-btn { height: 30px; gap: 6px; padding: 0 10px; font-size: 12px; color: var(--muted-foreground); }
+.review-guide-btn:hover { color: var(--foreground); }
 .review-preview { order: 2; position: sticky; top: 0; height: calc(100dvh - 82px); min-height: 420px; background: var(--stage); align-self: start; display: flex; flex-direction: column; }
 /* Desktop app shell: like the customizer, the page itself never scrolls. The
    nav tabs stay pinned and only the text under them scrolls inside its own
@@ -356,9 +358,9 @@
   .pattern-page > .pattern-workspace { flex: 1 1 auto; min-height: 0; }
   .pattern-page > p { flex: 0 0 auto; }
   .pattern-workspace > .pattern-header { flex: 0 0 auto; }
-  .review-layout { flex: 1 1 auto; min-height: 0; }
+  .review-layout { flex: 1 1 auto; min-height: 0; grid-template-rows: minmax(0, 1fr); }
   .review-content { min-height: 0; overflow: hidden; }
-  .review-content > nav { flex: 0 0 auto; }
+  .review-content > nav, .review-content > .review-guide-row { flex: 0 0 auto; }
   .review-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-bottom: 40px; }
   .review-preview { position: relative; top: auto; height: 100%; min-height: 0; align-self: stretch; }
 }
