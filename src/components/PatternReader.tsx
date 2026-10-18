@@ -71,7 +71,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
             {name && <span className="truncate text-xs text-muted-foreground">{name}</span>}
           </div>
           <div className="review-canvas"><CharacterPreview config={config} focus={focus} /></div>
-          <Button variant="outline" size="icon" className="review-guide-fab" aria-label="Pattern writing guide" title="How to write rounds when editing" onClick={() => setGuideOpen(true)}>
+          <Button variant="outline" size="icon" className="review-guide-fab" aria-label="Pattern syntax guide" title="Pattern syntax guide" onClick={() => setGuideOpen(true)}>
             <CircleHelp size={18} />
           </Button>
           {(previewBack || previewAction) && (
@@ -86,7 +86,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
             {tabs.filter(([, , on]) => on).map(([id, text]) => (
               <Button key={id} variant="ghost" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "category-active" : ""}`} onClick={() => pick(id)}>{text}</Button>
             ))}
-            <Button variant="ghost" size="icon" className="review-guide-btn" aria-label="Pattern writing guide" title="How to write rounds when editing" onClick={() => setGuideOpen(true)}>
+            <Button variant="ghost" size="icon" className="review-guide-btn" aria-label="Pattern syntax guide" title="Pattern syntax guide" onClick={() => setGuideOpen(true)}>
               <CircleHelp size={16} />
             </Button>
           </nav>
