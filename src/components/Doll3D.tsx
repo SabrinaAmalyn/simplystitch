@@ -7,6 +7,9 @@ import { PawVinyl } from "./PawVinyl";
 import { limbSurfaceYarn, pawYarn } from "@/lib/paw-colors";
 import { HEAD, HEAD_ATTACHMENT_OFFSET, BLUSH_POSITION, createBlushGeometry } from "@/lib/doll-anatomy";
 import { partYarn, yarnById, type BlushShape, type BrowStyle, type EyeStyle, type BodyPart, type CharacterConfig, type MouthStyle, type NoseStyle } from "@/lib/character";
+import { limbScale } from "@/lib/limb-lengths";
+import { JOINED_BODY, joinedBodyShape } from "@/lib/joined-body";
+import { PAW_BOUNDARY } from "@/lib/paw-colors";
 
 // Dev tooling injects `data-tsd-source` onto JSX. R3F reads hyphenated props as
 // nested paths (data.tsd.source) and throws. Declaring it as a flat, harmless
@@ -171,10 +174,11 @@ function BlushPatch({ side, color, shape }: { side: 1 | -1; color: string; shape
   );
 }
 
-function Arm({ side, color, pawColor, marked }: { side: 1 | -1; color: string; pawColor: string; marked: boolean }) {
+function Arm({ side, color, pawColor, marked, lengthScale = 1 }: { side: 1 | -1; color: string; pawColor: string; marked: boolean; lengthScale?: number }) {
   // Tilted up 20° and set high: the arm's top rests against the head's underside without sinking into it.
   const tilt = 0.35;
-  return <mesh position={[side * 0.58, 0.818, 0.02]} rotation={[0, 0, side * (Math.PI / 2 + tilt)]} castShadow><capsuleGeometry args={[0.19, 0.25, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} /></mesh>;
+  const extension = 0.63 * (lengthScale - 1);
+  return <mesh position={[side * (0.58 + Math.cos(tilt) * extension / 2), 0.818 + Math.sin(tilt) * extension / 2, 0.02]} rotation={[0, 0, side * (Math.PI / 2 + tilt)]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
 }
 
 /** Sphere tapered toward the top: a smooth, pillowy rounded triangle (like the bear ear, less round). */

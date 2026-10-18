@@ -3,6 +3,8 @@
 import { type CharacterConfig, partYarn } from "./character";
 import { pawYarn } from "./paw-colors";
 import type { Pattern, Round, Section } from "./pattern";
+import { BASE_LIMB_ROUNDS, limbLengths, scaledLimbRounds } from "./limb-lengths";
+import { createLayeredCharacter } from "./character-layers";
 
 const R = (label: string, text: string, count?: number): Round => (count === undefined ? { label, text } : { label, text, count });
 
@@ -74,30 +76,35 @@ function pair(title: string, left: string, right: string, base: (yarn: string) =
 
 // Paw colours: hands are worked in the paw colour for R1–R3, feet for R1–R4,
 // then each piece switches to its own arm/leg yarn.
-const armRounds = (paw: string | null, limb: string): Round[] =>
+const armRounds = (paw: string | null, limb: string, end: number): Round[] =>
   paw
     ? [
         R("R1", `6 sc in MR — work in ${paw} (paw colour)`, 6),
         R("R2", `(2 sc, inc) × 2 — in ${paw}`, 8),
         R("R3", `sc around — in ${paw}`, 8),
         R("R4", `switch to ${limb}, sc around`, 8),
-        R("R5–R6", "sc around for 2 rounds", 8),
+        R(`R5–R${end}`, `sc around for ${end - 4} rounds`, 8),
       ]
-    : ARM_ROUNDS;
+    : [...ARM_ROUNDS.slice(0, 2), R(`R3–R${end}`, `sc around for ${end - 2} rounds`, 8)];
 
-const legRounds = (paw: string | null, limb: string): Round[] =>
+const legRounds = (paw: string | null, limb: string, end: number): Round[] =>
   paw
     ? [
         R("R1", `6 sc in MR — work in ${paw} (paw colour)`, 6),
         R("R2", `inc × 6 — in ${paw}`, 12),
         R("R3–R4", `sc around for 2 rounds — in ${paw}`, 12),
         R("R5", `switch to ${limb}, sc around`, 12),
-        R("R6–R7", "sc around for 2 rounds", 12),
+        R(`R6–R${end}`, `sc around for ${end - 5} rounds`, 12),
       ]
-    : LEG_ROUNDS;
+    : [...LEG_ROUNDS.slice(0, 2), R(`R3–R${end}`, `sc around for ${end - 2} rounds`, 12)];
 
 export function generateDollPattern(c: CharacterConfig): Pattern {
-  const sel = c.layered!.selections;
+  const sel = (c.layered ?? createLayeredCharacter()).selections;
+  const lengths = limbLengths(c);
+  const armEnd = scaledLimbRounds(BASE_LIMB_ROUNDS.arms, lengths.arms);
+  const legEnd = scaledLimbRounds(BASE_LIMB_ROUNDS.legs, lengths.legs);
+  const offset = legEnd - BASE_LIMB_ROUNDS.legs;
+  const bodyRounds = BODY_ROUNDS.map((round) => ({ ...round, label: round.label.replace(/R(\d+)/g, (_, n: string) => `R${Number(n) + offset}`) }));
   const face = c.face;
   const y = (p: Parameters<typeof partYarn>[1]) => partYarn(c, p).name;
   const hands = c.colors.hands ? pawYarn(c, "hands").name : null;
@@ -109,9 +116,9 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
   const legL = y("leftLeg"), legR = y("rightLeg");
   const sections: Section[] = [
     { title: "Head (make 1)", yarn: y("head"), rounds: HEAD_ROUNDS, note: "Stuff the head firmly with fiberfill before fastening off. Fasten off without leaving a long tail." },
-    ...pair("Legs", legL, legR, (yarn) => ({ rounds: legRounds(feet, yarn), note: "After completing the first leg, fasten off. Keep the second leg on the hook to join." }), feet),
-    { title: "Body (continues from the legs)", yarn: y("body"), rounds: BODY_ROUNDS, note: "Stuff the legs and body firmly as you crochet. Fasten off, leaving a long yarn tail for sewing the body onto the head." },
-    ...pair("Arms", y("leftArm"), y("rightArm"), (yarn) => ({ rounds: armRounds(hands, yarn), note: "Lightly stuff. Fasten off, leaving a long yarn tail for sewing." }), hands),
+    ...pair("Legs", legL, legR, (yarn) => ({ rounds: legRounds(feet, yarn, legEnd), note: "After completing the first leg, fasten off. Keep the second leg on the hook to join." }), feet),
+    { title: "Body (continues from the legs)", yarn: y("body"), rounds: bodyRounds, note: "Stuff the legs and body firmly as you crochet. Fasten off, leaving a long yarn tail for sewing the body onto the head." },
+    ...pair("Arms", y("leftArm"), y("rightArm"), (yarn) => ({ rounds: armRounds(hands, yarn, armEnd), note: "Lightly stuff. Fasten off, leaving a long yarn tail for sewing." }), hands),
   ];
   if (ear) sections.push(...pair(ear.name, y("leftEar"), y("rightEar"), () => ({ rounds: ear.rounds, note: ear.finish })));
   if (tail) sections.push({ title: `${tail.name} (make 1)`, yarn: y("tail"), rounds: tail.rounds, note: tail.finish });
@@ -137,7 +144,7 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
     ...(tail ? ["Sew the tail low on the back, centred just above and between the legs."] : []),
   ];
 
-  const yarns = new Set<string>(sections.flatMap((s) => s.yarn!.split(PAW_LABEL)).concat(hands ?? [], feet ?? []));
+  const yarns = new Set<string>(sections.flatMap((s) => s.yarn?.split(PAW_LABEL) ?? []).concat(hands ?? [], feet ?? []));
   return {
     title: `SimplyStitch ${ear ? ear.name.replace(" ears", "") : "Doll"}`,
     materials: [
