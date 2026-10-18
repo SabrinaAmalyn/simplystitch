@@ -120,60 +120,6 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
               )}
             </article>
           </div>
-          <Dialog open={guideOpen} onOpenChange={setGuideOpen}>
-            <DialogContent className="max-h-[85vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>How to read your pattern</DialogTitle>
-                <DialogDescription>Every abbreviation used in this pattern, in plain words.</DialogDescription>
-              </DialogHeader>
-              <dl className="flex flex-col gap-3 text-sm">
-                <div>
-                  <dt className="font-semibold">R1, R2, …</dt>
-                  <dd className="text-muted-foreground">Round numbers. Tap a round to tick it off — your progress is saved on this device.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">MR — magic ring</dt>
-                  <dd className="text-muted-foreground">Crochet into an adjustable loop, then pull it tight so there is no hole at the start.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">sc — single crochet</dt>
-                  <dd className="text-muted-foreground">The basic stitch used throughout.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">inc — increase</dt>
-                  <dd className="text-muted-foreground">Work two single crochets into the same stitch.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">dec — decrease</dt>
-                  <dd className="text-muted-foreground">Single crochet two stitches together, turning two stitches into one.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">ch — chain</dt>
-                  <dd className="text-muted-foreground">Yarn over and pull through to make a chain stitch.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">st / sts — stitch / stitches</dt>
-                  <dd className="text-muted-foreground">A single loop of your crocheted fabric.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">(inc, 2 sc) × 6 (18)</dt>
-                  <dd className="text-muted-foreground">Repeat everything in brackets 6 times. The last number in bold is the stitch count you should have when the round ends — count to check.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">(6)</dt>
-                  <dd className="text-muted-foreground">The stitch count to check at the end of that round.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">Stuff</dt>
-                  <dd className="text-muted-foreground">Fill the piece with fiberfill — the assembly notes say how firmly.</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold">Fasten off</dt>
-                  <dd className="text-muted-foreground">Cut the yarn and pull the tail through the last loop to secure it.</dd>
-                </div>
-              </dl>
-            </DialogContent>
-          </Dialog>
         </section>
       </div>
     </div>
