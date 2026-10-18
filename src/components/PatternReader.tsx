@@ -71,6 +71,9 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
             {name && <span className="truncate text-xs text-muted-foreground">{name}</span>}
           </div>
           <div className="review-canvas"><CharacterPreview config={config} focus={focus} /></div>
+          <Button variant="outline" size="icon" className="review-guide-fab" aria-label="Pattern writing guide" title="How to write rounds when editing" onClick={() => setGuideOpen(true)}>
+            <CircleHelp size={18} />
+          </Button>
           {(previewBack || previewAction) && (
             <div className="review-preview-bar">
               {previewBack}

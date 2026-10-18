@@ -347,6 +347,8 @@
 .review-content { order: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); position: relative; }
 .review-guide-btn { align-self: center; justify-self: end; height: 30px; width: 30px; margin-right: 6px; color: var(--muted-foreground); }
 .review-guide-btn:hover { color: var(--foreground); }
+/* Mobile-only floating guide over the 3D viewer's bottom-right corner. */
+.review-guide-fab { display: none; }
 .review-preview { order: 2; position: sticky; top: 0; height: calc(100dvh - 82px); min-height: 420px; background: var(--stage); align-self: start; display: flex; flex-direction: column; }
 /* Desktop app shell: like the customizer, the page itself never scrolls. The
    nav tabs stay pinned and only the text under them scrolls inside its own
