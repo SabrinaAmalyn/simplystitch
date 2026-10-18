@@ -174,10 +174,16 @@ function BlushPatch({ side, color, shape }: { side: 1 | -1; color: string; shape
   );
 }
 
-function Arm({ side, color, pawColor, marked, lengthScale = 1 }: { side: 1 | -1; color: string; pawColor: string; marked: boolean; lengthScale?: number }) {
+function Arm({ side, color, pawColor, marked, lengthScale = 1, down = false }: { side: 1 | -1; color: string; pawColor: string; marked: boolean; lengthScale?: number; down?: boolean }) {
+  const extension = 0.63 * (lengthScale - 1);
+  if (down) {
+    // Preview-only pose: hanging from the shoulder, angled slightly away from the torso.
+    const a = 0.32;
+    const h = 0.125 + extension / 2;
+    return <mesh position={[side * (0.56 + Math.sin(a) * h), 0.84 - Math.cos(a) * h, 0.02]} rotation={[0, 0, side * a]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
+  }
   // Tilted up 20° and set high: the arm's top rests against the head's underside without sinking into it.
   const tilt = 0.35;
-  const extension = 0.63 * (lengthScale - 1);
   return <mesh position={[side * (0.58 + Math.cos(tilt) * extension / 2), 0.818 + Math.sin(tilt) * extension / 2, 0.02]} rotation={[0, 0, side * (Math.PI / 2 + tilt)]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
 }
 
@@ -312,7 +318,7 @@ function Ear({ type, side, color }: { type: Ears; side: 1 | -1; color: string })
   }
 }
 
-function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: EarType; focus?: PartFocus }) {
+function Doll({ config, ears, focus = null, armsDown = false }: { config: CharacterConfig; ears: EarType; focus?: PartFocus; armsDown?: boolean }) {
   const c = (p: BodyPart) => partYarn(config, p).hex;
   const arms = limbScale(config, "arms");
   const legs = limbScale(config, "legs");
@@ -343,8 +349,8 @@ function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: E
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
       <JoinedBody lengthScale={legs} torsoScale={torsoH} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />
       <group position={[0, -torsoDrop(torsoH) / 2, 0]}><Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} /></group>
-      <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />
-      <Arm lengthScale={arms} side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "rightHand").hex} marked={pawMarked(config, "rightHand")} />
+      <Arm down={armsDown} lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />
+      <Arm down={armsDown} lengthScale={arms} side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "rightHand").hex} marked={pawMarked(config, "rightHand")} />
       <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>
         {ears && <Ear type={ears} side={1} color={c("leftEar")} />}
         {ears && <Ear type={ears} side={-1} color={c("rightEar")} />}
@@ -353,7 +359,7 @@ function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: E
   );
 }
 
-export default function Doll3D({ config, ears, focus = null }: { config: CharacterConfig; ears: EarType; focus?: PartFocus }) {
+export default function Doll3D({ config, ears, focus = null, armsDown = false }: { config: CharacterConfig; ears: EarType; focus?: PartFocus; armsDown?: boolean }) {
   const footY = -1.11 + joinedBodyShape(limbScale(config, "legs"), limbScale(config, "torso")).leg.bottom - JOINED_BODY.leg.bottom;
   return (
     <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.9, 5.5], fov: 40 }} gl={{ toneMappingExposure: 1.05 }}>
@@ -380,8 +386,8 @@ export default function Doll3D({ config, ears, focus = null }: { config: Charact
         </>
       ) : (
         <>
-          <Bounds key={`${ears}-${limbScale(config, "arms")}-${limbScale(config, "legs")}-${limbScale(config, "torso")}`} fit clip margin={1.2}>
-            <Doll config={config} ears={ears} />
+          <Bounds key={`${ears}-${limbScale(config, "arms")}-${limbScale(config, "legs")}-${limbScale(config, "torso")}-${armsDown}`} fit clip margin={1.2}>
+            <Doll config={config} ears={ears} armsDown={armsDown} />
           </Bounds>
           <ContactShadows position={[0, footY, 0]} opacity={0.28} blur={3} scale={5} far={2} />
           <OrbitControls makeDefault enablePan={false} minDistance={3.5} maxDistance={9} minPolarAngle={0.5} maxPolarAngle={1.9} />

@@ -27,7 +27,7 @@ class PreviewBoundary extends Component<{ children: ReactNode; resetKey: string 
   }
 }
 
-export function CharacterPreview({ config, focus = null }: { config: CharacterConfig; focus?: PartFocus }) {
+export function CharacterPreview({ config, focus = null, armsDown = false }: { config: CharacterConfig; focus?: PartFocus; armsDown?: boolean }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const earId = (config.layered ?? createLayeredCharacter()).selections.ears;
@@ -38,7 +38,7 @@ export function CharacterPreview({ config, focus = null }: { config: CharacterCo
         {mounted && (
           <PreviewBoundary resetKey={JSON.stringify(config.colors) + String(ears) + String(config.layered?.selections.tail)}>
             <Suspense fallback={<p className="text-sm text-muted-foreground">Loading character…</p>}>
-              <Doll3D config={config} ears={ears} focus={focus} />
+              <Doll3D config={config} ears={ears} focus={focus} armsDown={armsDown} />
             </Suspense>
           </PreviewBoundary>
         )}

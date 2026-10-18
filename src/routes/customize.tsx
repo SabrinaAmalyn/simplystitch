@@ -8,7 +8,7 @@ import { setState, useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers";
 import { YARNS } from "@/lib/yarn-palette";
-import { ArrowLeft, Dices, RotateCcw } from "lucide-react";
+import { ArrowLeft, Dices, PersonStanding, RotateCcw } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 
 const pick = <T,>(list: readonly T[]): T => {
@@ -100,6 +100,7 @@ function Workspace() {
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [armsDown, setArmsDown] = useState(false);
 
   const layered = config.layered ?? createLayeredCharacter();
   const blockers = patternBlockers(layered);
@@ -143,8 +144,12 @@ function Workspace() {
             </Button>
           </div>
           <div className="character-canvas">
-            <CharacterPreview config={config} />
+            <CharacterPreview config={config} armsDown={armsDown} />
             <PreviewActions />
+            <Button type="button" variant="outline" size="icon" aria-label={armsDown ? "Raise arms" : "Lower arms"} aria-pressed={armsDown}
+              title="Change pose" className="preview-pose" onClick={() => setArmsDown((v) => !v)}>
+              <PersonStanding size={18} />
+            </Button>
             <div className="preview-generate">
               <Button type="button" onClick={generate} disabled={busy || blockers.length > 0}>
                 {busy ? "Stitching your pattern…" : "Generate"}
