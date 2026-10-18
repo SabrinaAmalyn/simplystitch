@@ -89,3 +89,5 @@
 - [x] Randomize also randomizes arm, leg and torso lengths (10% slider steps, 100–170%)
 - [x] Pattern page: nav rows shrank and overlapped in short landscape; pin them so only the text under the tabs scrolls
 - [x] Pattern page: add a Stitch guide button explaining the pattern's abbreviations
+- [ ] Fix pattern page: section + subsection tabs stay pinned, only content scrolls (landscape)
+- [ ] Move stitch-guide "?" button out of the tab overlay into its own small row
