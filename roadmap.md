@@ -83,3 +83,5 @@
 - [x] Customize (phone): Randomize at bottom-right of 3D view
 - [x] Phone buttons: consistent size and font
 - [x] Recolour the supplied character artwork to the app blue, remove its background, and use it as the browser tab icon
+- [ ] Paws: independent left/right hand and foot colours (4 buttons)
+- [ ] Torso height slider with matching body rounds
