@@ -379,9 +379,11 @@ export default function Doll3D({ config, ears, focus = null }: { config: Charact
         </>
       ) : (
         <>
-          <Doll config={config} ears={ears} />
+          <Bounds key={`${ears}-${limbScale(config, "arms")}-${limbScale(config, "legs")}`} fit clip margin={1.2}>
+            <Doll config={config} ears={ears} />
+          </Bounds>
           <ContactShadows position={[0, footY, 0]} opacity={0.28} blur={3} scale={5} far={2} />
-          <OrbitControls enablePan={false} minDistance={3.5} maxDistance={9} minPolarAngle={0.5} maxPolarAngle={1.9} target={[0, 0.65, 0]} />
+          <OrbitControls makeDefault enablePan={false} minDistance={3.5} maxDistance={9} minPolarAngle={0.5} maxPolarAngle={1.9} />
         </>
       )}
     </Canvas>
