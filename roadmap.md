@@ -1,6 +1,6 @@
 # Tasks
-- [ ] Add arm and leg length sliders with matching preview and crochet rounds; verify saving, reload and mobile layout.
-- [ ] Move mobile customizer Reset to the viewer's bottom-left and add Go Back in the top-left; verify navigation.
+- [x] Add arm and leg length sliders with matching preview and crochet rounds; verified saving, reload and mobile layout.
+- [x] Move mobile customizer Reset to the viewer's bottom-left and add Go Back in the top-left; verified Reset and navigation.
 - [x] Refine pattern workspace presentation without changing instructions; verified desktop/mobile reading, progress persistence, repeated rounds, edit, save and download at 360, 390, 502, 1024 and 1280 widths.
 - [x] Interactive pattern reader: collapsible character, Go to drawer, tappable rows, expandable repeated rounds, notes, per-section and overall progress saved per pattern; verified on phone.
 - [x] Rename the second journey step from "Generate & Review" to "Review" on the pattern page and landing page; verified.
