@@ -2,6 +2,7 @@
 import { CROCHET_PARTS, type CharacterConfig, partYarn, yarnById } from "./character";
 import { patternBlockers } from "./character-layers";
 import { generateDollPattern } from "./doll-pattern";
+import { limbLengths, scaledLimbRounds } from "./limb-lengths";
 
 export type Round = { label: string; text: string; count?: number };
 export type Section = { title: string; yarn?: string; note?: string; rounds: Round[] };
@@ -172,6 +173,9 @@ export function generatePattern(c: CharacterConfig): Pattern {
   const acc = yarnById(c.colors.accessory).name;
   const eyes = yarnById(c.colors.eyes).name;
   const body = BODY[c.body];
+  const lengths = limbLengths(c);
+  const armEnd = scaledLimbRounds(c.body === "tall" ? 14 : 11, lengths.arms);
+  const legEnd = scaledLimbRounds(c.body === "tall" ? 15 : c.body === "chubby" ? 9 : 11, lengths.legs);
   const hasAcc = c.accessories.length > 0;
 
   const partMaterials = new Map<string, string[]>();
@@ -209,7 +213,7 @@ export function generatePattern(c: CharacterConfig): Pattern {
       rounds: [
         { label: "R1", text: "6 sc in magic ring", count: 6 },
         { label: "R2", text: "inc × 6", count: 12 },
-        { label: c.body === "tall" ? "R3–14" : "R3–11", text: "sc around", count: 12 },
+        { label: `R3–${armEnd}`, text: "sc around", count: 12 },
       ],
       note: "Use the listed yarn throughout. Stuff lightly for relaxed arms, flatten the 12-stitch opening and sc through both layers across 6 sts. Leave a sewing tail; attach so the arms hang down beside the torso.",
     }, partYarn(c, "leftArm").name, partYarn(c, "rightArm").name, "arm"),
@@ -220,7 +224,7 @@ export function generatePattern(c: CharacterConfig): Pattern {
         { label: "R1", text: "6 sc in magic ring", count: 6 },
         { label: "R2", text: "inc × 6", count: 12 },
         { label: "R3", text: "(sc, inc) × 6", count: 18 },
-        { label: c.body === "tall" ? "R4–15" : c.body === "chubby" ? "R4–9" : "R4–11", text: "sc around", count: 18 },
+        { label: `R4–${legEnd}`, text: "sc around", count: 18 },
       ],
       note: "Work in the listed yarn with no color change. These are straight legs with rounded ends, not separate shoes. Stuff firmly and leave the 18-stitch top open with a long tail for sewing to the hip base.",
     }, partYarn(c, "leftLeg").name, partYarn(c, "rightLeg").name, "leg"),

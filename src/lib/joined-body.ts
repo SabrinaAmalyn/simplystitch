@@ -17,6 +17,11 @@ export const JOINED_BODY = {
   leg: { halfSpacing: 0.22, bottom: -0.02, top: 0.5, radius: 0.21 },
 } satisfies { torso: BodyVolume; leg: LegCapsule };
 
+export function joinedBodyShape(scale = 1) {
+  const extension = (JOINED_BODY.leg.top - JOINED_BODY.leg.bottom) * (scale - 1);
+  return { torso: JOINED_BODY.torso, leg: { ...JOINED_BODY.leg, bottom: JOINED_BODY.leg.bottom - extension } };
+}
+
 function volumeDistance(x: number, y: number, z: number, volume: BodyVolume) {
   const [cx, cy, cz] = volume.center;
   const [rx, ry, rz] = volume.radii;

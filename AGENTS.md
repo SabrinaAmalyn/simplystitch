@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 - Keep character configuration, SVG preview, and deterministic pattern generation separate; anatomy changes must update the preview and pattern together to keep them aligned.
+- Resolve optional paired limb lengths through the shared limb-length module and quantize preview lengths to whole crochet rounds; extend limbs away from fixed attachments, move paw boundaries with their tips, and offset joined-body round numbers without rewriting saved drafts.
 - Define yarns and display groups in one shared palette module, retaining legacy yarn IDs; all region controls use the shared swatch component so exact colour resolution and saved selections stay consistent.
 - Version the base anatomy in pattern keys and migrate saved configurations without overwriting draft text; existing edited patterns must remain recoverable when defaults change.
 - Resolve individual part yarns through the shared character helper with legacy main-yarn fallback; backfill missing saved part colors without modifying draft records, and name sides from the doll's perspective so preview and assembly agree.
