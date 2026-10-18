@@ -43,7 +43,7 @@ function buildJoinedGeometry(scale: number) {
   return geometry;
 }
 
-export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked, lengthScale = 1 }: { torso: string; leftLeg: string; rightLeg: string; pawColor: string; marked: boolean; lengthScale?: number }) {
+export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked, rightPawColor = pawColor, rightMarked = marked, lengthScale = 1 }: { torso: string; leftLeg: string; rightLeg: string; pawColor: string; marked: boolean; rightPawColor?: string; rightMarked?: boolean; lengthScale?: number }) {
   const geometry = useMemo(() => buildJoinedGeometry(lengthScale), [lengthScale]);
   useEffect(() => () => geometry.dispose(), [geometry]);
   useEffect(() => {
@@ -64,7 +64,7 @@ export function JoinedBody({ torso, leftLeg, rightLeg, pawColor, marked, lengthS
   }, [geometry, torso, leftLeg, rightLeg]);
   return (
     <mesh geometry={geometry} castShadow>
-      <PawVinyl vertexColors pawColor={pawColor} region="feet" enabled={marked}
+      <PawVinyl vertexColors pawColor={pawColor} region="feet" enabled={marked} rightPawColor={rightPawColor} rightEnabled={rightMarked}
         boundary={PAW_BOUNDARY.feet + joinedBodyShape(lengthScale).leg.bottom - JOINED_BODY.leg.bottom} />
     </mesh>
   );

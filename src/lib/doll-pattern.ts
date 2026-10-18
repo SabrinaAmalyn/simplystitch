@@ -1,7 +1,7 @@
 // Explicit crochet rules for the joined-body base doll ("base.doll-v1") and its supported features.
 // Every stitch count here comes from the designer's supplied patterns; never invent new rules.
 import { type CharacterConfig, partYarn } from "./character";
-import { pawYarn } from "./paw-colors";
+import { pawMarked, pawYarn, type PawSide } from "./paw-colors";
 import type { Pattern, Round, Section } from "./pattern";
 import { BASE_LIMB_ROUNDS, limbLengths, scaledLimbRounds } from "./limb-lengths";
 import { createLayeredCharacter } from "./character-layers";
@@ -65,12 +65,13 @@ export const BLUSH_RULES = {
 } as const;
 
 const PAW_LABEL = " (paw) + ";
-function pair(title: string, left: string, right: string, base: (yarn: string) => Omit<Section, "title" | "yarn">, paw: string | null = null): Section[] {
-  const label = (limb: string) => (paw && paw !== limb ? `${paw}${PAW_LABEL}${limb}` : limb);
-  if (left === right) return [{ ...base(left), title: `${title} (make 2)`, yarn: label(left) }];
+function pair(title: string, left: string, right: string, base: (yarn: string, paw: string | null) => Omit<Section, "title" | "yarn">, paws: [string | null, string | null] = [null, null]): Section[] {
+  const [pawL, pawR] = paws;
+  const label = (limb: string, paw: string | null) => (paw && paw !== limb ? `${paw}${PAW_LABEL}${limb}` : limb);
+  if (left === right && pawL === pawR) return [{ ...base(left, pawL), title: `${title} (make 2)`, yarn: label(left, pawL) }];
   return [
-    { ...base(left), title: `Left ${title.toLowerCase().replace(/s$/, "")} (make 1)`, yarn: label(left) },
-    { ...base(right), title: `Right ${title.toLowerCase().replace(/s$/, "")} (make 1)`, yarn: label(right) },
+    { ...base(left, pawL), title: `Left ${title.toLowerCase().replace(/s$/, "")} (make 1)`, yarn: label(left, pawL) },
+    { ...base(right, pawR), title: `Right ${title.toLowerCase().replace(/s$/, "")} (make 1)`, yarn: label(right, pawR) },
   ];
 }
 
@@ -107,8 +108,9 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
   const bodyRounds = BODY_ROUNDS.map((round) => ({ ...round, label: round.label.replace(/R(\d+)/g, (_, n: string) => `R${Number(n) + offset}`) }));
   const face = c.face;
   const y = (p: Parameters<typeof partYarn>[1]) => partYarn(c, p).name;
-  const hands = c.colors.hands ? pawYarn(c, "hands").name : null;
-  const feet = c.colors.feet ? pawYarn(c, "feet").name : null;
+  const paw = (side: PawSide) => (pawMarked(c, side) ? pawYarn(c, side).name : null);
+  const hands: [string | null, string | null] = [paw("leftHand"), paw("rightHand")];
+  const feet: [string | null, string | null] = [paw("leftFoot"), paw("rightFoot")];
   const ear = sel.ears ? EAR_RULES[sel.ears] : undefined;
   const tail = sel.tail ? TAIL_RULES[sel.tail] : undefined;
   const blush = face.cheeks ? BLUSH_RULES[face.blushShape ?? "round"] : undefined;
@@ -116,9 +118,9 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
   const legL = y("leftLeg"), legR = y("rightLeg");
   const sections: Section[] = [
     { title: "Head (make 1)", yarn: y("head"), rounds: HEAD_ROUNDS, note: "Stuff the head firmly with fiberfill before fastening off. Fasten off without leaving a long tail." },
-    ...pair("Legs", legL, legR, (yarn) => ({ rounds: legRounds(feet, yarn, legEnd), note: "After completing the first leg, fasten off. Keep the second leg on the hook to join." }), feet),
+    ...pair("Legs", legL, legR, (yarn, p) => ({ rounds: legRounds(p, yarn, legEnd), note: "After completing the first leg, fasten off. Keep the second leg on the hook to join." }), feet),
     { title: "Body (continues from the legs)", yarn: y("body"), rounds: bodyRounds, note: "Stuff the legs and body firmly as you crochet. Fasten off, leaving a long yarn tail for sewing the body onto the head." },
-    ...pair("Arms", y("leftArm"), y("rightArm"), (yarn) => ({ rounds: armRounds(hands, yarn, armEnd), note: "Lightly stuff. Fasten off, leaving a long yarn tail for sewing." }), hands),
+    ...pair("Arms", y("leftArm"), y("rightArm"), (yarn, p) => ({ rounds: armRounds(p, yarn, armEnd), note: "Lightly stuff. Fasten off, leaving a long yarn tail for sewing." }), hands),
   ];
   if (ear) sections.push(...pair(ear.name, y("leftEar"), y("rightEar"), () => ({ rounds: ear.rounds, note: ear.finish })));
   if (tail) sections.push({ title: `${tail.name} (make 1)`, yarn: y("tail"), rounds: tail.rounds, note: tail.finish });

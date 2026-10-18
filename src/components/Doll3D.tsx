@@ -4,7 +4,7 @@ import { Bounds, ContactShadows, Environment, Float, Lightformer, OrbitControls 
 import * as THREE from "three";
 import { JoinedBody } from "./JoinedBody";
 import { PawVinyl } from "./PawVinyl";
-import { limbSurfaceYarn, pawYarn } from "@/lib/paw-colors";
+import { limbSurfaceYarn, pawMarked, pawYarn } from "@/lib/paw-colors";
 import { HEAD, HEAD_ATTACHMENT_OFFSET, BLUSH_POSITION, createBlushGeometry } from "@/lib/doll-anatomy";
 import { partYarn, yarnById, type BlushShape, type BrowStyle, type EyeStyle, type BodyPart, type CharacterConfig, type MouthStyle, type NoseStyle } from "@/lib/character";
 import { limbScale } from "@/lib/limb-lengths";
@@ -327,8 +327,8 @@ function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: E
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
     </group>
   );
-  if (focus === "body") return <JoinedBody lengthScale={legs} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "feet").hex} marked={Boolean(config.colors.feet)} />;
-  if (focus === "arm") return <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />;
+  if (focus === "body") return <JoinedBody lengthScale={legs} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />;
+  if (focus === "arm") return <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />;
   if (focus === "tail") return <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />;
   if (focus === "ears") return <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>{ears && <><Ear type={ears} side={1} color={c("leftEar")} /><Ear type={ears} side={-1} color={c("rightEar")} /></>}</group>;
   return (
@@ -340,10 +340,10 @@ function Doll({ config, ears, focus = null }: { config: CharacterConfig; ears: E
       <Mouth style={config.face.mouth ?? "none"} />
       {config.face.whiskers && <Whiskers overBlush={config.face.cheeks} />}
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
-      <JoinedBody lengthScale={legs} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "feet").hex} marked={Boolean(config.colors.feet)} />
+      <JoinedBody lengthScale={legs} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />
       <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />
-      <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />
-      <Arm lengthScale={arms} side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "hands").hex} marked={Boolean(config.colors.hands)} />
+      <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />
+      <Arm lengthScale={arms} side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "rightHand").hex} marked={pawMarked(config, "rightHand")} />
       <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>
         {ears && <Ear type={ears} side={1} color={c("leftEar")} />}
         {ears && <Ear type={ears} side={-1} color={c("rightEar")} />}

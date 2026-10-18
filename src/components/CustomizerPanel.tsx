@@ -6,7 +6,7 @@ import { YarnSwatches } from "@/components/YarnSwatches";
 import { BrowCards, CheekCards, EyeCards, MouthCards, NoseCards } from "@/components/FaceFeatureCards";
 import { LayerFeatureCards } from "@/components/LayerFeatureCards";
 import { createLayeredCharacter, selectLayer } from "@/lib/character-layers";
-import { pawYarn, type PawRegion } from "@/lib/paw-colors";
+import { PAW_SIDE_REGION, pawYarn, type PawRegion, type PawSide } from "@/lib/paw-colors";
 import { Slider } from "@/components/ui/slider";
 import { limbLengths, LIMB_LENGTH_MIN, LIMB_LENGTH_MAX } from "@/lib/limb-lengths";
 const CATEGORIES = ["Body", "Face", "Ears", "Tail"] as const;
@@ -15,13 +15,13 @@ const SUBCATEGORIES: Partial<Record<Category, string[]>> = {
   Body: ["Head", "Torso", "Arms", "Legs", "Paws"],
   Face: ["Eyes", "Eyebrows", "Nose", "Mouth", "Cheeks"],
 };
-const LABELS: Partial<Record<BodyPart | PawRegion, string>> = {
+const LABELS: Partial<Record<BodyPart | PawRegion | PawSide, string>> = {
   head: "Head", body: "Body", leftArm: "Left arm", rightArm: "Right arm", leftLeg: "Left leg", rightLeg: "Right leg",
   leftEar: "Left ear", rightEar: "Right ear", leftEye: "Left eye", rightEye: "Right eye", leftBlush: "Left blush", rightBlush: "Right blush",
-  brows: "Eyebrows", hands: "Hands / paws", feet: "Feet / paws", tail: "Tail",
+  brows: "Eyebrows", hands: "Hands / paws", feet: "Feet / paws", leftHand: "Left hand", rightHand: "Right hand", leftFoot: "Left foot", rightFoot: "Right foot", tail: "Tail",
 };
-const REGIONS: Record<string, (BodyPart | PawRegion)[]> = {
-  Head: ["head"], Torso: ["body"], Arms: ["leftArm", "rightArm"], Legs: ["leftLeg", "rightLeg"], Paws: ["hands", "feet"],
+const REGIONS: Record<string, (BodyPart | PawRegion | PawSide)[]> = {
+  Head: ["head"], Torso: ["body"], Arms: ["leftArm", "rightArm"], Legs: ["leftLeg", "rightLeg"], Paws: ["leftHand", "rightHand", "leftFoot", "rightFoot"],
   Eyes: ["leftEye", "rightEye"], Eyebrows: ["brows"], Cheeks: ["leftBlush", "rightBlush"],
 };
 
@@ -29,7 +29,7 @@ function RegionThumb({ region }: { region: string }) {
   return <svg viewBox="0 0 64 64" aria-hidden="true" className="text-primary">
     {region === "head" ? <rect x="12" y="10" width="40" height="42" rx="18" fill="currentColor" />
       : region === "body" ? <path d="M20 12Q32 5 44 12L47 39Q47 53 32 53Q17 53 17 39Z" fill="currentColor" />
-      : region === "hands" || region === "feet" ? <><rect x="23" y="9" width="18" height="46" rx="9" fill="currentColor" opacity=".25" /><path d="M23 38H41V46a9 9 0 01-18 0Z" fill="currentColor" /></>
+      : region in PAW_SIDE_REGION ? <><rect x="23" y="9" width="18" height="46" rx="9" fill="currentColor" opacity=".25" /><path d="M23 38H41V46a9 9 0 01-18 0Z" fill="currentColor" /></>
       : <rect x="23" y="9" width="18" height="46" rx="9" fill="currentColor" transform={region.includes("Arm") ? "rotate(65 32 32)" : undefined} />}
   </svg>;
 }
@@ -43,7 +43,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
   const lengthGroup = category === "Body" && sub === "Arms" ? "arms" : category === "Body" && sub === "Legs" ? "legs" : null;
   const regions = category === "Ears" ? ["leftEar", "rightEar"] as BodyPart[] : category === "Tail" ? ["tail"] as BodyPart[] : REGIONS[sub] ?? [];
   const region = regions[regionIndex] ?? regions[0];
-  const current = region === "hands" || region === "feet" ? pawYarn(config, region) : region ? partYarn(config, region) : undefined;
+  const current = region && region in PAW_SIDE_REGION ? pawYarn(config, region as PawSide) : region ? partYarn(config, region) : undefined;
   const changeFace = (patch: Partial<CharacterConfig["face"]>) => onChange({ ...config, face: { ...config.face, ...patch } });
   const pickCategory = (next: Category) => { setCategory(next); setSub(SUBCATEGORIES[next]?.[0] ?? ""); setRegionIndex(0); };
   const paletteVisible = current && (sub !== "Cheeks" || config.face.cheeks) && (category !== "Ears" || layered.selections.ears) && (category !== "Tail" || layered.selections.tail);
