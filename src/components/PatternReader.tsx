@@ -1,10 +1,11 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { Check, ChevronDown, Info, Pencil } from "lucide-react";
+import { Check, ChevronDown, CircleHelp, Info, Pencil } from "lucide-react";
 import { CharacterPreview, type PartFocus } from "@/components/CharacterPreview";
 import type { CharacterConfig } from "@/lib/character";
 import { parsePatternText, sectionBody, sectionRowKeys, withSectionBody, type ReaderItem, type ReaderRow, type ReaderSection } from "@/lib/pattern-reader";
 import { resetProgress, toggleRows, useStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 type Props = {
   text: string; config: CharacterConfig; progressKey: string; name?: string | undefined;
@@ -38,6 +39,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
   const parts = doc.sections.filter((s) => s.parent);
   const assembly = doc.sections.filter((s) => /^assembly/i.test(s.title));
   const [tab, setTab] = useState<"materials" | "instructions" | "assembly">(parts.length ? "instructions" : "materials");
+  const [guideOpen, setGuideOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [partId, setPartId] = useState(parts[0]?.id);
   const part = parts.find((p) => p.id === partId) ?? parts[0];
@@ -77,6 +79,9 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
           )}
         </section>
         <section className="review-content">
+          <Button variant="outline" size="icon" className="review-guide-btn" aria-label="Stitch guide" title="What the abbreviations mean" onClick={() => setGuideOpen(true)}>
+            <CircleHelp size={18} />
+          </Button>
           <nav className="category-nav review-category-nav" role="tablist" aria-label="Pattern categories" style={{ gridTemplateColumns: `repeat(${tabs.filter(([, , on]) => on).length}, minmax(0, 1fr))` }}>
             {tabs.filter(([, , on]) => on).map(([id, text]) => (
               <Button key={id} variant="ghost" role="tab" aria-selected={tab === id} className={`category-tab ${tab === id ? "category-active" : ""}`} onClick={() => pick(id)}>{text}</Button>
