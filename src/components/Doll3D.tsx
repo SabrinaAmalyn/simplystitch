@@ -174,13 +174,19 @@ function BlushPatch({ side, color, shape }: { side: 1 | -1; color: string; shape
   );
 }
 
-function Arm({ side, color, pawColor, marked, lengthScale = 1, down = false }: { side: 1 | -1; color: string; pawColor: string; marked: boolean; lengthScale?: number; down?: boolean }) {
+function Arm({ side, color, pawColor, marked, lengthScale = 1, down = false, torsoScale = 1 }: { side: 1 | -1; color: string; pawColor: string; marked: boolean; lengthScale?: number; down?: boolean; torsoScale?: number }) {
   const extension = 0.63 * (lengthScale - 1);
   if (down) {
-    // Preview-only pose: hanging from the shoulder, angled slightly away from the torso.
-    const a = 0.3;
+    // Preview-only pose: hanging from under the head, its inner side sunk into the torso at chest height
+    // so the arm touches the head and body seamlessly for any torso height.
+    const a = 0.12;
     const h = 0.125 + extension / 2;
-    return <mesh position={[side * (0.5 + Math.sin(a) * h), 0.92 - Math.cos(a) * h, 0.02]} rotation={[0, 0, side * a]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
+    const { torso } = joinedBodyShape(1, torsoScale);
+    const chestY = 0.78;
+    const t = Math.min(1, Math.abs(chestY - torso.center[1]) / torso.radii[1]);
+    const shoulderX = torso.radii[0] * Math.sqrt(1 - t * t) + 0.12;
+    const topY = 0.98;
+    return <mesh position={[side * (shoulderX - Math.sin(a) * (topY - chestY) + Math.sin(a) * h), topY - Math.cos(a) * h, 0.02]} rotation={[0, 0, side * a]} castShadow><capsuleGeometry args={[0.19, 0.25 + extension, 12, 24]} /><PawVinyl color={color} pawColor={pawColor} region="hands" enabled={marked} boundary={PAW_BOUNDARY.hands - extension / 2} /></mesh>;
   }
   // Tilted up 20° and set high: the arm's top rests against the head's underside without sinking into it.
   const tilt = 0.35;
@@ -349,8 +355,8 @@ function Doll({ config, ears, focus = null, armsDown = false }: { config: Charac
       {config.face.cheeks && <><BlushPatch side={1} color={c("leftBlush")} shape={config.face.blushShape ?? "round"} /><BlushPatch side={-1} color={c("rightBlush")} shape={config.face.blushShape ?? "round"} /></>}
       <JoinedBody lengthScale={legs} torsoScale={torsoH} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />
       <group position={[0, -torsoDrop(torsoH) / 2, 0]}><Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} /></group>
-      <Arm down={armsDown} lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />
-      <Arm down={armsDown} lengthScale={arms} side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "rightHand").hex} marked={pawMarked(config, "rightHand")} />
+      <Arm down={armsDown} torsoScale={torsoH} lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />
+      <Arm down={armsDown} torsoScale={torsoH} lengthScale={arms} side={-1} color={limbSurfaceYarn(config, "rightArm", "hands").hex} pawColor={pawYarn(config, "rightHand").hex} marked={pawMarked(config, "rightHand")} />
       <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>
         {ears && <Ear type={ears} side={1} color={c("leftEar")} />}
         {ears && <Ear type={ears} side={-1} color={c("rightEar")} />}
