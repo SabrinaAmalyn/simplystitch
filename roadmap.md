@@ -87,3 +87,5 @@
 - [x] Torso height slider with matching body rounds
 - [x] Push the lowered arms closer to the body so no gap shows at default and 170% proportions
 - [x] Randomize also randomizes arm, leg and torso lengths (10% slider steps, 100–170%)
+- [ ] Pattern page: nav rows shrank and overlapped in short landscape; pin them so only the text under the tabs scrolls
+- [ ] Pattern page: add a Stitch guide button explaining the pattern's abbreviations

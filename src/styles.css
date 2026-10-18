@@ -344,7 +344,8 @@
 
 /* Review page: customizer-style split — pattern tabs left, floating piece preview right. */
 .review-layout { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); background: var(--background); min-height: calc(100dvh - 82px); }
-.review-content { order: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+.review-content { order: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); position: relative; }
+.review-guide-btn { position: absolute; top: 9px; right: 8px; z-index: 5; height: 36px; width: 36px; background: var(--card); }
 .review-preview { order: 2; position: sticky; top: 0; height: calc(100dvh - 82px); min-height: 420px; background: var(--stage); align-self: start; display: flex; flex-direction: column; }
 /* Desktop app shell: like the customizer, the page itself never scrolls. The
    nav tabs stay pinned and only the text under them scrolls inside its own
@@ -378,6 +379,7 @@
   .review-header { display: none; }
   .review-preview { order: 0; position: relative; height: auto; min-height: 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: minmax(0, 1fr); }
   .review-content { border-right: 0; }
+  .review-guide-btn { top: 5px; }
   /* Phone: the buttons keep their own row; the piece name floats centred inside the 3D view. */
   .review-preview-name { order: 0; grid-row: 1; padding: 12px 12px 0; }
   .review-name-input { max-width: none; height: 40px; font-size: 0.9375rem; }
