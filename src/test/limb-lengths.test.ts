@@ -9,7 +9,7 @@ const config = (arms = 100, legs = 100) => ({ ...DEFAULT_CONFIG, layered: create
 const sections = (arms: number, legs: number) => generatePattern(config(arms, legs)).sections;
 
 it("defaults old characters to 100% and clamps lengths to 100%–170%", () => {
-  expect(limbLengths(DEFAULT_CONFIG)).toEqual({ arms: 100, legs: 100 });
+  expect(limbLengths(DEFAULT_CONFIG)).toEqual({ arms: 100, legs: 100, torso: 100 });
   expect(normalizeLimbLength(70)).toBe(100);
   expect(normalizeLimbLength(200)).toBe(170);
   expect(normalizeLimbLength(NaN)).toBe(100);
