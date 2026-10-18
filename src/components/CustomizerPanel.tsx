@@ -40,7 +40,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
   const [regionIndex, setRegionIndex] = useState(0);
   const layered = config.layered ?? createLayeredCharacter();
   const lengths = limbLengths(config);
-  const lengthGroup = category === "Body" && sub === "Arms" ? "arms" : category === "Body" && sub === "Legs" ? "legs" : null;
+  const lengthGroup = category === "Body" && sub === "Arms" ? "arms" : category === "Body" && sub === "Legs" ? "legs" : category === "Body" && sub === "Torso" ? "torso" : null;
   const regions = category === "Ears" ? ["leftEar", "rightEar"] as BodyPart[] : category === "Tail" ? ["tail"] as BodyPart[] : REGIONS[sub] ?? [];
   const region = regions[regionIndex] ?? regions[0];
   const current = region && region in PAW_SIDE_REGION ? pawYarn(config, region as PawSide) : region ? partYarn(config, region) : undefined;
@@ -78,7 +78,7 @@ export function CustomizerPanel({ config, onChange }: { config: CharacterConfig;
       </section>
       {lengthGroup && <div className="mt-5 mb-3 space-y-3">
         <div className="flex items-center justify-between gap-3 text-sm font-medium">
-          <label id={`${lengthGroup}-length-label`}>{lengthGroup === "arms" ? "Arm length" : "Leg length"}</label>
+          <label id={`${lengthGroup}-length-label`}>{lengthGroup === "arms" ? "Arm length" : lengthGroup === "legs" ? "Leg length" : "Torso height"}</label>
           <span className="tabular-nums text-muted-foreground">{lengths[lengthGroup]}%</span>
         </div>
         <Slider aria-labelledby={`${lengthGroup}-length-label`} min={LIMB_LENGTH_MIN} max={LIMB_LENGTH_MAX} step={10}

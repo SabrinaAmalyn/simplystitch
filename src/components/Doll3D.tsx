@@ -8,7 +8,7 @@ import { limbSurfaceYarn, pawMarked, pawYarn } from "@/lib/paw-colors";
 import { HEAD, HEAD_ATTACHMENT_OFFSET, BLUSH_POSITION, createBlushGeometry } from "@/lib/doll-anatomy";
 import { partYarn, yarnById, type BlushShape, type BrowStyle, type EyeStyle, type BodyPart, type CharacterConfig, type MouthStyle, type NoseStyle } from "@/lib/character";
 import { limbScale } from "@/lib/limb-lengths";
-import { JOINED_BODY, joinedBodyShape } from "@/lib/joined-body";
+import { JOINED_BODY, joinedBodyShape, torsoDrop } from "@/lib/joined-body";
 import { PAW_BOUNDARY } from "@/lib/paw-colors";
 
 // Dev tooling injects `data-tsd-source` onto JSX. R3F reads hyphenated props as
@@ -380,7 +380,7 @@ export default function Doll3D({ config, ears, focus = null }: { config: Charact
         </>
       ) : (
         <>
-          <Bounds key={`${ears}-${limbScale(config, "arms")}-${limbScale(config, "legs")}`} fit clip margin={1.2}>
+          <Bounds key={`${ears}-${limbScale(config, "arms")}-${limbScale(config, "legs")}-${limbScale(config, "torso")}`} fit clip margin={1.2}>
             <Doll config={config} ears={ears} />
           </Bounds>
           <ContactShadows position={[0, footY, 0]} opacity={0.28} blur={3} scale={5} far={2} />
