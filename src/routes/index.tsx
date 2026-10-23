@@ -40,7 +40,8 @@ function Landing() {
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <Link to="/" className="font-logo text-2xl uppercase">SimplyStitch</Link>
           <nav className="flex items-center gap-2">
-            <Link to="/customize" className="btn-primary">Try Demo</Link>
+            <Link to="/my-patterns" className="btn-ghost">Log in</Link>
+            <Link to="/my-patterns" className="btn-primary">Sign up</Link>
           </nav>
         </div>
       </header>
