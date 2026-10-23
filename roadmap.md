@@ -95,3 +95,4 @@
 - [x] Move stitch-guide "?" button out of the tab overlay into its own small row
 - [x] Stitch guide is for edit mode: explain the pattern-writing format, show it while editing a section
 - [x] Writing guide: small tab right of category tabs on desktop; floating icon bottom-right of 3D viewer on mobile
+- [x] Landing header: on phones replace Log in / Sign up with a hamburger that opens both; verified open, close, navigate, desktop unchanged.
