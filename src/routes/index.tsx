@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Menu, X } from "lucide-react";
 import customiseArt from "@/assets/how-customise.png.asset.json";
 import generateArt from "@/assets/how-generate.png.asset.json";
 import reviewArt from "@/assets/how-review.png.asset.json";
@@ -34,16 +36,35 @@ const TICKER = [
 
 function Landing() {
   const items = [...TICKER, ...TICKER];
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <main className="min-h-screen bg-background">
-      <header className="border-b border-border px-4 py-4 md:px-8">
+      <header className="relative z-40 border-b border-border px-4 py-4 md:px-8">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <Link to="/" className="font-logo text-2xl uppercase">SimplyStitch</Link>
-          <nav className="flex items-center gap-2">
+          <nav className="hidden items-center gap-2 md:flex">
             <Link to="/my-patterns" className="btn-ghost">Log in</Link>
             <Link to="/my-patterns" className="btn-primary">Sign up</Link>
           </nav>
+          <button
+            type="button"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground md:hidden"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
+        {menuOpen && (
+          <>
+            <button aria-label="Close menu" className="fixed inset-0 z-30 bg-foreground/20 md:hidden" onClick={() => setMenuOpen(false)} />
+            <nav className="absolute inset-x-0 top-full z-40 flex flex-col gap-2 border-b border-border bg-card px-4 py-4 md:hidden">
+              <Link to="/my-patterns" className="btn-ghost w-full" onClick={() => setMenuOpen(false)}>Log in</Link>
+              <Link to="/my-patterns" className="btn-primary w-full" onClick={() => setMenuOpen(false)}>Sign up</Link>
+            </nav>
+          </>
+        )}
       </header>
 
       <section className="landing-sky flex min-h-[72vh] items-center px-4 py-16 md:px-8">
