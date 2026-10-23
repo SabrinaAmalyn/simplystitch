@@ -326,6 +326,9 @@
   .pattern-header-controls { flex-basis: auto; }
   .pattern-header-title { font-size: 16px; }
   .account-crumb { font-size: 13px; }
+  /* The phone top bar already carries the brand, so the trail drops to just the current page. */
+  .account-crumb-item:not(:last-child), .account-crumb-sep { display: none; }
+  .account-crumb-current { font-size: 14px; }
   /* Small screens: the workspace bar drops the logo and the profile picture. */
   .pattern-header-logo, .pattern-header-profile { display: none; }
   .pattern-name-field { width: auto; flex: 1; }
