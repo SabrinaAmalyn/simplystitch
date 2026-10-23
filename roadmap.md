@@ -1,6 +1,6 @@
 # Tasks
-- [ ] Keep the SimplyStitch logo at the top left of the signed-in area on desktop and phone.
-- [ ] Pin the account top bar (with the profile picture) so only the main content area scrolls; verified desktop and phone.
+- [x] Keep the SimplyStitch logo at the top left of the signed-in area on desktop and phone; verified at 1280x800 and 390x844.
+- [x] Pin the account top bar (with the profile picture) so only the main content area scrolls; verified on library, profile and saved pattern pages at desktop and phone.
 - [x] Add arm and leg length sliders with matching preview and crochet rounds; verified saving, reload and mobile layout.
 - [x] Move mobile customizer Reset to the viewer's bottom-left and add Go Back in the top-left; verified Reset and navigation.
 - [x] Refine pattern workspace presentation without changing instructions; verified desktop/mobile reading, progress persistence, repeated rounds, edit, save and download at 360, 390, 502, 1024 and 1280 widths.
