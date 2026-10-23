@@ -16,6 +16,7 @@ export function AccountLayout({ children, breadcrumb }: { children: ReactNode; b
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col overflow-hidden border-r border-border bg-card px-4 py-6 transition-transform md:sticky md:top-0 md:bottom-auto md:h-screen md:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
+        <Link to="/" onClick={() => setOpen(false)} className="font-logo block text-2xl uppercase leading-tight">SimplyStitch</Link>
         <nav className="mt-6 flex flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon }) => (
             <Link
@@ -42,6 +43,7 @@ export function AccountLayout({ children, breadcrumb }: { children: ReactNode; b
             <button aria-label="Open menu" className="rounded-lg border border-border p-2 md:hidden" onClick={() => setOpen(true)}>
               <Menu size={18} />
             </button>
+            <Link to="/" className="font-logo shrink-0 text-xl uppercase leading-tight md:hidden">SimplyStitch</Link>
             {breadcrumb}
           </div>
           <ProfileMenu />
