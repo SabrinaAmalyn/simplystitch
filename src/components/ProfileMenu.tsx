@@ -24,6 +24,9 @@ export function ProfileMenu() {
               <Link to="/admin/makers" className="flex items-center gap-2"><Users size={15} /> Makers</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
+              <Link to="/admin/showcase" className="flex items-center gap-2"><Sparkles size={15} /> Official patterns</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link to="/admin/payments" className="flex items-center gap-2"><CreditCard size={15} /> Payments</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
