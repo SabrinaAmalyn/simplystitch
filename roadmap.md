@@ -8,3 +8,5 @@
 - Maker profile uses actual signed-in account information instead of the Jane Doe demo template. (done)
 - Admins can see when each maker created their account. (done)
 - Makers get a "My Yarn" page listing their yarn stash with an Add yarn button at the top right. (done)
+- [x] Official team patterns with landing-page toggle, View/Customize actions and showcase stats
+- [ ] REMINDER: decide community gallery + duplicate detection (postponed by user)
