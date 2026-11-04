@@ -8,8 +8,8 @@ describe("hookForWeight", () => {
     expect(hookForWeight("2 Fine")).toBe("3.5 mm");
     expect(hookForWeight("3 Light")).toBe("4.5 mm");
     expect(hookForWeight("4 Medium")).toBe("5.5 mm");
-    expect(hookForWeight("5 Bulky")).toBe("6.5 mm");
-    expect(hookForWeight("6 Super Bulky")).toBe("8.0 mm");
+    expect(hookForWeight("5 Bulky")).toBe("8.0 mm");
+    expect(hookForWeight("6 Super Bulky")).toBe("10.0 mm");
   });
 
   it("stays within the offered hook sizes for jumbo yarn and unknown values", () => {
