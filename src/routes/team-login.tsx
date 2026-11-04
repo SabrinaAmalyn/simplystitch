@@ -81,28 +81,32 @@ function TeamLoginPage() {
     setBusy(false);
   }
 
+  const field = "w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-background px-4 py-10">
-      <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-sm">
-        <Link to="/" className="font-logo block text-center text-2xl uppercase">SimplyStitch</Link>
-        <p className="mt-2 text-center text-xs font-semibold uppercase tracking-wide text-primary">Team</p>
-        <h1 className="mt-3 text-center text-lg font-semibold">Team sign in</h1>
-        <p className="mt-1 text-center text-sm text-muted-foreground">For SimplyStitch admins and super admins.</p>
-        <div className="mt-5 flex flex-col gap-2">
-          <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("google")}>Continue with Google</button>
-          <button type="button" className="lovable-auth-button" onClick={() => social("lovable")}>Continue with Lovable</button>
+    <div className="flex min-h-dvh items-center justify-center bg-muted/40 px-4 py-10">
+      <div className="w-full max-w-sm">
+        <Link to="/" className="font-logo mb-6 block text-center text-2xl uppercase">SimplyStitch</Link>
+        <div className="rounded-2xl border border-border bg-card p-7 shadow-sm">
+          <h1 className="text-xl font-semibold">Team sign in</h1>
+          <form onSubmit={submit} className="mt-5 flex flex-col gap-4">
+            <label className="text-sm font-medium">Email
+              <input type="email" className={field + " mt-1.5"} value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </label>
+            <label className="text-sm font-medium">Password
+              <input type="password" minLength={6} className={field + " mt-1.5"} value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </label>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <button className="btn-primary mt-1 w-full justify-center" disabled={busy}>{busy ? "Please wait…" : "Sign in"}</button>
+          </form>
+          <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="h-px flex-1 bg-border" />or<span className="h-px flex-1 bg-border" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("google")}>Continue with Google</button>
+            <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("lovable")}>Continue with Lovable</button>
+          </div>
         </div>
-        <div className="my-4 text-center text-xs text-muted-foreground">or with email</div>
-        <form onSubmit={submit} className="flex flex-col gap-3">
-          <input type="email" className="rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="Team email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" minLength={6} className="rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button className="btn-primary w-full justify-center" disabled={busy}>{busy ? "Please wait…" : "Sign in"}</button>
-        </form>
-        {error && <p className="mt-3 text-center text-sm text-destructive">{error}</p>}
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          Not team?{" "}
-          <Link to="/auth" className="font-semibold text-primary">Regular sign in</Link>
-        </p>
+        <p className="mt-5 text-center text-xs"><Link to="/auth" className="text-muted-foreground hover:text-primary">Maker sign in</Link></p>
       </div>
     </div>
   );

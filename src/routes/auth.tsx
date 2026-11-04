@@ -70,41 +70,50 @@ function AuthPage() {
     navigate({ to: "/my-patterns" });
   }
 
+  const field = "w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-background px-4 py-10">
-      <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-sm">
-        <Link to="/" className="font-logo block text-center text-2xl uppercase">SimplyStitch</Link>
-        {sent ? (
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Check <strong className="text-foreground">{email}</strong> for a confirmation link, then come back and log in.
-          </p>
-        ) : (
-          <>
-            <h1 className="mt-4 text-center text-lg font-semibold">{mode === "signup" ? "Create your maker account" : "Welcome back"}</h1>
-            <div className="mt-5 flex flex-col gap-2">
-              <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("google")}>Continue with Google</button>
-              <button type="button" className="lovable-auth-button" onClick={() => social("lovable")}>Continue with Lovable</button>
-            </div>
-            <div className="my-4 text-center text-xs text-muted-foreground">or with email</div>
-            <form onSubmit={submit} className="flex flex-col gap-3">
-              {mode === "signup" && (
-                <input className="rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} required />
-              )}
-              <input type="email" className="rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              <input type="password" minLength={6} className="rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-              <button className="btn-primary w-full justify-center" disabled={busy}>{busy ? "Please wait…" : mode === "signup" ? "Sign up" : "Log in"}</button>
-            </form>
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-              {mode === "signup" ? "Already have an account? " : "New here? "}
-              <button type="button" className="font-semibold text-primary" onClick={() => setMode(mode === "signup" ? "login" : "signup")}>
-                {mode === "signup" ? "Log in" : "Sign up"}
-              </button>
+    <div className="flex min-h-dvh items-center justify-center bg-muted/40 px-4 py-10">
+      <div className="w-full max-w-sm">
+        <Link to="/" className="font-logo mb-6 block text-center text-2xl uppercase">SimplyStitch</Link>
+        <div className="rounded-2xl border border-border bg-card p-7 shadow-sm">
+          {sent ? (
+            <p className="text-center text-sm text-muted-foreground">
+              Check <strong className="text-foreground">{email}</strong> for a confirmation link.
             </p>
-          </>
-        )}
-        <p className="mt-4 text-center text-xs text-muted-foreground">
-          <Link to="/team-login" className="hover:text-primary">SimplyStitch team? Team sign in</Link>
+          ) : (
+            <>
+              <h1 className="text-xl font-semibold">{mode === "signup" ? "Create an account" : "Log in"}</h1>
+              <form onSubmit={submit} className="mt-5 flex flex-col gap-4">
+                {mode === "signup" && (
+                  <label className="text-sm font-medium">Name
+                    <input className={field + " mt-1.5"} value={name} onChange={(e) => setName(e.target.value)} required />
+                  </label>
+                )}
+                <label className="text-sm font-medium">Email
+                  <input type="email" className={field + " mt-1.5"} value={email} onChange={(e) => setEmail(e.target.value)} required />
+                </label>
+                <label className="text-sm font-medium">Password
+                  <input type="password" minLength={6} className={field + " mt-1.5"} value={password} onChange={(e) => setPassword(e.target.value)} required />
+                </label>
+                <button className="btn-primary mt-1 w-full justify-center" disabled={busy}>{busy ? "Please wait…" : mode === "signup" ? "Sign up" : "Log in"}</button>
+              </form>
+              <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="h-px flex-1 bg-border" />or<span className="h-px flex-1 bg-border" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("google")}>Continue with Google</button>
+                <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("lovable")}>Continue with Lovable</button>
+              </div>
+            </>
+          )}
+        </div>
+        <p className="mt-5 text-center text-sm text-muted-foreground">
+          {mode === "signup" ? "Already have an account? " : "Don't have an account? "}
+          <button type="button" className="font-semibold text-primary" onClick={() => { setSent(false); setMode(mode === "signup" ? "login" : "signup"); }}>
+            {mode === "signup" ? "Log in" : "Sign up"}
+          </button>
         </p>
+        <p className="mt-2 text-center text-xs"><Link to="/team-login" className="text-muted-foreground hover:text-primary">Team sign in</Link></p>
       </div>
     </div>
   );
