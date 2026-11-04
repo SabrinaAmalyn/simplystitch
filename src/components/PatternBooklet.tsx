@@ -8,6 +8,20 @@ import { parsePatternText, type ReaderItem, type ReaderSection } from "@/lib/pat
 import { YARNS } from "@/lib/yarn-palette";
 import { limbScale } from "@/lib/limb-lengths";
 import type { CharacterConfig } from "@/lib/character";
+import type { PartFocus } from "@/components/CharacterPreview";
+
+type Shot = "doll" | Exclude<PartFocus, null>;
+const SHOTS: Shot[] = ["doll", "head", "body", "arm", "ears", "tail"];
+/** Which 3D close-up shows a pattern piece. */
+const focusFor = (title: string): Exclude<PartFocus, null> | null => {
+  const t = title.toLowerCase();
+  if (t.includes("ear")) return "ears";
+  if (t.includes("tail")) return "tail";
+  if (t.includes("arm")) return "arm";
+  if (t.includes("leg") || t.includes("body")) return "body";
+  if (t.includes("head") || t.includes("blush")) return "head";
+  return null;
+};
 
 const ABBREVIATIONS: [string, string][] = [
   ["R", "round"], ["MR", "magic ring"], ["ch", "chain"], ["st(s)", "stitch(es)"],
@@ -64,7 +78,8 @@ function Page({ n, children, className = "" }: { n?: number; children: React.Rea
   );
 }
 
-function Booklet({ name, text, config, image }: { name: string; text: string; config: CharacterConfig; image: string | null }) {
+function Booklet({ name, text, config, shots }: { name: string; text: string; config: CharacterConfig; shots: Partial<Record<Shot, string>> }) {
+  const image = shots.doll ?? null;
   const doc = useMemo(() => parsePatternText(text), [text]);
   const find = (re: RegExp) => doc.sections.find((s) => re.test(s.title));
   const materials = find(/^materials$/i);
@@ -108,7 +123,7 @@ function Booklet({ name, text, config, image }: { name: string; text: string; co
               {s.yarn && <p className="booklet-yarn">({s.yarn})</p>}
               <Items items={s.items} />
             </div>
-            <PartImage title={s.title} yarn={s.yarn} />
+            {(() => { const f = focusFor(s.title); const src = f ? shots[f] : undefined; return src ? <img src={src} alt={`${s.title} in 3D`} className="booklet-part-img booklet-part-3d" /> : <PartImage title={s.title} yarn={s.yarn} />; })()}
           </div>
         </Page>
       ))}
@@ -134,7 +149,8 @@ function Booklet({ name, text, config, image }: { name: string; text: string; co
 
 /** Print preview of the pattern as a styled booklet; "Print / Save as PDF" uses the browser's print engine. */
 export function PatternBookletDialog({ open, onOpenChange, name, text, config }: { open: boolean; onOpenChange: (v: boolean) => void; name: string; text: string; config: CharacterConfig }) {
-  const [image, setImage] = useState<string | null>(null);
+  const [shots, setShots] = useState<Partial<Record<Shot, string>>>({});
+  const next = SHOTS.find((k) => !shots[k]);
   const print = () => {
     document.body.classList.add("print-booklet-mode");
     const done = () => { document.body.classList.remove("print-booklet-mode"); window.removeEventListener("afterprint", done); };
@@ -148,15 +164,15 @@ export function PatternBookletDialog({ open, onOpenChange, name, text, config }:
           <DialogTitle>Print preview</DialogTitle>
           <DialogDescription>Choose "Save as PDF" in the print window to keep a copy.</DialogDescription>
         </DialogHeader>
-        {open && !image && (
-          <div className="booklet-capture" aria-hidden="true"><CharacterPreview config={config} onCapture={setImage} /></div>
+        {open && next && (
+          <div className="booklet-capture" aria-hidden="true"><CharacterPreview key={next} config={config} focus={next === "doll" ? null : next} onCapture={(url) => setShots((v) => ({ ...v, [next]: url }))} /></div>
         )}
-        <div className="booklet-scroll"><Booklet name={name} text={text} config={config} image={image} /></div>
+        <div className="booklet-scroll"><Booklet name={name} text={text} config={config} shots={shots} /></div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Close</Button>
-          <Button onClick={print} disabled={!image}><Printer /> Print / Save as PDF</Button>
+          <Button onClick={print} disabled={!!next}><Printer /> Print / Save as PDF</Button>
         </DialogFooter>
-        {open && createPortal(<div className="booklet-print-root"><Booklet name={name} text={text} config={config} image={image} /></div>, document.body)}
+        {open && createPortal(<div className="booklet-print-root"><Booklet name={name} text={text} config={config} shots={shots} /></div>, document.body)}
       </DialogContent>
     </Dialog>
   );
