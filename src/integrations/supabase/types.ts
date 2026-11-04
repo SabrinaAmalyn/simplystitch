@@ -71,6 +71,54 @@ export type Database = {
         }
         Relationships: []
       }
+      official_patterns: {
+        Row: {
+          click_count: number
+          config: Json
+          created_at: string
+          created_by: string
+          customize_count: number
+          description: string
+          download_count: number
+          id: string
+          is_featured: boolean
+          name: string
+          text: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          click_count?: number
+          config: Json
+          created_at?: string
+          created_by: string
+          customize_count?: number
+          description?: string
+          download_count?: number
+          id?: string
+          is_featured?: boolean
+          name: string
+          text?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          click_count?: number
+          config?: Json
+          created_at?: string
+          created_by?: string
+          customize_count?: number
+          description?: string
+          download_count?: number
+          id?: string
+          is_featured?: boolean
+          name?: string
+          text?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
       patterns: {
         Row: {
           config: Json
@@ -166,6 +214,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      track_official_pattern: {
+        Args: { _id: string; _kind: string }
+        Returns: undefined
       }
     }
     Enums: {
