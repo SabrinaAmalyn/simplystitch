@@ -76,3 +76,7 @@ export function yarnWeight(value: string | null | undefined): YarnWeight {
 export const yarnWeightLabel = (weight: YarnWeight) => `${weight.name} (CYC ${weight.category}, ${weight.alsoKnownAs})`;
 
 export const YARN_WEIGHT_OPTIONS = YARN_WEIGHTS.map((weight) => weight.id);
+
+/** Every SimplyStitch pattern is written for CYC category 3 (DK / light worsted). */
+export const PATTERN_WEIGHT = yarnWeight(YARN_WEIGHT_DEFAULT);
+export const PATTERN_WEIGHT_LABEL = yarnWeightLabel(PATTERN_WEIGHT);
