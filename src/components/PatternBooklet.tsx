@@ -114,19 +114,25 @@ function Booklet({ name, text, config, shots }: { name: string; text: string; co
         <h2>Abbreviations</h2>
         <dl className="booklet-abbr">{ABBREVIATIONS.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>= {v}</dd></div>)}</dl>
       </Page>
-      {pieces.map((s: ReaderSection, i) => (
-        <Page n={++n} key={s.id}>
-          {i === 0 && <p className="booklet-kicker">{title} pattern</p>}
-          <div className="booklet-piece">
-            <div>
-              <h2>{s.title}</h2>
-              {s.yarn && <p className="booklet-yarn">({s.yarn})</p>}
-              <Items items={s.items} />
+      {pieces.map((s: ReaderSection, i) => {
+        // Big pieces (head, body) get a hero-sized image at half the page width.
+        const large = /head|body/i.test(s.title);
+        const f = focusFor(s.title);
+        const src = f ? shots[f] : undefined;
+        return (
+          <Page n={++n} key={s.id}>
+            {i === 0 && <p className="booklet-kicker">{title} pattern</p>}
+            <div className={`booklet-piece${large ? " booklet-piece-large" : ""}`}>
+              <div>
+                <h2>{s.title}</h2>
+                {s.yarn && <p className="booklet-yarn">({s.yarn})</p>}
+                <Items items={s.items} />
+              </div>
+              {src ? <img src={src} alt={`${s.title} in 3D`} className="booklet-part-img booklet-part-3d" /> : <PartImage title={s.title} yarn={s.yarn} />}
             </div>
-            {(() => { const f = focusFor(s.title); const src = f ? shots[f] : undefined; return src ? <img src={src} alt={`${s.title} in 3D`} className="booklet-part-img booklet-part-3d" /> : <PartImage title={s.title} yarn={s.yarn} />; })()}
-          </div>
-        </Page>
-      ))}
+          </Page>
+        );
+      })}
       {assembly.length > 0 && (
         <Page n={++n}>
           <h2>Assembly</h2>
