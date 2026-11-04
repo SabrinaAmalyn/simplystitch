@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Move printed booklet page-number circles inward so they do not touch the border; verify PDF output.
 - [ ] Enlarge and tighten ear/leg pairs and show blush as separate 3D discs in reader and booklet; verify both.
 - [x] Show separate 3D legs in the pattern preview and booklet; verified both views, retained joined body, generated PDF, and passed regression tests.
 - [x] Keep the SimplyStitch logo at the top left of the signed-in area on desktop and phone; verified at 1280x800 and 390x844.
