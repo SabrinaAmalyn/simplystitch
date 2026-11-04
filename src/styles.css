@@ -455,3 +455,46 @@
   .doc-progress > div:first-child { flex-direction: column; align-items: flex-start; }
   .doc-progress > div:first-child > span { white-space: nowrap; }
 }
+
+/* ---- Pattern booklet (print preview + PDF) ---- */
+.booklet-dialog { max-height: 92dvh; display: flex; flex-direction: column; }
+.booklet-scroll { flex: 1; min-height: 0; overflow-y: auto; background: var(--muted); border-radius: 12px; padding: 16px; }
+.booklet-capture { position: fixed; left: -10000px; top: 0; width: 600px; height: 700px; pointer-events: none; }
+.booklet-print-root { display: none; }
+.booklet { display: flex; flex-direction: column; align-items: center; gap: 16px; font-family: "Poppins", system-ui, sans-serif; color: var(--foreground); }
+.booklet-page { position: relative; width: 100%; max-width: 560px; aspect-ratio: 210 / 297; background: var(--primary); padding: 14px; border-radius: 6px; overflow: hidden; }
+.booklet-card { height: 100%; background: var(--background); border-radius: 22px; padding: 30px 32px; overflow: hidden; font-size: 12px; line-height: 1.6; }
+.booklet-num { position: absolute; right: 26px; bottom: 26px; width: 32px; height: 32px; border-radius: 999px; background: var(--primary); color: var(--primary-foreground); display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+.booklet h2 { font-size: 15px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--primary); margin: 14px 0 2px; }
+.booklet h2:first-child { margin-top: 0; }
+.booklet h3 { font-weight: 600; margin: 10px 0 2px; }
+.booklet ul { list-style: none; padding: 0; margin: 0; }
+.booklet ul li::before { content: "– "; }
+.booklet-rounds p { margin: 0; }
+.booklet-count { color: var(--primary); font-weight: 600; }
+.booklet-note { font-style: italic; color: var(--muted-foreground); }
+.booklet-yarn { font-style: italic; color: var(--muted-foreground); margin: 0 0 4px; }
+.booklet-kicker { font-size: 17px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 18px; }
+.booklet-piece { display: grid; grid-template-columns: 1fr 120px; gap: 16px; align-items: start; }
+.booklet-part-img { width: 120px; height: 120px; }
+.booklet-abbr { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; margin: 0; }
+.booklet-abbr div { display: flex; gap: 4px; }
+.booklet-abbr dt { font-weight: 600; }
+.booklet-cover .booklet-card, .booklet-end .booklet-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.booklet-title { font-size: 44px; font-weight: 800; line-height: 1.05; text-transform: uppercase; letter-spacing: .04em; color: var(--primary); margin-top: 36px; }
+.booklet-by { font-size: 13px; letter-spacing: .25em; text-transform: uppercase; color: var(--primary); margin-top: 10px; }
+.booklet-hero { flex: 1; min-height: 0; width: 100%; object-fit: contain; margin: 12px 0; }
+.booklet-end .booklet-hero { flex: 0 0 auto; max-height: 45%; }
+.booklet-hero-empty { display: grid; place-items: center; color: var(--muted-foreground); }
+.booklet-mark { font-weight: 800; color: var(--primary); letter-spacing: .02em; border-bottom: 2px solid var(--border); padding-bottom: 2px; margin-top: auto; }
+.booklet-end p { margin: 6px 0; }
+
+@media print {
+  @page { size: A4; margin: 0; }
+  body.print-booklet-mode > *:not(.booklet-print-root) { display: none !important; }
+  body.print-booklet-mode .booklet-print-root { display: block; }
+  body.print-booklet-mode { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .booklet-print-root .booklet { gap: 0; }
+  .booklet-print-root .booklet-page { width: 210mm; height: 297mm; max-width: none; aspect-ratio: auto; border-radius: 0; padding: 8mm; page-break-after: always; break-after: page; }
+  .booklet-print-root .booklet-card { padding: 16mm 16mm; font-size: 12.5pt; }
+}
