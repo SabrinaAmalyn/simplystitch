@@ -16,6 +16,7 @@ import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as MyPatternsRouteImport } from './routes/my-patterns'
 import { Route as PatternRouteImport } from './routes/pattern'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as TeamLoginRouteImport } from './routes/team-login'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as MyPatternsIndexRouteImport } from './routes/my-patterns.index'
 import { Route as MyPatternsPatternIdRouteImport } from './routes/my-patterns.$patternId'
@@ -54,6 +55,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeamLoginRoute = TeamLoginRouteImport.update({
+  id: '/team-login',
+  path: '/team-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/my-patterns': typeof MyPatternsRouteWithChildren
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
+  '/team-login': typeof TeamLoginRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/customize': typeof CustomizeRoute
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
+  '/team-login': typeof TeamLoginRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns': typeof MyPatternsIndexRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/my-patterns': typeof MyPatternsRouteWithChildren
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
+  '/team-login': typeof TeamLoginRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/my-patterns'
     | '/pattern'
     | '/profile'
+    | '/team-login'
     | '/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns/'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
     | '/customize'
     | '/pattern'
     | '/profile'
+    | '/team-login'
     | '/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/my-patterns'
     | '/pattern'
     | '/profile'
+    | '/team-login'
     | '/_authenticated/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns/'
@@ -148,6 +160,7 @@ export interface RootRouteChildren {
   MyPatternsRoute: typeof MyPatternsRouteWithChildren
   PatternRoute: typeof PatternRoute
   ProfileRoute: typeof ProfileRoute
+  TeamLoginRoute: typeof TeamLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -199,6 +212,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team-login': {
+      id: '/team-login'
+      path: '/team-login'
+      fullPath: '/team-login'
+      preLoaderRoute: typeof TeamLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -258,6 +278,7 @@ const rootRouteChildren: RootRouteChildren = {
   MyPatternsRoute: MyPatternsRouteWithChildren,
   PatternRoute: PatternRoute,
   ProfileRoute: ProfileRoute,
+  TeamLoginRoute: TeamLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
