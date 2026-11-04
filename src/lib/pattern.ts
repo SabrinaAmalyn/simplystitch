@@ -2,6 +2,7 @@
 import { CROCHET_PARTS, type CharacterConfig, partYarn, yarnById } from "./character";
 import { patternBlockers } from "./character-layers";
 import { generateDollPattern } from "./doll-pattern";
+import { PATTERN_WEIGHT_LABEL } from "./yarn-weights";
 import { limbLengths, scaledLimbRounds } from "./limb-lengths";
 
 export type Round = { label: string; text: string; count?: number };
@@ -187,7 +188,7 @@ export function generatePattern(c: CharacterConfig): Pattern {
   }
 
   const materials = [
-    "DK / light worsted cotton yarn — ~60 g total for the doll (estimate)",
+    `${PATTERN_WEIGHT_LABEL} cotton yarn — ~60 g total for the doll (estimate)`,
     ...Array.from(partMaterials, ([name, parts]) => `${name} (${parts.join(", ")})`),
     ...(c.ears !== "none" ? [`${accent} (inner ears, ~15 g)`] : []),
     ...(c.face.cheeks ? ["Blush Pink (cheeks, small amount)"] : []),

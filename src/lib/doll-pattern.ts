@@ -2,6 +2,7 @@
 // Every stitch count here comes from the designer's supplied patterns; never invent new rules.
 import { type CharacterConfig, partYarn } from "./character";
 import { pawMarked, pawYarn, type PawSide } from "./paw-colors";
+import { PATTERN_WEIGHT_LABEL } from "./yarn-weights";
 import type { Pattern, Round, Section } from "./pattern";
 import { BASE_LIMB_ROUNDS, limbLengths, scaledLimbRounds } from "./limb-lengths";
 import { createLayeredCharacter } from "./character-layers";
@@ -156,7 +157,7 @@ export function generateDollPattern(c: CharacterConfig): Pattern {
   return {
     title: `SimplyStitch ${ear ? ear.name.replace(" ears", "") : "Doll"}`,
     materials: [
-      `DK / light worsted yarn in ${Array.from(yarns).join(", ")}`,
+      `${PATTERN_WEIGHT_LABEL} yarn in ${Array.from(yarns).join(", ")}`,
       `${eyes} for the eyes${brow !== "none" ? ` and ${y("brows")} for embroidery` : ""}`,
       "Crochet hook to suit your yarn, fiberfill, stitch marker, tapestry needle",
     ],

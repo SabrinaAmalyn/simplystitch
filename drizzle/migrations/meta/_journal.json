@@ -15,6 +15,13 @@
       "when": 1793775975673,
       "tag": "0001_maker_patterns_preferences",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793779200000,
+      "tag": "0002_yarn_weight_cyc",
+      "breakpoints": true
     }
   ]
 }

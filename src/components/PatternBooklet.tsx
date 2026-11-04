@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { parsePatternText, type ReaderItem, type ReaderSection } from "@/lib/pattern-reader";
 import { YARNS } from "@/lib/yarn-palette";
+import { PATTERN_WEIGHT_LABEL } from "@/lib/yarn-weights";
 import { limbScale } from "@/lib/limb-lengths";
 import type { CharacterConfig } from "@/lib/character";
 import type { PartFocus } from "@/components/CharacterPreview";
@@ -103,7 +104,7 @@ function Booklet({ name, text, config, shots }: { name: string; text: string; co
           <li>Fiberfill stuffing</li>
         </ul>
         <h2>Yarn &amp; hook size</h2>
-        <p>DK / light worsted cotton yarn with a 3.0 mm crochet hook. Your finished doll will be approximately {cm} cm ({(cm / 2.54).toFixed(1)}") tall.</p>
+        <p>{PATTERN_WEIGHT_LABEL} cotton yarn with a 3.0 mm crochet hook. Your finished doll will be approximately {cm} cm ({(cm / 2.54).toFixed(1)}") tall.</p>
         <h2>Abbreviations</h2>
         <dl className="booklet-abbr">{ABBREVIATIONS.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>= {v}</dd></div>)}</dl>
       </Page>
