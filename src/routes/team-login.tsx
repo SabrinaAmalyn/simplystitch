@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { isTeamMember, type AppRole } from "@/lib/roles";
-import "@lovable.dev/cloud-auth-js/styles.css";
 
 const TEAM_FLAG = "simplystitch-team-signin";
 const NOT_TEAM = "This account isn't on the SimplyStitch team. Makers sign in on the regular page.";
