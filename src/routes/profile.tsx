@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AccountLayout } from "@/components/AccountLayout";
 import { useStore } from "@/lib/store";
-import { yarnById } from "@/lib/yarn-palette";
+import { MakerPreferences } from "@/components/MakerPreferences";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -25,16 +25,6 @@ const PROFILE = {
   bio: "Weekend amigurumi maker. Currently working through a very long list of foxes.",
   plan: "Maker Pro",
 };
-
-const PREFERENCES = [
-  { label: "Written terms", value: "US" },
-  { label: "Yarn weight", value: "DK cotton" },
-  { label: "Hook size", value: "3.0 mm" },
-  { label: "Email digest", value: "Monthly" },
-  { label: "Public profile", value: "Off" },
-];
-
-const FAVOURITE_YARNS = ["peach", "blush", "sage", "oat"].map(yarnById);
 
 const PROJECT = { name: "Tabby cat", stage: "Body — round 12 of 15", percent: 80 };
 
@@ -82,29 +72,10 @@ function ProfilePage() {
         <div className="grid min-w-0 gap-6 md:grid-cols-2">
 
 
-          <section className="panel">
-            <h2 className="mb-4 font-display text-xl font-semibold">Stitching preferences</h2>
-            <dl className="flex flex-col gap-3">
-              {PREFERENCES.map((p) => (
-                <div key={p.label} className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-3 last:border-0 last:pb-0">
-                  <dt className="text-sm text-muted-foreground">{p.label}</dt>
-                  <dd className="text-sm font-semibold">{p.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
+          <MakerPreferences />
 
           <section className="panel">
-            <h2 className="mb-4 font-display text-xl font-semibold">Favourite yarns</h2>
-            <ul className="flex flex-wrap gap-2">
-              {FAVOURITE_YARNS.map((y) => (
-                <li key={y.id} className="flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-sm">
-                  <span aria-hidden className="h-4 w-4 rounded-full border border-border" style={{ background: y.hex }} />
-                  {y.name}
-                </li>
-              ))}
-            </ul>
-            <h2 className="mt-6 mb-3 font-display text-xl font-semibold">Current project</h2>
+            <h2 className="mb-3 font-display text-xl font-semibold">Current project</h2>
             <p className="text-sm font-semibold">{PROJECT.name}</p>
             <p className="text-xs text-muted-foreground">{PROJECT.stage}</p>
             <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
