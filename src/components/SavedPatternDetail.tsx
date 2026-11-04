@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Download, FileText, MoreVertical, Palette, Pencil } from "lucide-react";
+import { FileText, MoreVertical, Palette, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -63,7 +63,6 @@ export function SavedPatternDetail({ p }: { p: SavedPattern }) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={() => setRenaming(true)}><Pencil /> Rename</DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => { loadPatternIntoCustomizer(p.id); navigate({ to: "/customize" }); }}><Palette /> Customize</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => downloadPattern(p)}><Download /> Download .txt</DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setPrinting(true)}><FileText /> Export PDF</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
