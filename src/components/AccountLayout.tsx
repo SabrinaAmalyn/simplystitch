@@ -4,6 +4,7 @@ import { BookOpen, LogIn, LogOut, Menu, ShieldCheck, User } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { roleLabel, useAuth } from "@/hooks/useAuth";
+import { ForcePasswordChange } from "@/components/ForcePasswordChange";
 
 const NAV = [
   { to: "/my-patterns", label: "My Patterns", icon: BookOpen },
@@ -21,6 +22,7 @@ export function AccountLayout({ children, breadcrumb }: { children: ReactNode; b
   }
   return (
     <div className="flex h-dvh w-full overflow-hidden bg-background">
+      <ForcePasswordChange />
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col overflow-hidden border-r border-border bg-card px-4 py-6 transition-transform md:sticky md:top-0 md:bottom-auto md:h-full md:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}
       >

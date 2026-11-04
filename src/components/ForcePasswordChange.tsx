@@ -1,7 +1,7 @@
 // ============= Full file contents =============
 
 // Shown over the signed-in shell while the account still uses a temporary password.
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,22 +9,21 @@ import { passwordChangeError } from "@/lib/team-admin";
 
 export function ForcePasswordChange() {
   const { user, loading } = useAuth();
-  const [mustChange, setMustChange] = useState<boolean | null>(null);
+  const [mustChange, setMustChange] = useState(false);
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
 
-  // Look up the flag once the session is known.
-  if (!loading && user && mustChange === null) {
-    setMustChange(true); // optimistic lock while the row loads, then corrected below
+  useEffect(() => {
+    if (loading || !user) return;
     void supabase
       .from("profiles")
       .select("must_change_password")
       .eq("id", user.id)
       .maybeSingle()
       .then(({ data }) => setMustChange(Boolean(data?.must_change_password)));
-  }
+  }, [loading, user]);
 
   if (!user || !mustChange) return null;
 
@@ -33,9 +32,10 @@ export function ForcePasswordChange() {
     const invalid = passwordChangeError(current, next, confirm);
     if (invalid) { toast.error(invalid); return; }
     setBusy(true);
+    const uid = user!.id;
     const { error } = await supabase.auth.updateUser({ password: next, current_password: current });
     if (error) { setBusy(false); toast.error(error.message); return; }
-    await supabase.from("profiles").update({ must_change_password: false }).eq("id", user!.id);
+    await supabase.from("profiles").update({ must_change_password: false }).eq("id", uid);
     toast.success("Password updated");
     setMustChange(false);
   }
