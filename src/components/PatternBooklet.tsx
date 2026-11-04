@@ -45,10 +45,10 @@ function Items({ items }: { items: ReaderItem[] }) {
   return (
     <div className="booklet-rounds">
       {items.map((it, i) => {
-        if (it.kind === "row") return <p key={i}><b>{/^\d/.test(it.row.badge) ? `R${it.row.badge}` : it.row.badge}:</b> {it.row.text}{it.row.count != null && <span className="booklet-count"> [{it.row.count}]</span>}</p>;
+        if (it.kind === "row") return <p key={i}><b>{it.row.key.includes(":step") ? `${it.row.badge}.` : /^\d/.test(it.row.badge) ? `R${it.row.badge}:` : `${it.row.badge}:`}</b> {it.row.text}{it.row.count != null && <span className="booklet-count"> [{it.row.count}]</span>}</p>;
         if (it.kind === "group") return <p key={i}><b>R{it.badge}:</b> {it.text}{it.count != null && <span className="booklet-count"> [{it.count}]</span>}</p>;
         if (it.kind === "note") return <p key={i} className="booklet-note">{it.text}</p>;
-        if (it.kind === "list") return <ul key={i}>{it.items.map((x, j) => <li key={j}>{x}</li>)}</ul>;
+        if (it.kind === "list") return <ul key={i}>{it.items.map((x, j) => <li key={j}>{x.replace(/^\d+\.\s+/, "")}</li>)}</ul>;
         return <p key={i}>{it.text}</p>;
       })}
     </div>
