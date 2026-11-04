@@ -41,6 +41,36 @@ export type Database = {
         }
         Relationships: []
       }
+      maker_yarns: {
+        Row: {
+          brand: string
+          color_id: string
+          created_at: string
+          hook_size: string
+          id: string
+          user_id: string
+          yarn_weight: string
+        }
+        Insert: {
+          brand?: string
+          color_id: string
+          created_at?: string
+          hook_size?: string
+          id?: string
+          user_id: string
+          yarn_weight?: string
+        }
+        Update: {
+          brand?: string
+          color_id?: string
+          created_at?: string
+          hook_size?: string
+          id?: string
+          user_id?: string
+          yarn_weight?: string
+        }
+        Relationships: []
+      }
       patterns: {
         Row: {
           config: Json
