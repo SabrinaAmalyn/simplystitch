@@ -199,6 +199,14 @@ export function hydrateStore() {
   listeners.forEach((l) => l());
 }
 
+export function getStoreState(): State {
+  return state;
+}
+export function subscribeStore(l: () => void) {
+  listeners.add(l);
+  return () => { listeners.delete(l); };
+}
+
 export function useStore<T>(sel: (s: State) => T): T {
   return useSyncExternalStore(
     (l) => {
