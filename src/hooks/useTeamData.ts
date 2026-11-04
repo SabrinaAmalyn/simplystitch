@@ -14,7 +14,7 @@ export function useTeamData() {
 
   const load = useCallback(async () => {
     const [{ data: profiles }, { data: roleRows }, { data: patternRows }, { data: prefs }, { data: yarns }] = await Promise.all([
-      supabase.from("profiles").select("id, display_name, email, must_change_password").order("created_at"),
+      supabase.from("profiles").select("id, display_name, email, must_change_password, created_at").order("created_at"),
       supabase.from("user_roles").select("user_id, role") as PromiseLike<{ data: RoleRow[] | null }>,
       supabase.from("patterns").select("user_id, config") as PromiseLike<{ data: PatternRow[] | null }>,
       supabase.from("maker_preferences").select("user_id, written_terms, yarn_weight, hook_size") as PromiseLike<{ data: PrefsRow[] | null }>,

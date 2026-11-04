@@ -2,7 +2,7 @@
 
 import { colourUsage } from "@/lib/maker-insights";
 
-export type ProfileRow = { id: string; display_name: string | null; email: string | null };
+export type ProfileRow = { id: string; display_name: string | null; email: string | null; created_at: string | null };
 export type RoleRow = { user_id: string; role: string };
 export type PatternRow = { user_id: string; config: { colors: Record<string, string | undefined> } };
 export type PrefsRow = { user_id: string; written_terms: string; yarn_weight: string; hook_size: string };
@@ -12,6 +12,7 @@ export type MemberStats = {
   id: string;
   displayName: string | null;
   email: string | null;
+  createdAt: string | null;
   roles: string[];
   patternCount: number;
   topColours: Array<[string, number]>;
@@ -39,6 +40,7 @@ export function memberStats(rows: {
       id: p.id,
       displayName: p.display_name,
       email: p.email,
+      createdAt: p.created_at ?? null,
       roles: rows.roleRows.filter((r) => r.user_id === p.id).map((r) => r.role),
       patternCount: patterns.length,
       topColours: sorted(colourUsage(patterns)).slice(0, 5),
