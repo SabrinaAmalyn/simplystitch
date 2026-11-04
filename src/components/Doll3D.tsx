@@ -20,7 +20,8 @@ if (!Object.prototype.hasOwnProperty.call(Object.prototype, "data-tsd-source")) 
 
 export type EarType = "human" | "dog" | "cat" | "bear" | "bunny" | null;
 /** A single crochet piece to show floating on its own; null shows the whole doll. */
-export type PartFocus = "head" | "body" | "arm" | "ears" | "tail" | null;
+export type { PartFocus } from "@/lib/part-focus";
+import type { PartFocus } from "@/lib/part-focus";
 
 /** Soft vinyl-toy material with a velvety sheen glow at the edges. */
 function Vinyl({ color, sheenColor = "#ffe4d2" }: { color: string; sheenColor?: string }) {
@@ -321,6 +322,21 @@ function Ear({ type, side, color }: { type: Ears; side: 1 | -1; color: string })
   }
 }
 
+/** Unjoined crochet legs, using the assembled doll's dimensions and yarn regions. */
+function SeparateLegs({ config }: { config: CharacterConfig }) {
+  const leg = joinedBodyShape(limbScale(config, "legs")).leg;
+  const centerY = (leg.bottom + leg.radius + leg.top) / 2;
+  const boundary = PAW_BOUNDARY.feet + leg.bottom - JOINED_BODY.leg.bottom - centerY;
+  return <group>{([1, -1] as const).map((side) => {
+    const part = side === 1 ? "leftLeg" : "rightLeg";
+    const paw = side === 1 ? "leftFoot" : "rightFoot";
+    return <mesh key={side} position={[side * (leg.radius + 0.15), centerY, 0]} castShadow>
+      <capsuleGeometry args={[leg.radius, leg.top - leg.bottom - leg.radius, 16, 32]} />
+      <PawVinyl color={limbSurfaceYarn(config, part, "feet").hex} pawColor={pawYarn(config, paw).hex} region="feet" enabled={pawMarked(config, paw)} boundary={boundary} />
+    </mesh>;
+  })}</group>;
+}
+
 function Doll({ config, ears, focus = null, armsDown = false }: { config: CharacterConfig; ears: EarType; focus?: PartFocus; armsDown?: boolean }) {
   const c = (p: BodyPart) => partYarn(config, p).hex;
   const arms = limbScale(config, "arms");
@@ -339,6 +355,7 @@ function Doll({ config, ears, focus = null, armsDown = false }: { config: Charac
   );
   if (focus === "body") return <JoinedBody lengthScale={legs} torsoScale={torsoH} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />;
   if (focus === "arm") return <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />;
+  if (focus === "legs") return <SeparateLegs config={config} />;
   if (focus === "tail") return <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />;
   // The two ears are crocheted individually — spread them apart in the close-up
   // so they read as two separate pieces rather than one connected shape.

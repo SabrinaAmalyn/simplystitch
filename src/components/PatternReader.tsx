@@ -1,6 +1,8 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { Check, ChevronDown, CircleHelp, Info, Pencil } from "lucide-react";
-import { CharacterPreview, type PartFocus } from "@/components/CharacterPreview";
+import { CharacterPreview } from "@/components/CharacterPreview";
+import { focusForSection } from "@/lib/part-focus";
+export { focusForSection } from "@/lib/part-focus";
 import type { CharacterConfig } from "@/lib/character";
 import { parsePatternText, sectionBody, sectionRowKeys, withSectionBody, type ReaderItem, type ReaderRow, type ReaderSection } from "@/lib/pattern-reader";
 import { resetProgress, toggleRows, useStore } from "@/lib/store";
@@ -19,17 +21,6 @@ type Props = {
   /** Pattern-name field placed in the preview's top-left corner. */
   previewName?: ReactNode;
 };
-
-/** Which single crochet piece a pattern section makes. */
-export function focusForSection(title: string | undefined): PartFocus {
-  const t = (title ?? "").toLowerCase();
-  if (/ear/.test(t)) return "ears";
-  if (/arm|hand/.test(t)) return "arm";
-  if (/tail/.test(t)) return "tail";
-  if (/leg|body|torso/.test(t)) return "body";
-  if (/head|face|blush|cheek|eye|nose|mouth|whisker/.test(t)) return "head";
-  return null;
-}
 
 export function PatternReader({ text, config, progressKey, name, header, onTextChange, previewAction, previewBack, previewName }: Props) {
   const doc = useMemo(() => parsePatternText(text), [text]);

@@ -27,3 +27,4 @@
 - Map optional feature thumbnail selections to existing visibility fields in the workspace; presentation-only changes must retain saved shapes and yarns without a configuration migration.
 - The landing page owns "/" and the character editor owns "/customize"; account pages keep their own routes. In-app links to the editor must target "/customize", so marketing copy and the working tool never compete for the same address.
 - Pattern reader presentation is shared by draft and saved views through a reusable workspace header and reader-scoped styles; keep parsing, generated text and progress storage independent so visual changes cannot alter crochet content.
+- Reader and booklet share part-focus selection; leg close-ups render separated capsules from shared leg dimensions and per-side yarns while the assembled doll retains its joined lower-body surface.
