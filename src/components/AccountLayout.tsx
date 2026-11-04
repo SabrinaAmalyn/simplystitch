@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { BarChart3, BookOpen, CreditCard, Palette, Users, LogIn, LogOut, Menu, ShieldCheck, User } from "lucide-react";
+import { BarChart3, BookOpen, CreditCard, Palette, Users, LogIn, LogOut, Menu, ShieldCheck, Sparkles, User } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { roleLabel, useAuth } from "@/hooks/useAuth";
@@ -15,6 +15,7 @@ const NAV = [
 const TEAM_NAV = [
   { to: "/admin", label: "Analytics", icon: BarChart3 },
   { to: "/admin/makers", label: "Makers", icon: Users },
+  { to: "/admin/showcase", label: "Official patterns", icon: Sparkles },
   { to: "/admin/payments", label: "Payments", icon: CreditCard },
   { to: "/admin/team", label: "Team members", icon: ShieldCheck },
 ] as const;
