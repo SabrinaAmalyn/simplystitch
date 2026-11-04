@@ -42,6 +42,7 @@ function MyYarnPage() {
   const shown = stash.filter((y) => `${yarnById(y.color_id).name} ${y.brand}`.toLowerCase().includes(query.toLowerCase()));
 
   return (
+    <AccountLayout>
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
@@ -130,6 +131,7 @@ function MyYarnPage() {
         }}
       />
     </div>
+    </AccountLayout>
   );
 }
 
