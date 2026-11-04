@@ -7,7 +7,7 @@ describe("derivePreferences", () => {
   it("ranks favourite colours by how many patterns use them", () => {
     const r = derivePreferences([p({ main: "peach", eyes: "charcoal" }), p({ main: "peach", accent: "cream" })], []);
     expect(r.favourite_yarns[0]).toBe("peach");
-    expect(r.usage.peach).toBe(2);
+    expect(r.usage["peach"]).toBe(2);
   });
   it("takes weight and hook from stash yarns used in patterns", () => {
     const stash = [

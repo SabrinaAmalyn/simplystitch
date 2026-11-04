@@ -11,7 +11,7 @@ import { derivePreferences, PATTERN_HOOK_DEFAULT, type StashYarn } from "@/lib/m
 export const TERMS = ["US", "UK"];
 export const HOOK_SIZES = ["2.0 mm", "2.5 mm", "3.0 mm", "3.5 mm", "4.0 mm", "4.5 mm", "5.0 mm", "5.5 mm", "6.0 mm", "8.0 mm", "10.0 mm"];
 
-const NEW_YARN = { color_id: YARNS[0].id, yarn_weight: YARN_WEIGHT_DEFAULT, hook_size: PATTERN_HOOK_DEFAULT, brand: "" };
+const NEW_YARN = { color_id: YARNS[0]?.id ?? "peach", yarn_weight: YARN_WEIGHT_DEFAULT, hook_size: PATTERN_HOOK_DEFAULT, brand: "" };
 const select = "rounded-md border border-input bg-background px-2 py-1.5 text-sm";
 
 /** Yarn stash plus preferences calculated from the maker's saved patterns. */
@@ -39,9 +39,9 @@ export function MakerPreferences() {
   }, [user, derived, terms]);
 
   async function addYarn() {
-    if (!user) return toast.error("Log in to save your yarns");
+    if (!user) { toast.error("Log in to save your yarns"); return; }
     const { data, error } = await supabase.from("maker_yarns").insert({ user_id: user.id, ...form, brand: form.brand.trim() }).select("id, color_id, yarn_weight, hook_size, brand").single();
-    if (error || !data) return toast.error("Couldn't add that yarn");
+    if (error || !data) { toast.error("Couldn't add that yarn"); return; }
     setStash((s) => [...s, data]);
     setForm({ ...NEW_YARN, yarn_weight: form.yarn_weight, hook_size: form.hook_size, brand: form.brand });
   }
