@@ -107,6 +107,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
                     toggle={toggle}
                     editing={editId === s.id}
                     initialBody={Number.isFinite(idx) ? sectionBody(text, idx) : ""}
+                    editable={Boolean(onTextChange)}
                     onStart={() => setEditId(s.id)}
                     onDone={() => setEditId(null)}
                     onChange={(body) => { if (Number.isFinite(idx)) onTextChange?.(withSectionBody(text, idx, body)); }}
@@ -122,7 +123,7 @@ export function PatternReader({ text, config, progressKey, name, header, onTextC
             <DialogContent className="max-h-[85vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Pattern syntax guide</DialogTitle>
-                <DialogDescription>Each line type below formats differently in the reader. Type one item per line when you edit a section.</DialogDescription>
+                <DialogDescription>Each line type below formats differently in the reader.</DialogDescription>
               </DialogHeader>
               <dl className="flex flex-col gap-3 text-sm">
                 {[
@@ -174,18 +175,20 @@ const shortTitle = (t: string) => t.replace(/\s*\(.*?\)\s*/g, " ").replace(/\s*[
 
 type SectionEditProps = {
   s: ReaderSection; done: Set<string>; toggle: (k: string[], v: boolean) => void;
-  editing: boolean; initialBody: string; onStart: () => void; onDone: () => void; onChange: (body: string) => void;
+  editing: boolean; initialBody: string; editable: boolean; onStart: () => void; onDone: () => void; onChange: (body: string) => void;
 };
 
-function SectionView({ s, done, toggle, editing, initialBody, onStart, onDone, onChange }: SectionEditProps) {
+function SectionView({ s, done, toggle, editing, initialBody, editable, onStart, onDone, onChange }: SectionEditProps) {
   const [draft, setDraft] = useState(initialBody);
   return (
     <section id={s.id} className="reader-section">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-xl font-bold">{s.title}</h2>
-        <Button variant="ghost" size="icon" className="reader-edit-btn shrink-0" aria-label={editing ? `Done editing ${s.title}` : `Edit ${s.title}`} aria-pressed={editing} title={editing ? "Done editing" : "Edit this section"} onClick={editing ? onDone : onStart}>
-          <Pencil size={16} />
-        </Button>
+        {editable && (
+          <Button variant="ghost" size="icon" className="reader-edit-btn shrink-0" aria-label={editing ? `Done editing ${s.title}` : `Edit ${s.title}`} aria-pressed={editing} title={editing ? "Done editing" : "Edit this section"} onClick={editing ? onDone : onStart}>
+            <Pencil size={16} />
+          </Button>
+        )}
       </div>
       {editing ? (
         <div className="mt-3 flex flex-col gap-2">
