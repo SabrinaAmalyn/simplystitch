@@ -36,4 +36,4 @@
 - Maker tool routes are wrapped in the MakerOnly gate; admin and super_admin accounts are stats-only and see /admin instead of the customizer and pattern tools.
 - Super admins provision team accounts through the role-checked createTeamMember server function (email + temporary password); the profiles.must_change_password flag drives a blocking first sign-in password change and must fail closed if it cannot be set.
 - /pattern renders PatternReader without onTextChange as a read-only preview; the per-section edit affordances appear only when a handler passes onTextChange.
-- Official team patterns live in `official_patterns` (separate from maker `patterns`); team accounts may use /customize and /pattern, where saves go to official patterns and cloud-sync skips team users — keeps maker analytics free of team data. Engagement counters change only through the `track_official_pattern` function, which ignores team activity.
+- Team saves from /customize go to `official_patterns`, never `patterns`; cloud-sync skips team users and counters change only via `track_official_pattern` (ignores team) — keeps maker analytics clean.
