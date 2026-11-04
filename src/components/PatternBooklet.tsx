@@ -34,12 +34,9 @@ function PartImage({ title, yarn }: { title: string; yarn?: string | undefined }
   else if (t.includes("ear")) shape = <path d="M60 10 C92 30 96 100 60 108 C24 100 28 30 60 10z" fill={fill} stroke={stroke} strokeWidth="2" />;
   else if (t.includes("tail")) shape = <path d="M60 18 C92 40 88 96 60 104 C32 96 28 40 60 18z" fill={fill} stroke={stroke} strokeWidth="2" />;
   else shape = <circle cx="60" cy="60" r="36" fill={fill} stroke={stroke} strokeWidth="2" />;
-  // Stitch-texture rings suggest crocheted rounds.
   return (
     <svg viewBox="0 0 120 120" className="booklet-part-img" aria-hidden="true">
-      <defs><pattern id="st" width="8" height="6" patternUnits="userSpaceOnUse"><path d="M0 6 L4 0 L8 6" fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth="1" /></pattern></defs>
       {shape}
-      <g style={{ clipPath: "none" }}>{shape && <use href="#st" />}</g>
     </svg>
   );
 }

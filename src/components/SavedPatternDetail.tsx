@@ -1,12 +1,13 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Download, MoreVertical, Palette, Pencil } from "lucide-react";
+import { Download, FileText, MoreVertical, Palette, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { PatternDocument } from "@/components/PatternDocument";
+import { PatternBookletDialog } from "@/components/PatternBooklet";
 import { loadPatternIntoCustomizer, progressKey, renamePattern, type SavedPattern } from "@/lib/store";
 
 export function downloadPattern(p: SavedPattern) {
@@ -47,6 +48,7 @@ function RenameDialog({ p, open, onOpenChange }: { p: SavedPattern; open: boolea
 export function SavedPatternDetail({ p }: { p: SavedPattern }) {
   const navigate = useNavigate();
   const [renaming, setRenaming] = useState(false);
+  const [printing, setPrinting] = useState(false);
   return (
     <div className="saved-pattern-workspace">
       <PatternDocument text={p.text} config={p.config} progressKey={progressKey(p.text, p.id)} name={p.name}
@@ -62,12 +64,14 @@ export function SavedPatternDetail({ p }: { p: SavedPattern }) {
                 <DropdownMenuItem onSelect={() => setRenaming(true)}><Pencil /> Rename</DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => { loadPatternIntoCustomizer(p.id); navigate({ to: "/customize" }); }}><Palette /> Customize</DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => downloadPattern(p)}><Download /> Download .txt</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setPrinting(true)}><FileText /> Export PDF</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           }
         />}
       />
       <RenameDialog p={p} open={renaming} onOpenChange={setRenaming} />
+      <PatternBookletDialog open={printing} onOpenChange={setPrinting} name={p.name} text={p.text} config={p.config} />
     </div>
   );
 }
