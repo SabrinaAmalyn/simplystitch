@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { configKey } from "@/lib/character";
-import { defaultPatternName, progressKey, savePatternToLibrary, setState, updatePatternInLibrary, useStore } from "@/lib/store";
+import { defaultPatternName, progressKey, savePatternToLibrary, updatePatternInLibrary, useStore } from "@/lib/store";
 import { PatternReader } from "@/components/PatternReader";
 import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { Button } from "@/components/ui/button";
