@@ -55,7 +55,7 @@ export function MakerPreferences() {
           {field("Written terms", "written_terms", TERMS)}
           <div role="group" aria-label="Yarn weight" className="border-b border-border pb-3">
             <p className="text-sm text-muted-foreground">Yarn weight</p>
-            <div className="mt-2 grid grid-cols-4 gap-2 sm:grid-cols-8">
+            <div className="mt-2 grid grid-cols-4 gap-2">
               {YARN_WEIGHTS.map((w) => {
                 const on = w.category === weight.category;
                 return (
