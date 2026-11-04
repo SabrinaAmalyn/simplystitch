@@ -3,6 +3,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
+import { SocialButtons } from "@/components/SocialButtons";
 
 type Mode = "login" | "signup";
 
