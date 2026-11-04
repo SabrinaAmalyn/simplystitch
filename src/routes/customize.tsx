@@ -97,7 +97,7 @@ export const Route = createFileRoute("/customize")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: () => <MakerOnly><Workspace /></MakerOnly>,
+  component: () => <MakerOnly allowTeam><Workspace /></MakerOnly>,
 });
 
 function Workspace() {
