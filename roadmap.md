@@ -7,4 +7,4 @@
 - Disable maker editing on /pattern: it becomes a read-only preview of the generated pattern and each part before the maker finalises the design and generates the pattern. (done)
 - Maker profile uses actual signed-in account information instead of the Jane Doe demo template. (done)
 - Admins can see when each maker created their account. (done)
-- Makers get a "My Yarn" page listing their yarn stash with an Add yarn button at the top right. (open)
+- Makers get a "My Yarn" page listing their yarn stash with an Add yarn button at the top right. (done)
