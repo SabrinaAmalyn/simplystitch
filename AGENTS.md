@@ -30,3 +30,4 @@
 - Reader and booklet share part-focus selection; isolated leg capsules use shared leg dimensions, blush uses thin discs, and compact paired close-ups retain per-side yarns without altering assembled anatomy.
 - Roles (maker/admin/super_admin) live only in the protected user_roles table; only super admins may grant or revoke admin via RLS, and the first account to sign up becomes super admin — prevents privilege escalation from client data.
 - The team sign-in lives at "/team-login", separate from the maker "/auth" page, and admits only admin/super_admin roles checked through the shared isTeamMember helper — makers can never enter through the team door.
+- Saved patterns stay in the local store for the UI and are mirrored to the `patterns` table by src/lib/cloud-sync.ts when signed in; maker preferences live in `maker_preferences`. Team roles can read both for analytics — keeps the editor offline-capable while admins see real data.
