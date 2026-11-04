@@ -5,3 +5,4 @@
 - Team members created with a temporary password must set a new password immediately at first login. (done)
 - In the maker's My Patterns page, add a Create Pattern button at the top right. (done)
 - Disable maker editing on /pattern: it becomes a read-only preview of the generated pattern and each part before the maker finalises the design and generates the pattern. (done)
+- Maker profile uses actual signed-in account information instead of the Jane Doe demo template. (done)
