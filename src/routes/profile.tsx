@@ -1,103 +1,154 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { AccountLayout } from "@/components/AccountLayout";
-import { useStore } from "@/lib/store";
 import { MakerPreferences } from "@/components/MakerPreferences";
 import { MakerOnly } from "@/components/MakerOnly";
+import { roleLabel, useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { type StashYarn } from "@/lib/maker-insights";
+import {
+  isSamplePattern,
+  memberSinceLabel,
+  profileActivity,
+  profileDisplayName,
+  profileInitials,
+  profileStats,
+} from "@/lib/profile-info";
+import { useStore } from "@/lib/store";
+import { yarnById } from "@/lib/yarn-palette";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
       { title: "My Profile — SimplyStitch" },
-      { name: "description", content: "Your SimplyStitch account: saved characters, favourite yarns, stitching preferences and recent activity." },
+      { name: "description", content: "Your SimplyStitch maker profile, yarn stash and stitching preferences." },
       { property: "og:title", content: "My Profile — SimplyStitch" },
-      { property: "og:description", content: "Your SimplyStitch profile: favourite yarns, stitching preferences and recent activity." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:description", content: "Your maker profile and stitching preferences." },
     ],
   }),
-  component: () => <MakerOnly><ProfilePage /></MakerOnly>,
+  component: () => (
+    <MakerOnly>
+      <ProfilePage />
+    </MakerOnly>
+  ),
 });
 
-// Demo account content — sample data shown in the signed-in preview only.
-const PROFILE = {
-  name: "Jane Doe",
-  handle: "@janedoe",
-  initials: "JD",
-  bio: "Weekend amigurumi maker. Currently working through a very long list of foxes.",
-  plan: "Maker Pro",
-};
-
-const PROJECT = { name: "Tabby cat", stage: "Body — round 12 of 15", percent: 80 };
-
-const ACTIVITY = [
-  { what: "Saved “Fox Red Bunny”", when: "2 days ago" },
-  { what: "Edited the pattern for “Tabby cat”", when: "5 days ago" },
-  { what: "Generated “Sleepy Bear”", when: "1 week ago" },
-];
+type ProfileRecord = { display_name: string | null; email: string | null; created_at: string };
 
 function ProfilePage() {
-  const saved = useStore((s) => s.library).length;
-  const stats = [
-    { label: "Saved patterns", value: String(saved) },
-    { label: "Stitches cast on", value: "12,480" },
-    { label: "Yarns used", value: "9" },
-    { label: "Finished dolls", value: "6" },
+  const { user, roles, loading } = useAuth();
+  const library = useStore((s) => s.library);
+  const [profile, setProfile] = useState<ProfileRecord | null>(null);
+  const [yarns, setYarns] = useState<StashYarn[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    let active = true;
+    setProfile(null);
+    setYarns([]);
+
+    void supabase
+      .from("profiles")
+      .select("display_name, email, created_at")
+      .eq("id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (active && data) setProfile(data as ProfileRecord);
+      });
+
+    void supabase
+      .from("maker_yarns")
+      .select("id, color_id, yarn_weight, hook_size, brand")
+      .eq("user_id", user.id)
+      .order("created_at")
+      .then(({ data }) => {
+        if (active && data) setYarns(data as StashYarn[]);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [user]);
+
+  const mine = useMemo(
+    () => library.filter((pattern) => !isSamplePattern(pattern.id)).sort((a, b) => b.savedAt - a.savedAt),
+    [library],
+  );
+  const stats = profileStats(mine, yarns);
+  const recent = profileActivity(mine);
+  const name = profileDisplayName({
+    profileName: profile?.display_name,
+    metadataName: user?.user_metadata?.display_name,
+    email: user?.email,
+  });
+  const initials = profileInitials(name);
+  const joined = memberSinceLabel(profile?.created_at ?? user?.created_at);
+  const topColour = stats.topColourId ? yarnById(stats.topColourId).name : "—";
+
+  if (loading) return null;
+  if (!user) return <Navigate to="/auth" replace />;
+
+  const cards = [
+    { label: "Saved patterns", value: String(stats.savedPatterns) },
+    { label: "Yarns listed", value: String(stats.yarnsListed) },
+    { label: "Colours used", value: String(stats.coloursUsed) },
+    { label: "Most-used colour", value: topColour },
   ];
 
   return (
     <AccountLayout>
-      <div className="flex flex-col gap-6">
-        <section className="panel flex flex-col gap-4 md:flex-row md:items-center md:gap-5">
-          <div className="flex min-w-0 flex-1 flex-col items-start gap-4 md:flex-row md:items-center">
-            <div aria-hidden className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-accent font-display text-xl font-semibold text-primary">
-              {PROFILE.initials}
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-5">
+        <section className="panel flex flex-col gap-5 md:flex-row md:items-center">
+          <div className="flex min-w-0 flex-1 items-center gap-4">
+            <div
+              aria-hidden
+              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-accent text-xl font-semibold text-primary"
+            >
+              {initials}
             </div>
-            <div className="min-w-0 flex-1">
-              <h1 className="font-display text-2xl font-semibold">{PROFILE.name}</h1>
-              <p className="text-sm text-muted-foreground">{PROFILE.handle} · {PROFILE.plan}</p>
-              <p className="mt-2 text-sm">{PROFILE.bio}</p>
+            <div className="min-w-0">
+              <h1 className="font-display text-2xl font-semibold">{name}</h1>
+              <p className="mt-1 text-sm text-muted-foreground">{user.email} · {roleLabel(roles)}</p>
+              <p className="mt-2 text-sm text-muted-foreground">Member since {joined}</p>
             </div>
           </div>
-          <Link to="/my-patterns" className="btn-ghost w-full justify-center md:ml-auto md:w-auto">View my patterns</Link>
+          <Link to="/my-patterns" className="btn-ghost w-full justify-center md:w-auto">
+            View my patterns
+          </Link>
         </section>
 
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label} className="rounded-lg border border-border bg-card p-4">
-              <p className="font-display text-2xl font-semibold">{s.value}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{s.label}</p>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {cards.map(({ label, value }) => (
+            <div key={label} className="panel">
+              <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</div>
+              <div className="mt-1 break-words font-display text-2xl font-semibold">{value}</div>
             </div>
           ))}
         </div>
 
-        <div className="grid min-w-0 gap-6 md:grid-cols-2">
+        <MakerPreferences />
 
-
-          <MakerPreferences />
-
-          <section className="panel">
-            <h2 className="mb-3 font-display text-xl font-semibold">Current project</h2>
-            <p className="text-sm font-semibold">{PROJECT.name}</p>
-            <p className="text-xs text-muted-foreground">{PROJECT.stage}</p>
-            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
-              <div className="h-full rounded-full bg-primary" style={{ width: `${PROJECT.percent}%` }} />
-            </div>
-          </section>
-
-          <section className="panel">
-            <h2 className="mb-4 font-display text-xl font-semibold">Recent activity</h2>
+        <section className="panel">
+          <h2 className="mb-3 font-display text-xl font-semibold">Recent patterns</h2>
+          {recent.length > 0 ? (
             <ul className="flex flex-col gap-3">
-              {ACTIVITY.map((a) => (
-                <li key={a.what} className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-3 last:border-0 last:pb-0">
-                  <span className="text-sm">{a.what}</span>
-                  <span className="text-xs text-muted-foreground">{a.when}</span>
+              {recent.map(({ id, what, when }) => (
+                <li key={id} className="flex items-start justify-between gap-3 border-b border-border pb-3 last:border-0 last:pb-0">
+                  <span className="min-w-0 text-sm">{what}</span>
+                  <span className="shrink-0 text-xs text-muted-foreground">{when}</span>
                 </li>
               ))}
             </ul>
-          </section>
-        </div>
-
-        <p className="text-xs text-muted-foreground">This profile shows sample data so you can see how the signed-in area will look.</p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              No saved patterns yet.{" "}
+              <Link to="/customize" className="font-semibold text-primary">
+                Create your first pattern
+              </Link>
+              .
+            </p>
+          )}
+        </section>
       </div>
     </AccountLayout>
   );
