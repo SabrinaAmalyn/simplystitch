@@ -504,4 +504,5 @@
   .booklet-print-root .booklet { gap: 0; }
   .booklet-print-root .booklet-page { width: 210mm; height: 297mm; max-width: none; aspect-ratio: auto; border-radius: 0; padding: 8mm; page-break-after: always; break-after: page; }
   .booklet-print-root .booklet-card { padding: 16mm 16mm; font-size: 12.5pt; }
+  .booklet-print-root .booklet-num { right: 14mm; bottom: 14mm; width: 10mm; height: 10mm; }
 }

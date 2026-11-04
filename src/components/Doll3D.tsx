@@ -405,7 +405,7 @@ export default function Doll3D({ config, ears, focus = null, armsDown = false, o
       </Environment>
       {focus ? (
         <>
-          <Bounds key={focus} fit clip margin={focus === "ears" || focus === "legs" || focus === "blush" ? 0.95 : 1.2}>
+          <Bounds key={focus} fit clip margin={focus === "ears" || focus === "legs" || focus === "blush" ? 1.1 : 1.2}>
             <Float speed={1.6} rotationIntensity={0.25} floatIntensity={0.4}>
               <Doll config={config} ears={ears} focus={focus} />
             </Float>
