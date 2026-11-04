@@ -21,6 +21,8 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as MyPatternsIndexRouteImport } from './routes/my-patterns.index'
 import { Route as MyPatternsPatternIdRouteImport } from './routes/my-patterns.$patternId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminMakersRouteImport } from './routes/_authenticated/admin.makers'
+import { Route as AuthenticatedAdminPaymentsRouteImport } from './routes/_authenticated/admin.payments'
 import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
 
 const IndexRoute = IndexRouteImport.update({
@@ -82,6 +84,18 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminMakersRoute =
+  AuthenticatedAdminMakersRouteImport.update({
+    id: '/makers',
+    path: '/makers',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPaymentsRoute =
+  AuthenticatedAdminPaymentsRouteImport.update({
+    id: '/payments',
+    path: '/payments',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
   id: '/team',
   path: '/team',
@@ -99,6 +113,8 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
+  '/admin/makers': typeof AuthenticatedAdminMakersRoute
+  '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -111,6 +127,8 @@ export interface FileRoutesByTo {
   '/team-login': typeof TeamLoginRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns': typeof MyPatternsIndexRoute
+  '/admin/makers': typeof AuthenticatedAdminMakersRoute
+  '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/admin/team': typeof AuthenticatedAdminTeamRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
@@ -127,6 +145,8 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
+  '/_authenticated/admin/makers': typeof AuthenticatedAdminMakersRoute
+  '/_authenticated/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -143,6 +163,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns/'
+    | '/admin/makers'
+    | '/admin/payments'
     | '/admin/team'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -155,6 +177,8 @@ export interface FileRouteTypes {
     | '/team-login'
     | '/my-patterns/$patternId'
     | '/my-patterns'
+    | '/admin/makers'
+    | '/admin/payments'
     | '/admin/team'
     | '/admin'
   id:
@@ -170,6 +194,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns/'
+    | '/_authenticated/admin/makers'
+    | '/_authenticated/admin/payments'
     | '/_authenticated/admin/team'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
@@ -271,6 +297,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/makers': {
+      id: '/_authenticated/admin/makers'
+      path: '/makers'
+      fullPath: '/admin/makers'
+      preLoaderRoute: typeof AuthenticatedAdminMakersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/payments': {
+      id: '/_authenticated/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AuthenticatedAdminPaymentsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/team': {
       id: '/_authenticated/admin/team'
       path: '/team'
@@ -282,11 +322,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminMakersRoute: typeof AuthenticatedAdminMakersRoute
+  AuthenticatedAdminPaymentsRoute: typeof AuthenticatedAdminPaymentsRoute
   AuthenticatedAdminTeamRoute: typeof AuthenticatedAdminTeamRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminMakersRoute: AuthenticatedAdminMakersRoute,
+  AuthenticatedAdminPaymentsRoute: AuthenticatedAdminPaymentsRoute,
   AuthenticatedAdminTeamRoute: AuthenticatedAdminTeamRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
