@@ -28,7 +28,9 @@ const rows = () => ({
 
 describe("memberStats", () => {
   it("reports each account's own stats from its personal data", () => {
-    const [jane, lea] = memberStats(rows());
+    const members = memberStats(rows());
+    const jane = members[0]!;
+    const lea = members[1]!;
     expect(jane).toMatchObject({
       displayName: "Jane",
       patternCount: 2,
