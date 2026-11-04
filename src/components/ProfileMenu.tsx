@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BarChart3, BookOpen, CreditCard, Palette, Users, ShieldCheck, User } from "lucide-react";
+import { BarChart3, BookOpen, CreditCard, Palette, Users, ShieldCheck, Sparkles, User } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
 
