@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import type { AppRole } from "@/lib/roles";
 
-export type AppRole = "maker" | "admin" | "super_admin";
+export type { AppRole };
 
 /** Current signed-in user plus their roles (roles read from the protected roles table). */
 export function useAuth() {

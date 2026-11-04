@@ -90,6 +90,9 @@ function AuthPage() {
             </p>
           </>
         )}
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          <Link to="/team-login" className="hover:text-primary">SimplyStitch team? Team sign in</Link>
+        </p>
       </div>
     </div>
   );
