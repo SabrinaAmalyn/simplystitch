@@ -8,7 +8,7 @@ describe("crochet piece close-ups", () => {
     }
   });
   it("retains the joined body view for body instructions", () => {
-    expect(focusForSection("Body (join legs)")).toBe("legs");
+    expect(focusForSection("Body (continues from the legs)")).toBe("body");
     expect(focusForSection("Body")).toBe("body");
   });
 });

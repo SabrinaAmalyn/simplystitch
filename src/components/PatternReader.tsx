@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { Check, ChevronDown, CircleHelp, Info, Pencil } from "lucide-react";
-import { CharacterPreview, type PartFocus } from "@/components/CharacterPreview";
+import { CharacterPreview } from "@/components/CharacterPreview";
 import { focusForSection } from "@/lib/part-focus";
 export { focusForSection } from "@/lib/part-focus";
 import type { CharacterConfig } from "@/lib/character";
