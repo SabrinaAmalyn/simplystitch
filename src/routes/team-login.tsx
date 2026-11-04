@@ -97,13 +97,7 @@ function TeamLoginPage() {
             {error && <p className="text-sm text-destructive">{error}</p>}
             <button className="btn-primary mt-1 w-full justify-center" disabled={busy}>{busy ? "Please wait…" : "Sign in"}</button>
           </form>
-          <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="h-px flex-1 bg-border" />or<span className="h-px flex-1 bg-border" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("google")}>Continue with Google</button>
-            <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("lovable")}>Continue with Lovable</button>
-          </div>
+          <SocialButtons onPick={social} />
         </div>
         <p className="mt-5 text-center text-xs"><Link to="/auth" className="text-muted-foreground hover:text-primary">Maker sign in</Link></p>
       </div>
