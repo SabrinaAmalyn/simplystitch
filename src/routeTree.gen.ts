@@ -10,16 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as MyPatternsRouteImport } from './routes/my-patterns'
 import { Route as PatternRouteImport } from './routes/pattern'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as MyPatternsIndexRouteImport } from './routes/my-patterns.index'
 import { Route as MyPatternsPatternIdRouteImport } from './routes/my-patterns.$patternId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomizeRoute = CustomizeRouteImport.update({
@@ -42,6 +54,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const MyPatternsIndexRoute = MyPatternsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,28 +72,35 @@ const MyPatternsPatternIdRoute = MyPatternsPatternIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/customize': typeof CustomizeRoute
   '/my-patterns': typeof MyPatternsRouteWithChildren
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/customize': typeof CustomizeRoute
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns': typeof MyPatternsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/customize': typeof CustomizeRoute
   '/my-patterns': typeof MyPatternsRouteWithChildren
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
 }
@@ -84,33 +108,42 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/customize'
     | '/my-patterns'
     | '/pattern'
     | '/profile'
+    | '/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/customize'
     | '/pattern'
     | '/profile'
+    | '/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/customize'
     | '/my-patterns'
     | '/pattern'
     | '/profile'
+    | '/_authenticated/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   CustomizeRoute: typeof CustomizeRoute
   MyPatternsRoute: typeof MyPatternsRouteWithChildren
   PatternRoute: typeof PatternRoute
@@ -124,6 +157,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customize': {
@@ -154,6 +201,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/my-patterns/': {
       id: '/my-patterns/'
       path: '/'
@@ -171,6 +225,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 interface MyPatternsRouteChildren {
   MyPatternsPatternIdRoute: typeof MyPatternsPatternIdRoute
   MyPatternsIndexRoute: typeof MyPatternsIndexRoute
@@ -187,6 +252,8 @@ const MyPatternsRouteWithChildren = MyPatternsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   CustomizeRoute: CustomizeRoute,
   MyPatternsRoute: MyPatternsRouteWithChildren,
   PatternRoute: PatternRoute,

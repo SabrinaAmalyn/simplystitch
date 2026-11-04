@@ -1,16 +1,24 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { BookOpen, LogOut, Menu, User } from "lucide-react";
+import { BookOpen, LogIn, LogOut, Menu, ShieldCheck, User } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
+import { supabase } from "@/integrations/supabase/client";
+import { roleLabel, useAuth } from "@/hooks/useAuth";
 
 const NAV = [
   { to: "/my-patterns", label: "My Patterns", icon: BookOpen },
   { to: "/profile", label: "My Profile", icon: User },
 ] as const;
 
-/** Demo signed-in shell: left sidebar + top bar with the profile picture menu. */
+/** Signed-in shell: left sidebar + top bar with the profile picture menu. */
 export function AccountLayout({ children, breadcrumb }: { children: ReactNode; breadcrumb?: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const { user, roles, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  async function logOut() {
+    await supabase.auth.signOut();
+    navigate({ to: "/", replace: true });
+  }
   return (
     <div className="flex h-dvh w-full overflow-hidden bg-background">
       <aside
@@ -29,11 +37,30 @@ export function AccountLayout({ children, breadcrumb }: { children: ReactNode; b
               <Icon size={16} /> {label}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              to="/admin"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted"
+              activeProps={{ className: "bg-accent text-primary" }}
+            >
+              <ShieldCheck size={16} /> Team
+            </Link>
+          )}
         </nav>
         <div className="mt-auto flex flex-col gap-1 pt-4">
-          <Link to="/" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted">
-            <LogOut size={16} /> Log out
-          </Link>
+          {user ? (
+            <>
+              <div className="px-3 text-xs text-muted-foreground">{user.email} · {roleLabel(roles)}</div>
+              <button onClick={logOut} className="flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-semibold text-foreground hover:bg-muted">
+                <LogOut size={16} /> Log out
+              </button>
+            </>
+          ) : (
+            <Link to="/auth" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted">
+              <LogIn size={16} /> Log in
+            </Link>
+          )}
         </div>
       </aside>
       {open && <button aria-label="Close menu" className="fixed inset-0 z-30 bg-foreground/20 md:hidden" onClick={() => setOpen(false)} />}

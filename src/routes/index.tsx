@@ -43,8 +43,8 @@ function Landing() {
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <Link to="/" className="font-logo text-2xl uppercase">SimplyStitch</Link>
           <nav className="hidden items-center gap-2 md:flex">
-            <Link to="/my-patterns" className="btn-ghost">Log in</Link>
-            <Link to="/my-patterns" className="btn-primary">Sign up</Link>
+            <Link to="/auth" search={{ mode: "login" }} className="btn-ghost">Log in</Link>
+            <Link to="/auth" search={{ mode: "signup" }} className="btn-primary">Sign up</Link>
           </nav>
           <button
             type="button"
@@ -60,8 +60,8 @@ function Landing() {
           <>
             <button aria-label="Close menu" className="fixed inset-0 z-30 bg-foreground/20 md:hidden" onClick={() => setMenuOpen(false)} />
             <nav className="absolute inset-x-0 top-full z-40 flex flex-col gap-2 border-b border-border bg-card px-4 py-4 md:hidden">
-              <Link to="/my-patterns" className="btn-ghost w-full" onClick={() => setMenuOpen(false)}>Log in</Link>
-              <Link to="/my-patterns" className="btn-primary w-full" onClick={() => setMenuOpen(false)}>Sign up</Link>
+              <Link to="/auth" search={{ mode: "login" }} className="btn-ghost w-full" onClick={() => setMenuOpen(false)}>Log in</Link>
+              <Link to="/auth" search={{ mode: "signup" }} className="btn-primary w-full" onClick={() => setMenuOpen(false)}>Sign up</Link>
             </nav>
           </>
         )}
