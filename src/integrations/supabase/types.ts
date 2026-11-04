@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      maker_preferences: {
+        Row: {
+          favourite_yarns: string[]
+          hook_size: string
+          updated_at: string
+          user_id: string
+          written_terms: string
+          yarn_weight: string
+        }
+        Insert: {
+          favourite_yarns?: string[]
+          hook_size?: string
+          updated_at?: string
+          user_id: string
+          written_terms?: string
+          yarn_weight?: string
+        }
+        Update: {
+          favourite_yarns?: string[]
+          hook_size?: string
+          updated_at?: string
+          user_id?: string
+          written_terms?: string
+          yarn_weight?: string
+        }
+        Relationships: []
+      }
+      patterns: {
+        Row: {
+          config: Json
+          created_at: string
+          history: Json
+          id: string
+          initial_text: string
+          name: string
+          saved_at: string
+          text: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          config: Json
+          created_at?: string
+          history?: Json
+          id: string
+          initial_text?: string
+          name: string
+          saved_at?: string
+          text?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          history?: Json
+          id?: string
+          initial_text?: string
+          name?: string
+          saved_at?: string
+          text?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
