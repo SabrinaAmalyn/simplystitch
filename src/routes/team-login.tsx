@@ -1,8 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 import { isTeamMember, type AppRole } from "@/lib/roles";
+import "@lovable.dev/cloud-auth-js/styles.css";
+
+const TEAM_FLAG = "simplystitch-team-signin";
+const NOT_TEAM = "This account isn't on the SimplyStitch team. Makers sign in on the regular page.";
 
 export const Route = createFileRoute("/team-login")({
   head: () => ({
@@ -25,6 +30,42 @@ function TeamLoginPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
+  async function admitOrReject(uid: string, rejectIfMaker: boolean) {
+    const { data: roleRows } = await supabase.from("user_roles").select("role").eq("user_id", uid);
+    const roles = (roleRows ?? []).map((r) => r.role as AppRole);
+    if (isTeamMember(roles)) { navigate({ to: "/admin", replace: true }); return true; }
+    if (rejectIfMaker) {
+      await supabase.auth.signOut();
+      setError(NOT_TEAM);
+      toast.error(NOT_TEAM);
+    }
+    return false;
+  }
+
+  // Team members already signed in (or returning from Google/Lovable) go straight to the Team page.
+  useEffect(() => {
+    let active = true;
+    const check = async (uid: string) => {
+      if (!active) return;
+      const fromTeamDoor = sessionStorage.getItem(TEAM_FLAG) === "1";
+      sessionStorage.removeItem(TEAM_FLAG);
+      await admitOrReject(uid, fromTeamDoor);
+    };
+    supabase.auth.getUser().then(({ data }) => { if (data.user) check(data.user.id); });
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session && sessionStorage.getItem(TEAM_FLAG) === "1") check(session.user.id);
+    });
+    return () => { active = false; sub.subscription.unsubscribe(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function social(provider: "google" | "lovable") {
+    setError("");
+    sessionStorage.setItem(TEAM_FLAG, "1");
+    const r = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin + "/team-login" });
+    if (r.error) { sessionStorage.removeItem(TEAM_FLAG); toast.error(r.error.message ?? "Sign in failed"); return; }
+  }
+
   async function submit(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -36,18 +77,8 @@ function TeamLoginPage() {
       toast.error(signInError.message);
       return;
     }
-    const uid = data.user?.id ?? "";
-    const { data: roleRows } = await supabase.from("user_roles").select("role").eq("user_id", uid);
-    const roles = (roleRows ?? []).map((r) => r.role as AppRole);
-    if (!isTeamMember(roles)) {
-      await supabase.auth.signOut();
-      setBusy(false);
-      const msg = "This account isn't on the SimplyStitch team. Makers sign in on the regular page.";
-      setError(msg);
-      toast.error(msg);
-      return;
-    }
-    navigate({ to: "/admin" });
+    await admitOrReject(data.user?.id ?? "", true);
+    setBusy(false);
   }
 
   return (
@@ -57,7 +88,12 @@ function TeamLoginPage() {
         <p className="mt-2 text-center text-xs font-semibold uppercase tracking-wide text-primary">Team</p>
         <h1 className="mt-3 text-center text-lg font-semibold">Team sign in</h1>
         <p className="mt-1 text-center text-sm text-muted-foreground">For SimplyStitch admins and super admins.</p>
-        <form onSubmit={submit} className="mt-5 flex flex-col gap-3">
+        <div className="mt-5 flex flex-col gap-2">
+          <button type="button" className="btn-ghost w-full justify-center" onClick={() => social("google")}>Continue with Google</button>
+          <button type="button" className="lovable-auth-button" onClick={() => social("lovable")}>Continue with Lovable</button>
+        </div>
+        <div className="my-4 text-center text-xs text-muted-foreground">or with email</div>
+        <form onSubmit={submit} className="flex flex-col gap-3">
           <input type="email" className="rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="Team email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input type="password" minLength={6} className="rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           <button className="btn-primary w-full justify-center" disabled={busy}>{busy ? "Please wait…" : "Sign in"}</button>

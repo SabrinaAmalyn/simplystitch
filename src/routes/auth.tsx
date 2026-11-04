@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -51,8 +51,20 @@ function AuthPage() {
     }
   }
 
+  // Signed-in visitors (including those returning from Google/Lovable) go straight to their page.
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (active && data.user) navigate({ to: "/my-patterns", replace: true });
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) navigate({ to: "/my-patterns", replace: true });
+    });
+    return () => { active = false; sub.subscription.unsubscribe(); };
+  }, [navigate]);
+
   async function social(provider: "google" | "lovable") {
-    const r = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin });
+    const r = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin + "/auth" });
     if (r.error) { toast.error(r.error.message ?? "Sign in failed"); return; }
     if (r.redirected) return;
     navigate({ to: "/my-patterns" });
