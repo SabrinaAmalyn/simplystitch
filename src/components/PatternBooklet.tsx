@@ -12,7 +12,7 @@ import type { PartFocus } from "@/components/CharacterPreview";
 import { focusForSection } from "@/lib/part-focus";
 
 type Shot = "doll" | Exclude<PartFocus, null>;
-const SHOTS: Shot[] = ["doll", "head", "body", "legs", "arm", "ears", "tail"];
+const SHOTS: Shot[] = ["doll", "head", "body", "legs", "arm", "ears", "blush", "tail"];
 
 const ABBREVIATIONS: [string, string][] = [
   ["R", "round"], ["MR", "magic ring"], ["ch", "chain"], ["st(s)", "stitch(es)"],
@@ -38,6 +38,7 @@ function PartImage({ title, yarn }: { title: string; yarn?: string | undefined }
   else if (t.includes("body")) shape = <path d="M24 20 h72 q8 0 8 10 v62 q0 14 -14 14 h-60 q-14 0 -14 -14 v-62 q0 -10 8 -10z" fill={fill} stroke={stroke} strokeWidth="2" />;
   else if (t.includes("arm")) shape = <rect x="42" y="12" width="36" height="96" rx="18" fill={fill} stroke={stroke} strokeWidth="2" />;
   else if (t.includes("ear")) shape = <path d="M60 10 C92 30 96 100 60 108 C24 100 28 30 60 10z" fill={fill} stroke={stroke} strokeWidth="2" />;
+  else if (/blush|cheek/.test(t)) shape = <>{[32, 88].map((x) => <circle key={x} cx={x} cy="60" r="24" fill={fill} stroke={stroke} strokeWidth="2" />)}</>;
   else if (t.includes("tail")) shape = <path d="M60 18 C92 40 88 96 60 104 C32 96 28 40 60 18z" fill={fill} stroke={stroke} strokeWidth="2" />;
   else shape = <circle cx="60" cy="60" r="36" fill={fill} stroke={stroke} strokeWidth="2" />;
   return (
@@ -110,11 +111,12 @@ function Booklet({ name, text, config, shots }: { name: string; text: string; co
         // Big pieces (head, body) get a hero-sized image at half the page width.
         const large = /head|body/i.test(s.title);
         const f = focusForSection(s.title);
+        const pair = f === "ears" || f === "legs" || f === "blush";
         const src = f ? shots[f] : undefined;
         return (
           <Page n={++n} key={s.id}>
             {i === 0 && <p className="booklet-kicker">{title} pattern</p>}
-            <div className={`booklet-piece${large ? " booklet-piece-large" : ""}`}>
+            <div className={`booklet-piece${large ? " booklet-piece-large" : pair ? " booklet-piece-pair" : ""}`}>
               <div>
                 <h2>{s.title}</h2>
                 {s.yarn && <p className="booklet-yarn">({s.yarn})</p>}
