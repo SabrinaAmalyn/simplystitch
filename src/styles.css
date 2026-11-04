@@ -482,6 +482,8 @@
 .booklet-part-3d { width: 150px; height: 150px; object-fit: contain; }
 .booklet-piece-large .booklet-part-img { width: 100%; height: auto; aspect-ratio: 1; }
 .booklet-piece-large .booklet-part-3d { width: 100%; height: auto; aspect-ratio: 1; }
+.booklet-piece-pair { grid-template-columns: minmax(0, 1fr) minmax(0, 42%); }
+.booklet-piece-pair .booklet-part-img { width: 100%; height: auto; aspect-ratio: 1; }
 .booklet-abbr { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; margin: 0; }
 .booklet-abbr div { display: flex; gap: 4px; }
 .booklet-abbr dt { font-weight: 600; }

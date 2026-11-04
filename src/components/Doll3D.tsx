@@ -330,7 +330,7 @@ function SeparateLegs({ config }: { config: CharacterConfig }) {
   return <group>{([1, -1] as const).map((side) => {
     const part = side === 1 ? "leftLeg" : "rightLeg";
     const paw = side === 1 ? "leftFoot" : "rightFoot";
-    return <mesh key={side} position={[side * (leg.radius + 0.15), centerY, 0]} castShadow>
+    return <mesh key={side} position={[side * (leg.radius + 0.045), centerY, 0]} castShadow>
       <capsuleGeometry args={[leg.radius, leg.top - leg.bottom - leg.radius, 16, 32]} />
       <PawVinyl color={limbSurfaceYarn(config, part, "feet").hex} pawColor={pawYarn(config, paw).hex} region="feet" enabled={pawMarked(config, paw)} boundary={boundary} />
     </mesh>;
@@ -356,10 +356,15 @@ function Doll({ config, ears, focus = null, armsDown = false }: { config: Charac
   if (focus === "body") return <JoinedBody lengthScale={legs} torsoScale={torsoH} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />;
   if (focus === "arm") return <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />;
   if (focus === "legs") return <SeparateLegs config={config} />;
+  if (focus === "blush") return <group>{([1, -1] as const).map((side) => (
+    <mesh key={side} position={[side * 0.28, 0, 0]} scale={[0.24, 0.24, 0.025]} castShadow>
+      <sphereGeometry args={[1, 48, 24]} />
+      <Vinyl color={c(side === 1 ? "leftBlush" : "rightBlush")} />
+    </mesh>
+  ))}</group>;
   if (focus === "tail") return <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />;
-  // The two ears are crocheted individually — spread them apart in the close-up
-  // so they read as two separate pieces rather than one connected shape.
-  if (focus === "ears") return <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>{ears && <><group position={[0.8, 0, 0]}><Ear type={ears} side={1} color={c("leftEar")} /></group><group position={[-0.8, 0, 0]}><Ear type={ears} side={-1} color={c("rightEar")} /></group></>}</group>;
+  // Compact separated pairs, without changing the assembled ear attachments.
+  if (focus === "ears") return <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>{ears && <><group position={[ears === "bunny" ? 0.1 : 0.3, 0, 0]}><Ear type={ears} side={1} color={c("leftEar")} /></group><group position={[ears === "bunny" ? -0.1 : -0.3, 0, 0]}><Ear type={ears} side={-1} color={c("rightEar")} /></group></>}</group>;
   return (
     <group position={[0, -1.1, 0]}>
       <Head color={c("head")} />
@@ -400,7 +405,7 @@ export default function Doll3D({ config, ears, focus = null, armsDown = false, o
       </Environment>
       {focus ? (
         <>
-          <Bounds key={focus} fit clip margin={1.2}>
+          <Bounds key={focus} fit clip margin={focus === "ears" || focus === "legs" || focus === "blush" ? 0.95 : 1.2}>
             <Float speed={1.6} rotationIntensity={0.25} floatIntensity={0.4}>
               <Doll config={config} ears={ears} focus={focus} />
             </Float>
