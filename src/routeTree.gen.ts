@@ -21,6 +21,7 @@ import { Route as TeamLoginRouteImport } from './routes/team-login'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as MyPatternsIndexRouteImport } from './routes/my-patterns.index'
 import { Route as MyPatternsPatternIdRouteImport } from './routes/my-patterns.$patternId'
+import { Route as OfficialPatternIdRouteImport } from './routes/official.$patternId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminMakersRouteImport } from './routes/_authenticated/admin.makers'
 import { Route as AuthenticatedAdminPaymentsRouteImport } from './routes/_authenticated/admin.payments'
@@ -86,6 +87,11 @@ const MyPatternsPatternIdRoute = MyPatternsPatternIdRouteImport.update({
   path: '/$patternId',
   getParentRoute: () => MyPatternsRoute,
 } as any)
+const OfficialPatternIdRoute = OfficialPatternIdRouteImport.update({
+  id: '/official/$patternId',
+  path: '/official/$patternId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/team-login': typeof TeamLoginRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
+  '/official/$patternId': typeof OfficialPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
   '/admin/makers': typeof AuthenticatedAdminMakersRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/team-login': typeof TeamLoginRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
+  '/official/$patternId': typeof OfficialPatternIdRoute
   '/my-patterns': typeof MyPatternsIndexRoute
   '/admin/makers': typeof AuthenticatedAdminMakersRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/team-login': typeof TeamLoginRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
+  '/official/$patternId': typeof OfficialPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
   '/_authenticated/admin/makers': typeof AuthenticatedAdminMakersRoute
   '/_authenticated/admin/payments': typeof AuthenticatedAdminPaymentsRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/team-login'
     | '/admin'
     | '/my-patterns/$patternId'
+    | '/official/$patternId'
     | '/my-patterns/'
     | '/admin/makers'
     | '/admin/payments'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/team-login'
     | '/my-patterns/$patternId'
+    | '/official/$patternId'
     | '/my-patterns'
     | '/admin/makers'
     | '/admin/payments'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/team-login'
     | '/_authenticated/admin'
     | '/my-patterns/$patternId'
+    | '/official/$patternId'
     | '/my-patterns/'
     | '/_authenticated/admin/makers'
     | '/_authenticated/admin/payments'
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   PatternRoute: typeof PatternRoute
   ProfileRoute: typeof ProfileRoute
   TeamLoginRoute: typeof TeamLoginRoute
+  OfficialPatternIdRoute: typeof OfficialPatternIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -322,6 +335,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/my-patterns/$patternId'
       preLoaderRoute: typeof MyPatternsPatternIdRouteImport
       parentRoute: typeof MyPatternsRoute
+    }
+    '/official/$patternId': {
+      id: '/official/$patternId'
+      path: '/official/$patternId'
+      fullPath: '/official/$patternId'
+      preLoaderRoute: typeof OfficialPatternIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
@@ -415,6 +435,7 @@ const rootRouteChildren: RootRouteChildren = {
   PatternRoute: PatternRoute,
   ProfileRoute: ProfileRoute,
   TeamLoginRoute: TeamLoginRoute,
+  OfficialPatternIdRoute: OfficialPatternIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
