@@ -65,6 +65,10 @@ async function start(uid: string) {
   stop();
   userId = uid;
   pushed = new Map();
+  // Team accounts only test the maker flow: their drafts never reach maker analytics.
+  const { data: roleRows } = await supabase.from("user_roles").select("role").eq("user_id", uid);
+  if (userId !== uid) return;
+  if ((roleRows ?? []).some((r) => r.role === "admin" || r.role === "super_admin")) { userId = null; return; }
   const { data } = await supabase.from("patterns").select("*").eq("user_id", uid);
   if (userId !== uid) return;
   const remote = (data ?? []).map((r) => fromRow(r as Row));

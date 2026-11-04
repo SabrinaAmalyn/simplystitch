@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BarChart3, BookOpen, CreditCard, Palette, Users, ShieldCheck, User } from "lucide-react";
+import { BarChart3, BookOpen, CreditCard, Palette, Users, ShieldCheck, Sparkles, User } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -22,6 +22,9 @@ export function ProfileMenu() {
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/admin/makers" className="flex items-center gap-2"><Users size={15} /> Makers</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/admin/showcase" className="flex items-center gap-2"><Sparkles size={15} /> Official patterns</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/admin/payments" className="flex items-center gap-2"><CreditCard size={15} /> Payments</Link>

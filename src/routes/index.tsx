@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import customiseArt from "@/assets/how-customise.png.asset.json";
 import generateArt from "@/assets/how-generate.png.asset.json";
 import reviewArt from "@/assets/how-review.png.asset.json";
+import { FeaturedPatterns } from "@/components/FeaturedPatterns";
 import heroBadge from "@/assets/hero-badge.png.asset.json";
 
 export const Route = createFileRoute("/")({
@@ -130,6 +131,8 @@ function Landing() {
           </ol>
         </div>
       </section>
+
+      <FeaturedPatterns />
 
       <section className="landing-sky px-4 py-8 text-center text-primary-foreground md:py-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-4">

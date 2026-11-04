@@ -36,6 +36,13 @@
       "when": 1793779200002,
       "tag": "0004_add_profiles_must_change_password",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793833989910,
+      "tag": "0005_official_patterns",
+      "breakpoints": true
     }
   ]
 }
