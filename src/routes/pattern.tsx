@@ -8,6 +8,7 @@ import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { MakerOnly } from "@/components/MakerOnly";
 
 export const Route = createFileRoute("/pattern")({
   head: () => ({
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/pattern")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: PatternPage,
+  component: () => <MakerOnly><PatternPage /></MakerOnly>,
 });
 
 function PatternPage() {

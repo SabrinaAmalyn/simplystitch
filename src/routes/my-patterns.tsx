@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { AccountLayout } from "@/components/AccountLayout";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { MakerOnly } from "@/components/MakerOnly";
 import { useStore } from "@/lib/store";
 
 /** The saved pattern opened by the current address, if this is one of those pages. */
@@ -12,7 +13,7 @@ function useOpenPattern() {
 }
 
 export const Route = createFileRoute("/my-patterns")({
-  component: MyPatternsLayout,
+  component: () => <MakerOnly><MyPatternsLayout /></MakerOnly>,
 });
 
 /** Shared shell for the library pages; a single pattern also gets a breadcrumb trail. */

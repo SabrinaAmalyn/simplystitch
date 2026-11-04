@@ -10,6 +10,7 @@ import { createLayeredCharacter, patternBlockers } from "@/lib/character-layers"
 import { YARNS } from "@/lib/yarn-palette";
 import { ArrowLeft, Dices, PersonStanding, RotateCcw } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
+import { MakerOnly } from "@/components/MakerOnly";
 
 const pick = <T,>(list: readonly T[]): T => {
   const value = list[Math.floor(Math.random() * list.length)];
@@ -96,7 +97,7 @@ export const Route = createFileRoute("/customize")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Workspace,
+  component: () => <MakerOnly><Workspace /></MakerOnly>,
 });
 
 function Workspace() {
