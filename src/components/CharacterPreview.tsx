@@ -27,7 +27,7 @@ class PreviewBoundary extends Component<{ children: ReactNode; resetKey: string 
   }
 }
 
-export function CharacterPreview({ config, focus = null, armsDown = false, onCapture }: { config: CharacterConfig; focus?: PartFocus; armsDown?: boolean; onCapture?: (dataUrl: string) => void }) {
+export function CharacterPreview({ config, focus = null, armsDown = false, onCapture }: { config: CharacterConfig; focus?: PartFocus; armsDown?: boolean; onCapture?: ((dataUrl: string) => void) | undefined }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const earId = (config.layered ?? createLayeredCharacter()).selections.ears;

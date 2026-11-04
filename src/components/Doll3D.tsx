@@ -362,7 +362,7 @@ function Doll({ config, ears, focus = null, armsDown = false }: { config: Charac
   );
 }
 
-export default function Doll3D({ config, ears, focus = null, armsDown = false, onCapture }: { config: CharacterConfig; ears: EarType; focus?: PartFocus; armsDown?: boolean; onCapture?: (dataUrl: string) => void }) {
+export default function Doll3D({ config, ears, focus = null, armsDown = false, onCapture }: { config: CharacterConfig; ears: EarType; focus?: PartFocus; armsDown?: boolean; onCapture?: ((dataUrl: string) => void) | undefined }) {
   const footY = -1.11 + joinedBodyShape(limbScale(config, "legs"), limbScale(config, "torso")).leg.bottom - JOINED_BODY.leg.bottom;
   return (
     <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.9, 5.5], fov: 40 }} gl={{ toneMappingExposure: 1.05, preserveDrawingBuffer: !!onCapture }}
