@@ -41,7 +41,7 @@ function AdminPage() {
     const { error } = on
       ? await supabase.from("user_roles").insert({ user_id: m.id, role: "admin" })
       : await supabase.from("user_roles").delete().eq("user_id", m.id).eq("role", "admin");
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(on ? `${m.display_name ?? m.email} is now an Admin` : "Admin access removed");
     load();
   }

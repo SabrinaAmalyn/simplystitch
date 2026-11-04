@@ -9,7 +9,7 @@ type Mode = "login" | "signup";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { mode?: Mode } =>
-    s.mode === "signup" ? { mode: "signup" } : s.mode === "login" ? { mode: "login" } : {},
+    s["mode"] === "signup" ? { mode: "signup" } : s["mode"] === "login" ? { mode: "login" } : {},
   head: () => ({
     meta: [
       { title: "Log in or sign up — SimplyStitch" },
@@ -40,20 +40,20 @@ function AuthPage() {
         options: { emailRedirectTo: window.location.origin + "/my-patterns", data: { display_name: name } },
       });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       if (data.session) navigate({ to: "/my-patterns" });
       else setSent(true);
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       navigate({ to: "/my-patterns" });
     }
   }
 
   async function social(provider: "google" | "lovable") {
     const r = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin });
-    if (r.error) return toast.error(r.error.message ?? "Sign in failed");
+    if (r.error) { toast.error(r.error.message ?? "Sign in failed"); return; }
     if (r.redirected) return;
     navigate({ to: "/my-patterns" });
   }
