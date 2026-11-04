@@ -8,6 +8,7 @@ import { roleLabel, useAuth, type AppRole } from "@/hooks/useAuth";
 import { isTeamRow, useTeamData, type TeamMemberRow } from "@/hooks/useTeamData";
 import { createTeamMember } from "@/lib/team-admin.functions";
 import { MIN_PASSWORD } from "@/lib/team-admin";
+import { memberSinceLabel } from "@/lib/profile-info";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/_authenticated/admin/team")({
@@ -58,6 +59,7 @@ function TeamPage() {
             <tr>
               <th className="px-4 py-2 font-medium">Member</th>
               <th className="px-4 py-2 font-medium">Role</th>
+              <th className="px-4 py-2 font-medium">Joined</th>
               <th className="px-4 py-2 font-medium">Status</th>
               {isSuperAdmin && <th className="px-4 py-2 text-right font-medium">Actions</th>}
             </tr>
@@ -74,6 +76,7 @@ function TeamPage() {
                   <td className="px-4 py-3">
                     <span className="rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-primary">{roleLabel(m.roles as AppRole[])}</span>
                   </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-xs text-muted-foreground">{memberSinceLabel(m.createdAt)}</td>
                   <td className="px-4 py-3 text-xs">
                     {m.mustChangePassword
                       ? <span className="text-muted-foreground">Invited · awaiting first sign-in</span>
@@ -90,7 +93,7 @@ function TeamPage() {
               );
             })}
             {team.length === 0 && (
-              <tr><td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">{ready ? "No team members yet." : "Loading…"}</td></tr>
+              <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">{ready ? "No team members yet." : "Loading…"}</td></tr>
             )}
           </tbody>
         </table>
