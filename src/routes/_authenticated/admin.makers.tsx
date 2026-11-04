@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { isTeamRow, useTeamData } from "@/hooks/useTeamData";
+import { memberSinceLabel } from "@/lib/profile-info";
 import { yarnById } from "@/lib/yarn-palette";
 
 export const Route = createFileRoute("/_authenticated/admin/makers")({
@@ -21,7 +22,9 @@ export const Route = createFileRoute("/_authenticated/admin/makers")({
 function MakersPage() {
   const { members, ready } = useTeamData();
   const [query, setQuery] = useState("");
-  const makers = members.filter((m) => !isTeamRow(m));
+  const makers = members
+    .filter((m) => !isTeamRow(m))
+    .sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime());
   const shown = makers.filter((m) => `${m.displayName ?? ""} ${m.email ?? ""}`.toLowerCase().includes(query.toLowerCase()));
   return (
     <div className="mx-auto max-w-6xl">
@@ -41,7 +44,7 @@ function MakersPage() {
           <table className="w-full min-w-[720px] text-sm">
             <thead className="bg-muted/50 text-left text-xs text-muted-foreground">
               <tr>
-                {["Maker", "Patterns", "Yarns", "Weight", "Hook", "Terms", "Favourite colours"].map((h) => (
+                {["Maker", "Joined", "Patterns", "Yarns", "Weight", "Hook", "Terms", "Favourite colours"].map((h) => (
                   <th key={h} className="px-4 py-2 font-medium">{h}</th>
                 ))}
               </tr>
@@ -53,6 +56,7 @@ function MakersPage() {
                     <div className="font-semibold">{m.displayName ?? "Unnamed"}</div>
                     <div className="text-xs text-muted-foreground">{m.email}</div>
                   </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-xs text-muted-foreground">{memberSinceLabel(m.createdAt)}</td>
                   <td className="px-4 py-3">{m.patternCount}</td>
                   <td className="px-4 py-3">{m.yarnsListed}</td>
                   <td className="px-4 py-3">{m.yarnWeight ?? "—"}</td>
@@ -68,7 +72,7 @@ function MakersPage() {
                 </tr>
               ))}
               {shown.length === 0 && (
-                <tr><td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">{ready ? "No makers found." : "Loading…"}</td></tr>
+                <tr><td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">{ready ? "No makers found." : "Loading…"}</td></tr>
               )}
             </tbody>
           </table>
