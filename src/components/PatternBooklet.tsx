@@ -9,19 +9,10 @@ import { YARNS } from "@/lib/yarn-palette";
 import { limbScale } from "@/lib/limb-lengths";
 import type { CharacterConfig } from "@/lib/character";
 import type { PartFocus } from "@/components/CharacterPreview";
+import { focusForSection } from "@/lib/part-focus";
 
 type Shot = "doll" | Exclude<PartFocus, null>;
-const SHOTS: Shot[] = ["doll", "head", "body", "arm", "ears", "tail"];
-/** Which 3D close-up shows a pattern piece. */
-const focusFor = (title: string): Exclude<PartFocus, null> | null => {
-  const t = title.toLowerCase();
-  if (t.includes("ear")) return "ears";
-  if (t.includes("tail")) return "tail";
-  if (t.includes("arm")) return "arm";
-  if (t.includes("leg") || t.includes("body")) return "body";
-  if (t.includes("head") || t.includes("blush")) return "head";
-  return null;
-};
+const SHOTS: Shot[] = ["doll", "head", "body", "legs", "arm", "ears", "tail"];
 
 const ABBREVIATIONS: [string, string][] = [
   ["R", "round"], ["MR", "magic ring"], ["ch", "chain"], ["st(s)", "stitch(es)"],
@@ -43,7 +34,8 @@ function PartImage({ title, yarn }: { title: string; yarn?: string | undefined }
   const stroke = "rgba(0,0,0,0.18)";
   let shape;
   if (t.includes("head")) shape = <ellipse cx="60" cy="62" rx="48" ry="42" fill={fill} stroke={stroke} strokeWidth="2" />;
-  else if (t.includes("leg") || t.includes("body")) shape = <path d="M24 20 h72 q8 0 8 10 v62 q0 14 -14 14 h-60 q-14 0 -14 -14 v-62 q0 -10 8 -10z" fill={fill} stroke={stroke} strokeWidth="2" />;
+  else if (t.includes("leg")) shape = <>{[25, 70].map((x) => <rect key={x} x={x} y="20" width="25" height="80" rx="12" fill={fill} stroke={stroke} strokeWidth="2" />)}</>;
+  else if (t.includes("body")) shape = <path d="M24 20 h72 q8 0 8 10 v62 q0 14 -14 14 h-60 q-14 0 -14 -14 v-62 q0 -10 8 -10z" fill={fill} stroke={stroke} strokeWidth="2" />;
   else if (t.includes("arm")) shape = <rect x="42" y="12" width="36" height="96" rx="18" fill={fill} stroke={stroke} strokeWidth="2" />;
   else if (t.includes("ear")) shape = <path d="M60 10 C92 30 96 100 60 108 C24 100 28 30 60 10z" fill={fill} stroke={stroke} strokeWidth="2" />;
   else if (t.includes("tail")) shape = <path d="M60 18 C92 40 88 96 60 104 C32 96 28 40 60 18z" fill={fill} stroke={stroke} strokeWidth="2" />;
@@ -117,7 +109,7 @@ function Booklet({ name, text, config, shots }: { name: string; text: string; co
       {pieces.map((s: ReaderSection, i) => {
         // Big pieces (head, body) get a hero-sized image at half the page width.
         const large = /head|body/i.test(s.title);
-        const f = focusFor(s.title);
+        const f = focusForSection(s.title);
         const src = f ? shots[f] : undefined;
         return (
           <Page n={++n} key={s.id}>
