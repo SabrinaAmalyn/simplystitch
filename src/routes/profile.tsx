@@ -77,9 +77,9 @@ function ProfilePage() {
   const stats = profileStats(mine, yarns);
   const recent = profileActivity(mine);
   const name = profileDisplayName({
-    profileName: profile?.display_name,
-    metadataName: user?.user_metadata?.display_name,
-    email: user?.email,
+    profileName: profile?.display_name ?? null,
+    metadataName: user?.user_metadata?.["display_name"],
+    email: user?.email ?? null,
   });
   const initials = profileInitials(name);
   const joined = memberSinceLabel(profile?.created_at ?? user?.created_at);

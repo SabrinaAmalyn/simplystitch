@@ -8,9 +8,9 @@ type PatternForProfile = {
 };
 
 type Identity = {
-  profileName?: string | null;
-  metadataName?: unknown;
-  email?: string | null;
+  profileName?: string | null | undefined;
+  metadataName?: unknown | undefined;
+  email?: string | null | undefined;
 };
 
 function clean(value: unknown): string {
