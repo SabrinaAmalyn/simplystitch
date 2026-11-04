@@ -340,7 +340,9 @@ function Doll({ config, ears, focus = null, armsDown = false }: { config: Charac
   if (focus === "body") return <JoinedBody lengthScale={legs} torsoScale={torsoH} torso={c("body")} leftLeg={limbSurfaceYarn(config, "leftLeg", "feet").hex} rightLeg={limbSurfaceYarn(config, "rightLeg", "feet").hex} pawColor={pawYarn(config, "leftFoot").hex} marked={pawMarked(config, "leftFoot")} rightPawColor={pawYarn(config, "rightFoot").hex} rightMarked={pawMarked(config, "rightFoot")} />;
   if (focus === "arm") return <Arm lengthScale={arms} side={1} color={limbSurfaceYarn(config, "leftArm", "hands").hex} pawColor={pawYarn(config, "leftHand").hex} marked={pawMarked(config, "leftHand")} />;
   if (focus === "tail") return <Tail selection={config.layered?.selections.tail ?? null} color={c("tail")} />;
-  if (focus === "ears") return <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>{ears && <><Ear type={ears} side={1} color={c("leftEar")} /><Ear type={ears} side={-1} color={c("rightEar")} /></>}</group>;
+  // The two ears are crocheted individually — spread them apart in the close-up
+  // so they read as two separate pieces rather than one connected shape.
+  if (focus === "ears") return <group position={[0, HEAD_ATTACHMENT_OFFSET, 0]}>{ears && <><group position={[0.8, 0, 0]}><Ear type={ears} side={1} color={c("leftEar")} /></group><group position={[-0.8, 0, 0]}><Ear type={ears} side={-1} color={c("rightEar")} /></group></>}</group>;
   return (
     <group position={[0, -1.1, 0]}>
       <Head color={c("head")} />
