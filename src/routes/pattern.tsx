@@ -2,25 +2,26 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { configKey } from "@/lib/character";
-import { defaultPatternName, progressKey, savePatternToLibrary, setState, updatePatternInLibrary, useStore } from "@/lib/store";
+import { defaultPatternName, progressKey, savePatternToLibrary, updatePatternInLibrary, useStore } from "@/lib/store";
 import { PatternReader } from "@/components/PatternReader";
 import { PatternWorkspaceHeader } from "@/components/PatternWorkspaceHeader";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { MakerOnly } from "@/components/MakerOnly";
 
 export const Route = createFileRoute("/pattern")({
   head: () => ({
     meta: [
       { title: "Your pattern draft — SimplyStitch" },
-      { name: "description", content: "Review and edit your generated crochet pattern draft." },
+      { name: "description", content: "Preview your generated crochet pattern and each piece before saving it." },
       { property: "og:title", content: "Your pattern draft — SimplyStitch" },
-      { property: "og:description", content: "Review and edit your generated crochet pattern." },
+      { property: "og:description", content: "Preview your generated crochet pattern and each piece before saving it." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: PatternPage,
+  component: () => <MakerOnly><PatternPage /></MakerOnly>,
 });
 
 function PatternPage() {
@@ -69,8 +70,6 @@ function PatternPage() {
   return (
     <main className="pattern-page">
       <PatternReader text={draft.text} config={config} progressKey={progressKey(draft.text)}
-        onTextChange={(text) => setState((s) => ({ ...s, draft: s.draft && { ...s.draft, initialText: s.draft.initialText ?? s.draft.text, text, edited: true, saved: false } }))}
-
         previewAction={<Button onClick={openNaming} aria-label="Save">Save</Button>}
         previewBack={<Button variant="outline" asChild><Link to="/customize" aria-label="Go Back"><ArrowLeft /> <span className="max-md:hidden">Go Back</span></Link></Button>}
         header={<><div className="review-header"><PatternWorkspaceHeader
@@ -83,7 +82,6 @@ function PatternPage() {
           </div>
         )}</>}
       />
-      {draft.edited && <p className="text-sm text-muted-foreground">Edits are saved automatically on this device.</p>}
 
       <Dialog open={naming} onOpenChange={setNaming}>
         <DialogContent>

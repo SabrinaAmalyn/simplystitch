@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { AccountLayout } from "@/components/AccountLayout";
 import { useStore } from "@/lib/store";
 import { MakerPreferences } from "@/components/MakerPreferences";
+import { MakerOnly } from "@/components/MakerOnly";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/profile")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: ProfilePage,
+  component: () => <MakerOnly><ProfilePage /></MakerOnly>,
 });
 
 // Demo account content — sample data shown in the signed-in preview only.
