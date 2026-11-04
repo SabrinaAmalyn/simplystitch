@@ -20,6 +20,8 @@ import { Route as TeamLoginRouteImport } from './routes/team-login'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as MyPatternsIndexRouteImport } from './routes/my-patterns.index'
 import { Route as MyPatternsPatternIdRouteImport } from './routes/my-patterns.$patternId'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminTeamRouteImport } from './routes/_authenticated/admin.team'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -75,6 +77,16 @@ const MyPatternsPatternIdRoute = MyPatternsPatternIdRouteImport.update({
   path: '/$patternId',
   getParentRoute: () => MyPatternsRoute,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminTeamRoute = AuthenticatedAdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -84,9 +96,11 @@ export interface FileRoutesByFullPath {
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
   '/team-login': typeof TeamLoginRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
+  '/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -95,9 +109,10 @@ export interface FileRoutesByTo {
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
   '/team-login': typeof TeamLoginRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns': typeof MyPatternsIndexRoute
+  '/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,9 +124,11 @@ export interface FileRoutesById {
   '/pattern': typeof PatternRoute
   '/profile': typeof ProfileRoute
   '/team-login': typeof TeamLoginRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/my-patterns/$patternId': typeof MyPatternsPatternIdRoute
   '/my-patterns/': typeof MyPatternsIndexRoute
+  '/_authenticated/admin/team': typeof AuthenticatedAdminTeamRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -126,6 +143,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns/'
+    | '/admin/team'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -134,9 +153,10 @@ export interface FileRouteTypes {
     | '/pattern'
     | '/profile'
     | '/team-login'
-    | '/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns'
+    | '/admin/team'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -150,6 +170,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/my-patterns/$patternId'
     | '/my-patterns/'
+    | '/_authenticated/admin/team'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -242,15 +264,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyPatternsPatternIdRouteImport
       parentRoute: typeof MyPatternsRoute
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/team': {
+      id: '/_authenticated/admin/team'
+      path: '/team'
+      fullPath: '/admin/team'
+      preLoaderRoute: typeof AuthenticatedAdminTeamRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminTeamRoute: typeof AuthenticatedAdminTeamRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminTeamRoute: AuthenticatedAdminTeamRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =

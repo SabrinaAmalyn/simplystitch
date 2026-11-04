@@ -1,9 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, User } from "lucide-react";
+import { BarChart3, BookOpen, ShieldCheck, User } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
 
-/** Empty profile picture button with My Profile / My Patterns menu (demo account). */
+/** Profile picture menu: maker pages for makers, team console pages for team accounts. */
 export function ProfileMenu() {
+  const { isAdmin } = useAuth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -13,12 +15,25 @@ export function ProfileMenu() {
         <User size={18} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-44">
-        <DropdownMenuItem asChild>
-          <Link to="/my-patterns" className="flex items-center gap-2"><BookOpen size={15} /> My Patterns</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/profile" className="flex items-center gap-2"><User size={15} /> My Profile</Link>
-        </DropdownMenuItem>
+        {isAdmin ? (
+          <>
+            <DropdownMenuItem asChild>
+              <Link to="/admin" className="flex items-center gap-2"><BarChart3 size={15} /> Analytics</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/admin/team" className="flex items-center gap-2"><ShieldCheck size={15} /> Team members</Link>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            <DropdownMenuItem asChild>
+              <Link to="/my-patterns" className="flex items-center gap-2"><BookOpen size={15} /> My Patterns</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/profile" className="flex items-center gap-2"><User size={15} /> My Profile</Link>
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

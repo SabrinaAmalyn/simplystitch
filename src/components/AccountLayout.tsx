@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { BookOpen, LogIn, LogOut, Menu, ShieldCheck, User } from "lucide-react";
+import { BarChart3, BookOpen, LogIn, LogOut, Menu, ShieldCheck, User } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { roleLabel, useAuth } from "@/hooks/useAuth";
@@ -9,6 +9,11 @@ import { ForcePasswordChange } from "@/components/ForcePasswordChange";
 const NAV = [
   { to: "/my-patterns", label: "My Patterns", icon: BookOpen },
   { to: "/profile", label: "My Profile", icon: User },
+] as const;
+
+const TEAM_NAV = [
+  { to: "/admin", label: "Analytics", icon: BarChart3 },
+  { to: "/admin/team", label: "Team members", icon: ShieldCheck },
 ] as const;
 
 /** Signed-in shell: left sidebar + top bar with the profile picture menu. */
@@ -28,27 +33,18 @@ export function AccountLayout({ children, breadcrumb }: { children: ReactNode; b
       >
         <Link to="/" onClick={() => setOpen(false)} className="font-logo block text-2xl uppercase leading-tight">SimplyStitch</Link>
         <nav className="mt-6 flex flex-col gap-1">
-          {NAV.map(({ to, label, icon: Icon }) => (
+          {(isAdmin ? TEAM_NAV : NAV).map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
               to={to}
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted"
               activeProps={{ className: "bg-accent text-primary" }}
+              activeOptions={{ exact: true }}
             >
               <Icon size={16} /> {label}
             </Link>
           ))}
-          {isAdmin && (
-            <Link
-              to="/admin"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted"
-              activeProps={{ className: "bg-accent text-primary" }}
-            >
-              <ShieldCheck size={16} /> Team
-            </Link>
-          )}
         </nav>
         <div className="mt-auto flex flex-col gap-1 pt-4">
           {user ? (
