@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { BarChart3, BookOpen, CreditCard, Users, LogIn, LogOut, Menu, ShieldCheck, User } from "lucide-react";
+import { BarChart3, BookOpen, CreditCard, Palette, Users, LogIn, LogOut, Menu, ShieldCheck, User } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { supabase } from "@/integrations/supabase/client";
 import { roleLabel, useAuth } from "@/hooks/useAuth";
@@ -8,6 +8,7 @@ import { ForcePasswordChange } from "@/components/ForcePasswordChange";
 
 const NAV = [
   { to: "/my-patterns", label: "My Patterns", icon: BookOpen },
+  { to: "/my-yarn", label: "My Yarn", icon: Palette },
   { to: "/profile", label: "My Profile", icon: User },
 ] as const;
 

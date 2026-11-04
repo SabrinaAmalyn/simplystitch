@@ -7,8 +7,8 @@ const colors = (c: Record<string, string>) => ({ config: { colors: c } });
 
 const rows = () => ({
   profiles: [
-    { id: "u1", display_name: "Jane", email: "jane@example.com" },
-    { id: "u2", display_name: null, email: "lea@example.com" },
+    { id: "u1", display_name: "Jane", email: "jane@example.com", created_at: "2026-01-12T08:00:00Z" },
+    { id: "u2", display_name: null, email: "lea@example.com", created_at: null },
   ],
   roleRows: [
     { user_id: "u1", role: "maker" },
@@ -40,7 +40,8 @@ describe("memberStats", () => {
       yarnsListed: 2,
     });
     expect(jane.topColours[0]).toEqual(["peach", 2]);
-    expect(lea).toMatchObject({ patternCount: 1, yarnsListed: 1, writtenTerms: null });
+    expect(lea).toMatchObject({ patternCount: 1, yarnsListed: 1, writtenTerms: null, createdAt: null });
+    expect(jane.createdAt).toBe("2026-01-12T08:00:00Z");
   });
 });
 
