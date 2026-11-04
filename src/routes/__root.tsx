@@ -126,8 +126,14 @@ function RootComponent() {
     return startCloudSync();
   }, []);
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event) => {
+    let lastUser: string | null | undefined;
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      const uid = session?.user?.id ?? null;
+      // Supabase re-sends SIGNED_IN when the tab regains focus; only react to real identity changes.
+      if (event === "INITIAL_SESSION") { lastUser = uid; return; }
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      if (event === "SIGNED_IN" && uid === lastUser) return;
+      lastUser = uid;
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });

@@ -30,6 +30,8 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  // Hide the form until we know nobody is signed in, so returning from Google never flashes sign-up.
+  const [checking, setChecking] = useState(true);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -55,7 +57,9 @@ function AuthPage() {
   useEffect(() => {
     let active = true;
     supabase.auth.getUser().then(({ data }) => {
-      if (active && data.user) navigate({ to: "/my-patterns", replace: true });
+      if (!active) return;
+      if (data.user) navigate({ to: "/my-patterns", replace: true });
+      else setChecking(false);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" && session) navigate({ to: "/my-patterns", replace: true });
@@ -71,6 +75,14 @@ function AuthPage() {
   }
 
   const field = "w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
+  if (checking) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-muted/40 px-4">
+        <p className="text-sm text-muted-foreground">Signing you in…</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-dvh items-center justify-center bg-muted/40 px-4 py-10">
       <div className="w-full max-w-sm">
