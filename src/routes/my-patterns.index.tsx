@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { CharacterPreview } from "@/components/CharacterPreview";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,10 @@ function MyPatternsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-display text-2xl font-semibold">My Patterns</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-display text-2xl font-semibold">My Patterns</h1>
+        <Link to="/customize" className="btn-primary inline-flex items-center gap-1.5"><Plus size={16} /> Create Pattern</Link>
+      </div>
 
       {library.length === 0 ? (
         <section className="panel text-center">
