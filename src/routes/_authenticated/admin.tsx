@@ -1,12 +1,15 @@
 // ============= Full file contents =============
 
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AccountLayout } from "@/components/AccountLayout";
 import { roleLabel, useAuth, type AppRole } from "@/hooks/useAuth";
 import { yarnById } from "@/lib/yarn-palette";
+import { createTeamMember } from "@/lib/team-admin.functions";
+import { MIN_PASSWORD } from "@/lib/team-admin";
 import { memberStats, teamSummary, type MemberStats, type PatternRow, type PrefsRow, type RoleRow, type YarnRow } from "@/lib/team-stats";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -126,6 +129,7 @@ function AdminPage() {
       </div>
 
       <h2 className="mt-8 text-lg font-bold">Makers</h2>
+      {isSuperAdmin && <AddTeamMember onAdded={load} />}
       <input className="mt-3 w-full max-w-md rounded-lg border border-input bg-background px-3 py-2 text-sm" placeholder="Search by name or email" value={query} onChange={(e) => setQuery(e.target.value)} />
       <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-card">
         {shown.map((m) => {
@@ -166,5 +170,50 @@ function AdminPage() {
         {shown.length === 0 && <li className="px-4 py-6 text-center text-sm text-muted-foreground">No members found.</li>}
       </ul>
     </AccountLayout>
+  );
+}
+
+/** Super admin only: creates a team account with a temporary password. */
+function AddTeamMember({ onAdded }: { onAdded: () => void }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const create = useServerFn(createTeamMember);
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      await create({ data: { email, password } });
+      toast.success(`Team account created for ${email}. Share the temporary password — they'll be asked to change it at first sign-in.`);
+      setEmail("");
+      setPassword("");
+      onAdded();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't create that account.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const field = "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
+  return (
+    <form onSubmit={submit} className="mt-3 max-w-xl rounded-xl border border-border bg-card p-4">
+      <h3 className="text-sm font-semibold">Add a team member</h3>
+      <p className="mt-1 text-xs text-muted-foreground">
+        Creates their admin account with a temporary password. They must choose a new one at first sign-in.
+      </p>
+      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        <label className="flex flex-col gap-1 text-xs text-muted-foreground">Email
+          <input type="email" required className={field} placeholder="name@simplystitch.app" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        <label className="flex flex-col gap-1 text-xs text-muted-foreground">Temporary password
+          <input type="text" required minLength={MIN_PASSWORD} className={field} placeholder={`At least ${MIN_PASSWORD} characters`} value={password} onChange={(e) => setPassword(e.target.value)} />
+        </label>
+      </div>
+      <button type="submit" disabled={busy} className="btn-primary mt-3 disabled:opacity-60">
+        {busy ? "Creating…" : "Create account"}
+      </button>
+    </form>
   );
 }
