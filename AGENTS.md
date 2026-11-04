@@ -32,3 +32,6 @@
 - The team sign-in lives at "/team-login", separate from the maker "/auth" page, and admits only admin/super_admin roles checked through the shared isTeamMember helper — makers can never enter through the team door.
 - Saved patterns stay in the local store for the UI and are mirrored to the `patterns` table by src/lib/cloud-sync.ts when signed in; maker preferences live in `maker_preferences`. Team roles can read both for analytics — keeps the editor offline-capable while admins see real data.
 - Maker yarn stash lives in `maker_yarns`; stitching preferences (weight, hook, favourite colours) are derived from saved patterns × stash via src/lib/maker-insights.ts and mirrored into `maker_preferences` — only written terms are chosen manually, so analytics reflect real usage.
+- Maker tool routes are wrapped in the MakerOnly gate; admin and super_admin accounts are stats-only and see /admin instead of the customizer and pattern tools.
+- Super admins provision team accounts through the role-checked createTeamMember server function (email + temporary password); the profiles.must_change_password flag drives a blocking first sign-in password change and must fail closed if it cannot be set.
+- /pattern renders PatternReader without onTextChange as a read-only preview; the per-section edit affordances appear only when a handler passes onTextChange.
