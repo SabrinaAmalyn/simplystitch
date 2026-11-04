@@ -366,7 +366,7 @@ export default function Doll3D({ config, ears, focus = null, armsDown = false, o
   const footY = -1.11 + joinedBodyShape(limbScale(config, "legs"), limbScale(config, "torso")).leg.bottom - JOINED_BODY.leg.bottom;
   return (
     <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0.9, 5.5], fov: 40 }} gl={{ toneMappingExposure: 1.05, preserveDrawingBuffer: !!onCapture }}
-      onCreated={onCapture ? ({ gl }) => { window.setTimeout(() => onCapture(gl.domElement.toDataURL("image/png")), 1800); } : undefined}>
+      onCreated={({ gl }) => { if (onCapture) window.setTimeout(() => onCapture(gl.domElement.toDataURL("image/png")), 1800); }}>
       <hemisphereLight args={["#fff6ec", "#ffd9c4", 1.1]} />
       {/* Warm key */}
       <directionalLight position={[3, 5, 4]} intensity={1.6} color="#fff0e0" castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
