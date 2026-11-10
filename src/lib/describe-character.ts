@@ -43,6 +43,7 @@ export function describePrompt(): string {
     "Tails: rabbit/bear → tail-round, cat/dog/fox/monkey → tail-long, humans → none.",
     `Lengths are percentages ${LIMB_LENGTH_MIN}–${LIMB_LENGTH_MAX} in steps of 10; chubby/short means near ${LIMB_LENGTH_MIN}, tall/lanky means higher.`,
     "Cheeks (blush) and whiskers are mutually exclusive. Use accessory colours (e.g. a red hat) as accents on ears, paws or blush when sensible.",
+    "Eyes and brows are embroidered thread: use charcoal unless a dark colour is asked for.",
     "In note, briefly mention anything that could not be made, or leave it empty.",
   ].join("\n");
 }
