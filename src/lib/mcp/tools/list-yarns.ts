@@ -1,6 +1,6 @@
 import { defineTool, ToolError } from "@lovable.dev/mcp-js";
 import { supabaseForUser } from "../supabase";
-import { YARN_COLORS } from "@/lib/yarn-palette";
+import { YARNS } from "@/lib/yarn-palette";
 
 export default defineTool({
   name: "list_yarns",
@@ -14,7 +14,7 @@ export default defineTool({
     if (error) throw new ToolError(error.message);
     const yarns = (data ?? []).map((y) => ({
       id: y.id,
-      color: YARN_COLORS.find((c) => c.id === y.color_id)?.name ?? y.color_id,
+      color: YARNS.find((c) => c.id === y.color_id)?.name ?? y.color_id,
       brand: y.brand, weight: y.yarn_weight, hook: y.hook_size,
     }));
     return {
