@@ -44,7 +44,7 @@ export function DescribeBar({ onResult }: { onResult: (c: CharacterConfig) => vo
     <div className="flex flex-wrap items-center gap-1.5">
       <span className="text-xs text-muted-foreground mr-0.5">Try:</span>
       {IDEAS.map((idea) => <button key={idea} type="button" disabled={busy} onClick={() => void submit(idea)}
-        className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted-foreground hover:bg-muted hover:text-foreground">{idea}</button>)}
+        className="rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground hover:bg-muted hover:text-foreground">{idea}</button>)}
     </div>
     {message && <p className={`text-xs ${message.kind === "error" ? "text-destructive" : "text-muted-foreground"}`}>{message.text}</p>}
    </div>
