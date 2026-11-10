@@ -11,6 +11,7 @@ import { YARNS } from "@/lib/yarn-palette";
 import { ArrowLeft, Dices, PersonStanding, RotateCcw } from "lucide-react";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { MakerOnly } from "@/components/MakerOnly";
+import { DescribeBar } from "@/components/DescribeBar";
 
 const pick = <T,>(list: readonly T[]): T => {
   const value = list[Math.floor(Math.random() * list.length)];
@@ -165,6 +166,7 @@ function Workspace() {
         </section>
 
         <section className="min-w-0 options-column">
+          <DescribeBar onResult={(c) => setState((s) => ({ ...s, editingPatternId: null, config: c }))} />
           <CustomizerPanel config={config} onChange={(c) => setState((s) => ({ ...s, config: c }))} />
           <div className="workspace-actions flex flex-col gap-4">
             {error && <div className="alert alert-error">{error}</div>}
