@@ -4,12 +4,16 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { SocialButtons } from "@/components/SocialButtons";
+import { oauthReturnPath } from "@/lib/oauth-return-path";
 
 type Mode = "login" | "signup";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { mode?: Mode } =>
-    s["mode"] === "signup" ? { mode: "signup" } : s["mode"] === "login" ? { mode: "login" } : {},
+  validateSearch: (s: Record<string, unknown>): { mode?: Mode; next?: string } => {
+    const mode: Mode | undefined = s["mode"] === "signup" ? "signup" : s["mode"] === "login" ? "login" : undefined;
+    const next = oauthReturnPath(s["next"]);
+    return { ...(mode ? { mode } : {}), ...(next !== "/" ? { next } : {}) };
+  },
   head: () => ({
     meta: [
       { title: "Log in or sign up — SimplyStitch" },
@@ -24,7 +28,10 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<Mode>(search.mode ?? "signup");
+  const next = search.next;
+  const [mode, setMode] = useState<Mode>(search.mode ?? (next ? "login" : "signup"));
+  // After sign-in, return to a pending connection approval when there is one.
+  const goHome = () => { if (next) window.location.assign(next); else navigate({ to: "/my-patterns", replace: true }); };
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,17 +46,17 @@ function AuthPage() {
     if (mode === "signup") {
       const { data, error } = await supabase.auth.signUp({
         email, password,
-        options: { emailRedirectTo: window.location.origin + "/my-patterns", data: { display_name: name } },
+        options: { emailRedirectTo: next ? new URL(next, window.location.origin).href : window.location.origin + "/my-patterns", data: { display_name: name } },
       });
       setBusy(false);
       if (error) { toast.error(error.message); return; }
-      if (data.session) navigate({ to: "/my-patterns" });
+      if (data.session) goHome();
       else setSent(true);
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setBusy(false);
       if (error) { toast.error(error.message); return; }
-      navigate({ to: "/my-patterns" });
+      goHome();
     }
   }
 
@@ -58,20 +65,21 @@ function AuthPage() {
     let active = true;
     supabase.auth.getUser().then(({ data }) => {
       if (!active) return;
-      if (data.user) navigate({ to: "/my-patterns", replace: true });
+      if (data.user) goHome();
       else setChecking(false);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) navigate({ to: "/my-patterns", replace: true });
+      if (event === "SIGNED_IN" && session) goHome();
     });
     return () => { active = false; sub.subscription.unsubscribe(); };
-  }, [navigate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate, next]);
 
   async function social(provider: "google" | "lovable") {
-    const r = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin + "/auth" });
+    const r = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin + "/auth" + (next ? "?next=" + encodeURIComponent(next) : "") });
     if (r.error) { toast.error(r.error.message ?? "Sign in failed"); return; }
     if (r.redirected) return;
-    navigate({ to: "/my-patterns" });
+    goHome();
   }
 
   const field = "w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20";
